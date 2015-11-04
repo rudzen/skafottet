@@ -41,8 +41,7 @@ public class Play extends Activity {
 
         logik.gætBogstav(gaet);
 
-        //if(!logik.erSpilletSlut()){
-            if(false){
+        if(!logik.erSpilletSlut()){
             updateScreen();
         } else {
                 Intent endgame = new Intent(Play.this, EndOfGame.class);
@@ -55,9 +54,6 @@ public class Play extends Activity {
                 Log.d("play", "finishing");
                 finish();
         }
-
-
-
     }
 
     private void updateScreen(){
@@ -85,7 +81,6 @@ public class Play extends Activity {
                 case 6:
                     galgen.setImageResource(R.mipmap.forkert6);
                     break;
-
             }
         }
     }

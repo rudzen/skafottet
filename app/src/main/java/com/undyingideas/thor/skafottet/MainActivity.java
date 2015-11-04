@@ -23,11 +23,11 @@ public class MainActivity extends Activity {
         startActivity(new Intent(MainActivity.this, Play.class));
     }
     public void instlClck(View v){
-        startActivity(new Intent(MainActivity.this, Instruktioner.class));
+        startActivity(new Intent(MainActivity.this, Instillinger.class));
     }
 
     public void instClck(View view) {
-        Intent Instillinger = new Intent(MainActivity.this, Instillinger.class);
+        Intent Instillinger = new Intent(MainActivity.this, Instruktioner.class);
         startActivity(Instillinger);
 
     }
