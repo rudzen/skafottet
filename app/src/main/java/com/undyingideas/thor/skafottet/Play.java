@@ -3,6 +3,7 @@ package com.undyingideas.thor.skafottet;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,7 +13,7 @@ import android.widget.Toast;
 
 public class Play extends Activity {
     ImageView galgen;
-    Galgelogik logik = new Galgelogik();
+    Galgelogik logik;
     Button ok;
     TextView usedLetters, ordet;
     EditText input;
@@ -29,6 +30,8 @@ public class Play extends Activity {
         ordet = (TextView) findViewById(R.id.synligtOrd);
         input = (EditText) findViewById(R.id.gaet);
         galgen = (ImageView) findViewById(R.id.galgen);
+        logik = new Galgelogik();
+        ordet.setText(logik.getSynligtOrd());
 
     }
 
@@ -38,10 +41,19 @@ public class Play extends Activity {
 
         logik.gætBogstav(gaet);
 
-        if(!logik.erSpilletSlut()){
+        //if(!logik.erSpilletSlut()){
+            if(false){
             updateScreen();
         } else {
-            if(!logik.erSpilletTabt()) startActivity(new Intent());
+                Intent endgame = new Intent(Play.this, EndOfGame.class);
+
+                endgame.putExtra("vundet", logik.erSpilletVundet());
+                endgame.putExtra("forsøg", logik.getAntalForkerteBogstaver());
+                endgame.putExtra("ordet", logik.getOrdet());
+                endgame.putExtra("spiller", "Du");
+                startActivity(endgame);
+                Log.d("play", "finishing");
+                finish();
         }
 
 
