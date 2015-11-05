@@ -15,7 +15,7 @@ public class Play extends Activity {
     ImageView galgen;
     Galgelogik logik;
     Button ok;
-    TextView usedLetters, ordet;
+    TextView usedLetters, ordet, status;
     EditText input;
     String gaet; //bruges til at holde det aktuelle gæt
 
@@ -24,14 +24,16 @@ public class Play extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
-        //instatierer widgets
+        //instantierer widgets
         ok = (Button) findViewById(R.id.InputBtn);
         usedLetters = (TextView) findViewById(R.id.usedLetters);
         ordet = (TextView) findViewById(R.id.synligtOrd);
         input = (EditText) findViewById(R.id.gaet);
         galgen = (ImageView) findViewById(R.id.galgen);
         logik = new Galgelogik();
+        status = (TextView) findViewById(R.id.statusText);
         ordet.setText(logik.getSynligtOrd());
+
 
     }
 
@@ -39,7 +41,14 @@ public class Play extends Activity {
 
       gaet = input.getText().toString();
 
-        logik.gætBogstav(gaet);
+        if (gaet.length() > 1){
+            gaet = gaet.substring(0,1);
+            logik.gætBogstav(gaet);
+            status.setText("Brug kun et bogstav, resten vil blive ignoreret");
+        } else {
+            status.setText("");
+            logik.gætBogstav(gaet);
+        }
 
         if(!logik.erSpilletSlut()){
             updateScreen();
@@ -83,5 +92,7 @@ public class Play extends Activity {
                     break;
             }
         }
+        input.setText("");
+
     }
 }
