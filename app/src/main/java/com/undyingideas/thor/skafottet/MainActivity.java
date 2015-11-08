@@ -20,8 +20,11 @@ public class MainActivity extends Activity {
     }
 
     public void startClck(View v){
-        startActivity(new Intent(MainActivity.this, Play.class));
+        Intent startSpil = new Intent(MainActivity.this, Play.class);
+        startSpil.putExtra("muligeOrd",getIntent().getStringArrayListExtra("muligeOrd"));
+        startActivity(startSpil);
     }
+
     public void instlClck(View v){
         startActivity(new Intent(MainActivity.this, Instillinger.class));
 

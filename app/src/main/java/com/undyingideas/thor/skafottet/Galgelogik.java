@@ -52,7 +52,10 @@ public class Galgelogik {
     return spilletErTabt || spilletErVundet;
   }
 
-
+  /**
+   * Brug constructor med input i stedet for
+   */
+  @Deprecated
   public Galgelogik() {
   /*  muligeOrd.add("bil");
     muligeOrd.add("computer");
@@ -67,6 +70,11 @@ public class Galgelogik {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  public Galgelogik(ArrayList<String> muligeOrd){
+    this.muligeOrd = muligeOrd;
+    nulstil();
   }
 
   public void nulstil() {

@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".LoadingScreen"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,7 +35,7 @@
             android:name=".EndOfGame"
             android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".LoadingScreen" >
+        <activity android:name=".MainActivity" >
         </activity>
     </application>
 

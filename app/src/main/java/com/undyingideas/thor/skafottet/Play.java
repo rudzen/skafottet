@@ -31,7 +31,9 @@ public class Play extends Activity {
         ordet = (TextView) findViewById(R.id.synligtOrd);
         input = (EditText) findViewById(R.id.gaet);
         galgen = (ImageView) findViewById(R.id.galgen);
-        new AsyncTask(){
+        logik = new Galgelogik(getIntent().getStringArrayListExtra("muligeOrd"));
+
+        /*new AsyncTask(){
 
             @Override
             protected Object doInBackground(Object[] params) {
@@ -49,7 +51,7 @@ public class Play extends Activity {
             protected void onPostExecute(Object ord){
                 ordet.setText((String)ord);
             }
-        }.execute();
+        }.execute();*/
 
 
 
