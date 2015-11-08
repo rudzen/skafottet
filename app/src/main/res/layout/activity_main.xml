@@ -33,17 +33,26 @@
         android:layout_height="wrap_content"
         android:text="Instruktioner"
         android:id="@+id/InstrBtn"
-        android:layout_below="@+id/StartBtn"
-        android:layout_alignStart="@+id/StartBtn"
-        android:layout_marginTop="27dp"
-        android:onClick="instClck"/>
+        android:onClick="instClck"
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/StartBtn" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Instillinger"
         android:id="@+id/InstilBtn"
-        android:layout_centerVertical="true"
+        android:onClick="instlClck"
+        android:layout_below="@+id/InstrBtn"
+        android:layout_alignStart="@+id/InstrBtn" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Se Mulige Ord"
+        android:id="@+id/OrdListeBtn"
+        android:layout_above="@+id/InstrBtn"
         android:layout_alignStart="@+id/InstrBtn"
-        android:onClick="instlClck"/>
+        android:layout_marginBottom="29dp"
+        android:onClick="seOrdClck" />
 </RelativeLayout>

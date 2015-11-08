@@ -16,24 +16,19 @@ public class WordCollector {
     private static ArrayList<String> muligeOrd;
 
 
-    public static ArrayList<String> samlOrd(String url) {
+    public static ArrayList<String> samlOrd(String url) throws Exception{
         muligeOrd = new ArrayList<String>();
 
         if(url == null){
-            try {
+
                 hentOrdFra("http://dr.dk");
                 //hentOrdFraMoths();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }else{
-            try{
-                hentOrdFra(url);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
 
-        }
+
+            }
+        else{
+                hentOrdFra(url);
+            }
 
         return muligeOrd;
     }
@@ -88,7 +83,7 @@ public class WordCollector {
 
 
 
-    public static ArrayList<String> samlOrd(){
+    public static ArrayList<String> samlOrd() throws Exception{
         return samlOrd(null);
 
     }

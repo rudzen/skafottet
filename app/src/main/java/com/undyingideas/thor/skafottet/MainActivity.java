@@ -19,20 +19,38 @@ public class MainActivity extends Activity {
 
     }
 
+    /**
+     * knap til at starte 1p spil
+     * @param v
+     */
     public void startClck(View v){
         Intent startSpil = new Intent(MainActivity.this, Play.class);
-        startSpil.putExtra("muligeOrd",getIntent().getStringArrayListExtra("muligeOrd"));
+        startSpil.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
         startActivity(startSpil);
     }
 
+    /**
+     * Knap til instillings aktivitet
+     * @param v
+     */
     public void instlClck(View v){
         startActivity(new Intent(MainActivity.this, Instillinger.class));
 
     }
 
+    /**
+     * knap til instruktions aktivitet
+     * @param view
+     */
     public void instClck(View view) {
         Intent Instillinger = new Intent(MainActivity.this, Instruktioner.class);
         startActivity(Instillinger);
 
+    }
+
+    public void seOrdClck(View v){
+        Intent SeOrd = new Intent(MainActivity.this, OrdVaelger.class);
+        SeOrd.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
+        startActivity(SeOrd);
     }
 }

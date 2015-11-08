@@ -33,35 +33,8 @@ public class Play extends Activity {
         galgen = (ImageView) findViewById(R.id.galgen);
         logik = new Galgelogik(getIntent().getStringArrayListExtra("muligeOrd"));
 
-        /*new AsyncTask(){
-
-            @Override
-            protected Object doInBackground(Object[] params) {
-                try{
-                    logik = new Galgelogik();
-                    String ord = logik.getSynligtOrd();
-                    return ord;
-                }catch (Exception e){
-                    e.printStackTrace();
-                    return e;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Object ord){
-                ordet.setText((String)ord);
-            }
-        }.execute();*/
-
-
-
+        ordet.setText(logik.getSynligtOrd());
         status = (TextView) findViewById(R.id.statusText);
-
-
-
-
-
-
     }
 
     public void gaetClck(View view) {
