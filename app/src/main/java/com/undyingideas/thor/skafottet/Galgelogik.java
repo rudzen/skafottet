@@ -54,15 +54,19 @@ public class Galgelogik {
 
 
   public Galgelogik() {
-    muligeOrd.add("bil");
+  /*  muligeOrd.add("bil");
     muligeOrd.add("computer");
     muligeOrd.add("programmering");
     muligeOrd.add("motorvej");
     muligeOrd.add("busrute");
     muligeOrd.add("gangsti");
     muligeOrd.add("skovsnegl");
-    muligeOrd.add("solsort");
-    nulstil();
+    muligeOrd.add("solsort");*/
+    try{
+      hentOrdFraMoths();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   public void nulstil() {
@@ -70,6 +74,7 @@ public class Galgelogik {
     antalForkerteBogstaver = 0;
     spilletErVundet = false;
     spilletErTabt = false;
+
     ordet = muligeOrd.get(new Random().nextInt(muligeOrd.size()));
     opdaterSynligtOrd();
   }
@@ -133,6 +138,17 @@ public class Galgelogik {
       linje = br.readLine();
     }
     return sb.toString();
+  }
+
+  public void hentOrdFraMoths() throws Exception{
+    String data = hentUrl("http://mothsordbog.dk/godt-ord-igen");
+    System.out.println("data = " + data);
+    data = data.replaceAll("<.+?>", " ").toLowerCase().replaceAll("[^a-zæøå]", " ");
+    System.out.println("data = " + data);
+    muligeOrd.clear();
+    muligeOrd.addAll(new HashSet<String>(Arrays.asList(data.split(" "))));
+    System.out.println("muligeOrd = " + muligeOrd);
+    nulstil();
   }
 
   public void hentOrdFraDr() throws Exception {

@@ -2,6 +2,7 @@ package com.undyingideas.thor.skafottet;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,14 +31,40 @@ public class Play extends Activity {
         ordet = (TextView) findViewById(R.id.synligtOrd);
         input = (EditText) findViewById(R.id.gaet);
         galgen = (ImageView) findViewById(R.id.galgen);
-        logik = new Galgelogik();
+        new AsyncTask(){
+
+            @Override
+            protected Object doInBackground(Object[] params) {
+                try{
+                    logik = new Galgelogik();
+                    String ord = logik.getSynligtOrd();
+                    return ord;
+                }catch (Exception e){
+                    e.printStackTrace();
+                    return e;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Object ord){
+                ordet.setText((String)ord);
+            }
+        }.execute();
+
+
+
         status = (TextView) findViewById(R.id.statusText);
-        ordet.setText(logik.getSynligtOrd());
+
+
+
+
 
 
     }
 
     public void gaetClck(View view) {
+        logik.logStatus();
+       // Log.d("Play", logik.getOrdet());
 
       gaet = input.getText().toString();
 

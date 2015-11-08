@@ -24,6 +24,7 @@ public class MainActivity extends Activity {
     }
     public void instlClck(View v){
         startActivity(new Intent(MainActivity.this, Instillinger.class));
+
     }
 
     public void instClck(View view) {
