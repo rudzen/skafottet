@@ -61,7 +61,7 @@ public class EndOfGame extends Activity {
     }
 
     public void afslutClck(View view) {
-        startActivity(new Intent(this, MainActivity.class));
+        //startActivity(new Intent(this, MainActivity.class));
 
         finish();
     }
