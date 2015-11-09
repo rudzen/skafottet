@@ -3,6 +3,7 @@
     package="com.undyingideas.thor.skafottet" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
 
     <application
         android:allowBackup="true"
@@ -38,6 +39,8 @@
         <activity android:name=".MainActivity" >
         </activity>
         <activity android:name=".OrdVaelger" >
+        </activity>
+        <activity android:name=".MultiplayerActivity" >
         </activity>
     </application>
 
