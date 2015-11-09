@@ -41,15 +41,15 @@ public class Play extends Activity {
     }
 
     private void guess(String guess){
-        String theGuess;
+
         theGuess = guess;
-        if (this.theGuess.length() > 1){
-            this.theGuess = this.theGuess.substring(0, 1);
-            logik.gætBogstav(this.theGuess);
+        if (theGuess.length() > 1){
+            theGuess = theGuess.substring(0, 1);
+            logik.gætBogstav(theGuess);
             status.setText("Brug kun et bogstav, resten vil blive ignoreret");
         } else {
             status.setText("");
-            logik.gætBogstav(this.theGuess);
+            logik.gætBogstav(theGuess);
         }
 
         if(!logik.erSpilletSlut()){
