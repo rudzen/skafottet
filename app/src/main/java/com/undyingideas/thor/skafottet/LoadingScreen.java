@@ -38,7 +38,6 @@ public class LoadingScreen extends AppCompatActivity {
                 return null;
             }
         }
-
         @Override
         protected void onPostExecute(Object muligeOrd) {
 
@@ -48,5 +47,5 @@ public class LoadingScreen extends AppCompatActivity {
             startActivity(StartApp);
         }
     }
-    }
+
 }
