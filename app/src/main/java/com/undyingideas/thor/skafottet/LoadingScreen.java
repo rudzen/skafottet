@@ -47,7 +47,7 @@ public class LoadingScreen extends AppCompatActivity {
 
             }
         }.execute();
-
+        finish();
 
     }
 }
