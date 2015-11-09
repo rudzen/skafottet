@@ -2,7 +2,6 @@ package com.undyingideas.thor.skafottet;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class Play extends Activity {
     ImageView galgen;
@@ -18,7 +16,7 @@ public class Play extends Activity {
     Button ok;
     TextView usedLetters, ordet, status;
     EditText input;
-    String gaet; //bruges til at holde det aktuelle gæt
+    String theGuess; //bruges til at holde det aktuelle gæt
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,37 +37,39 @@ public class Play extends Activity {
 
     public void gaetClck(View view) {
         logik.logStatus();
-       // Log.d("Play", logik.getOrdet());
+        guess(input.getText().toString());
+    }
 
-      gaet = input.getText().toString();
-
-        if (gaet.length() > 1){
-            gaet = gaet.substring(0,1);
-            logik.gætBogstav(gaet);
+    private void guess(String guess){
+        String theGuess;
+        theGuess = guess;
+        if (this.theGuess.length() > 1){
+            this.theGuess = this.theGuess.substring(0, 1);
+            logik.gætBogstav(this.theGuess);
             status.setText("Brug kun et bogstav, resten vil blive ignoreret");
         } else {
             status.setText("");
-            logik.gætBogstav(gaet);
+            logik.gætBogstav(this.theGuess);
         }
 
         if(!logik.erSpilletSlut()){
             updateScreen();
         } else {
-                Intent endgame = new Intent(Play.this, EndOfGame.class);
+            Intent endgame = new Intent(Play.this, EndOfGame.class);
 
-                endgame.putExtra("vundet", logik.erSpilletVundet());
-                endgame.putExtra("forsøg", logik.getAntalForkerteBogstaver());
-                endgame.putExtra("ordet", logik.getOrdet());
-                endgame.putExtra("spiller", "Du");
-                startActivity(endgame);
-                Log.d("play", "finishing");
-                finish();
+            endgame.putExtra("vundet", logik.erSpilletVundet());
+            endgame.putExtra("forsøg", logik.getAntalForkerteBogstaver());
+            endgame.putExtra("ordet", logik.getOrdet());
+            endgame.putExtra("spiller", "Du");
+            startActivity(endgame);
+            Log.d("play", "finishing");
+            finish();
         }
     }
 
     private void updateScreen(){
         ordet.setText(logik.getSynligtOrd());
-        usedLetters.append(gaet);
+        usedLetters.append(theGuess);
         if(!logik.erSidsteBogstavKorrekt()){
             int wrongs = logik.getAntalForkerteBogstaver();
 
@@ -95,6 +95,5 @@ public class Play extends Activity {
             }
         }
         input.setText("");
-
     }
 }
