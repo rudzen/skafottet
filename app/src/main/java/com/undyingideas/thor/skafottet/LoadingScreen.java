@@ -22,7 +22,6 @@ public class LoadingScreen extends AppCompatActivity {
 
         new LoadWords().execute();
 
-        finish();
 
     }
 
@@ -44,7 +43,9 @@ public class LoadingScreen extends AppCompatActivity {
             Intent StartApp = new Intent(LoadingScreen.this, MainActivity.class);
 
             StartApp.putExtra("muligeOrd", (ArrayList<String>) muligeOrd);
+            StartApp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);// Fjerner loadscreen fra stacken
             startActivity(StartApp);
+
         }
     }
 

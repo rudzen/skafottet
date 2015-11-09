@@ -29,7 +29,10 @@ public class Play extends Activity {
         ordet = (TextView) findViewById(R.id.synligtOrd);
         input = (EditText) findViewById(R.id.gaet);
         galgen = (ImageView) findViewById(R.id.galgen);
-        logik = new Galgelogik(getIntent().getStringArrayListExtra("muligeOrd"));
+
+        if(logik != null && logik.erSpilletSlut()){
+            logik.nulstil();
+        } else logik = new Galgelogik(getIntent().getStringArrayListExtra("muligeOrd"));
 
         ordet.setText(logik.getSynligtOrd());
         status = (TextView) findViewById(R.id.statusText);
@@ -61,6 +64,7 @@ public class Play extends Activity {
             endgame.putExtra("forsøg", logik.getAntalForkerteBogstaver());
             endgame.putExtra("ordet", logik.getOrdet());
             endgame.putExtra("spiller", "Du");
+            endgame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
             startActivity(endgame);
             Log.d("play", "finishing");
             finish();

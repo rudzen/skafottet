@@ -55,8 +55,10 @@ public class EndOfGame extends Activity {
     }
 
     public void nytSpilClck(View view) {
+        Intent newGame = new Intent(this, Play.class);
+        newGame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
 
-        startActivity(new Intent(this, Play.class));
+        startActivity(newGame);
         finish();
     }
 
