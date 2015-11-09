@@ -37,7 +37,9 @@
         </activity>
         <activity android:name=".MainActivity" >
         </activity>
-        <activity android:name=".OrdVaelger" >
+        <activity android:name=".OrdVaelger"
+            android:screenOrientation="portrait">
+
         </activity>
     </application>
 
