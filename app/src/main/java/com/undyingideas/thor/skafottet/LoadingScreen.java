@@ -19,35 +19,34 @@ public class LoadingScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading_screen);
         final SharedPreferences ord = PreferenceManager.getDefaultSharedPreferences(this);
-        new AsyncTask() {
-            @Override
-            protected Object doInBackground(Object[] params) {
-                ArrayList<String> muligeOrd;
-                try {
-                   muligeOrd = WordCollector.samlOrd();
 
-                    return muligeOrd;
-                } catch (Exception e){
-                    return null;
-                }
+        new LoadWords().execute();
 
-
-
-            }
-
-            @Override
-            protected void onPostExecute(Object muligeOrd) {
-
-                Intent StartApp = new Intent(LoadingScreen.this, MainActivity.class);
-
-                    StartApp.putExtra("muligeOrd", (ArrayList<String>) muligeOrd);
-                    startActivity(StartApp);
-
-
-
-            }
-        }.execute();
         finish();
 
+    }
+
+    private class LoadWords extends AsyncTask{
+        @Override
+        protected Object doInBackground(Object[] params) {
+            ArrayList<String> muligeOrd;
+            try {
+                muligeOrd = WordCollector.samlOrd();
+
+                return muligeOrd;
+            } catch (Exception e){
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Object muligeOrd) {
+
+            Intent StartApp = new Intent(LoadingScreen.this, MainActivity.class);
+
+            StartApp.putExtra("muligeOrd", (ArrayList<String>) muligeOrd);
+            startActivity(StartApp);
+        }
+    }
     }
 }
