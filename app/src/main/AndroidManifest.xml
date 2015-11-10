@@ -24,6 +24,9 @@
             android:name=".Play"
             android:screenOrientation="portrait" >
         </activity>
+        <activity android:name=".HangmanButtonActivity">
+
+        </activity>
         <activity
             android:name=".Instruktioner"
             android:screenOrientation="portrait" >

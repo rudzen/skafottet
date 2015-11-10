@@ -31,7 +31,7 @@ public class MainActivity extends Activity {
      * @param v
      */
     public void startClck(View v){
-        Intent startSpil = new Intent(MainActivity.this, Play.class);
+        Intent startSpil = new Intent(MainActivity.this, HangmanButtonActivity.class);
         startSpil.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
         //Intent startSpil = new Intent(MainActivity.this, LoadingScreen.class);
 
