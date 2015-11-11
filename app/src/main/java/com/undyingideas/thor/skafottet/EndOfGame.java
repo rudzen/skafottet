@@ -47,15 +47,20 @@ public class EndOfGame extends Activity {
             resultaterDisp.loadData(resultText,"text/html; charset=UTF-8", null);
 
         }
-        Log.d("endgame", "data: " + spilData.getString("spiller ") + " " +  spilData.getString("forsøg")+ " " + spilData.getBoolean("vundet") );
+        Log.d("endgame", "data: " + spilData.getString("spiller ") + " " + spilData.getString("forsøg") + " " + spilData.getBoolean("vundet"));
 
 
     }
 
     public void newGameClck(View view) {
-        Intent newGame = new Intent(this, HangmanButtonActivity.class);
-        newGame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
-
+        Intent newGame;
+        if(getIntent().getBooleanExtra("wasHotSeat", false)){
+            newGame = new Intent(this, WordPicker.class);
+            newGame.putExtra("isHotSeat", true);
+        } else{
+            newGame = new Intent(this, HangmanButtonActivity.class);
+            newGame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
+        }
         startActivity(newGame);
         finish();
     }

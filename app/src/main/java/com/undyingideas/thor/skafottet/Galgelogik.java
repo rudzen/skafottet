@@ -158,7 +158,7 @@ public class Galgelogik {
   }
 
   public void hentOrdFraMoths() throws Exception{
-    String data = hentUrl("http://mothsordbog.dk/godt-ord-igen");
+    String data = hentUrl("http://mothsordbog.dk/godt-prefs-igen");
     System.out.println("data = " + data);
     data = data.replaceAll("<.+?>", " ").toLowerCase().replaceAll("[^a-zæøå]", " ");
     System.out.println("data = " + data);

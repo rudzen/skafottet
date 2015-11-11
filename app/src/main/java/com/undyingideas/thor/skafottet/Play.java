@@ -16,6 +16,7 @@ public class Play extends Activity {
     ImageView galgen;
     Galgelogik logik;
     ArrayList<String> possibleWords;
+    private boolean isHotSeat;
     Button ok;
     TextView usedLetters, ordet, status;
     EditText input;
@@ -71,6 +72,8 @@ public class Play extends Activity {
         endgame.putExtra("ordet", logik.getOrdet());
         endgame.putExtra("spiller", "Du");
         endgame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
+        Log.d("Play", "StartEndgame: isHotseat " + isHotSeat);
+        endgame.putExtra("wasHotSeat", isHotSeat);
         startActivity(endgame);
         Log.d("play", "finishing");
         finish();
@@ -106,6 +109,8 @@ public class Play extends Activity {
         input.setText("");
     }
     private void CheckGameType(){// could check gametype by some extra info from activating classes, but that would require more refactoring
+        isHotSeat = getIntent().getBooleanExtra("isHotSeat", false);
+        Log.d("Play", "CheckGameType: isHotseat " + isHotSeat);
         if(logik != null && logik.erSpilletSlut()){
             logik.nulstil();
         } else{

@@ -26,7 +26,7 @@ public class MultiplayerActivity extends AppCompatActivity {
     public void hotSeatClck(View view) {
         Intent hotSeatStart = new Intent(this, WordPicker.class);
         hotSeatStart.putExtra("muligeOrd",getIntent().getStringArrayListExtra("muligeOrd"));
-        hotSeatStart.putExtra("hotSeat", true);
+        hotSeatStart.putExtra("isHotSeat", true);
         startActivity(hotSeatStart);
 
     }
