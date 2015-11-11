@@ -6,7 +6,13 @@ import android.webkit.WebView;
 
 public class Instruktioner extends AppCompatActivity {
 
-    String instruktionText = "<html><body>blaa blaa blaa såndan spilles spillet <br> <br> <b>192</b> points.</body></html>" ;
+    String instruktionText = "<html><body><ol>" +
+            "<li>Gæt på et bogstav ved at trykke på det</li>"+
+            "<li>Hvis du gætter forkert bliver du lidt hængt</li>"+
+            "<li>Hvis du gætter rigtigt bliver det vist på ordet</li>"+
+            "<li>...</li>"+
+            "<li>profit</li>"+
+            "</ol></body></html>" ;
     WebView instruktioner;
 
 
