@@ -7,15 +7,17 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class OrdVaelger extends AppCompatActivity {
+public class WordPicker extends AppCompatActivity {
 
     ListView ordListe;
     ArrayList<String> muligeOrd;
+    private boolean isHotseat = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ord_vaelger);
+        getIntent().getBooleanExtra("hotSeat", false);
         muligeOrd = getIntent().getStringArrayListExtra("muligeOrd");
         ordListe = (ListView) findViewById(R.id.ordListen);
 

@@ -11,6 +11,8 @@ import java.util.HashSet;
 
 /**
  * Created by Thor on 08-11-2015.
+ * This class still uses a lot of danish, will be corrected at some other time
+ * todo clean language
  */
 public class WordCollector {
     private static ArrayList<String> muligeOrd;

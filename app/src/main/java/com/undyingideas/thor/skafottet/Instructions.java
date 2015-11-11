@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.webkit.WebView;
 
-public class Instruktioner extends AppCompatActivity {
+public class Instructions extends AppCompatActivity {
 
     String instruktionText = "<html><body><ol>" +
             "<li>Gæt på et bogstav ved at trykke på det</li>"+

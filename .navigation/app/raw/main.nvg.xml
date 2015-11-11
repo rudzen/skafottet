@@ -6,7 +6,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.undyingideas.thor.skafottet.Instillinger"/>
+        className = "com.undyingideas.thor.skafottet.Preferences"/>
       <point      
         x = "1420"      
         y = "44"/>
@@ -22,7 +22,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.undyingideas.thor.skafottet.Instruktioner"/>
+        className = "com.undyingideas.thor.skafottet.Instructions"/>
       <point      
         x = "172"      
         y = "88"/>
@@ -62,7 +62,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.undyingideas.thor.skafottet.OrdVaelger"/>
+        className = "com.undyingideas.thor.skafottet.WordPicker"/>
       <point      
         x = "124"      
         y = "128"/>

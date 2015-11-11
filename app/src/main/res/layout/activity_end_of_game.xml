@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:text="start nyt spil"
         android:id="@+id/nytSplBtn"
-        android:onClick="nytSpilClck"
+        android:onClick="newGameClck"
         android:layout_marginBottom="61dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Afslut"
-        android:onClick="afslutClck"
+        android:onClick="endGameClck"
         android:id="@+id/afslutBtn"
         android:layout_alignTop="@+id/nytSplBtn"
         android:layout_alignParentEnd="true" />

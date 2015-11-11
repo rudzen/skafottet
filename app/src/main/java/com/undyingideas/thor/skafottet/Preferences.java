@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.webkit.WebView;
 
-public class Instillinger extends AppCompatActivity {
+public class Preferences extends AppCompatActivity {
 
     WebView etParOrd;
     String ordene;

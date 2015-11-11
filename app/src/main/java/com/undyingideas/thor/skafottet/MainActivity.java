@@ -2,14 +2,13 @@ package com.undyingideas.thor.skafottet;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends Activity {
 
-    private Button StartBtn, InstilBtn, InstBtn;
+    private Button StartBtn, instructionBtn, preferenceBtn;
 
 
     @Override
@@ -20,7 +19,8 @@ public class MainActivity extends Activity {
         findViewById(R.id.btnMultiplayer).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MultiplayerActivity.class));
+                startActivity(new Intent(MainActivity.this, MultiplayerActivity.class)
+                        .putExtra("muligeOrd",getIntent().getStringArrayListExtra("muligeOrd")));
             }
         });
 
@@ -31,35 +31,33 @@ public class MainActivity extends Activity {
      * @param v
      */
     public void startClck(View v){
-        Intent startSpil = new Intent(MainActivity.this, HangmanButtonActivity.class);
-        startSpil.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
-        //Intent startSpil = new Intent(MainActivity.this, LoadingScreen.class);
+        Intent startGame = new Intent(MainActivity.this, HangmanButtonActivity.class);
+        startGame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
+        //Intent startGame = new Intent(MainActivity.this, LoadingScreen.class);
 
-        startActivity(startSpil);
+        startActivity(startGame);
     }
 
     /**
      * Knap til instillings aktivitet
      * @param v
      */
-    public void instlClck(View v){
-        startActivity(new Intent(MainActivity.this, Instillinger.class));
-
+    public void preferenceClck(View v){
+        startActivity(new Intent(MainActivity.this, Preferences.class));
     }
 
     /**
      * knap til instruktions aktivitet
      * @param view
      */
-    public void instClck(View view) {
-        Intent Instillinger = new Intent(MainActivity.this, Instruktioner.class);
+    public void instructionClck(View view) {
+        Intent Instillinger = new Intent(MainActivity.this, Instructions.class);
         startActivity(Instillinger);
-
     }
 
-    public void seOrdClck(View v){
-        Intent SeOrd = new Intent(MainActivity.this, OrdVaelger.class);
-        SeOrd.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
-        startActivity(SeOrd);
+    public void getWordsClck(View v){
+        Intent wordPicker = new Intent(MainActivity.this, WordPicker.class);
+        wordPicker.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
+        startActivity(wordPicker);
     }
 }
