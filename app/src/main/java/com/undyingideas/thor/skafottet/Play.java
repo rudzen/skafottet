@@ -10,9 +10,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class Play extends Activity {
     ImageView galgen;
     Galgelogik logik;
+    ArrayList<String> possibleWords;
     Button ok;
     TextView usedLetters, ordet, status;
     EditText input;
@@ -29,10 +32,8 @@ public class Play extends Activity {
         ordet = (TextView) findViewById(R.id.synligtOrd);
         input = (EditText) findViewById(R.id.gaet);
         galgen = (ImageView) findViewById(R.id.galgen);
-
-        if(logik != null && logik.erSpilletSlut()){
-            logik.nulstil();
-        } else logik = new Galgelogik(getIntent().getStringArrayListExtra("muligeOrd"));
+        possibleWords = new ArrayList<>();
+        CheckGameType();
 
         ordet.setText(logik.getSynligtOrd());
         status = (TextView) findViewById(R.id.statusText);
@@ -58,17 +59,21 @@ public class Play extends Activity {
         if(!logik.erSpilletSlut()){
             updateScreen();
         } else {
-            Intent endgame = new Intent(Play.this, EndOfGame.class);
-
-            endgame.putExtra("vundet", logik.erSpilletVundet());
-            endgame.putExtra("forsøg", logik.getAntalForkerteBogstaver());
-            endgame.putExtra("ordet", logik.getOrdet());
-            endgame.putExtra("spiller", "Du");
-            endgame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
-            startActivity(endgame);
-            Log.d("play", "finishing");
-            finish();
+            StartEndgame();
         }
+    }
+
+    private void StartEndgame() {
+        Intent endgame = new Intent(Play.this, EndOfGame.class);
+
+        endgame.putExtra("vundet", logik.erSpilletVundet());
+        endgame.putExtra("forsøg", logik.getAntalForkerteBogstaver());
+        endgame.putExtra("ordet", logik.getOrdet());
+        endgame.putExtra("spiller", "Du");
+        endgame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
+        startActivity(endgame);
+        Log.d("play", "finishing");
+        finish();
     }
 
     private void updateScreen(){
@@ -99,5 +104,16 @@ public class Play extends Activity {
             }
         }
         input.setText("");
+    }
+    private void CheckGameType(){// could check gametype by some extra info from activating classes, but that would require more refactoring
+        if(logik != null && logik.erSpilletSlut()){
+            logik.nulstil();
+        } else{
+            ArrayList<String> candidateLlist = getIntent().getStringArrayListExtra("muligeOrd");
+            if(candidateLlist != null) possibleWords = candidateLlist; //
+            else possibleWords.add(getIntent().getStringExtra("wordToBeGuessed"));
+
+            logik = new Galgelogik(possibleWords);
+        }
     }
 }

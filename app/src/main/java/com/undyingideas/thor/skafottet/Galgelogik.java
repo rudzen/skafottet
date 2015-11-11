@@ -72,6 +72,15 @@ public class Galgelogik {
     }
   }
 
+  /**
+   * Constructor for single word instances, used for hotSeat and multiPlayer
+   * @param WordToBeGuessed
+   */
+  public Galgelogik(String WordToBeGuessed){
+    this.muligeOrd.add(WordToBeGuessed);
+    nulstil();
+  }
+
   public Galgelogik(ArrayList<String> muligeOrd){
     this.muligeOrd = muligeOrd;
     nulstil();

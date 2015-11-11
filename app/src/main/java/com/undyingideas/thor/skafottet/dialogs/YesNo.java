@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 
 /**
  * Just a Yes / No dialog fragment.
@@ -29,6 +30,7 @@ public class YesNo extends DialogFragment {
         arg.putString("yesButton", yesButton);
         arg.putString("noButton", noButton);
         frag.setArguments(arg);
+        Log.d("lol", "yesNo");
         return frag;
     }
 
