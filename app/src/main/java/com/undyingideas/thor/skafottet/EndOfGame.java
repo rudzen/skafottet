@@ -55,7 +55,7 @@ public class EndOfGame extends Activity {
     }
 
     public void nytSpilClck(View view) {
-        Intent newGame = new Intent(this, Play.class);
+        Intent newGame = new Intent(this, HangmanButtonActivity.class);
         newGame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
 
         startActivity(newGame);
