@@ -12,7 +12,7 @@ import android.widget.ImageView;
 public class EndOfGame extends Activity {
 
     WebView resultaterDisp; //skal bruges til at vise spillets resultater, og om det er vundet etc.
-    ImageView winImage; //skal vise et vinder billede, eller et straffende taberbillede
+    ImageView endImage; //skal vise et vinder/taber billede, eller et straffende taberbillede
     Bundle gameData;
     String resultText;
     Button newGame, endGame;
@@ -21,29 +21,24 @@ public class EndOfGame extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end_of_game);
 
-        winImage = (ImageView) findViewById(R.id.PokalBillede);
+        endImage = (ImageView) findViewById(R.id.PokalBillede);
         resultaterDisp = (WebView) findViewById(R.id.SpilresultaterWebView);
 
         gameData = getIntent().getExtras();
-        //newGame = (Button) findViewById(R.id.nytSplBtn);
-       // endGame = (Button) findViewById(R.id.afslutBtn);
 
         displayResults(gameData);
-
-
-
 
     }
     private void displayResults(Bundle spilData){
 
         if(spilData.getBoolean("vundet")){
-            winImage.setImageResource(R.mipmap.vundet);
-            resultText = "<html><body>Tilykke du har vundet <br> <br> Du gættede forkert <b> " + spilData.getInt("forsøg") + " gange</b> .</body></html>";
+            endImage.setImageResource(R.mipmap.vundet);
+            resultText = "<html><body>Tilykke du har vundet <br> <br> Du gættede forkert <b> " + spilData.getInt("forsøg") + " gange</b>.</body></html>";
             resultaterDisp.loadData(resultText,"text/html; charset=UTF-8", null);
         }
         else{
-            winImage.setImageResource(R.mipmap.rip);
-            resultText = "<html><body>Du har tabt <br> <br> Ordet du ledte efter var <b> " + spilData.getString("ordet") + "</b> .</body></html>";
+            endImage.setImageResource(R.mipmap.rip);
+            resultText = "<html><body>Du har tabt <br> <br> Ordet du ledte efter var <b> " + spilData.getString("ordet") + "</b>.</body></html>";
             resultaterDisp.loadData(resultText,"text/html; charset=UTF-8", null);
 
         }
