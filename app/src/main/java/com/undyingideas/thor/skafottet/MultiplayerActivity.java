@@ -28,6 +28,7 @@ public class MultiplayerActivity extends AppCompatActivity {
         hotSeatStart.putExtra("muligeOrd",getIntent().getStringArrayListExtra("muligeOrd"));
         hotSeatStart.putExtra("isHotSeat", true);
         startActivity(hotSeatStart);
+        finish();
 
     }
 
