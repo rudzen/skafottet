@@ -5,7 +5,7 @@ package com.undyingideas.thor.skafottet;
  */
 
 /**
- * Meant to hold the share gamelogik/flow, in order to allow different layouts to be utilized
+ * Meant to hold the shared gamelogik/flow, in order to allow different layouts to be utilized
  *
  */
 public class AbstractPlayActivity {
