@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.undyingideas.thor.skafottet.dialogs.YesNo;
 
@@ -21,6 +22,7 @@ public class WordPicker extends AppCompatActivity implements YesNo.YesNoResultLi
     SharedPreferences wordListGetter;
     ListView wordList;
     ArrayList<String> muligeOrd;
+    TextView title;
     private boolean isHotseat = false;
     private String possibleWord;
     @Override
@@ -35,7 +37,11 @@ public class WordPicker extends AppCompatActivity implements YesNo.YesNoResultLi
 
         //muligeOrd = getIntent().getStringArrayListExtra("muligeOrd");
         wordList = (ListView) findViewById(R.id.ordListen);
-        if(isHotseat)wordList.setOnItemClickListener(new ListClickListener());
+        if(isHotseat){
+            title = (TextView) findViewById(R.id.WordPickerTitle);
+            title.setText("Vælg et ord til din modstander!");
+            wordList.setOnItemClickListener(new ListClickListener());
+        }
 
         wordList.setAdapter(new ArrayAdapter(this, android.R.layout.simple_list_item_1, android.R.id.text1, muligeOrd));
     }

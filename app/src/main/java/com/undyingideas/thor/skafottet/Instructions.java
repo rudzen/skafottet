@@ -6,14 +6,15 @@ import android.webkit.WebView;
 
 public class Instructions extends AppCompatActivity {
 
-    String instruktionText = "<html><body><ol>" +
+    String instructionText = "<html><body><ol>" +
             "<li>Gæt på et bogstav ved at trykke på det</li>"+
             "<li>Hvis du gætter forkert bliver du lidt hængt</li>"+
             "<li>Hvis du gætter rigtigt bliver det vist på ordet</li>"+
+            "<li><b>Vælg Multiplayer -> Hot Seat, for at kunne vælge et ord en af dine venner/fjender skal gætte</b></li>"+
             "<li>...</li>"+
             "<li>profit</li>"+
             "</ol></body></html>" ;
-    WebView instruktioner;
+    WebView instructionDisplay;
 
 
     @Override
@@ -21,8 +22,8 @@ public class Instructions extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_instruktioner);
 
-        instruktioner = (WebView) findViewById(R.id.webView);
-        instruktioner.loadData(instruktionText,"text/html; charset=UTF-8", null);
+        instructionDisplay = (WebView) findViewById(R.id.webView);
+        instructionDisplay.loadData(instructionText, "text/html; charset=UTF-8", null);
 
     }
 }

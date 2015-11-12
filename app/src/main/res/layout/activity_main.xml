@@ -35,7 +35,7 @@
         android:id="@+id/InstrBtn"
         android:onClick="instructionClck"
         android:layout_centerVertical="true"
-        android:layout_alignStart="@+id/StartBtn" />
+        android:layout_alignStart="@+id/btnMultiplayer" />
 
     <Button
         android:layout_width="wrap_content"
@@ -43,24 +43,24 @@
         android:text="Instillinger"
         android:id="@+id/InstilBtn"
         android:onClick="preferenceClck"
-        android:layout_below="@+id/InstrBtn"
-        android:layout_alignStart="@+id/InstrBtn" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/InstrBtn"
+        android:layout_marginBottom="52dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Se Mulige Ord"
         android:id="@+id/OrdListeBtn"
-        android:layout_above="@+id/InstrBtn"
-        android:layout_alignStart="@+id/InstrBtn"
-        android:layout_marginBottom="29dp"
-        android:onClick="getWordsClck" />
+        android:onClick="getWordsClck"
+        android:layout_above="@+id/InstilBtn"
+        android:layout_alignStart="@+id/InstilBtn" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Multiplayer"
         android:id="@+id/btnMultiplayer"
-        android:layout_below="@+id/InstilBtn"
-        android:layout_alignStart="@+id/InstilBtn" />
+        android:layout_below="@+id/StartBtn"
+        android:layout_alignStart="@+id/StartBtn" />
 </RelativeLayout>
