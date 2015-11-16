@@ -56,8 +56,13 @@ public class MainActivity extends Activity {
     }
 
     public void getWordsClck(View v){
-        Intent wordPicker = new Intent(MainActivity.this, WordPicker.class);
-        wordPicker.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
-        startActivity(wordPicker);
+//        Intent wordPicker = new Intent(MainActivity.this, WordPicker.class);
+//        wordPicker.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
+//        startActivity(wordPicker);
+        WordPicker fragment = new WordPicker();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContentView, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 }
