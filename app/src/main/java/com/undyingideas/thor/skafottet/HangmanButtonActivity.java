@@ -24,7 +24,10 @@ public class HangmanButtonActivity extends Activity {
         setContentView(R.layout.hangman_button);
         imageView = (ImageView) findViewById(R.id.imageView);
         imageView.setImageResource(R.mipmap.galge);
-        game = new Galgelogik(getIntent().getExtras().getStringArrayList("muligeOrd"));
+        if (getIntent().getExtras().getBoolean("isHotSeat"))
+            game = new Galgelogik(getIntent().getExtras().getString("wordToBeGuessed"));
+        else
+            game = new Galgelogik(getIntent().getExtras().getStringArrayList("muligeOrd"));
         //game.nulstil();
         ordet = (TextView) findViewById(R.id.visibleText);
         ordet.setText(game.getSynligtOrd());

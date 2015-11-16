@@ -50,7 +50,7 @@ public class WordPicker extends AppCompatActivity implements YesNo.YesNoResultLi
     public void onDone(boolean result) {
         if(result){
             Log.d("wordPicker", "WordAccepted");
-            Intent startGame = new Intent(this, Play.class);
+            Intent startGame = new Intent(this, HangmanButtonActivity.class);
             startGame.putExtra("isHotSeat", true);
             startGame.putExtra("wordToBeGuessed", possibleWord);
             startActivity(startGame);
