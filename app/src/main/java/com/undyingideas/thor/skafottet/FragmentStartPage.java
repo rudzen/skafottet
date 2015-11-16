@@ -1,28 +1,33 @@
 package com.undyingideas.thor.skafottet;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
-public class MainActivity extends Activity {
+public class FragmentStartPage extends Fragment {
 
     private Button StartBtn, instructionBtn, preferenceBtn;
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        View rot = i.inflate(R.layout.activity_main,container,false);
+
 
         findViewById(R.id.btnMultiplayer).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MultiplayerActivity.class)
+                startActivity(new Intent(getActivity(), MultiplayerActivity.class)
                         .putExtra("muligeOrd",getIntent().getStringArrayListExtra("muligeOrd")));
             }
         });
+
+        return rot;
 
     }
 
@@ -31,7 +36,7 @@ public class MainActivity extends Activity {
      * @param v
      */
     public void startClck(View v){
-        Intent startGame = new Intent(MainActivity.this, HangmanButtonActivity.class);
+        Intent startGame = new Intent(getActivity(), HangmanButtonActivity.class);
         startGame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
         //Intent startGame = new Intent(MainActivity.this, LoadingScreen.class);
 
@@ -43,7 +48,7 @@ public class MainActivity extends Activity {
      * @param v
      */
     public void preferenceClck(View v){
-        startActivity(new Intent(MainActivity.this, Preferences.class));
+        startActivity(new Intent(getActivity(), Preferences.class));
     }
 
     /**
@@ -51,12 +56,12 @@ public class MainActivity extends Activity {
      * @param view
      */
     public void instructionClck(View view) {
-        Intent Instillinger = new Intent(MainActivity.this, Instructions.class);
+        Intent Instillinger = new Intent(getActivity(), Instructions.class);
         startActivity(Instillinger);
     }
 
     public void getWordsClck(View v){
-        Intent wordPicker = new Intent(MainActivity.this, WordPicker.class);
+        Intent wordPicker = new Intent(getActivity(), WordPicker.class);
         wordPicker.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
         startActivity(wordPicker);
 //        WordPicker fragment = new WordPicker();

@@ -30,10 +30,11 @@ public class WordPicker extends Fragment implements YesNo.YesNoResultListener {
     private String possibleWord;
     @Override
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+
         View rot = i.inflate(R.layout.activity_ord_vaelger,container,false);
         wordListGetter = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        isHotseat = getIntent().getBooleanExtra("isHotSeat", false);
+//        isHotseat = getIntent().getBooleanExtra("isHotSeat", false);
+
         muligeOrd = new ArrayList<>();
         Log.d("WordPicker", "cacheSize:" + wordListGetter.getStringSet("possibleWords",null).size() );
         muligeOrd.addAll(wordListGetter.getStringSet("possibleWords", null));

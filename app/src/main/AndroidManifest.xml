@@ -24,8 +24,7 @@
             android:name=".Play"
             android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".HangmanButtonActivity">
-
+        <activity android:name=".HangmanButtonActivity" >
         </activity>
         <activity
             android:name=".Instructions"
@@ -39,15 +38,18 @@
             android:name=".EndOfGame"
             android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:parentActivityName=".LoadingScreen"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".WordPicker"
-            android:screenOrientation="portrait">
-
+        <activity
+            android:name=".WordPicker"
+            android:screenOrientation="portrait" >
         </activity>
         <activity android:name=".MultiplayerActivity" >
+        </activity>
+        <activity android:name=".FragmentMainActivity" >
         </activity>
     </application>
 
