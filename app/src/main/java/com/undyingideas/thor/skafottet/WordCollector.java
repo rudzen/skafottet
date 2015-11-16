@@ -8,6 +8,7 @@ import java.security.spec.ECField;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 
 /**
  * Created by Thor on 08-11-2015.
@@ -17,21 +18,14 @@ import java.util.HashSet;
 public class WordCollector {
     private static ArrayList<String> muligeOrd;
 
-
     public static ArrayList<String> samlOrd(String url) throws Exception{
         muligeOrd = new ArrayList<String>();
-
         if(url == null){
-
                 hentOrdFra("http://dr.dk");
-                //hentOrdFraMoths();
-
-
             }
         else{
                 hentOrdFra(url);
             }
-
         return muligeOrd;
     }
 
@@ -73,22 +67,15 @@ public class WordCollector {
 
     public static void hentOrdFra(String url) throws Exception{
         String data = hentUrl(url);
-        System.out.println("data = " + data);
-
         data = data.replaceAll("<.+?>", " ").toLowerCase().replaceAll("[^a-zæøå]", " ");
-        System.out.println("data = " + data);
         muligeOrd.clear();
-        muligeOrd.addAll(new HashSet<String>(Arrays.asList(data.split(" "))));
-
-        System.out.println("muligeOrd = " + muligeOrd);
+        LinkedList<String> list = new LinkedList<>();
+        for (String s: data.split(" "))
+        if (s.length() > 2) list.add(s);
+        muligeOrd.addAll(new HashSet<String>(list));
     }
-
-
 
     public static ArrayList<String> samlOrd() throws Exception{
         return samlOrd(null);
-
     }
-
-
 }
