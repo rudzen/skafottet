@@ -33,6 +33,7 @@ public class MainActivity extends Activity {
     public void startClck(View v){
         Intent startGame = new Intent(MainActivity.this, HangmanButtonActivity.class);
         startGame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
+
         //Intent startGame = new Intent(MainActivity.this, LoadingScreen.class);
 
         startActivity(startGame);

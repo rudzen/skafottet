@@ -43,12 +43,20 @@ public class FragmentStartPage extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Intent startGame = new Intent(getActivity(), HangmanButtonActivity.class);
+
+            Bundle b = new Bundle();
+            b.putStringArrayList("muligeOrd", getArguments().getStringArrayList("muligeOrd"));
+            HangmanButtonFragment fragment = new HangmanButtonFragment();
+            fragment.setArguments(b);
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentindhold, fragment)
+                    .commit();
+        }
 //        startGame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
             //Intent startGame = new Intent(MainActivity.this, LoadingScreen.class);
 
-            startActivity(startGame);
-        }
+
+
     }
 
 

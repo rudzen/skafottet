@@ -16,7 +16,11 @@ public class FragmentMainActivity extends AppCompatActivity {
 
 
         if (savedInstanceState == null) {
+            Bundle b = new Bundle();
+            b.putStringArrayList("muligeOrd",getIntent().getStringArrayListExtra("muligeOrd"));
+
             FragmentStartPage fragment = new FragmentStartPage();
+            fragment.setArguments(b);
             getFragmentManager().beginTransaction()
                     .add(R.id.fragmentindhold, fragment)  // tom container i layout
                     .commit();

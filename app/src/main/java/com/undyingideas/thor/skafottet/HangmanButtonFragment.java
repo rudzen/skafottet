@@ -1,17 +1,20 @@
 package com.undyingideas.thor.skafottet;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class HangmanButtonActivity extends Activity {
+public class HangmanButtonFragment extends Fragment {
 
     private Galgelogik game;
     private ImageView imageView;
@@ -19,20 +22,22 @@ public class HangmanButtonActivity extends Activity {
     private ArrayList<Button> listOfButtons = new ArrayList<Button>();
     private String theGuess;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.hangman_button);
-        imageView = (ImageView) findViewById(R.id.imageView);
-        imageView.setImageResource(R.mipmap.galge);
+        View root = i.inflate(R.layout.hangman_button,container,false);
 
-        if (getIntent().getExtras().getBoolean("isHotSeat"))
-            game = new Galgelogik(getIntent().getExtras().getString("wordToBeGuessed"));
+        imageView = (ImageView) root.findViewById(R.id.imageView);
+        imageView.setImageResource(R.mipmap.galge);
+        
+        if (getArguments().getBoolean("isHotSeat"))
+            game = new Galgelogik(getArguments().getString("wordToBeGuessed"));
         else
-            game = new Galgelogik(getIntent().getExtras().getStringArrayList("muligeOrd"));
+            game = new Galgelogik(getArguments().getStringArrayList("muligeOrd"));
         //game.nulstil();
-        ordet = (TextView) findViewById(R.id.visibleText);
+        ordet = (TextView) root.findViewById(R.id.visibleText);
         ordet.setText(game.getSynligtOrd());
         resetButtons();
+        return root;
     }
 
     public void buttonOnClick(View v){
@@ -59,16 +64,18 @@ public class HangmanButtonActivity extends Activity {
         if(!game.erSpilletSlut()){
             updateScreen();
         } else {
-            Intent endgame = new Intent(HangmanButtonActivity.this, EndOfGame.class);
+            Intent endgame = new Intent(getActivity(), EndOfGame.class);
 
             endgame.putExtra("vundet", game.erSpilletVundet());
             endgame.putExtra("forsøg", game.getAntalForkerteBogstaver());
             endgame.putExtra("ordet", game.getOrdet());
             endgame.putExtra("spiller", "Du");
-            endgame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
+            endgame.putExtra("muligeOrd", getArguments().getStringArrayList("muligeOrd"));
             startActivity(endgame);
             Log.d("play", "finishing");
-            finish();
+
+            //Commented finish out, its causing problems with finish.
+            //finish();
         }
     }
 
