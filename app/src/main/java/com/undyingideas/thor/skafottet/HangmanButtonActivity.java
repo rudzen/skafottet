@@ -35,15 +35,12 @@ public class HangmanButtonActivity extends Activity {
     }
 
     public void buttonOnClick(View v){
-        // do something
-
         Button button= (Button )v;
         ((Button) v).setVisibility(View.INVISIBLE);
 
         listOfButtons.add((Button) v);
         String letter = ((Button) v).getText().toString();
-       guess(letter);
-
+        guess(letter);
     }
     public void resetButtons(){
         for(int i=0; i<listOfButtons.size();i++){

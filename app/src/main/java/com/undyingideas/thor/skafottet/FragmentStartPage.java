@@ -16,7 +16,8 @@ public class FragmentStartPage extends Fragment {
     @Override
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
-        View rot = i.inflate(R.layout.activity_main,container,false);
+        View rot = i.inflate(R.layout.fragment_main,container,false);
+
 
         rot.findViewById(R.id.btnStart).setOnClickListener(new StartClick());
         rot.findViewById(R.id.btnInstructions).setOnClickListener(new InstructionClick());
@@ -73,14 +74,13 @@ public class FragmentStartPage extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Intent wordPicker = new Intent(getActivity(), WordPicker.class);
+      //      Intent wordPicker = new Intent(getActivity(), WordPicker.class);
 //        wordPicker.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
-            startActivity(wordPicker);
-//        WordPicker fragment = new WordPicker();
-//        getFragmentManager().beginTransaction()
-//                .replace(R.id.fragmentContentView, fragment)
-//                .addToBackStack(null)
-//                .commit();
+       //     startActivity(wordPicker);
+        WordPicker fragment = new WordPicker();
+        getFragmentManager().beginTransaction()
+               .replace(R.id.fragmentindhold, fragment)
+                .commit();
         }
     }
 

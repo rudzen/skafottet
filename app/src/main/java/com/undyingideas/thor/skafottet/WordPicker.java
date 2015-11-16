@@ -59,7 +59,6 @@ public class WordPicker extends Fragment implements YesNo.YesNoResultListener {
             startGame.putExtra("isHotSeat", true);
             startGame.putExtra("wordToBeGuessed", possibleWord);
             startActivity(startGame);
-//            finish();
         }
         else Log.d("wordPicer", "wordDenied");
 
