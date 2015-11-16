@@ -40,9 +40,9 @@ public class WordPicker extends Fragment implements YesNo.YesNoResultListener {
         muligeOrd.addAll(wordListGetter.getStringSet("possibleWords", null));
 
         //muligeOrd = getIntent().getStringArrayListExtra("muligeOrd");
-        wordList = (ListView) findViewById(R.id.ordListen);
+        wordList = (ListView) rot.findViewById(R.id.ordListen);
         if(isHotseat){
-            title = (TextView) findViewById(R.id.WordPickerTitle);
+            title = (TextView) rot.findViewById(R.id.WordPickerTitle);
             title.setText("Vælg et ord til din modstander!");
             wordList.setOnItemClickListener(new ListClickListener());
         }
@@ -59,7 +59,7 @@ public class WordPicker extends Fragment implements YesNo.YesNoResultListener {
             startGame.putExtra("isHotSeat", true);
             startGame.putExtra("wordToBeGuessed", possibleWord);
             startActivity(startGame);
-            finish();
+//            finish();
         }
         else Log.d("wordPicer", "wordDenied");
 

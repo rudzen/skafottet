@@ -18,6 +18,11 @@ public class FragmentStartPage extends Fragment {
         super.onCreate(savedInstanceState);
         View rot = i.inflate(R.layout.activity_main,container,false);
 
+        rot.findViewById(R.id.btnStart).setOnClickListener(new StartClick());
+        rot.findViewById(R.id.btnInstructions).setOnClickListener(new InstructionClick());
+        rot.findViewById(R.id.btnSettings).setOnClickListener(new PreferenceClick());
+        rot.findViewById(R.id.btnWordList).setOnClickListener(new GetWordsClick());
+
 
 //        findViewById(R.id.btnMultiplayer).setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -31,43 +36,52 @@ public class FragmentStartPage extends Fragment {
 
     }
 
-    /**
-     * knap til at starte 1p spil
-     * @param v
-     */
-    public void startClck(View v){
-        Intent startGame = new Intent(getActivity(), HangmanButtonActivity.class);
+
+
+    public class StartClick implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            Intent startGame = new Intent(getActivity(), HangmanButtonActivity.class);
 //        startGame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
-        //Intent startGame = new Intent(MainActivity.this, LoadingScreen.class);
+            //Intent startGame = new Intent(MainActivity.this, LoadingScreen.class);
 
-        startActivity(startGame);
+            startActivity(startGame);
+        }
     }
 
-    /**
-     * Knap til instillings aktivitet
-     * @param v
-     */
-    public void preferenceClck(View v){
-        startActivity(new Intent(getActivity(), Preferences.class));
+
+    public class PreferenceClick implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            startActivity(new Intent(getActivity(), Preferences.class));
+        }
     }
 
-    /**
-     * knap til instruktions aktivitet
-     * @param view
-     */
-    public void instructionClck(View view) {
-        Intent Instillinger = new Intent(getActivity(), Instructions.class);
-        startActivity(Instillinger);
+
+    public class InstructionClick implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            Intent Instillinger = new Intent(getActivity(), Instructions.class);
+            startActivity(Instillinger);
+        }
     }
 
-    public void getWordsClck(View v){
-        Intent wordPicker = new Intent(getActivity(), WordPicker.class);
+    public class GetWordsClick implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            Intent wordPicker = new Intent(getActivity(), WordPicker.class);
 //        wordPicker.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
-        startActivity(wordPicker);
+            startActivity(wordPicker);
 //        WordPicker fragment = new WordPicker();
 //        getFragmentManager().beginTransaction()
 //                .replace(R.id.fragmentContentView, fragment)
 //                .addToBackStack(null)
 //                .commit();
+        }
     }
+
 }

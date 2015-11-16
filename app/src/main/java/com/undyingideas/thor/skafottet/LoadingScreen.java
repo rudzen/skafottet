@@ -40,13 +40,13 @@ public class LoadingScreen extends Activity {
             } catch (Exception e){
                 muligeOrd.addAll(prefs.getStringSet("possibleWords", null));
                 return muligeOrd;
-            }
-        }
+    }
+}
 
         @Override
         protected void onPostExecute(Object possibleWords) {
 
-            Intent StartApp = new Intent(LoadingScreen.this, MainActivity.class);
+            Intent StartApp = new Intent(LoadingScreen.this, FragmentMainActivity.class);
 
             StartApp.putExtra("muligeOrd", (ArrayList<String>) possibleWords);
             StartApp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);// Fjerner loadscreen fra stacken
