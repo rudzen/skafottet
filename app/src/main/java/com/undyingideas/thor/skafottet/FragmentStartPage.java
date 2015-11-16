@@ -19,13 +19,13 @@ public class FragmentStartPage extends Fragment {
         View rot = i.inflate(R.layout.activity_main,container,false);
 
 
-        findViewById(R.id.btnMultiplayer).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), MultiplayerActivity.class)
-                        .putExtra("muligeOrd",getIntent().getStringArrayListExtra("muligeOrd")));
-            }
-        });
+//        findViewById(R.id.btnMultiplayer).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(getActivity(), MultiplayerActivity.class)
+//                        .putExtra("muligeOrd",getIntent().getStringArrayListExtra("muligeOrd")));
+//            }
+//        });
 
         return rot;
 
@@ -37,7 +37,7 @@ public class FragmentStartPage extends Fragment {
      */
     public void startClck(View v){
         Intent startGame = new Intent(getActivity(), HangmanButtonActivity.class);
-        startGame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
+//        startGame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
         //Intent startGame = new Intent(MainActivity.this, LoadingScreen.class);
 
         startActivity(startGame);
@@ -62,7 +62,7 @@ public class FragmentStartPage extends Fragment {
 
     public void getWordsClck(View v){
         Intent wordPicker = new Intent(getActivity(), WordPicker.class);
-        wordPicker.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
+//        wordPicker.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
         startActivity(wordPicker);
 //        WordPicker fragment = new WordPicker();
 //        getFragmentManager().beginTransaction()
