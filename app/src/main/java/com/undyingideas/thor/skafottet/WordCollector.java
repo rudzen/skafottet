@@ -73,9 +73,7 @@ public class WordCollector {
         LinkedList<String> list = new LinkedList<>();
         for (String s: data.split(" "))
         if (s.length() > 2) list.add(s);
-        ArrayList<String> sort = new ArrayList<>(list);
-        Collections.sort(sort);
-        muligeOrd.addAll(new HashSet<String>(sort));
+        muligeOrd.addAll(new HashSet<String>(list));
     }
 
     public static ArrayList<String> samlOrd() throws Exception{

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.undyingideas.thor.skafottet.dialogs.YesNo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 
 public class WordPicker extends Fragment implements YesNo.YesNoResultListener {
@@ -36,9 +37,9 @@ public class WordPicker extends Fragment implements YesNo.YesNoResultListener {
 //        isHotseat = getIntent().getBooleanExtra("isHotSeat", false);
 
         muligeOrd = new ArrayList<>();
-        Log.d("WordPicker", "cacheSize:" + wordListGetter.getStringSet("possibleWords",null).size() );
+        Log.d("WordPicker", "cacheSize:" + wordListGetter.getStringSet("possibleWords", null).size());
         muligeOrd.addAll(wordListGetter.getStringSet("possibleWords", null));
-
+        Collections.sort(muligeOrd);
         //muligeOrd = getIntent().getStringArrayListExtra("muligeOrd");
         wordList = (ListView) rot.findViewById(R.id.ordListen);
         if(isHotseat){
