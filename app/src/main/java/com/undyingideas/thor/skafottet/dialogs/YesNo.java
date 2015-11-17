@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -59,8 +60,9 @@ public class YesNo extends DialogFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        activity = (Activity) activity;
         try {
-            listener = (YesNoResultListener) activity;
+            listener =  (YesNoResultListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " says : 'aaaargh i'm dead!'");
         }

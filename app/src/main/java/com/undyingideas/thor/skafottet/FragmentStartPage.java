@@ -1,6 +1,5 @@
 package com.undyingideas.thor.skafottet;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +22,7 @@ public class FragmentStartPage extends Fragment {
         rot.findViewById(R.id.btnInstructions).setOnClickListener(new InstructionClick());
         rot.findViewById(R.id.btnSettings).setOnClickListener(new PreferenceClick());
         rot.findViewById(R.id.btnWordList).setOnClickListener(new GetWordsClick());
+        rot.findViewById(R.id.btnMultiplayer).setOnClickListener(new StartMultiPlayerClick());
 
 
 //        findViewById(R.id.btnMultiplayer).setOnClickListener(new View.OnClickListener() {
@@ -87,9 +87,21 @@ public class FragmentStartPage extends Fragment {
        //     startActivity(wordPicker);
         WordPicker fragment = new WordPicker();
         getFragmentManager().beginTransaction()
-               .replace(R.id.fragmentindhold, fragment)
+               .replace(R.id.fragmentindhold, fragment).addToBackStack(null)
                 .commit();
         }
     }
 
+    private class StartMultiPlayerClick implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            MultiPlayerFragment fragment = new MultiPlayerFragment();
+            Bundle multiplayerData = new Bundle();
+            multiplayerData.putStringArrayList("muligeOrd", getArguments().getStringArrayList("muligeOrd"));
+            fragment.setArguments(multiplayerData);
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentindhold, fragment)
+                        .addToBackStack(null).commit();
+        }
+    }
 }

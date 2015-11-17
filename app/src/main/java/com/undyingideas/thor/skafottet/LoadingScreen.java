@@ -36,11 +36,14 @@ public class LoadingScreen extends Activity {
                 data.addAll(muligeOrd);
                 Log.d("LoadingScreen", "length:" + data.size());
                 prefs.edit().putStringSet("possibleWords", data).commit();//creates a cache for later use
-                return muligeOrd;
+
             } catch (Exception e){
                 muligeOrd.addAll(prefs.getStringSet("possibleWords", null));
-                return muligeOrd;
-    }
+                if(muligeOrd.size() <= 1) muligeOrd.add(0, "hej");
+
+            }
+            Log.d("LoadingScreen", "dataLength:" + muligeOrd.size());
+            return muligeOrd;
 }
 
         @Override

@@ -1,5 +1,6 @@
 package com.undyingideas.thor.skafottet;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Intent;
@@ -22,11 +23,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
-public class WordPicker extends Fragment implements YesNo.YesNoResultListener {
+public class WordPicker extends Fragment {
     SharedPreferences wordListGetter;
     ListView wordList;
     ArrayList<String> muligeOrd;
     TextView title;
+    Bundle data;
     private boolean isHotseat = false;
     private String possibleWord;
     @Override
@@ -34,13 +36,14 @@ public class WordPicker extends Fragment implements YesNo.YesNoResultListener {
 
         View rot = i.inflate(R.layout.activity_ord_vaelger,container,false);
         wordListGetter = PreferenceManager.getDefaultSharedPreferences(getActivity());
-//        isHotseat = getIntent().getBooleanExtra("isHotSeat", false);
-
+        if(getArguments() != null){ data = getArguments();
+        isHotseat = data.getBoolean("isHotSeat", false);}
+        Log.d("WordPicker", "isHotSeat:" + isHotseat);
         muligeOrd = new ArrayList<>();
         Log.d("WordPicker", "cacheSize:" + wordListGetter.getStringSet("possibleWords", null).size());
         muligeOrd.addAll(wordListGetter.getStringSet("possibleWords", null));
         Collections.sort(muligeOrd);
-        //muligeOrd = getIntent().getStringArrayListExtra("muligeOrd");
+
         wordList = (ListView) rot.findViewById(R.id.ordListen);
         if(isHotseat){
             title = (TextView) rot.findViewById(R.id.WordPickerTitle);
@@ -49,27 +52,18 @@ public class WordPicker extends Fragment implements YesNo.YesNoResultListener {
         }
 
         wordList.setAdapter(new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, muligeOrd));
+
+
         return rot;
     }
 
-    @Override
-    public void onDone(boolean result) {
-        if(result){
-            Log.d("wordPicker", "WordAccepted");
-            Intent startGame = new Intent(getActivity(), HangmanButtonActivity.class);
-            startGame.putExtra("isHotSeat", true);
-            startGame.putExtra("wordToBeGuessed", possibleWord);
-            startActivity(startGame);
-        }
-        else Log.d("wordPicer", "wordDenied");
 
-    }
 
     private class ListClickListener implements AdapterView.OnItemClickListener {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            possibleWord = muligeOrd.get(position);
+            FragmentMainActivity.possibleWord = muligeOrd.get(position);
             DialogFragment nf = YesNo.newInstance("Skal ordet være?", muligeOrd.get(position), "Ja", "Nej");
 
             Log.d("lol", "clicked");
