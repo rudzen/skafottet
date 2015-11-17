@@ -17,27 +17,14 @@ public class FragmentStartPage extends Fragment {
         super.onCreate(savedInstanceState);
         View rot = i.inflate(R.layout.fragment_main,container,false);
 
-
         rot.findViewById(R.id.btnStart).setOnClickListener(new StartClick());
         rot.findViewById(R.id.btnInstructions).setOnClickListener(new InstructionClick());
         rot.findViewById(R.id.btnSettings).setOnClickListener(new PreferenceClick());
         rot.findViewById(R.id.btnWordList).setOnClickListener(new GetWordsClick());
         rot.findViewById(R.id.btnMultiplayer).setOnClickListener(new StartMultiPlayerClick());
 
-
-//        findViewById(R.id.btnMultiplayer).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(getActivity(), MultiplayerActivity.class)
-//                        .putExtra("muligeOrd",getIntent().getStringArrayListExtra("muligeOrd")));
-//            }
-//        });
-
         return rot;
-
     }
-
-
 
     public class StartClick implements View.OnClickListener{
 
@@ -46,22 +33,13 @@ public class FragmentStartPage extends Fragment {
 
             Bundle b = new Bundle();
             b.putBoolean("isHotSeat", false);
-//            b.putStringArrayList("muligeOrd", getArguments().getStringArrayList("muligeOrd"));
-//            HangmanButtonFragment fragment = new HangmanButtonFragment();
-//
-            PlayFragment fragment = new PlayFragment();
+           PlayFragment fragment = new PlayFragment();
             fragment.setArguments(b);
             getFragmentManager().beginTransaction()
                     .replace(R.id.fragmentindhold, fragment)
                     .commit();
         }
-//        startGame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
-            //Intent startGame = new Intent(MainActivity.this, LoadingScreen.class);
-
-
-
     }
-
 
     public class PreferenceClick implements View.OnClickListener{
 
@@ -71,7 +49,6 @@ public class FragmentStartPage extends Fragment {
                     new Intent(getActivity(), Preferences.class));
         }
     }
-
 
     public class InstructionClick implements View.OnClickListener{
 
@@ -89,7 +66,7 @@ public class FragmentStartPage extends Fragment {
 
         WordPicker fragment = new WordPicker();
         getFragmentManager().beginTransaction()
-               .replace(R.id.fragmentindhold, fragment).addToBackStack(null)
+               .add(R.id.fragmentindhold, fragment).addToBackStack(null)
                 .commit();
         }
     }

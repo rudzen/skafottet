@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.Window;
 
 import com.undyingideas.thor.skafottet.dialogs.YesNo;
@@ -33,6 +34,7 @@ public class FragmentMainActivity extends AppCompatActivity implements YesNo.Yes
                     .addToBackStack(null)
                     .commit();
         }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
@@ -57,5 +59,13 @@ public class FragmentMainActivity extends AppCompatActivity implements YesNo.Yes
 //            startActivity(startGame);
         }
         else Log.d("wordPicer", "wordDenied");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if (item.getItemId() == android.R.id.home){
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

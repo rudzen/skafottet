@@ -21,10 +21,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Play"
+            android:name=".OldActivities.Play"
             android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".HangmanButtonActivity" >
+        <activity android:name=".OldActivities.HangmanButtonActivity" >
         </activity>
         <activity
             android:name=".Instructions"
@@ -35,11 +35,11 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".EndOfGame"
+            android:name=".OldActivities.EndOfGame"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".OldActivities.MainActivity"
             android:parentActivityName=".LoadingScreen"
             android:screenOrientation="portrait" >
         </activity>
@@ -47,7 +47,7 @@
             android:name=".WordPicker"
             android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".MultiplayerActivity" >
+        <activity android:name=".OldActivities.MultiplayerActivity" >
         </activity>
         <activity android:name=".FragmentMainActivity" >
         </activity>

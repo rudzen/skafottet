@@ -8,6 +8,8 @@ import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.undyingideas.thor.skafottet.SupportClasses.WordCollector;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 

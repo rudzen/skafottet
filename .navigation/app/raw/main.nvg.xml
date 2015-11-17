@@ -14,7 +14,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.undyingideas.thor.skafottet.MainActivity"/>
+        className = "com.undyingideas.thor.skafottet.OldActivities.MainActivity"/>
       <point      
         x = "1120"      
         y = "208"/>
@@ -38,7 +38,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.undyingideas.thor.skafottet.MultiplayerActivity"/>
+        className = "com.undyingideas.thor.skafottet.OldActivities.MultiplayerActivity"/>
       <point      
         x = "136"      
         y = "288"/>
@@ -46,7 +46,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.undyingideas.thor.skafottet.Play"/>
+        className = "com.undyingideas.thor.skafottet.OldActivities.Play"/>
       <point      
         x = "3052"      
         y = "88"/>
@@ -54,7 +54,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.undyingideas.thor.skafottet.EndOfGame"/>
+        className = "com.undyingideas.thor.skafottet.OldActivities.EndOfGame"/>
       <point      
         x = "1328"      
         y = "184"/>

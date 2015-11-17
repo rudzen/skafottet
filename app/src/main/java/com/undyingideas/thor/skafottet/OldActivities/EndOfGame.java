@@ -1,4 +1,4 @@
-package com.undyingideas.thor.skafottet;
+package com.undyingideas.thor.skafottet.OldActivities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,6 +8,9 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.WordPicker;
 
 public class EndOfGame extends Activity {
 

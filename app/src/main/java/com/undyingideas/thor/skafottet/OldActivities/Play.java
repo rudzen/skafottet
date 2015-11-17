@@ -1,4 +1,4 @@
-package com.undyingideas.thor.skafottet;
+package com.undyingideas.thor.skafottet.OldActivities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.undyingideas.thor.skafottet.Galgelogik;
+import com.undyingideas.thor.skafottet.R;
 
 import java.util.ArrayList;
 

@@ -61,16 +61,13 @@ public class EndOfGameFragment extends Fragment {
 
     private class endGameListener implements View.OnClickListener {
 
-
-
         @Override
         public void onClick(View v) {
-
+            Log.d("endgame", "going to start Screen");
+            FragmentStartPage newGame = new FragmentStartPage();
+            getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, newGame).commit();
         }
-
-
     }
-
 
     private class startGameListener implements View.OnClickListener {
         Bundle gameData = new Bundle();
