@@ -43,8 +43,6 @@ public class EndOfGame extends Activity {
 
         }
         Log.d("endgame", "data: " + spilData.getString("spiller ") + " " + spilData.getString("forsøg") + " " + spilData.getBoolean("vundet"));
-
-
     }
 
     public void newGameClck(View view) {

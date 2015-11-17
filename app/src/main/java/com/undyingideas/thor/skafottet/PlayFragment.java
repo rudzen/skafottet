@@ -19,7 +19,7 @@ import java.util.ArrayList;
 /**
  * Created by Thor on 17-11-2015.
  */
-public class PlayFragment extends Fragment {
+public class PlayFragment extends AbstractPlayFragment {
 
     ImageView galgen;
     Galgelogik logik;
@@ -75,15 +75,17 @@ public class PlayFragment extends Fragment {
 
     private void StartEndgame() {
         Intent endgame = new Intent(getActivity(), EndOfGame.class);
+        EndOfGameFragment fragment = new EndOfGameFragment();
 
-        endgame.putExtra("vundet", logik.erSpilletVundet());
-        endgame.putExtra("forsøg", logik.getAntalForkerteBogstaver());
-        endgame.putExtra("ordet", logik.getOrdet());
-        endgame.putExtra("spiller", "Du");
-        ///endgame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
-        Log.d("Play", "StartEndgame: isHotseat " + isHotSeat);
-        endgame.putExtra("wasHotSeat", isHotSeat);
-        startActivity(endgame);
+        getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, fragment).commit();
+//        endgame.putExtra("vundet", logik.erSpilletVundet());
+//        endgame.putExtra("forsøg", logik.getAntalForkerteBogstaver());
+//        endgame.putExtra("ordet", logik.getOrdet());
+//        endgame.putExtra("spiller", "Du");
+//        ///endgame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
+//        Log.d("Play", "StartEndgame: isHotseat " + isHotSeat);
+//        endgame.putExtra("wasHotSeat", isHotSeat);
+//        startActivity(endgame);
         Log.d("play", "finishing");
 
     }
