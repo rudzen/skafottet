@@ -36,7 +36,7 @@ public class HangmanButtonActivity extends Activity {
     }
 
     public void buttonOnClick(View v){
-        Button button= (Button )v;
+        Button button = (Button )v;
         ((Button) v).setVisibility(View.INVISIBLE);
 
         listOfButtons.add((Button) v);

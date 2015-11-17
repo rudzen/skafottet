@@ -23,10 +23,11 @@ public class EndOfGameFragment extends Fragment {
     Bundle gameData;
     String resultText;
     Button newGame, endGame;
+
     @Override
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View root = i.inflate(R.layout.activity_end_of_game, container ,false);
+        View root = i.inflate(R.layout.activity_end_of_game, container, false);
         endImage = (ImageView) root.findViewById(R.id.PokalBillede);
         resultaterDisp = (WebView) root.findViewById(R.id.SpilresultaterWebView);
 
@@ -42,43 +43,46 @@ public class EndOfGameFragment extends Fragment {
         return root;
 
     }
-    private void displayResults(Bundle spilData){
 
-        if(true){//spilData.getBoolean("vundet")){
+    private void displayResults(Bundle gameData) {
+
+        if (gameData.getBoolean("vundet")) {
             endImage.setImageResource(R.mipmap.vundet);
-//            resultText = "<html><body>Tilykke du har vundet <br> <br> Du gættede forkert <b> " + spilData.getInt("forsøg") + " gange</b>.</body></html>";
-//            resultaterDisp.loadData(resultText,"text/html; charset=UTF-8", null);
-        }
-        else{
+            resultText = "<html><body>Tilykke du har vundet <br> <br> Du gættede forkert <b> " + gameData.getInt("forsøg") + " gange</b>.</body></html>";
+            resultaterDisp.loadData(resultText, "text/html; charset=UTF-8", null);
+        } else {
             endImage.setImageResource(R.mipmap.rip);
-//            resultText = "<html><body>Du har tabt <br> <br> Ordet du ledte efter var <b> " + spilData.getString("ordet") + "</b>.</body></html>";
-//            resultaterDisp.loadData(resultText,"text/html; charset=UTF-8", null);
+            resultText = "<html><body>Du har tabt <br> <br> Ordet du ledte efter var <b> " + gameData.getString("ordet") + "</b>.</body></html>";
+            resultaterDisp.loadData(resultText, "text/html; charset=UTF-8", null);
 
         }
 //        Log.d("endgame", "data: " + spilData.getString("spiller ") + " " + spilData.getString("forsøg") + " " + spilData.getBoolean("vundet"));
     }
 
     private class endGameListener implements View.OnClickListener {
+
+
+
         @Override
         public void onClick(View v) {
-            Intent newGame;
-//        if(getIntent().getBooleanExtra("wasHotSeat", false)){
-//            newGame = new Intent(this, WordPicker.class);
-//            newGame.putExtra("isHotSeat", true);
-//        } else{
-//            newGame = new Intent(this, HangmanButtonActivity.class);
-//            newGame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
-//        }
-//        startActivity(newGame);
-//        finish();
 
         }
+
+
     }
+
 
     private class startGameListener implements View.OnClickListener {
+        Bundle gameData = new Bundle();
         @Override
         public void onClick(View v) {
-
+            AbstractPlayFragment newGame = new PlayFragment();
+            if (getArguments().getBoolean("wasHotSeat", false))
+                gameData.putBoolean("isHotSeat", true);
+            else gameData.putBoolean("muligeOrd", false);
+            newGame.setArguments(gameData);
+            getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, newGame).commit();
         }
     }
+
 }

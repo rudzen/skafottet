@@ -45,8 +45,11 @@ public class FragmentStartPage extends Fragment {
         public void onClick(View v) {
 
             Bundle b = new Bundle();
-            b.putStringArrayList("muligeOrd", getArguments().getStringArrayList("muligeOrd"));
-            HangmanButtonFragment fragment = new HangmanButtonFragment();
+            b.putBoolean("isHotSeat", false);
+//            b.putStringArrayList("muligeOrd", getArguments().getStringArrayList("muligeOrd"));
+//            HangmanButtonFragment fragment = new HangmanButtonFragment();
+//
+            PlayFragment fragment = new PlayFragment();
             fragment.setArguments(b);
             getFragmentManager().beginTransaction()
                     .replace(R.id.fragmentindhold, fragment)
@@ -64,7 +67,8 @@ public class FragmentStartPage extends Fragment {
 
         @Override
         public void onClick(View v) {
-            startActivity(new Intent(getActivity(), Preferences.class));
+            startActivity(
+                    new Intent(getActivity(), Preferences.class));
         }
     }
 
@@ -82,9 +86,7 @@ public class FragmentStartPage extends Fragment {
 
         @Override
         public void onClick(View v) {
-      //      Intent wordPicker = new Intent(getActivity(), WordPicker.class);
-//        wordPicker.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
-       //     startActivity(wordPicker);
+
         WordPicker fragment = new WordPicker();
         getFragmentManager().beginTransaction()
                .replace(R.id.fragmentindhold, fragment).addToBackStack(null)

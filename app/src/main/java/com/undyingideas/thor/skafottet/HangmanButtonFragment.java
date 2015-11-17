@@ -14,13 +14,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class HangmanButtonFragment extends Fragment {
+public class HangmanButtonFragment extends AbstractPlayFragment implements View.OnClickListener {
 
-    private Galgelogik game;
+//    private Galgelogik game;
     private ImageView imageView;
-    private TextView ordet;
+//    private TextView ordet;
     private ArrayList<Button> listOfButtons = new ArrayList<Button>();
-    private String theGuess;
+//    private String theGuess;
     @Override
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
@@ -28,87 +28,96 @@ public class HangmanButtonFragment extends Fragment {
 
         imageView = (ImageView) root.findViewById(R.id.imageView);
         imageView.setImageResource(R.mipmap.galge);
-        
-        if (getArguments().getBoolean("isHotSeat"))
-            game = new Galgelogik(getArguments().getString("wordToBeGuessed"));
-        else
-            game = new Galgelogik(getArguments().getStringArrayList("muligeOrd"));
-        //game.nulstil();
+//
+//        if (getArguments().getBoolean("isHotSeat"))
+//            game = new Galgelogik(getArguments().getString("wordToBeGuessed"));
+//        else
+//            game = new Galgelogik(getArguments().getStringArrayList("muligeOrd"));
+//        //game.nulstil();
+
+        CheckGameType();
         ordet = (TextView) root.findViewById(R.id.visibleText);
-        ordet.setText(game.getSynligtOrd());
+        ordet.setText(logik.getSynligtOrd());
         resetButtons();
         return root;
     }
 
-    public void buttonOnClick(View v){
-        Button button= (Button )v;
+//    public void buttonOnClick(View v){
+//
+//    }
+    public void resetButtons(){
+        for(int i=0; i<listOfButtons.size();i++){
+            Button button;
+            button = listOfButtons.get(i);
+            button.setVisibility(View.VISIBLE);
+            button.setOnClickListener(this);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        Log.d("buttons", "button clicked");
+        Button button = (Button )v;
         ((Button) v).setVisibility(View.INVISIBLE);
 
         listOfButtons.add((Button) v);
         String letter = ((Button) v).getText().toString();
         guess(letter);
     }
-    public void resetButtons(){
-        for(int i=0; i<listOfButtons.size();i++){
-            Button button;
-            button = listOfButtons.get(i);
-            button.setVisibility(View.VISIBLE);
-        }
-    }
 
-    private void guess(String guess){
+//    private void guess(String guess){
+//
+//        theGuess = guess;
+//        game.gætBogstav(theGuess);
+//
+//        if(!game.erSpilletSlut()){
+//            updateScreen();
+//        } else {
+//            Intent endgame = new Intent(getActivity(), EndOfGame.class);
+//
+//            endgame.putExtra("vundet", game.erSpilletVundet());
+//            endgame.putExtra("forsøg", game.getAntalForkerteBogstaver());
+//            endgame.putExtra("ordet", game.getOrdet());
+//            endgame.putExtra("spiller", "Du");
+//            endgame.putExtra("muligeOrd", getArguments().getStringArrayList("muligeOrd"));
+//            startActivity(endgame);
+//            Log.d("play", "finishing");
+//
+//            //Commented finish out, its causing problems with finish.
+//            //finish();
+//        }
+//    }
 
-        theGuess = guess;
-        game.gætBogstav(theGuess);
-
-        if(!game.erSpilletSlut()){
-            updateScreen();
-        } else {
-            Intent endgame = new Intent(getActivity(), EndOfGame.class);
-
-            endgame.putExtra("vundet", game.erSpilletVundet());
-            endgame.putExtra("forsøg", game.getAntalForkerteBogstaver());
-            endgame.putExtra("ordet", game.getOrdet());
-            endgame.putExtra("spiller", "Du");
-            endgame.putExtra("muligeOrd", getArguments().getStringArrayList("muligeOrd"));
-            startActivity(endgame);
-            Log.d("play", "finishing");
-
-            //Commented finish out, its causing problems with finish.
-            //finish();
-        }
-    }
-
-    private void updateScreen(){
-        ordet.setText(game.getSynligtOrd());
-        //usedLetters.append(theGuess);
-        if(!game.erSidsteBogstavKorrekt()){
-            int wrongs = game.getAntalForkerteBogstaver();
-
-            switch (wrongs){
-                case 1:
-                   imageView.setImageResource(R.mipmap.forkert1);
-                    break;
-                case 2:
-                    imageView.setImageResource(R.mipmap.forkert2);
-                    break;
-                case 3:
-                    imageView.setImageResource(R.mipmap.forkert3);
-                    break;
-                case 4:
-                    imageView.setImageResource(R.mipmap.forkert4);
-                    break;
-                case 5:
-                    imageView.setImageResource(R.mipmap.forkert5);
-                    break;
-                case 6:
-                    imageView.setImageResource(R.mipmap.forkert6);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
+//    private void updateScreen(){
+//        ordet.setText(game.getSynligtOrd());
+//        //usedLetters.append(theGuess);
+//        if(!game.erSidsteBogstavKorrekt()){
+//            int wrongs = game.getAntalForkerteBogstaver();
+//
+//            switch (wrongs){
+//                case 1:
+//                   imageView.setImageResource(R.mipmap.forkert1);
+//                    break;
+//                case 2:
+//                    imageView.setImageResource(R.mipmap.forkert2);
+//                    break;
+//                case 3:
+//                    imageView.setImageResource(R.mipmap.forkert3);
+//                    break;
+//                case 4:
+//                    imageView.setImageResource(R.mipmap.forkert4);
+//                    break;
+//                case 5:
+//                    imageView.setImageResource(R.mipmap.forkert5);
+//                    break;
+//                case 6:
+//                    imageView.setImageResource(R.mipmap.forkert6);
+//                    break;
+//                default:
+//                    break;
+//            }
+//        }
+//    }
 
 //    public void testForFails(){
 //
