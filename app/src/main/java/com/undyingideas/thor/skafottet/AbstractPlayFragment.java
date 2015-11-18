@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,7 +19,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Meant to hold the shared gamelogik/flow, in order to allow different layouts to be utilized
+ * Holds the shared gamelogik/flow, in order to allow different layouts to be utilized
  *
  */
 public class AbstractPlayFragment extends Fragment{
@@ -53,25 +54,7 @@ public class AbstractPlayFragment extends Fragment{
         }
     }
 
-    private void StartEndgame() {
-//        Intent endgame = new Intent(getActivity(), EndOfGame.class);
-        EndOfGameFragment fragment = new EndOfGameFragment();
-        Bundle endgame = new Bundle();
-        endgame.putBoolean("vundet", logik.erSpilletVundet());
-        endgame.putInt("forsøg", logik.getAntalForkerteBogstaver());
-        endgame.putString("ordet", logik.getOrdet());
-        endgame.putString("spiller", "Du");
-        endgame.putBoolean("wasHotSeat", isHotSeat);
-        fragment.setArguments(endgame);
-        getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, fragment).commit();
 
-        ///endgame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
-//        Log.d("Play", "StartEndgame: isHotseat " + isHotSeat);
-//        endgame.putExtra("wasHotSeat", isHotSeat);
-//        startActivity(endgame);
-        Log.d("play", "finishing");
-
-    }
 
     private void updateScreen(){
         ordet.setText(logik.getSynligtOrd());
@@ -102,7 +85,7 @@ public class AbstractPlayFragment extends Fragment{
         }
         input.setText("");
     }
-    protected void CheckGameType(){// could check gametype by some extra info from activating classes, but that would require more refactoring
+    protected void CheckGameType(){//checks gametype, to se whether its a newgame by some extra info from activating classes, but that would require more refactoring
         isHotSeat = getArguments().getBoolean("isHotSeat", false);
         Log.d("Play", "CheckGameType: isHotseat " + isHotSeat);
         if(isHotSeat){
@@ -120,6 +103,21 @@ public class AbstractPlayFragment extends Fragment{
 
         }
         logik = new Galgelogik(possibleWords);
+    }
+    private void StartEndgame() {// gathers need data for starting up the endgame Fragment
+        EndOfGameFragment fragment = new EndOfGameFragment();
+        Bundle endgame = new Bundle();
+        endgame.putBoolean("vundet", logik.erSpilletVundet());
+        endgame.putInt("forsøg", logik.getAntalForkerteBogstaver());
+        endgame.putString("ordet", logik.getOrdet());
+        endgame.putString("spiller", "Du");
+        endgame.putBoolean("wasHotSeat", isHotSeat);
+        fragment.setArguments(endgame);
+
+        getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, fragment).commit();
+
+        Log.d("play", "finishing");
+
     }
 
 

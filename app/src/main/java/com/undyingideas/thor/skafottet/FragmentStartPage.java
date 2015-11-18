@@ -36,7 +36,7 @@ public class FragmentStartPage extends Fragment {
            PlayFragment fragment = new PlayFragment();
             fragment.setArguments(b);
             getFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentindhold, fragment)
+                    .replace(R.id.fragmentindhold, fragment).addToBackStack(null)
                     .commit();
         }
     }
@@ -76,7 +76,7 @@ public class FragmentStartPage extends Fragment {
         public void onClick(View v) {
             MultiPlayerFragment fragment = new MultiPlayerFragment();
             Bundle multiplayerData = new Bundle();
-            multiplayerData.putStringArrayList("muligeOrd", getArguments().getStringArrayList("muligeOrd"));
+//            multiplayerData.putStringArrayList("muligeOrd", getArguments().getStringArrayList("muligeOrd"));
             fragment.setArguments(multiplayerData);
             getFragmentManager().beginTransaction()
                     .replace(R.id.fragmentindhold, fragment)

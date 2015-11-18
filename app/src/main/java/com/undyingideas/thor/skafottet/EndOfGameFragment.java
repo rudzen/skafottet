@@ -1,15 +1,19 @@
 package com.undyingideas.thor.skafottet;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import com.undyingideas.thor.skafottet.OldActivities.Play;
 
 import java.util.zip.Inflater;
 
@@ -46,20 +50,19 @@ public class EndOfGameFragment extends Fragment {
 
     private void displayResults(Bundle gameData) {
 
-        if (gameData.getBoolean("vundet")) {
+        if (gameData.getBoolean("vundet")) {//checkes if the game is won
             endImage.setImageResource(R.mipmap.vundet);
             resultText = "<html><body>Tilykke du har vundet <br> <br> Du gættede forkert <b> " + gameData.getInt("forsøg") + " gange</b>.</body></html>";
             resultaterDisp.loadData(resultText, "text/html; charset=UTF-8", null);
-        } else {
+        } else {// or lost
             endImage.setImageResource(R.mipmap.rip);
             resultText = "<html><body>Du har tabt <br> <br> Ordet du ledte efter var <b> " + gameData.getString("ordet") + "</b>.</body></html>";
             resultaterDisp.loadData(resultText, "text/html; charset=UTF-8", null);
-
         }
-//        Log.d("endgame", "data: " + spilData.getString("spiller ") + " " + spilData.getString("forsøg") + " " + spilData.getBoolean("vundet"));
+        Log.d("endgame", "data: " + gameData.getString("spiller ") + " " + gameData.getString("forsøg") + " " + gameData.getBoolean("vundet"));
     }
 
-    private class endGameListener implements View.OnClickListener {
+    private class endGameListener implements View.OnClickListener {//for afslut spil clicked
 
         @Override
         public void onClick(View v) {
@@ -69,17 +72,32 @@ public class EndOfGameFragment extends Fragment {
         }
     }
 
-    private class startGameListener implements View.OnClickListener {
+    private class startGameListener implements View.OnClickListener { //for newgame Clicked
         Bundle gameData = new Bundle();
         @Override
         public void onClick(View v) {
-            AbstractPlayFragment newGame = new PlayFragment();
-            if (getArguments().getBoolean("wasHotSeat", false))
+
+            if (getArguments().getBoolean("wasHotSeat", false)){//starting new multiyPlayer game by going to wordPicker
                 gameData.putBoolean("isHotSeat", true);
-            else gameData.putBoolean("muligeOrd", false);
-            newGame.setArguments(gameData);
-            getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, newGame).commit();
+                WordPicker newMultiPGame = new WordPicker();
+                newMultiPGame.setArguments(gameData);
+                getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, newMultiPGame).commit();
+            }
+
+            else{//starting new singleplayergame
+                gameData.putBoolean("isHotSeat", false);
+                PlayFragment newGame = new PlayFragment();
+                newGame.setArguments(gameData);
+                getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, newGame).commit();
+            }
         }
+    }
+
+    @Override
+    public void onStart(){//this actually removes the keyboard
+        super.onStart();
+        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
     }
 
 }

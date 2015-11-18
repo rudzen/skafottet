@@ -13,7 +13,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".LoadingScreen"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -49,7 +50,10 @@
         </activity>
         <activity android:name=".OldActivities.MultiplayerActivity" >
         </activity>
-        <activity android:name=".FragmentMainActivity" >
+        <activity android:name=".FragmentMainActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".LoadingScreen"
+            android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
     </application>
 

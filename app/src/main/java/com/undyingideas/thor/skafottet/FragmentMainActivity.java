@@ -48,15 +48,9 @@ public class FragmentMainActivity extends AppCompatActivity implements YesNo.Yes
             data.putString("theWord", possibleWord);
             startGame.setArguments(data);
             getFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentindhold, startGame)
+                    .add(R.id.fragmentindhold, startGame)
                         .addToBackStack(null)
                             .commit();
-
-
-//            Intent startGame = new Intent(this, HangmanButtonActivity.class);
-//            startGame.putExtra("isHotSeat", true);
-//            startGame.putExtra("wordToBeGuessed", possibleWord);
-//            startActivity(startGame);
         }
         else Log.d("wordPicer", "wordDenied");
     }
@@ -64,8 +58,21 @@ public class FragmentMainActivity extends AppCompatActivity implements YesNo.Yes
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         if (item.getItemId() == android.R.id.home){
-            onBackPressed();
+            //onBackPressed();
+            Log.d("main", "button pressed");
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed(){
+        int count = getFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            super.onBackPressed();
+            //additional code
+        } else {
+            getFragmentManager().popBackStack();
+        }
     }
 }
