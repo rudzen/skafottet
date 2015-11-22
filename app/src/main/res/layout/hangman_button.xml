@@ -4,7 +4,8 @@
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
+    android:background="#FFFFFFFF">
 
     <LinearLayout android:layout_weight="0.75"
         android:layout_width="wrap_content"
@@ -19,7 +20,6 @@
         android:layout_weight="1"
         android:text="a"
         android:id="@+id/button1"
-        android:onClick="onClick"
         android:layout_above="@+id/button8"
         android:layout_alignParentStart="true" />
 
@@ -30,7 +30,6 @@
         android:layout_weight="1"
         android:text="b"
         android:id="@+id/button2"
-        android:onClick="onClick"
         android:layout_alignBottom="@+id/button1"
         android:layout_toEndOf="@+id/button1"
          />
@@ -42,7 +41,6 @@
         android:layout_weight="1"
         android:text="c"
         android:id="@+id/button3"
-        android:onClick="onClick"
         android:layout_alignTop="@+id/button2"
         android:layout_toEndOf="@+id/button2"
         />
@@ -54,7 +52,7 @@
         android:layout_weight="1"
         android:text="d"
         android:id="@+id/button4"
-        android:onClick="onClick"
+
         android:layout_alignTop="@+id/button3"
         android:layout_toEndOf="@+id/button3"
          />
@@ -129,8 +127,7 @@
         android:text="j"
         android:id="@+id/button10"
         android:layout_alignBottom="@+id/button9"
-        android:layout_toEndOf="@+id/button9"
-        android:onClick="buttonOnClick" />
+        android:layout_toEndOf="@+id/button9" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -140,8 +137,7 @@
         android:text="k"
         android:id="@+id/button11"
         android:layout_alignBottom="@+id/button10"
-        android:layout_toEndOf="@+id/button10"
-        android:onClick="buttonOnClick" />
+        android:layout_toEndOf="@+id/button10" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -151,8 +147,7 @@
         android:text="l"
         android:id="@+id/button12"
         android:layout_alignBottom="@+id/button11"
-        android:layout_alignStart="@+id/button5"
-        android:onClick="buttonOnClick" />
+        android:layout_alignStart="@+id/button5" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -162,8 +157,7 @@
         android:text="m"
         android:id="@+id/button13"
         android:layout_alignBottom="@+id/button12"
-        android:layout_toEndOf="@+id/button12"
-        android:onClick="buttonOnClick" />
+        android:layout_toEndOf="@+id/button12" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -173,8 +167,7 @@
         android:text="n"
         android:id="@+id/button14"
         android:layout_alignBottom="@+id/button13"
-        android:layout_alignStart="@+id/button7"
-        android:onClick="buttonOnClick" />
+        android:layout_alignStart="@+id/button7" />
     </LinearLayout>
     <LinearLayout android:layout_weight="0.75"
         android:layout_width="wrap_content"
@@ -189,7 +182,6 @@
         android:layout_weight="1"
         android:text="o"
         android:id="@+id/button15"
-        android:onClick="buttonOnClick"
         android:layout_above="@+id/button22"
         android:layout_alignParentStart="true" />
 
@@ -201,8 +193,7 @@
         android:text="p"
         android:id="@+id/button16"
         android:layout_alignBottom="@+id/button15"
-        android:layout_toEndOf="@+id/button15"
-        android:onClick="buttonOnClick" />
+        android:layout_toEndOf="@+id/button15" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -212,8 +203,7 @@
         android:text="q"
         android:id="@+id/button17"
         android:layout_alignBottom="@+id/button16"
-        android:layout_toEndOf="@+id/button16"
-        android:onClick="buttonOnClick" />
+        android:layout_toEndOf="@+id/button16" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -223,8 +213,7 @@
         android:text="r"
         android:id="@+id/button18"
         android:layout_alignBottom="@+id/button17"
-        android:layout_toEndOf="@+id/button17"
-        android:onClick="buttonOnClick" />
+        android:layout_toEndOf="@+id/button17" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -234,8 +223,7 @@
         android:text="s"
         android:id="@+id/button19"
         android:layout_alignBottom="@+id/button18"
-        android:layout_alignStart="@+id/button12"
-        android:onClick="buttonOnClick" />
+        android:layout_alignStart="@+id/button12" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -245,8 +233,7 @@
         android:text="t"
         android:id="@+id/button20"
         android:layout_alignBottom="@+id/button19"
-        android:layout_toEndOf="@+id/button19"
-        android:onClick="buttonOnClick" />
+        android:layout_toEndOf="@+id/button19" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -256,8 +243,7 @@
         android:text="u"
         android:id="@+id/button21"
         android:layout_alignBottom="@+id/button20"
-        android:layout_alignStart="@+id/button14"
-        android:onClick="buttonOnClick" />
+        android:layout_alignStart="@+id/button14" />
     </LinearLayout>
     <LinearLayout android:layout_weight="0.75"
         android:layout_width="wrap_content"
@@ -272,7 +258,6 @@
         android:layout_weight="1"
         android:text="v"
         android:id="@+id/button22"
-        android:onClick="buttonOnClick"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_gravity="center" />
@@ -285,8 +270,7 @@
         android:text="y"
         android:id="@+id/button25"
         android:layout_alignTop="@+id/button24"
-        android:layout_toEndOf="@+id/button24"
-        android:onClick="buttonOnClick" />
+        android:layout_toEndOf="@+id/button24" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -296,8 +280,7 @@
         android:text="x"
         android:id="@+id/button24"
         android:layout_alignTop="@+id/button22"
-        android:layout_toStartOf="@+id/button17"
-        android:onClick="buttonOnClick" />
+        android:layout_toStartOf="@+id/button17" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -307,8 +290,7 @@
         android:text="z"
         android:id="@+id/button26"
         android:layout_alignBottom="@+id/button25"
-        android:layout_toEndOf="@+id/button25"
-        android:onClick="buttonOnClick" />
+        android:layout_toEndOf="@+id/button25" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -319,7 +301,7 @@
         android:layout_alignBottom="@+id/button26"
         android:layout_alignStart="@+id/button19"
         android:layout_weight="1"
-        android:onClick="buttonOnClick" />
+        android:onClick="butt" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -328,7 +310,6 @@
         android:layout_weight="1"
         android:text="ø"
         android:id="@+id/button27"
-        android:onClick="buttonOnClick"
         android:layout_alignTop="@+id/button23"
         android:layout_toEndOf="@+id/button23" />
 
@@ -340,8 +321,7 @@
         android:text="å"
         android:id="@+id/button28"
         android:layout_alignBottom="@+id/button27"
-        android:layout_alignStart="@+id/button21"
-        android:onClick="buttonOnClick" />
+        android:layout_alignStart="@+id/button21" />
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

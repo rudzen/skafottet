@@ -35,7 +35,8 @@ public class AbstractPlayFragment extends Fragment{
     TextView usedLetters, ordet, status;
     EditText input;
 
-    protected void guess(String guess){
+    protected void guess(String guess, boolean isMultiButtonInterface){
+        Boolean isMultiBtn = isMultiButtonInterface;
 
         theGuess = guess;
         if (theGuess.length() > 1){
@@ -43,22 +44,27 @@ public class AbstractPlayFragment extends Fragment{
             logik.gætBogstav(theGuess);
             status.setText("Brug kun ét bogstav, resten vil blive ignoreret");
         } else {
-            status.setText("");
+            if(!isMultiBtn) status.setText("");
             logik.gætBogstav(theGuess);
         }
 
         if(!logik.erSpilletSlut()){
-            updateScreen();
+            if (!isMultiBtn)updateScreen();
+            else updateScreen(false, false); // because its the Hangman with mulityple buttons an no input fields
         } else {
             StartEndgame();
         }
     }
+    protected void guess(String guess){
+       guess(guess, true);
+    }
 
 
-
-    private void updateScreen(){
+    private void updateScreen(boolean hasUsedLettersStat, boolean hasInputTxtField){
+        boolean isUsedLettersStat = hasUsedLettersStat;
+        boolean isInputTxtField = hasInputTxtField;
         ordet.setText(logik.getSynligtOrd());
-        usedLetters.append(theGuess);
+        if(isUsedLettersStat) usedLetters.append(theGuess);
         if(!logik.erSidsteBogstavKorrekt()){
             int wrongs = logik.getAntalForkerteBogstaver();
 
@@ -83,7 +89,11 @@ public class AbstractPlayFragment extends Fragment{
                     break;
             }
         }
-        input.setText("");
+        if(hasInputTxtField)input.setText("");
+    }
+
+    private void updateScreen(){
+       updateScreen(true, true);
     }
     protected void CheckGameType(){//checks gametype, to se whether its a newgame by some extra info from activating classes, but that would require more refactoring
         isHotSeat = getArguments().getBoolean("isHotSeat", false);
@@ -112,6 +122,7 @@ public class AbstractPlayFragment extends Fragment{
         endgame.putString("ordet", logik.getOrdet());
         endgame.putString("spiller", "Du");
         endgame.putBoolean("wasHotSeat", isHotSeat);
+
         fragment.setArguments(endgame);
 
         getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, fragment).commit();

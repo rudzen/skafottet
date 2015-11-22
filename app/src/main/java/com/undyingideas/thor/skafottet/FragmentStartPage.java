@@ -26,6 +26,9 @@ public class FragmentStartPage extends Fragment {
         return rot;
     }
 
+    /**
+     * For starting a new singlePlayerGame
+     */
     public class StartClick implements View.OnClickListener{
 
         @Override
@@ -33,7 +36,7 @@ public class FragmentStartPage extends Fragment {
 
             Bundle b = new Bundle();
             b.putBoolean("isHotSeat", false);
-           PlayFragment fragment = new PlayFragment();
+           HangmanButtonFragment fragment = new HangmanButtonFragment();
             fragment.setArguments(b);
             getFragmentManager().beginTransaction()
                     .replace(R.id.fragmentindhold, fragment).addToBackStack(null)
@@ -46,7 +49,7 @@ public class FragmentStartPage extends Fragment {
         @Override
         public void onClick(View v) {
             startActivity(
-                    new Intent(getActivity(), Preferences.class));
+                    new Intent(getActivity(), SettingsActivity.class));
         }
     }
 

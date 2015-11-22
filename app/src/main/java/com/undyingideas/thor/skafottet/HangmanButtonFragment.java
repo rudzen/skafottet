@@ -16,28 +16,22 @@ import java.util.ArrayList;
 
 public class HangmanButtonFragment extends AbstractPlayFragment implements View.OnClickListener {
 
-//    private Galgelogik game;
-    private ImageView imageView;
-//    private TextView ordet;
-    private ArrayList<Button> listOfButtons = new ArrayList<Button>();
-//    private String theGuess;
+
+    private ArrayList<Button> listOfButtons;
+    private View root;
+
     @Override
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
-        View root = i.inflate(R.layout.hangman_button,container,false);
+        root = i.inflate(R.layout.hangman_button,container,false);
 
-        imageView = (ImageView) root.findViewById(R.id.imageView);
-        imageView.setImageResource(R.mipmap.galge);
-//
-//        if (getArguments().getBoolean("isHotSeat"))
-//            game = new Galgelogik(getArguments().getString("wordToBeGuessed"));
-//        else
-//            game = new Galgelogik(getArguments().getStringArrayList("muligeOrd"));
-//        //game.nulstil();
+        galgen = (ImageView) root.findViewById(R.id.imageView);
+        galgen.setImageResource(R.mipmap.galge);
 
         CheckGameType();
         ordet = (TextView) root.findViewById(R.id.visibleText);
         ordet.setText(logik.getSynligtOrd());
+        listOfButtons = initButtons();
         resetButtons();
         return root;
     }
@@ -62,117 +56,51 @@ public class HangmanButtonFragment extends AbstractPlayFragment implements View.
 
         listOfButtons.add((Button) v);
         String letter = ((Button) v).getText().toString();
-        guess(letter);
+        guess(letter, true);
     }
 
-//    private void guess(String guess){
-//
-//        theGuess = guess;
-//        game.gætBogstav(theGuess);
-//
-//        if(!game.erSpilletSlut()){
-//            updateScreen();
-//        } else {
-//            Intent endgame = new Intent(getActivity(), EndOfGame.class);
-//
-//            endgame.putExtra("vundet", game.erSpilletVundet());
-//            endgame.putExtra("forsøg", game.getAntalForkerteBogstaver());
-//            endgame.putExtra("ordet", game.getOrdet());
-//            endgame.putExtra("spiller", "Du");
-//            endgame.putExtra("muligeOrd", getArguments().getStringArrayList("muligeOrd"));
-//            startActivity(endgame);
-//            Log.d("play", "finishing");
-//
-//            //Commented finish out, its causing problems with finish.
-//            //finish();
-//        }
-//    }
+    /**
+     * well this is annoying
+     * @return
+     */
+    public ArrayList<Button> initButtons(){
+        ArrayList<Button> returnList = new ArrayList<>();
+        returnList.add((Button) root.findViewById(R.id.button1));
+        returnList.add((Button) root.findViewById(R.id.button2));
+        returnList.add((Button) root.findViewById(R.id.button3));
+        returnList.add((Button) root.findViewById(R.id.button4));
+        returnList.add((Button) root.findViewById(R.id.button5));
+        returnList.add((Button) root.findViewById(R.id.button6));
+        returnList.add((Button) root.findViewById(R.id.button7));
+        returnList.add((Button) root.findViewById(R.id.button8));
+        returnList.add((Button) root.findViewById(R.id.button9));
+        returnList.add((Button) root.findViewById(R.id.button10));
+        returnList.add((Button) root.findViewById(R.id.button11));
+        returnList.add((Button) root.findViewById(R.id.button12));
+        returnList.add((Button) root.findViewById(R.id.button13));
+        returnList.add((Button) root.findViewById(R.id.button14));
+        returnList.add((Button) root.findViewById(R.id.button15));
+        returnList.add((Button) root.findViewById(R.id.button16));
+        returnList.add((Button) root.findViewById(R.id.button17));
+        returnList.add((Button) root.findViewById(R.id.button18));
+        returnList.add((Button) root.findViewById(R.id.button19));
+        returnList.add((Button) root.findViewById(R.id.button20));
+        returnList.add((Button) root.findViewById(R.id.button21));
+        returnList.add((Button) root.findViewById(R.id.button22));
+        returnList.add((Button) root.findViewById(R.id.button23));
+        returnList.add((Button) root.findViewById(R.id.button24));
+        returnList.add((Button) root.findViewById(R.id.button25));
+        returnList.add((Button) root.findViewById(R.id.button26));
+        returnList.add((Button) root.findViewById(R.id.button27));
+        returnList.add((Button) root.findViewById(R.id.button28));
 
-//    private void updateScreen(){
-//        ordet.setText(game.getSynligtOrd());
-//        //usedLetters.append(theGuess);
-//        if(!game.erSidsteBogstavKorrekt()){
-//            int wrongs = game.getAntalForkerteBogstaver();
-//
-//            switch (wrongs){
-//                case 1:
-//                   imageView.setImageResource(R.mipmap.forkert1);
-//                    break;
-//                case 2:
-//                    imageView.setImageResource(R.mipmap.forkert2);
-//                    break;
-//                case 3:
-//                    imageView.setImageResource(R.mipmap.forkert3);
-//                    break;
-//                case 4:
-//                    imageView.setImageResource(R.mipmap.forkert4);
-//                    break;
-//                case 5:
-//                    imageView.setImageResource(R.mipmap.forkert5);
-//                    break;
-//                case 6:
-//                    imageView.setImageResource(R.mipmap.forkert6);
-//                    break;
-//                default:
-//                    break;
-//            }
-//        }
-//    }
+        //adding clickhandlers
+        for (Button btn : returnList){
+            btn.setOnClickListener(this);
+        }
 
-//    public void testForFails(){
-//
-//        if(game.erSpilletTabt()||game.erSpilletTabt()) {
-//            game.nulstil();
-//            Toast toast = new Toast(getApplicationContext());
-//            toast.setGravity(Gravity.TOP | Gravity.LEFT, 0, 0);
-//            Toast.makeText(HangmanButtonActivity.this, "Spillet er slut", Toast.LENGTH_LONG).show();
-//            resetButtons();
-//        }
-//
-//        if (game.getAntalForkerteBogstaver()==1){
-//            imageView.setImageResource(R.mipmap.forkert1);
-//        }
-//        else if (game.getAntalForkerteBogstaver()==2){
-//            imageView.setImageResource(R.mipmap.forkert2);
-//        }
-//        else if (game.getAntalForkerteBogstaver()==3){
-//            imageView.setImageResource(R.mipmap.forkert3);
-//        }
-//        else if (game.getAntalForkerteBogstaver()==4){
-//            imageView.setImageResource(R.mipmap.forkert4);
-//        }
-//        else if (game.getAntalForkerteBogstaver()==5){
-//            imageView.setImageResource(R.mipmap.forkert5);
-//        }
-//        else if (game.getAntalForkerteBogstaver()==6){
-//            imageView.setImageResource(R.mipmap.forkert6);
-//        }
-//        else if (game.getAntalForkerteBogstaver()==0) {
-//            imageView.setImageResource(R.mipmap.galge);
-//        }
-//
-//        ordet.setText(game.getSynligtOrd());
-//    }
+        return returnList;
+    }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 }
