@@ -24,7 +24,7 @@ import java.util.ArrayList;
  */
 public class AbstractPlayFragment extends Fragment{
 
-    Galgelogik logik;
+    protected Galgelogik logik;
     ArrayList<String> possibleWords;
     private boolean isHotSeat;
     private String theGuess; //bruges til at holde det aktuelle gæt

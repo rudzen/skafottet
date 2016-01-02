@@ -83,7 +83,7 @@ public class EndOfGameFragment extends Fragment {
 
             else{//starting new singleplayergame
                 gameData.putBoolean("isHotSeat", false);
-                final PlayFragment newGame = new PlayFragment();
+                final HangmanButtonFragment newGame = new HangmanButtonFragment();
                 newGame.setArguments(gameData);
                 getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, newGame).commit();
             }

@@ -40,7 +40,7 @@ public class FragmentMainActivity extends AppCompatActivity implements YesNo.Yes
     public void onDone(final boolean result) {
         if(result){
             Log.d("wordPicker", "WordAccepted");
-            final PlayFragment startGame = new PlayFragment();
+            final HangmanButtonFragment startGame = new HangmanButtonFragment();
             final Bundle data = new Bundle();
             data.putBoolean("isHotSeat", true);
             data.putString("theWord", possibleWord);

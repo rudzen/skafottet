@@ -36,7 +36,7 @@ public class FragmentStartPage extends Fragment {
 
             final Bundle b = new Bundle();
             b.putBoolean("isHotSeat", false);
-           final HangmanButtonFragment fragment = new HangmanButtonFragment();
+            final HangmanButtonFragment fragment = new HangmanButtonFragment();
             fragment.setArguments(b);
             getFragmentManager().beginTransaction()
                     .replace(R.id.fragmentindhold, fragment).addToBackStack(null)
