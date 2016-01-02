@@ -16,17 +16,19 @@ import com.undyingideas.thor.skafottet.R;
 import java.util.ArrayList;
 
 public class Play extends Activity {
-    ImageView galgen;
-    Galgelogik logik;
-    ArrayList<String> possibleWords;
+    private ImageView galgen;
+    private Galgelogik logik;
+    private ArrayList<String> possibleWords;
     private boolean isHotSeat;
-    Button ok;
-    TextView usedLetters, ordet, status;
-    EditText input;
-    String theGuess; //bruges til at holde det aktuelle gæt
+    private Button ok;
+    private TextView usedLetters;
+    private TextView ordet;
+    private TextView status;
+    private EditText input;
+    private String theGuess; //bruges til at holde det aktuelle gæt
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
@@ -43,12 +45,12 @@ public class Play extends Activity {
         status = (TextView) findViewById(R.id.statusText);
     }
 
-    public void gaetClck(View view) {
+    public void gaetClck(final View view) {
         logik.logStatus();
         guess(input.getText().toString());
     }
 
-    private void guess(String guess){
+    private void guess(final String guess){
 
         theGuess = guess;
         if (theGuess.length() > 1){
@@ -68,7 +70,7 @@ public class Play extends Activity {
     }
 
     private void StartEndgame() {
-        Intent endgame = new Intent(Play.this, EndOfGame.class);
+        final Intent endgame = new Intent(this, EndOfGame.class);
 
         endgame.putExtra("vundet", logik.erSpilletVundet());
         endgame.putExtra("forsøg", logik.getAntalForkerteBogstaver());
@@ -86,7 +88,7 @@ public class Play extends Activity {
         ordet.setText(logik.getSynligtOrd());
         usedLetters.append(theGuess);
         if(!logik.erSidsteBogstavKorrekt()){
-            int wrongs = logik.getAntalForkerteBogstaver();
+            final int wrongs = logik.getAntalForkerteBogstaver();
 
             switch (wrongs){
                 case 1:
@@ -117,7 +119,7 @@ public class Play extends Activity {
         if(logik != null && logik.erSpilletSlut()){
             logik.nulstil();
         } else{
-            ArrayList<String> candidateLlist = getIntent().getStringArrayListExtra("muligeOrd");
+            final ArrayList<String> candidateLlist = getIntent().getStringArrayListExtra("muligeOrd");
             if(candidateLlist != null) possibleWords = candidateLlist; //
             else possibleWords.add(getIntent().getStringExtra("wordToBeGuessed"));
 

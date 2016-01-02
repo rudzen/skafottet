@@ -1,12 +1,9 @@
 package com.undyingideas.thor.skafottet;
 
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,20 +18,19 @@ import com.undyingideas.thor.skafottet.dialogs.YesNo;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 
 public class WordPicker extends Fragment {
-    SharedPreferences wordListGetter;
-    ListView wordList;
-    ArrayList<String> muligeOrd;
-    TextView title;
-    Bundle data;
-    private boolean isHotseat = false;
+    private SharedPreferences wordListGetter;
+    private ListView wordList;
+    private ArrayList<String> muligeOrd;
+    private TextView title;
+    private Bundle data;
+    private boolean isHotseat;
     private String possibleWord;
     @Override
-    public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater i, final ViewGroup container, final Bundle savedInstanceState) {
 
-        View rot = i.inflate(R.layout.activity_ord_vaelger,container,false);
+        final View rot = i.inflate(R.layout.activity_ord_vaelger,container,false);
         wordListGetter = PreferenceManager.getDefaultSharedPreferences(getActivity());
         if(getArguments() != null){ data = getArguments();
         isHotseat = data.getBoolean("isHotSeat", false);}
@@ -62,9 +58,9 @@ public class WordPicker extends Fragment {
     private class ListClickListener implements AdapterView.OnItemClickListener {
 
         @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
             FragmentMainActivity.possibleWord = muligeOrd.get(position);
-            DialogFragment nf = YesNo.newInstance("Skal ordet være?", muligeOrd.get(position), "Ja", "Nej");
+            final DialogFragment nf = YesNo.newInstance("Skal ordet være?", muligeOrd.get(position), "Ja", "Nej");
 
             Log.d("lol", "clicked");
             nf.show(getFragmentManager(), "newAcceptDialog");

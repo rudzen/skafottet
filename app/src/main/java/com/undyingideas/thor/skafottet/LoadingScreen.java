@@ -18,10 +18,10 @@ import java.util.HashSet;
  * or fetching words from the cache
  */
 public class LoadingScreen extends Activity {
-     SharedPreferences prefs;
+     private SharedPreferences prefs;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading_screen);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -30,16 +30,16 @@ public class LoadingScreen extends Activity {
 
     private class LoadWords extends AsyncTask{
         @Override
-        protected Object doInBackground(Object[] params) {
+        protected Object doInBackground(final Object[] params) {
             ArrayList<String> muligeOrd = new ArrayList<>();
-            HashSet<String> data = new HashSet<>();
+            final HashSet<String> data = new HashSet<>();
             try {
                 muligeOrd = WordCollector.samlOrd();
                 data.addAll(muligeOrd);
                 Log.d("LoadingScreen", "length:" + data.size());
-                prefs.edit().putStringSet("possibleWords", data).commit();//creates a cache for later use
+                prefs.edit().putStringSet("possibleWords", data).apply();//creates a cache for later use
 
-            } catch (Exception e){
+            } catch (final Exception e){
                 muligeOrd.addAll(prefs.getStringSet("possibleWords", null));
                 if(muligeOrd.size() <= 1) muligeOrd.add(0, "hej");
 
@@ -49,9 +49,9 @@ public class LoadingScreen extends Activity {
 }
 
         @Override
-        protected void onPostExecute(Object possibleWords) {
+        protected void onPostExecute(final Object possibleWords) {
 
-            Intent StartApp = new Intent(LoadingScreen.this, FragmentMainActivity.class);
+            final Intent StartApp = new Intent(LoadingScreen.this, FragmentMainActivity.class);
 
             StartApp.putExtra("muligeOrd", (ArrayList<String>) possibleWords);
             StartApp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);// Fjerner loadscreen fra stacken

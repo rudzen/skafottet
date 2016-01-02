@@ -1,11 +1,6 @@
 package com.undyingideas.thor.skafottet;
 
-import android.app.Fragment;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +12,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Created by Thor on 17-11-2015.
+ * Created on 17-11-2015, 08:39.
+ * Project : skafottet
+ * @author Thor
  */
 public class PlayFragment extends AbstractPlayFragment {
 
@@ -25,9 +22,9 @@ public class PlayFragment extends AbstractPlayFragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater i, final ViewGroup container, final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View root = i.inflate(R.layout.activity_play, container, false);
+        final View root = i.inflate(R.layout.activity_play, container, false);
 
 
         //instantierer widgets
@@ -47,7 +44,7 @@ public class PlayFragment extends AbstractPlayFragment {
 
     private class OkClick implements View.OnClickListener {
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
                 logik.logStatus();
                 guess(input.getText().toString());
 

@@ -14,13 +14,13 @@ import com.undyingideas.thor.skafottet.WordPicker;
 
 public class EndOfGame extends Activity {
 
-    WebView resultaterDisp; //skal bruges til at vise spillets resultater, og om det er vundet etc.
-    ImageView endImage; //skal vise et vinder/taber billede, eller et straffende taberbillede
-    Bundle gameData;
-    String resultText;
+    private WebView resultaterDisp; //skal bruges til at vise spillets resultater, og om det er vundet etc.
+    private ImageView endImage; //skal vise et vinder/taber billede, eller et straffende taberbillede
+    private Bundle gameData;
+    private String resultText;
     Button newGame, endGame;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end_of_game);
 
@@ -32,7 +32,7 @@ public class EndOfGame extends Activity {
         displayResults(gameData);
 
     }
-    private void displayResults(Bundle spilData){
+    private void displayResults(final Bundle spilData){
 
         if(spilData.getBoolean("vundet")){
             endImage.setImageResource(R.mipmap.vundet);
@@ -48,20 +48,20 @@ public class EndOfGame extends Activity {
         Log.d("endgame", "data: " + spilData.getString("spiller ") + " " + spilData.getString("forsøg") + " " + spilData.getBoolean("vundet"));
     }
 
-    public void newGameClck(View view) {
-        Intent newGame;
+    public void newGameClck(final View view) {
+        final Intent intent;
         if(getIntent().getBooleanExtra("wasHotSeat", false)){
-            newGame = new Intent(this, WordPicker.class);
-            newGame.putExtra("isHotSeat", true);
+            intent = new Intent(this, WordPicker.class);
+            intent.putExtra("isHotSeat", true);
         } else{
-            newGame = new Intent(this, HangmanButtonActivity.class);
-            newGame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
+            intent = new Intent(this, HangmanButtonActivity.class);
+            intent.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
         }
-        startActivity(newGame);
+        startActivity(intent);
         finish();
     }
 
-    public void endGameClck(View view) {
+    public void endGameClck(final View view) {
         //startActivity(new Intent(this, MainActivity.class));
 
         finish();

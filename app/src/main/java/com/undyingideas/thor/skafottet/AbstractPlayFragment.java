@@ -1,16 +1,16 @@
 package com.undyingideas.thor.skafottet;
 
 /**
- * Created by Thor on 09-11-2015.
+ * Created on 09-11-2015, 08:39.
+ * Project : skafottet
+ * @author Thor
  */
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,16 +27,16 @@ public class AbstractPlayFragment extends Fragment{
     Galgelogik logik;
     ArrayList<String> possibleWords;
     private boolean isHotSeat;
-    String theGuess; //bruges til at holde det aktuelle gæt
-    SharedPreferences data;
+    private String theGuess; //bruges til at holde det aktuelle gæt
+    private SharedPreferences data;
     ImageView galgen;
 
     Button ok;
     TextView usedLetters, ordet, status;
     EditText input;
 
-    protected void guess(String guess, boolean isMultiButtonInterface){
-        Boolean isMultiBtn = isMultiButtonInterface;
+    void guess(final String guess, final boolean isMultiButtonInterface){
+        final Boolean isMultiBtn = isMultiButtonInterface;
 
         theGuess = guess;
         if (theGuess.length() > 1){
@@ -55,19 +55,16 @@ public class AbstractPlayFragment extends Fragment{
             StartEndgame();
         }
     }
-    protected void guess(String guess){
+    void guess(final String guess){
        guess(guess, true);
     }
 
 
-    private void updateScreen(boolean hasUsedLettersStat, boolean hasInputTxtField){
-        boolean isUsedLettersStat = hasUsedLettersStat;
-        boolean isInputTxtField = hasInputTxtField;
+    private void updateScreen(final boolean hasUsedLettersStat, final boolean hasInputTxtField){
         ordet.setText(logik.getSynligtOrd());
-        if(isUsedLettersStat) usedLetters.append(theGuess);
+        if(hasUsedLettersStat) usedLetters.append(theGuess);
         if(!logik.erSidsteBogstavKorrekt()){
-            int wrongs = logik.getAntalForkerteBogstaver();
-
+            final int wrongs = logik.getAntalForkerteBogstaver();
             switch (wrongs){
                 case 1:
                     galgen.setImageResource(R.mipmap.forkert1);
@@ -95,7 +92,7 @@ public class AbstractPlayFragment extends Fragment{
     private void updateScreen(){
        updateScreen(true, true);
     }
-    protected void CheckGameType(){//checks gametype, to se whether its a newgame by some extra info from activating classes, but that would require more refactoring
+    void CheckGameType(){//checks gametype, to se whether its a newgame by some extra info from activating classes, but that would require more refactoring
         isHotSeat = getArguments().getBoolean("isHotSeat", false);
         Log.d("Play", "CheckGameType: isHotseat " + isHotSeat);
         if(isHotSeat){
@@ -105,18 +102,17 @@ public class AbstractPlayFragment extends Fragment{
             logik.nulstil();
         } else{// for det tilfældes skyld at der er tale om et nyt spil
             data = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            ArrayList<String> candidateLlist = new ArrayList<>();
+            final ArrayList<String> candidateLlist = new ArrayList<>();
             candidateLlist.addAll(data.getStringSet("possibleWords", null));
-            if(candidateLlist != null) possibleWords = candidateLlist; //
-            else possibleWords.add("default");
+            possibleWords = candidateLlist; //
 
 
         }
         logik = new Galgelogik(possibleWords);
     }
     private void StartEndgame() {// gathers need data for starting up the endgame Fragment
-        EndOfGameFragment fragment = new EndOfGameFragment();
-        Bundle endgame = new Bundle();
+        final EndOfGameFragment fragment = new EndOfGameFragment();
+        final Bundle endgame = new Bundle();
         endgame.putBoolean("vundet", logik.erSpilletVundet());
         endgame.putInt("forsøg", logik.getAntalForkerteBogstaver());
         endgame.putString("ordet", logik.getOrdet());

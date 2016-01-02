@@ -46,8 +46,6 @@
         android:layout_height="wrap_content"
         android:text="Se Mulige Ord"
         android:id="@+id/btnWordList"
-
-        android:layout_above="@+id/StartBtn"
         android:layout_alignParentStart="true" />
 
     <Button

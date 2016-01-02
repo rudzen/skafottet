@@ -19,10 +19,10 @@ public class HangmanButtonActivity extends Activity {
     private Galgelogik game;
     private ImageView imageView;
     private TextView ordet;
-    private ArrayList<Button> listOfButtons = new ArrayList<Button>();
-    private String theGuess;
+    private final ArrayList<Button> listOfButtons = new ArrayList<>();
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hangman_button);
         imageView = (ImageView) findViewById(R.id.imageView);
@@ -38,31 +38,31 @@ public class HangmanButtonActivity extends Activity {
         resetButtons();
     }
 
-    public void buttonOnClick(View v){
-        Button button = (Button )v;
-        ((Button) v).setVisibility(View.INVISIBLE);
+    public void buttonOnClick(final View v){
+        final Button button = (Button )v;
+        v.setVisibility(View.INVISIBLE);
 
         listOfButtons.add((Button) v);
-        String letter = ((Button) v).getText().toString();
+        final String letter = ((Button) v).getText().toString();
         guess(letter);
     }
-    public void resetButtons(){
+    private void resetButtons(){
         for(int i=0; i<listOfButtons.size();i++){
-            Button button;
+            final Button button;
             button = listOfButtons.get(i);
             button.setVisibility(View.VISIBLE);
         }
     }
 
-    private void guess(String guess){
+    private void guess(final String guess){
 
-        theGuess = guess;
+        final String theGuess = guess;
         game.gætBogstav(theGuess);
 
         if(!game.erSpilletSlut()){
             updateScreen();
         } else {
-            Intent endgame = new Intent(HangmanButtonActivity.this, EndOfGame.class);
+            final Intent endgame = new Intent(this, EndOfGame.class);
 
             endgame.putExtra("vundet", game.erSpilletVundet());
             endgame.putExtra("forsøg", game.getAntalForkerteBogstaver());
@@ -79,7 +79,7 @@ public class HangmanButtonActivity extends Activity {
         ordet.setText(game.getSynligtOrd());
         //usedLetters.append(theGuess);
         if(!game.erSidsteBogstavKorrekt()){
-            int wrongs = game.getAntalForkerteBogstaver();
+            final int wrongs = game.getAntalForkerteBogstaver();
 
             switch (wrongs){
                 case 1:

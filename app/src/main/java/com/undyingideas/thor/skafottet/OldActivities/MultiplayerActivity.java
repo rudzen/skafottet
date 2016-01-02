@@ -12,11 +12,11 @@ import com.undyingideas.thor.skafottet.WordPicker;
 
 public class MultiplayerActivity extends AppCompatActivity {
 
-    Button btnConnect;
-    BluetoothAdapter mBluetoothAdapter;
+    private Button btnConnect;
+    private BluetoothAdapter mBluetoothAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiplayer);
 
@@ -26,8 +26,8 @@ public class MultiplayerActivity extends AppCompatActivity {
 
     }
 
-    public void hotSeatClck(View view) {
-        Intent hotSeatStart = new Intent(this, WordPicker.class);
+    public void hotSeatClck(final View view) {
+        final Intent hotSeatStart = new Intent(this, WordPicker.class);
         hotSeatStart.putExtra("muligeOrd",getIntent().getStringArrayListExtra("muligeOrd"));
         hotSeatStart.putExtra("isHotSeat", true);
         startActivity(hotSeatStart);
@@ -36,10 +36,10 @@ public class MultiplayerActivity extends AppCompatActivity {
     }
 
 
-    private class ConnectViaBlueTooth implements View.OnClickListener {
+    private static class ConnectViaBlueTooth implements View.OnClickListener {
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
 //            if (!mBluetoothAdapter.isEnabled()) {
 //                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 //                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);

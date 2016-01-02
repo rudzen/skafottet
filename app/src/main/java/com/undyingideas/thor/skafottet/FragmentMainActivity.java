@@ -1,7 +1,5 @@
 package com.undyingideas.thor.skafottet;
 
-import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,10 +11,10 @@ import com.undyingideas.thor.skafottet.dialogs.YesNo;
 public class FragmentMainActivity extends AppCompatActivity implements YesNo.YesNoResultListener {
 
 
-    protected static String possibleWord;
+    static String possibleWord;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_main);
@@ -24,10 +22,10 @@ public class FragmentMainActivity extends AppCompatActivity implements YesNo.Yes
 
 
         if (savedInstanceState == null) {
-            Bundle b = new Bundle();
+            final Bundle b = new Bundle();
             b.putStringArrayList("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
 
-            FragmentStartPage fragment = new FragmentStartPage();
+            final FragmentStartPage fragment = new FragmentStartPage();
             fragment.setArguments(b);
             getFragmentManager().beginTransaction()
                     .add(R.id.fragmentindhold, fragment)// tom container i layout
@@ -39,11 +37,11 @@ public class FragmentMainActivity extends AppCompatActivity implements YesNo.Yes
     }
 
     @Override
-    public void onDone(boolean result) {
+    public void onDone(final boolean result) {
         if(result){
             Log.d("wordPicker", "WordAccepted");
-            PlayFragment startGame = new PlayFragment();
-            Bundle data = new Bundle();
+            final PlayFragment startGame = new PlayFragment();
+            final Bundle data = new Bundle();
             data.putBoolean("isHotSeat", true);
             data.putString("theWord", possibleWord);
             startGame.setArguments(data);
@@ -56,7 +54,7 @@ public class FragmentMainActivity extends AppCompatActivity implements YesNo.Yes
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(final MenuItem item){
         if (item.getItemId() == android.R.id.home){
             //onBackPressed();
             Log.d("main", "button pressed");
@@ -66,7 +64,7 @@ public class FragmentMainActivity extends AppCompatActivity implements YesNo.Yes
 
     @Override
     public void onBackPressed(){
-        int count = getFragmentManager().getBackStackEntryCount();
+        final int count = getFragmentManager().getBackStackEntryCount();
 
         if (count == 0) {
             super.onBackPressed();

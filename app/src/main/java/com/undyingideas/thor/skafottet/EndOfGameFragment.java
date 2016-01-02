@@ -2,7 +2,6 @@ package com.undyingideas.thor.skafottet;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,32 +12,30 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.undyingideas.thor.skafottet.OldActivities.Play;
-
-import java.util.zip.Inflater;
-
 /**
- * Created by Thor on 17-11-2015.
+ * Created on 17-11-2015, 08:39.
+ * Project : skafottet
+ * @author Thor
  */
 public class EndOfGameFragment extends Fragment {
 
-    WebView resultaterDisp; //skal bruges til at vise spillets resultater, og om det er vundet etc.
-    ImageView endImage; //skal vise et vinder/taber billede, eller et straffende taberbillede
-    Bundle gameData;
+    private WebView resultaterDisp; //skal bruges til at vise spillets resultater, og om det er vundet etc.
+    private ImageView endImage; //skal vise et vinder/taber billede, eller et straffende taberbillede
+    private Bundle gameData;
     String resultText;
     Button newGame, endGame;
 
     @Override
-    public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater i, final ViewGroup container, final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View root = i.inflate(R.layout.activity_end_of_game, container, false);
+        final View root = i.inflate(R.layout.activity_end_of_game, container, false);
         endImage = (ImageView) root.findViewById(R.id.PokalBillede);
         resultaterDisp = (WebView) root.findViewById(R.id.SpilresultaterWebView);
 
-        Button endGameBtn = (Button) root.findViewById(R.id.afslutBtn);
+        final Button endGameBtn = (Button) root.findViewById(R.id.afslutBtn);
         endGameBtn.setOnClickListener(new endGameListener());
 
-        Button newGameBtn = (Button) root.findViewById(R.id.nytSplBtn);
+        final Button newGameBtn = (Button) root.findViewById(R.id.nytSplBtn);
         newGameBtn.setOnClickListener(new startGameListener());
 
         gameData = getArguments();
@@ -48,7 +45,7 @@ public class EndOfGameFragment extends Fragment {
 
     }
 
-    private void displayResults(Bundle gameData) {
+    private void displayResults(final Bundle gameData) {
 
         if (gameData.getBoolean("vundet")) {//checkes if the game is won
             endImage.setImageResource(R.mipmap.vundet);
@@ -65,9 +62,9 @@ public class EndOfGameFragment extends Fragment {
     private class endGameListener implements View.OnClickListener {//for afslut spil clicked
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
             Log.d("endgame", "going to start Screen");
-            FragmentStartPage newGame = new FragmentStartPage();
+            final FragmentStartPage newGame = new FragmentStartPage();
             getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, newGame).commit();
         }
     }
@@ -75,18 +72,18 @@ public class EndOfGameFragment extends Fragment {
     private class startGameListener implements View.OnClickListener { //for newgame Clicked
         Bundle gameData = new Bundle();
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
 
             if (getArguments().getBoolean("wasHotSeat", false)){//starting new multiyPlayer game by going to wordPicker
                 gameData.putBoolean("isHotSeat", true);
-                WordPicker newMultiPGame = new WordPicker();
+                final WordPicker newMultiPGame = new WordPicker();
                 newMultiPGame.setArguments(gameData);
                 getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, newMultiPGame).commit();
             }
 
             else{//starting new singleplayergame
                 gameData.putBoolean("isHotSeat", false);
-                PlayFragment newGame = new PlayFragment();
+                final PlayFragment newGame = new PlayFragment();
                 newGame.setArguments(gameData);
                 getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, newGame).commit();
             }

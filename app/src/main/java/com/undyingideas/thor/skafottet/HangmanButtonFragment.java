@@ -1,8 +1,5 @@
 package com.undyingideas.thor.skafottet;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,7 +18,7 @@ public class HangmanButtonFragment extends AbstractPlayFragment implements View.
     private View root;
 
     @Override
-    public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState)  {
+    public View onCreateView(final LayoutInflater i, final ViewGroup container, final Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         root = i.inflate(R.layout.hangman_button,container,false);
 
@@ -39,9 +36,9 @@ public class HangmanButtonFragment extends AbstractPlayFragment implements View.
 //    public void buttonOnClick(View v){
 //
 //    }
-    public void resetButtons(){
+private void resetButtons(){
         for(int i=0; i<listOfButtons.size();i++){
-            Button button;
+            final Button button;
             button = listOfButtons.get(i);
             button.setVisibility(View.VISIBLE);
             button.setOnClickListener(this);
@@ -49,22 +46,24 @@ public class HangmanButtonFragment extends AbstractPlayFragment implements View.
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
         Log.d("buttons", "button clicked");
-        Button button = (Button )v;
+        final Button button = (Button )v;
         ((Button) v).setVisibility(View.INVISIBLE);
 
         listOfButtons.add((Button) v);
-        String letter = ((Button) v).getText().toString();
+        final String letter = ((Button) v).getText().toString();
         guess(letter, true);
     }
 
     /**
+     * TODO : RECODE RECODE RECODE RECODE!
      * well this is annoying
      * @return
      */
-    public ArrayList<Button> initButtons(){
-        ArrayList<Button> returnList = new ArrayList<>();
+    private ArrayList<Button> initButtons(){
+        final ArrayList<Button> returnList = new ArrayList<>();
+
         returnList.add((Button) root.findViewById(R.id.button1));
         returnList.add((Button) root.findViewById(R.id.button2));
         returnList.add((Button) root.findViewById(R.id.button3));
@@ -95,7 +94,7 @@ public class HangmanButtonFragment extends AbstractPlayFragment implements View.
         returnList.add((Button) root.findViewById(R.id.button28));
 
         //adding clickhandlers
-        for (Button btn : returnList){
+        for (final Button btn : returnList){
             btn.setOnClickListener(this);
         }
 

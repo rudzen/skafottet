@@ -13,9 +13,9 @@ public class FragmentStartPage extends Fragment {
     private Button StartBtn, instructionBtn, preferenceBtn;
 
     @Override
-    public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState)  {
+    public View onCreateView(final LayoutInflater i, final ViewGroup container, final Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
-        View rot = i.inflate(R.layout.fragment_main,container,false);
+        final View rot = i.inflate(R.layout.fragment_main,container,false);
 
         rot.findViewById(R.id.btnStart).setOnClickListener(new StartClick());
         rot.findViewById(R.id.btnInstructions).setOnClickListener(new InstructionClick());
@@ -29,14 +29,14 @@ public class FragmentStartPage extends Fragment {
     /**
      * For starting a new singlePlayerGame
      */
-    public class StartClick implements View.OnClickListener{
+    private class StartClick implements View.OnClickListener{
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
 
-            Bundle b = new Bundle();
+            final Bundle b = new Bundle();
             b.putBoolean("isHotSeat", false);
-           HangmanButtonFragment fragment = new HangmanButtonFragment();
+           final HangmanButtonFragment fragment = new HangmanButtonFragment();
             fragment.setArguments(b);
             getFragmentManager().beginTransaction()
                     .replace(R.id.fragmentindhold, fragment).addToBackStack(null)
@@ -44,30 +44,30 @@ public class FragmentStartPage extends Fragment {
         }
     }
 
-    public class PreferenceClick implements View.OnClickListener{
+    private class PreferenceClick implements View.OnClickListener{
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
             startActivity(
                     new Intent(getActivity(), SettingsActivity.class));
         }
     }
 
-    public class InstructionClick implements View.OnClickListener{
+    private class InstructionClick implements View.OnClickListener{
 
         @Override
-        public void onClick(View v) {
-            Intent Instillinger = new Intent(getActivity(), Instructions.class);
+        public void onClick(final View v) {
+            final Intent Instillinger = new Intent(getActivity(), Instructions.class);
             startActivity(Instillinger);
         }
     }
 
-    public class GetWordsClick implements View.OnClickListener{
+    private class GetWordsClick implements View.OnClickListener{
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
 
-        WordPicker fragment = new WordPicker();
+        final WordPicker fragment = new WordPicker();
         getFragmentManager().beginTransaction()
                .add(R.id.fragmentindhold, fragment).addToBackStack(null)
                 .commit();
@@ -76,9 +76,9 @@ public class FragmentStartPage extends Fragment {
 
     private class StartMultiPlayerClick implements View.OnClickListener {
         @Override
-        public void onClick(View v) {
-            MultiPlayerFragment fragment = new MultiPlayerFragment();
-            Bundle multiplayerData = new Bundle();
+        public void onClick(final View v) {
+            final MultiPlayerFragment fragment = new MultiPlayerFragment();
+            final Bundle multiplayerData = new Bundle();
 //            multiplayerData.putStringArrayList("muligeOrd", getArguments().getStringArrayList("muligeOrd"));
             fragment.setArguments(multiplayerData);
             getFragmentManager().beginTransaction()

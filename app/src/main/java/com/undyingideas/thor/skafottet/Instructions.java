@@ -6,7 +6,7 @@ import android.webkit.WebView;
 
 public class Instructions extends AppCompatActivity {
 
-    String instructionText = "<html><body><ol>" +
+    private static final String instructionText = "<html><body><ol>" +
             "<li>Gæt på et bogstav ved at trykke på det</li>"+
             "<li>Hvis du gætter forkert bliver du lidt hængt</li>"+
             "<li>Hvis du gætter rigtigt bliver det vist på ordet</li>"+
@@ -14,11 +14,11 @@ public class Instructions extends AppCompatActivity {
             "<li>...</li>"+
             "<li>profit</li>"+
             "</ol></body></html>" ;
-    WebView instructionDisplay;
+    private WebView instructionDisplay;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_instruktioner);
 

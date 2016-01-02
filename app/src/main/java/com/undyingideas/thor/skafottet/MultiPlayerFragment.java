@@ -2,9 +2,7 @@ package com.undyingideas.thor.skafottet;
 
 import android.app.Fragment;
 import android.bluetooth.BluetoothAdapter;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,18 +10,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 /**
- * Created by Thor on 17-11-2015.
+ * Created on 17-11-2015, 08:39.
+ * Project : skafottet
+ * @author Thor
  */
 public class MultiPlayerFragment extends Fragment {
 
     Button btnConnect;
-    BluetoothAdapter mBluetoothAdapter;
+    private BluetoothAdapter mBluetoothAdapter;
 
     @Override
-    public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater i, final ViewGroup container, final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View rod = i.inflate(R.layout.activity_multiplayer, container, false);
-        Button hotSeatBtn = (Button) rod.findViewById(R.id.HotSeatBtn);
+        final View rod = i.inflate(R.layout.activity_multiplayer, container, false);
+        final Button hotSeatBtn = (Button) rod.findViewById(R.id.HotSeatBtn);
         hotSeatBtn.setOnClickListener(new hotSeatClick());
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -33,10 +33,10 @@ public class MultiPlayerFragment extends Fragment {
     private class hotSeatClick implements View.OnClickListener {
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
             Log.d("multiFrag", "button clicked");
-            Fragment hotSeatStart = new WordPicker();
-            Bundle wordPickerData = new Bundle();
+            final Fragment hotSeatStart = new WordPicker();
+            final Bundle wordPickerData = new Bundle();
             wordPickerData.putBoolean("isHotSeat",true);
             hotSeatStart.setArguments(wordPickerData);
             getFragmentManager().beginTransaction().
@@ -45,10 +45,10 @@ public class MultiPlayerFragment extends Fragment {
     }
 
 
-    private class ConnectViaBlueTooth implements View.OnClickListener {
+    private static class ConnectViaBlueTooth implements View.OnClickListener {
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
 //            if (!mBluetoothAdapter.isEnabled()) {
 //                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 //                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
