@@ -33,10 +33,7 @@ public class HangmanButtonFragment extends AbstractPlayFragment implements View.
         return root;
     }
 
-//    public void buttonOnClick(View v){
-//
-//    }
-private void resetButtons(){
+    private void resetButtons(){
         for(int i=0; i<listOfButtons.size();i++){
             final Button button;
             button = listOfButtons.get(i);
@@ -48,8 +45,7 @@ private void resetButtons(){
     @Override
     public void onClick(final View v) {
         Log.d("buttons", "button clicked");
-        final Button button = (Button )v;
-        ((Button) v).setVisibility(View.INVISIBLE);
+        v.setVisibility(View.INVISIBLE);
 
         listOfButtons.add((Button) v);
         final String letter = ((Button) v).getText().toString();
