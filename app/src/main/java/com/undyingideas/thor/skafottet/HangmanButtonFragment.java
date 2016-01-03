@@ -53,41 +53,16 @@ public class HangmanButtonFragment extends AbstractPlayFragment implements View.
     }
 
     /**
-     * TODO : RECODE RECODE RECODE RECODE!
      * well this is annoying
      * @return
      */
     private ArrayList<Button> initButtons(){
         final ArrayList<Button> returnList = new ArrayList<>();
 
-        returnList.add((Button) root.findViewById(R.id.button1));
-        returnList.add((Button) root.findViewById(R.id.button2));
-        returnList.add((Button) root.findViewById(R.id.button3));
-        returnList.add((Button) root.findViewById(R.id.button4));
-        returnList.add((Button) root.findViewById(R.id.button5));
-        returnList.add((Button) root.findViewById(R.id.button6));
-        returnList.add((Button) root.findViewById(R.id.button7));
-        returnList.add((Button) root.findViewById(R.id.button8));
-        returnList.add((Button) root.findViewById(R.id.button9));
-        returnList.add((Button) root.findViewById(R.id.button10));
-        returnList.add((Button) root.findViewById(R.id.button11));
-        returnList.add((Button) root.findViewById(R.id.button12));
-        returnList.add((Button) root.findViewById(R.id.button13));
-        returnList.add((Button) root.findViewById(R.id.button14));
-        returnList.add((Button) root.findViewById(R.id.button15));
-        returnList.add((Button) root.findViewById(R.id.button16));
-        returnList.add((Button) root.findViewById(R.id.button17));
-        returnList.add((Button) root.findViewById(R.id.button18));
-        returnList.add((Button) root.findViewById(R.id.button19));
-        returnList.add((Button) root.findViewById(R.id.button20));
-        returnList.add((Button) root.findViewById(R.id.button21));
-        returnList.add((Button) root.findViewById(R.id.button22));
-        returnList.add((Button) root.findViewById(R.id.button23));
-        returnList.add((Button) root.findViewById(R.id.button24));
-        returnList.add((Button) root.findViewById(R.id.button25));
-        returnList.add((Button) root.findViewById(R.id.button26));
-        returnList.add((Button) root.findViewById(R.id.button27));
-        returnList.add((Button) root.findViewById(R.id.button28));
+        returnList.addAll(getChildren((ViewGroup) root.findViewById(R.id.linearLayout1)));
+        returnList.addAll(getChildren((ViewGroup) root.findViewById(R.id.linearLayout2)));
+        returnList.addAll(getChildren((ViewGroup) root.findViewById(R.id.linearLayout3)));
+        returnList.addAll(getChildren((ViewGroup) root.findViewById(R.id.linearLayout4)));
 
         //adding clickhandlers
         for (final Button btn : returnList){
@@ -95,6 +70,12 @@ public class HangmanButtonFragment extends AbstractPlayFragment implements View.
         }
 
         return returnList;
+    }
+
+    private ArrayList<Button> getChildren(ViewGroup vg) {
+        ArrayList<Button> a = new ArrayList<>();
+        for(int i = 0; i < vg.getChildCount(); i++) a.add((Button)vg.getChildAt(i));
+        return a;
     }
 
 

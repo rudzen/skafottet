@@ -10,8 +10,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/linearLayout"
-        android:layout_above="@+id/linearLayout3"
+        android:id="@+id/linearLayout1"
+        android:layout_above="@+id/linearLayout2"
         android:layout_alignParentEnd="false"
         android:layout_alignParentStart="true">
     <Button
@@ -82,9 +82,9 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/linearLayout2"
-        android:layout_alignStart="@+id/linearLayout2"
-        android:id="@+id/linearLayout3"
+        android:layout_above="@+id/linearLayout3"
+        android:layout_alignStart="@+id/linearLayout3"
+        android:id="@+id/linearLayout2"
         android:layout_alignParentStart="true">
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -153,7 +153,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/linearLayout2"
+        android:id="@+id/linearLayout3"
         android:layout_above="@+id/linearLayout4"
         android:layout_alignParentEnd="false"
         android:layout_alignParentStart="true">
@@ -290,7 +290,7 @@
         android:layout_height="wrap_content"
         android:text="New Text"
         android:id="@+id/visibleText"
-        android:layout_above="@+id/linearLayout"
+        android:layout_above="@+id/linearLayout1"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
