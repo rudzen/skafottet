@@ -15,3 +15,8 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+
+
+# for TextSurface:
+-keep class su.levenetc.android.textsurface.** { *; }
