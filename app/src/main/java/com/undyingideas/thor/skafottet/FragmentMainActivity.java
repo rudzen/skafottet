@@ -17,7 +17,7 @@ public class FragmentMainActivity extends AppCompatActivity implements YesNo.Yes
         return possibleWord;
     }
 
-    public static void setPossibleWord(String possibleWord) {
+    public static void setPossibleWord(final String possibleWord) {
         FragmentMainActivity.possibleWord = possibleWord;
     }
 
@@ -35,7 +35,7 @@ public class FragmentMainActivity extends AppCompatActivity implements YesNo.Yes
 
             final FragmentStartPage fragment = new FragmentStartPage();
             fragment.setArguments(b);
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragmentindhold, fragment)// tom container i layout
                     .addToBackStack(null)
                     .commit();
@@ -53,7 +53,7 @@ public class FragmentMainActivity extends AppCompatActivity implements YesNo.Yes
             data.putBoolean("isHotSeat", true);
             data.putString("theWord", getPossibleWord());
             startGame.setArguments(data);
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragmentindhold, startGame)
                         .addToBackStack(null)
                             .commit();

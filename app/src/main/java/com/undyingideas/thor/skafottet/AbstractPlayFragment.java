@@ -6,10 +6,10 @@ package com.undyingideas.thor.skafottet;
  * @author Thor
  */
 
-import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
  * Holds the shared gamelogik/flow, in order to allow different layouts to be utilized
  *
  */
-public class AbstractPlayFragment extends Fragment{
+public class AbstractPlayFragment extends Fragment {
 
     protected Galgelogik logik;
     ArrayList<String> possibleWords;

@@ -1,8 +1,8 @@
 package com.undyingideas.thor.skafottet;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +14,7 @@ public class FragmentStartPage extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater i, final ViewGroup container, final Bundle savedInstanceState)  {
-        super.onCreate(savedInstanceState);
+        onCreate(savedInstanceState);
         final View rot = i.inflate(R.layout.fragment_main,container,false);
 
         rot.findViewById(R.id.btnStart).setOnClickListener(new StartClick());

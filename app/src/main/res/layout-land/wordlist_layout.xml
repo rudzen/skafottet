@@ -12,8 +12,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/primary"
-        app:popupTheme="@style/RTheme.PopupOverlay"/>
+        android:background="@color/colorPrimary"
+        app:popupTheme="@style/Widget.AppCompat.Light.PopupMenu.Overflow"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:layout_width="match_parent"
@@ -24,7 +24,7 @@
 
         <fragment
             android:id="@+id/word_titles"
-            class="dk.rudz.executioner.words.WordTitlesFragment"
+            class="com.undyingideas.thor.skafottet.wordlist.WordTitlesFragment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
