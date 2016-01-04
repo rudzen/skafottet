@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+    >
+
+    <EditText
+        android:id="@+id/dialog_add_word_list_edit_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="Ordliste titel"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:typeface="sans"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:textStyle="italic"/>
+
+    <EditText
+        android:id="@+id/dialog_add_word_list_edit_url"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="Ordliste webaddresse"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:typeface="sans"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:textStyle="italic"
+        android:inputType="textUri"/>
+
+    <CheckBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hent liste nu"
+        android:id="@+id/chk_dialog_add_wordlist_download"
+        />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_dialog_add_wordlist_ok"
+            android:layout_weight="1"
+            android:singleLine="false"
+            android:text="Ok"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_dialog_add_wordlist_cancel"
+            android:layout_weight="1"
+            android:text="Afbryd"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,29 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    tools:ignore="UseCompoundDrawables"
+              android:weightSum="1"
+    >
+    <!-- android:background="#00ffffff" -->
+
+    <ImageView
+        android:id="@+id/adapter_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:src="@android:drawable/btn_star_big_off"/>
+
+    <TextView
+        android:id="@+id/adapter_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textAlignment="viewStart"
+        android:textStyle="italic"
+        android:padding="10dp"
+        android:stateListAnimator="@android:animator/fade_out"
+        />
+
+</LinearLayout>

@@ -29,6 +29,7 @@ import java.lang.ref.WeakReference;
 public class WordDetailsFragment extends Fragment {
 
     /* create insance of the fragment with the correct data in bundle */
+    @SuppressWarnings("StandardVariableNames")
     public static WordDetailsFragment newInstance(final int index) {
         final WordDetailsFragment f = new WordDetailsFragment();
         final Bundle args = new Bundle();

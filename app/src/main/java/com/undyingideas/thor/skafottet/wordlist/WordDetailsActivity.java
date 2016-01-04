@@ -42,6 +42,7 @@ public class WordDetailsActivity extends AppCompatActivity {
         }
     }
 
+    @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         /* TESTING */
         int id = item.getItemId();
@@ -55,6 +56,6 @@ public class WordDetailsActivity extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+//        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 }

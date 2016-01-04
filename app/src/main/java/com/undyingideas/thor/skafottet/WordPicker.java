@@ -1,10 +1,10 @@
 package com.undyingideas.thor.skafottet;
 
-import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,18 +48,14 @@ public class WordPicker extends Fragment {
         }
 
         wordList.setAdapter(new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, muligeOrd));
-
-
         return rot;
     }
-
-
 
     private class ListClickListener implements AdapterView.OnItemClickListener {
 
         @Override
         public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-            FragmentMainActivity.possibleWord = muligeOrd.get(position);
+            FragmentMainActivity.setPossibleWord(muligeOrd.get(position));
             final DialogFragment nf = YesNo.newInstance("Skal ordet være?", muligeOrd.get(position), "Ja", "Nej");
 
             Log.d("lol", "clicked");

@@ -11,7 +11,15 @@ import com.undyingideas.thor.skafottet.dialogs.YesNo;
 public class FragmentMainActivity extends AppCompatActivity implements YesNo.YesNoResultListener {
 
 
-    static String possibleWord;
+    private static String possibleWord;
+
+    public static String getPossibleWord() {
+        return possibleWord;
+    }
+
+    public static void setPossibleWord(String possibleWord) {
+        FragmentMainActivity.possibleWord = possibleWord;
+    }
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -43,7 +51,7 @@ public class FragmentMainActivity extends AppCompatActivity implements YesNo.Yes
             final HangmanButtonFragment startGame = new HangmanButtonFragment();
             final Bundle data = new Bundle();
             data.putBoolean("isHotSeat", true);
-            data.putString("theWord", possibleWord);
+            data.putString("theWord", getPossibleWord());
             startGame.setArguments(data);
             getFragmentManager().beginTransaction()
                     .add(R.id.fragmentindhold, startGame)
