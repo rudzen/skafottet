@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.undyingideas.thor.skafottet.SupportClasses.WordCollector;
+import com.undyingideas.thor.skafottet.utility.Constant;
+import com.undyingideas.thor.skafottet.utility.FontsOverride;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,9 +24,15 @@ public class LoadingScreen extends Activity {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+//        FontsOverride.setDefaultFont(this, "DEFAULT", Constant.DEF_FONT);
+//        FontsOverride.setDefaultFont(this, "MONOSPACE", Constant.DEF_FONT);
+//        FontsOverride.setDefaultFont(this, "SERIF", Constant.DEF_FONT);
+//        FontsOverride.setDefaultFont(this, "SANS_SERIF", Constant.DEF_FONT);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading_screen);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
         new LoadWords().execute();
     }
 
@@ -51,7 +59,8 @@ public class LoadingScreen extends Activity {
         @Override
         protected void onPostExecute(final Object possibleWords) {
 
-            final Intent StartApp = new Intent(LoadingScreen.this, FragmentMainActivity.class);
+            final Intent StartApp = new Intent(LoadingScreen.this, MenuActivity.class);
+//            final Intent StartApp = new Intent(LoadingScreen.this, FragmentMainActivity.class);
 
             StartApp.putExtra("muligeOrd", (ArrayList<String>) possibleWords);
             StartApp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);// Fjerner loadscreen fra stacken

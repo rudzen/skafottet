@@ -11,7 +11,7 @@
     <style name="background">
         <item name="android:alpha" >0.2</item>
         <item name="android:scaleType"> fitXY </item>
-        <item name="android:src">@mipmap/dansemacabre</item>
+        <item name="android:src">@drawable/dansemacabre</item>
     </style>
 
 </resources>

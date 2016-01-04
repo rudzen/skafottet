@@ -35,12 +35,12 @@ public class EndOfGame extends Activity {
     private void displayResults(final Bundle spilData){
 
         if(spilData.getBoolean("vundet")){
-            endImage.setImageResource(R.mipmap.vundet);
+            endImage.setImageResource(R.drawable.vundet);
             resultText = "<html><body>Tilykke du har vundet <br> <br> Du gættede forkert <b> " + spilData.getInt("forsøg") + " gange</b>.</body></html>";
             resultaterDisp.loadData(resultText,"text/html; charset=UTF-8", null);
         }
         else{
-            endImage.setImageResource(R.mipmap.rip);
+            endImage.setImageResource(R.drawable.rip);
             resultText = "<html><body>Du har tabt <br> <br> Ordet du ledte efter var <b> " + spilData.getString("ordet") + "</b>.</body></html>";
             resultaterDisp.loadData(resultText,"text/html; charset=UTF-8", null);
 

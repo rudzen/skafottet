@@ -34,6 +34,7 @@ public class FragmentMainActivity extends AppCompatActivity implements YesNo.Yes
             b.putStringArrayList("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
 
             final FragmentStartPage fragment = new FragmentStartPage();
+//            final FragmentStartPage fragment = new FragmentStartPage();
             fragment.setArguments(b);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragmentindhold, fragment)// tom container i layout
@@ -51,7 +52,7 @@ public class FragmentMainActivity extends AppCompatActivity implements YesNo.Yes
             final HangmanButtonFragment startGame = new HangmanButtonFragment();
             final Bundle data = new Bundle();
             data.putBoolean("isHotSeat", true);
-            data.putString("theWord", getPossibleWord());
+            data.putString("theWord", possibleWord);
             startGame.setArguments(data);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragmentindhold, startGame)

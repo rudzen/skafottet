@@ -67,22 +67,22 @@ public class AbstractPlayFragment extends Fragment {
             final int wrongs = logik.getAntalForkerteBogstaver();
             switch (wrongs){
                 case 1:
-                    galgen.setImageResource(R.mipmap.forkert1);
+                    galgen.setImageResource(R.drawable.forkert1);
                     break;
                 case 2:
-                    galgen.setImageResource(R.mipmap.forkert2);
+                    galgen.setImageResource(R.drawable.forkert2);
                     break;
                 case 3:
-                    galgen.setImageResource(R.mipmap.forkert3);
+                    galgen.setImageResource(R.drawable.forkert3);
                     break;
                 case 4:
-                    galgen.setImageResource(R.mipmap.forkert4);
+                    galgen.setImageResource(R.drawable.forkert4);
                     break;
                 case 5:
-                    galgen.setImageResource(R.mipmap.forkert5);
+                    galgen.setImageResource(R.drawable.forkert5);
                     break;
                 case 6:
-                    galgen.setImageResource(R.mipmap.forkert6);
+                    galgen.setImageResource(R.drawable.forkert6);
                     break;
             }
         }

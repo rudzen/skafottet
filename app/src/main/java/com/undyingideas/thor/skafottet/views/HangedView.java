@@ -43,13 +43,13 @@ public class HangedView extends View {
     public void init(final int width, final int height) {
         if (width > 0 && height > 0) {
             if (p == null) p = new Paint(Paint.ANTI_ALIAS_FLAG);
-            images.put(0, Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.galge), width, height, true));
-            images.put(1, Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.forkert1), width, height, true));
-            images.put(2, Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.forkert2), width, height, true));
-            images.put(3, Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.forkert3), width, height, true));
-            images.put(4, Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.forkert4), width, height, true));
-            images.put(5, Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.forkert5), width, height, true));
-            images.put(6, Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.forkert6), width, height, true));
+            images.put(0, Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.galge), width, height, true));
+            images.put(1, Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.forkert1), width, height, true));
+            images.put(2, Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.forkert2), width, height, true));
+            images.put(3, Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.forkert3), width, height, true));
+            images.put(4, Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.forkert4), width, height, true));
+            images.put(5, Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.forkert5), width, height, true));
+            images.put(6, Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.forkert6), width, height, true));
         }
     }
 

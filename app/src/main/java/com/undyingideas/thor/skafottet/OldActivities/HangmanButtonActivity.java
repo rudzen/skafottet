@@ -26,7 +26,7 @@ public class HangmanButtonActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hangman_button);
         imageView = (ImageView) findViewById(R.id.imageView);
-        imageView.setImageResource(R.mipmap.galge);
+        imageView.setImageResource(R.drawable.galge);
 
         if (getIntent().getExtras().getBoolean("isHotSeat"))
             game = new Galgelogik(getIntent().getExtras().getString("wordToBeGuessed"));
@@ -83,22 +83,22 @@ public class HangmanButtonActivity extends Activity {
 
             switch (wrongs){
                 case 1:
-                   imageView.setImageResource(R.mipmap.forkert1);
+                   imageView.setImageResource(R.drawable.forkert1);
                     break;
                 case 2:
-                    imageView.setImageResource(R.mipmap.forkert2);
+                    imageView.setImageResource(R.drawable.forkert2);
                     break;
                 case 3:
-                    imageView.setImageResource(R.mipmap.forkert3);
+                    imageView.setImageResource(R.drawable.forkert3);
                     break;
                 case 4:
-                    imageView.setImageResource(R.mipmap.forkert4);
+                    imageView.setImageResource(R.drawable.forkert4);
                     break;
                 case 5:
-                    imageView.setImageResource(R.mipmap.forkert5);
+                    imageView.setImageResource(R.drawable.forkert5);
                     break;
                 case 6:
-                    imageView.setImageResource(R.mipmap.forkert6);
+                    imageView.setImageResource(R.drawable.forkert6);
                     break;
                 default:
                     break;

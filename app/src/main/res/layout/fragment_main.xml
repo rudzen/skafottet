@@ -13,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:src="@mipmap/gallow"
+        android:src="@drawable/gallow"
         android:scaleType="centerCrop"
         android:layout_alignParentEnd="true" />
 

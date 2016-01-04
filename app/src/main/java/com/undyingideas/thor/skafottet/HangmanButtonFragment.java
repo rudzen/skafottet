@@ -23,7 +23,7 @@ public class HangmanButtonFragment extends AbstractPlayFragment implements View.
         root = i.inflate(R.layout.hangman_button,container,false);
 
         galgen = (ImageView) root.findViewById(R.id.imageView);
-        galgen.setImageResource(R.mipmap.galge);
+        galgen.setImageResource(R.drawable.galge);
 
         CheckGameType();
         ordet = (TextView) root.findViewById(R.id.visibleText);

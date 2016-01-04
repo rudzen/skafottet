@@ -48,11 +48,11 @@ public class EndOfGameFragment extends Fragment {
     private void displayResults(final Bundle gameData) {
 
         if (gameData.getBoolean("vundet")) {//checkes if the game is won
-            endImage.setImageResource(R.mipmap.vundet);
+            endImage.setImageResource(R.drawable.vundet);
             resultText = "<html><body>Tilykke du har vundet <br> <br> Du gættede forkert <b> " + gameData.getInt("forsøg") + " gange</b>.</body></html>";
             resultaterDisp.loadData(resultText, "text/html; charset=UTF-8", null);
         } else {// or lost
-            endImage.setImageResource(R.mipmap.rip);
+            endImage.setImageResource(R.drawable.rip);
             resultText = "<html><body>Du har tabt <br> <br> Ordet du ledte efter var <b> " + gameData.getString("ordet") + "</b>.</body></html>";
             resultaterDisp.loadData(resultText, "text/html; charset=UTF-8", null);
         }

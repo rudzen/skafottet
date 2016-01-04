@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright © 2015.
+  ~ "THE BEER-WARE LICENSE" (Revision 42):
+  ~ <s133235@student.dtu> wrote this file. As long as you retain this notice you
+  ~ can do whatever you want with this stuff. If we meet some day, and you think
+  ~ this stuff is worth it, you can buy me a beer in return - Rudy Alex Kohn
+  ~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  -->
+
+<RelativeLayout android:id="@+id/menu_background"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/gallow"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:focusableInTouchMode="false"
+                android:orientation="vertical"
+                android:backgroundTintMode="multiply"
+    >
+
+    <com.undyingideas.thor.skafottet.views.StarField
+        android:id="@+id/sf"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        />
+
+    <ImageView
+        android:id="@+id/menu_title"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:src="@drawable/dansemacabre"
+        android:clickable="true"
+        android:contentDescription="The title image"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/menu_image_logo"
+        android:layout_alignEnd="@+id/menu_image_logo"/>
+
+    <ImageView
+        android:id="@+id/menu_cont_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/button_cont_game"
+        android:clickable="true"
+        android:contentDescription="New game button"
+        android:cropToPadding="false"
+        android:layout_gravity="center"
+        android:layout_below="@+id/menu_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="41dp"/>
+
+    <ImageView
+        android:id="@+id/menu_new_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/button_new_game"
+        android:clickable="true"
+        android:contentDescription="New game button"
+        android:cropToPadding="false"
+        android:layout_below="@+id/menu_cont_game"
+        android:layout_alignLeft="@+id/menu_cont_game"
+        android:layout_alignStart="@+id/menu_cont_game"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"/>
+
+    <ImageView
+        android:id="@+id/menu_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:src="@drawable/button_settings"
+        android:contentDescription="Settings button"
+        android:cropToPadding="false"
+        android:layout_gravity="center"
+        android:layout_below="@+id/menu_word_lists"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"/>
+
+    <ImageView
+        android:id="@+id/menu_word_lists"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/button_word_lists"
+        android:clickable="true"
+        android:contentDescription="Options button"
+        android:layout_gravity="center"
+        android:layout_below="@+id/menu_multiplayer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"/>
+
+    <ImageView
+        android:id="@+id/menu_multiplayer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/button_multiplayer"
+        android:clickable="true"
+        android:contentDescription="Options button"
+        android:layout_gravity="center"
+        android:layout_below="@+id/menu_new_game"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"/>
+
+    <ImageView
+        android:id="@+id/menu_help"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/button_help"
+        android:clickable="true"
+        android:contentDescription="Help button"
+        android:layout_gravity="center"
+        android:layout_below="@+id/menu_settings"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"/>
+
+    <ImageView
+        android:id="@+id/menu_quit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/button_quit"
+        android:clickable="true"
+        android:contentDescription="Quit button"
+        android:layout_gravity="center"
+        android:layout_below="@+id/menu_help"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"/>
+
+    <ImageView
+        android:id="@+id/menu_image_logo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:contentDescription="Logo"
+        android:src="@drawable/rip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+</RelativeLayout>
