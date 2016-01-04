@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:baselineAligned="false"
+              android:orientation="vertical"
+    >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primary"
+        app:popupTheme="@style/RTheme.PopupOverlay"/>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:baselineAligned="false"
+                  android:orientation="horizontal"
+        >
+
+        <fragment
+            android:id="@+id/word_titles"
+            class="dk.rudz.executioner.words.WordTitlesFragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <!-- FrameLayouts are used to block out a part of the screen to display normally a single
+        object
+        detailsElementBackground is a background that can provide details about the data
+        the user is selecting -->
+        <FrameLayout
+            android:id="@+id/word_details"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="?android:attr/detailsElementBackground"/>
+
+    </LinearLayout>
+</LinearLayout>

@@ -9,6 +9,7 @@
 
 package com.undyingideas.thor.skafottet.wordlist;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.wordlist.data.WordList;
 
 import java.util.List;
 
@@ -41,6 +43,7 @@ public class HangmanWordsAdapter extends ArrayAdapter<String> {
         public ImageView img;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getView(final int position, final View convertView, final ViewGroup parent) {
         View rowView = convertView;

@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.utility.Game;
 
 /* needs to be heavily altered with stuff */
 /**
@@ -39,7 +40,7 @@ public class WordTitlesFragment extends ListFragment {
         super.onActivityCreated(savedInstanceState);
 
 //        ArrayAdapter<String> lvAdapter = new WordListAdapter(getActivity(), Game.wl);
-        final ArrayAdapter<String> lvAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_activated_1, wl.getWordTitleList());
+        final ArrayAdapter<String> lvAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_activated_1, Game.wl.getWordTitleList());
 
         // Connect the ListView to our data
         setListAdapter(lvAdapter);
@@ -57,7 +58,7 @@ public class WordTitlesFragment extends ListFragment {
             mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
         } else {
             // Else read the wordlist current list.
-            mCurCheckPosition = wl.getIndexByTitle(wl.getCurrentWordListTitle());
+            mCurCheckPosition = Game.wl.getIndexByTitle(Game.wl.getCurrentWordListTitle());
         }
 
         if (mDuelPane) {

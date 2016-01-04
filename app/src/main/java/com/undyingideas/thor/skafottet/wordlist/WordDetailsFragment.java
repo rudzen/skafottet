@@ -20,6 +20,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.undyingideas.thor.skafottet.utility.Game;
+
 import java.lang.ref.WeakReference;
 
 /**

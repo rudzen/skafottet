@@ -21,12 +21,13 @@ import android.view.MenuItem;
 
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.dialogs.YesNo;
+import com.undyingideas.thor.skafottet.wordlist.data.WordItem;
 
 /**
  * WordFragmentLayout class.
  * @author rudz
  */
-public class WordFragmentLayout extends AppCompatActivity implements YesNo.YesNoResultListener, AddWordList.AddWordListListener {
+public class WordFragmentLayout extends AppCompatActivity implements YesNo.YesNoResultListener, AddWordListDialog.AddWordListListener {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +81,7 @@ public class WordFragmentLayout extends AppCompatActivity implements YesNo.YesNo
     public void onDone(final boolean result) {
         if (result) {
             /* generate edittext dialog and show it */
-            final DialogFragment add = AddWordList.newInstance("Indtast information", "Ok", "Afbryd", true);
+            final DialogFragment add = AddWordListDialog.newInstance("Indtast information", "Ok", "Afbryd", true);
             add.show(getSupportFragmentManager(), "ADDialog");
         }
     }
