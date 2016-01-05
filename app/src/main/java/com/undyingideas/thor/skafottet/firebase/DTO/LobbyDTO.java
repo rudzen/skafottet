@@ -9,4 +9,19 @@ public class LobbyDTO {
 
     ArrayList<LobbyPlayerStatus> playerList = new ArrayList<>();
 
+    public LobbyDTO(){
+
+    }
+
+    public LobbyDTO(ArrayList<LobbyPlayerStatus> playerList) {
+        this.playerList = playerList;
+    }
+
+    public ArrayList<LobbyPlayerStatus> getPlayerList() {
+        return playerList;
+    }
+
+    public void setPlayerList(ArrayList<LobbyPlayerStatus> playerList) {
+        this.playerList = playerList;
+    }
 }
