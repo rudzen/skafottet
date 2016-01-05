@@ -3,6 +3,7 @@ package com.undyingideas.thor.skafottet;
 /**
  * Created on 09-11-2015, 08:39.
  * Project : skafottet
+ *
  * @author Thor
  */
 
@@ -14,10 +15,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.undyingideas.thor.skafottet.utility.GameUtility;
+import com.undyingideas.thor.skafottet.utility.Constant;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+
+import static com.undyingideas.thor.skafottet.utility.GameUtility.prefs;
 
 /**
  * Holds the shared gamelogik/flow, in order to allow different layouts to be utilized
@@ -29,86 +32,76 @@ public class AbstractPlayFragment extends Fragment {
     ArrayList<String> possibleWords = new ArrayList<>();
     private boolean isHotSeat;
     private String theGuess; //bruges til at holde det aktuelle gæt
-//    private SharedPreferences data;
     ImageView galgen;
 
     Button ok;
     TextView usedLetters, ordet, status;
     EditText input;
 
-    void guess(final String guess, final boolean isMultiButtonInterface){
+    void guess(final String guess, final boolean isMultiButtonInterface) {
         final Boolean isMultiBtn = isMultiButtonInterface;
 
         theGuess = guess;
-        if (theGuess.length() > 1){
+        if (theGuess.length() > 1) {
             theGuess = theGuess.substring(0, 1);
             logik.gætBogstav(theGuess);
             status.setText("Brug kun ét bogstav, resten vil blive ignoreret");
         } else {
-            if(!isMultiBtn) status.setText("");
+            if (!isMultiBtn) status.setText("");
             logik.gætBogstav(theGuess);
         }
 
-        if(!logik.erSpilletSlut()){
-            if (!isMultiBtn)updateScreen();
+        if (!logik.erSpilletSlut()) {
+            if (!isMultiBtn) updateScreen();
             else updateScreen(false, false); // because its the Hangman with mulityple buttons an no input fields
         } else {
             StartEndgame();
         }
     }
-    void guess(final String guess){
-       guess(guess, true);
+
+    void guess(final String guess) {
+        guess(guess, true);
     }
 
-    private void updateScreen(final boolean hasUsedLettersStat, final boolean hasInputTxtField){
+    private void updateScreen(final boolean hasUsedLettersStat, final boolean hasInputTxtField) {
         ordet.setText(logik.getSynligtOrd());
-        if(hasUsedLettersStat) usedLetters.append(theGuess);
-        if(!logik.erSidsteBogstavKorrekt()){
+        if (hasUsedLettersStat) usedLetters.append(theGuess);
+        if (!logik.erSidsteBogstavKorrekt()) {
             final int wrongs = logik.getAntalForkerteBogstaver();
-            switch (wrongs){
-                case 1:
-                    galgen.setImageResource(R.drawable.forkert1);
-                    break;
-                case 2:
-                    galgen.setImageResource(R.drawable.forkert2);
-                    break;
-                case 3:
-                    galgen.setImageResource(R.drawable.forkert3);
-                    break;
-                case 4:
-                    galgen.setImageResource(R.drawable.forkert4);
-                    break;
-                case 5:
-                    galgen.setImageResource(R.drawable.forkert5);
-                    break;
-                case 6:
-                    galgen.setImageResource(R.drawable.forkert6);
-                    break;
+            if (wrongs == 1) {
+                galgen.setImageResource(R.drawable.forkert1);
+            } else if (wrongs == 2) {
+                galgen.setImageResource(R.drawable.forkert2);
+            } else if (wrongs == 3) {
+                galgen.setImageResource(R.drawable.forkert3);
+            } else if (wrongs == 4) {
+                galgen.setImageResource(R.drawable.forkert4);
+            } else if (wrongs == 5) {
+                galgen.setImageResource(R.drawable.forkert5);
+            } else if (wrongs == 6) {
+                galgen.setImageResource(R.drawable.forkert6);
             }
         }
-        if(hasInputTxtField)input.setText("");
+        if (hasInputTxtField) input.setText(null);
     }
 
-    private void updateScreen(){
-       updateScreen(true, true);
+    private void updateScreen() {
+        updateScreen(true, true);
     }
-    void CheckGameType(){//checks gametype, to se whether its a newgame by some extra info from activating classes, but that would require more refactoring
+
+    void CheckGameType() {//checks gametype, to se whether its a newgame by some extra info from activating classes, but that would require more refactoring
         isHotSeat = getArguments().getBoolean("isHotSeat", false);
         Log.d("Play", "CheckGameType: isHotseat " + isHotSeat);
-        if(isHotSeat){
+        if (isHotSeat) {
             possibleWords.add(getArguments().getString("theWord"));
-        }
-        else if(logik != null && logik.erSpilletSlut()){
+        } else if (logik != null && logik.erSpilletSlut()) {
             logik.nulstil();
-        } else{// for det tilfældes skyld at der er tale om et nyt spil
-//            data = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            possibleWords.addAll((HashSet<String>) GameUtility.prefs.getObject("possibleWords", HashSet.class));
-//            final ArrayList<String> candidateLlist = new ArrayList<>();
-//            candidateLlist.addAll(data.getStringSet("possibleWords", null));
-//            possibleWords = candidateLlist; //
+        } else {// for det tilfældes skyld at der er tale om et nyt spil
+            possibleWords.addAll((HashSet<String>) prefs.getObject(Constant.KEY_PREF_POSSIBLE_WORDS, HashSet.class));
         }
         logik = new Galgelogik(possibleWords);
     }
+
     private void StartEndgame() {// gathers need data for starting up the endgame Fragment
         final EndOfGameFragment fragment = new EndOfGameFragment();
         final Bundle endgame = new Bundle();
@@ -125,7 +118,6 @@ public class AbstractPlayFragment extends Fragment {
         Log.d("play", "finishing");
 
     }
-
 
 
 }

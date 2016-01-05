@@ -60,10 +60,10 @@ public class LoadingScreen extends Activity {
                     muligeOrd.addAll(WordCollector.samlOrd());
                     data.addAll(muligeOrd);
                     Log.d("LoadingScreen", "length:" + data.size());
-                    prefs.putObject("possibleWords", data);
+                    prefs.putObject(Constant.KEY_PREF_POSSIBLE_WORDS, data);
                     //prefs.edit().putStringSet("possibleWords", data).apply();//creates a cache for later use
                 } catch (final Exception e) {
-                    muligeOrd.addAll((HashSet<String>) prefs.getObject("possibleWords", HashSet.class)); // prefs.getStringSet("possibleWords", null));
+                    muligeOrd.addAll((HashSet<String>) prefs.getObject(Constant.KEY_PREF_POSSIBLE_WORDS, HashSet.class)); // prefs.getStringSet("possibleWords", null));
                     if (muligeOrd.size() <= 1) muligeOrd.add(0, "hej"); // LOLZ
                 }
                 Log.d("LoadingScreen", "dataLength:" + muligeOrd.size());
@@ -82,8 +82,8 @@ public class LoadingScreen extends Activity {
                 StartApp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);// Fjerner loadscreen fra stacken
                 loadingScreen.startActivity(StartApp);
                 try {
-                    prefs.checkForNullKey("possibleWords");
-                    Log.d("cache", "contains " + prefs.getObject("possibleWords", HashSet.class)); //checkForNullKey(); prefs.contains("possibleWords"));
+                    prefs.checkForNullKey(Constant.KEY_PREF_POSSIBLE_WORDS);
+                    Log.d("cache", "contains " + prefs.getObject(Constant.KEY_PREF_POSSIBLE_WORDS, HashSet.class)); //checkForNullKey(); prefs.contains("possibleWords"));
                 } catch (NullPointerException e) {
 
                 }
