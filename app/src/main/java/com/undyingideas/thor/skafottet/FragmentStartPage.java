@@ -13,9 +13,9 @@ public class FragmentStartPage extends Fragment {
     private Button StartBtn, instructionBtn, preferenceBtn;
 
     @Override
-    public View onCreateView(final LayoutInflater i, final ViewGroup container, final Bundle savedInstanceState)  {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)  {
         onCreate(savedInstanceState);
-        final View rot = i.inflate(R.layout.fragment_main,container,false);
+        final View rot = inflater.inflate(R.layout.fragment_main,container,false);
 
         rot.findViewById(R.id.btnStart).setOnClickListener(new StartClick());
         rot.findViewById(R.id.btnInstructions).setOnClickListener(new InstructionClick());
@@ -34,10 +34,10 @@ public class FragmentStartPage extends Fragment {
         @Override
         public void onClick(final View v) {
 
-            final Bundle b = new Bundle();
-            b.putBoolean("isHotSeat", false);
+            final Bundle bundle = new Bundle();
+            bundle.putBoolean("isHotSeat", false);
             final HangmanButtonFragment fragment = new HangmanButtonFragment();
-            fragment.setArguments(b);
+            fragment.setArguments(bundle);
             getFragmentManager().beginTransaction()
                     .replace(R.id.fragmentindhold, fragment).addToBackStack(null)
                     .commit();
@@ -90,7 +90,7 @@ public class FragmentStartPage extends Fragment {
     private class HighScoreClick implements View.OnClickListener{
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
             final HighScoreFragment fragment = new HighScoreFragment();
         }
     }

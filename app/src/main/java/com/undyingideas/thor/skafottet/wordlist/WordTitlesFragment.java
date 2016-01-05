@@ -17,7 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.utility.Game;
+import com.undyingideas.thor.skafottet.utility.GameUtility;
 
 /* needs to be heavily altered with stuff */
 /**
@@ -33,14 +33,14 @@ public class WordTitlesFragment extends ListFragment {
     boolean mDuelPane;
 
     // Currently selected item in the ListView
-    int mCurCheckPosition = 0;
+    int mCurCheckPosition;
 
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-//        ArrayAdapter<String> lvAdapter = new WordListAdapter(getActivity(), Game.wl);
-        final ArrayAdapter<String> lvAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_activated_1, Game.wl.getWordTitleList());
+//        ArrayAdapter<String> lvAdapter = new WordListAdapter(getActivity(), GameUtility.s_wordList);
+        final ArrayAdapter<String> lvAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_activated_1, GameUtility.s_wordList.getWordTitleList());
 
         // Connect the ListView to our data
         setListAdapter(lvAdapter);
@@ -52,14 +52,7 @@ public class WordTitlesFragment extends ListFragment {
         // Check if the detailsFrame exists and if it is visible
         mDuelPane = detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE;
 
-        // If the screen is rotated onSaveInstanceState() below will store the // hero most recently selected. Get the value attached to curChoice and // store it in mCurCheckPosition
-        if (savedInstanceState != null) {
-            // Restore last state for checked position.
-            mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
-        } else {
-            // Else read the wordlist current list.
-            mCurCheckPosition = Game.wl.getIndexByTitle(Game.wl.getCurrentWordListTitle());
-        }
+        mCurCheckPosition = savedInstanceState != null ? savedInstanceState.getInt("curChoice", 0) : GameUtility.s_wordList.getIndexByTitle(GameUtility.s_wordList.getCurrentWordListTitle());
 
         if (mDuelPane) {
             // CHOICE_MODE_SINGLE allows one item in the ListView to be selected at a time
@@ -85,7 +78,7 @@ public class WordTitlesFragment extends ListFragment {
     }
 
     // Shows the data
-    void showDetails(int index) {
+    void showDetails(final int index) {
 
         /* update last selected */
         mCurCheckPosition = index;
@@ -108,7 +101,7 @@ public class WordTitlesFragment extends ListFragment {
                 details = WordDetailsFragment.newInstance(index);
 
                 // Start Fragment transactions
-                android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+                final android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
 
                 // Replace any other Fragment with our new Details Fragment with the right data
                 ft.replace(R.id.word_details, details);

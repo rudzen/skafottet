@@ -71,14 +71,14 @@ public class WordItem implements Serializable {
         return words.contains(word);
     }
 
-    public String getWord(int index) {
+    public String getWord(final int index) {
         if (words.size() < index) return "";
         return words.get(index);
     }
 
     public boolean exists(final String title, final String url) {
         /* yes, it's possible to have different cased entries :) */
-        return (this.title.equals(title) && this.url.equals(url));
+        return this.title.equals(title) && this.url.equals(url);
     }
 
     /* -------------- Getters & Setters -------------- */
@@ -87,7 +87,7 @@ public class WordItem implements Serializable {
         return words;
     }
 
-    public void setWords(ArrayList<String> words) {
+    public void setWords(final ArrayList<String> words) {
         /* since we are using a final list, just add the new words manually */
         this.words.clear();
         this.words.addAll(words);
@@ -98,7 +98,7 @@ public class WordItem implements Serializable {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -106,7 +106,7 @@ public class WordItem implements Serializable {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         this.url = url;
     }
 
@@ -114,7 +114,7 @@ public class WordItem implements Serializable {
         return dlNow;
     }
 
-    public void setDlNow(boolean dlNow) {
+    public void setDlNow(final boolean dlNow) {
         this.dlNow = dlNow;
     }
 }

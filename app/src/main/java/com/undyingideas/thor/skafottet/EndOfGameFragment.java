@@ -26,17 +26,17 @@ public class EndOfGameFragment extends Fragment {
     Button newGame, endGame;
 
     @Override
-    public View onCreateView(final LayoutInflater i, final ViewGroup container, final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        final View root = i.inflate(R.layout.activity_end_of_game, container, false);
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+        onCreate(savedInstanceState);
+        final View root = inflater.inflate(R.layout.activity_end_of_game, container, false);
         endImage = (ImageView) root.findViewById(R.id.PokalBillede);
         resultaterDisp = (WebView) root.findViewById(R.id.SpilresultaterWebView);
 
         final Button endGameBtn = (Button) root.findViewById(R.id.afslutBtn);
-        endGameBtn.setOnClickListener(new endGameListener());
+        endGameBtn.setOnClickListener(new EndGameListener());
 
         final Button newGameBtn = (Button) root.findViewById(R.id.nytSplBtn);
-        newGameBtn.setOnClickListener(new startGameListener());
+        newGameBtn.setOnClickListener(new StartGameListener());
 
         gameData = getArguments();
 
@@ -59,7 +59,7 @@ public class EndOfGameFragment extends Fragment {
         Log.d("endgame", "data: " + gameData.getString("spiller ") + " " + gameData.getString("forsøg") + " " + gameData.getBoolean("vundet"));
     }
 
-    private class endGameListener implements View.OnClickListener {//for afslut spil clicked
+    private class EndGameListener implements View.OnClickListener {//for afslut spil clicked
 
         @Override
         public void onClick(final View v) {
@@ -69,7 +69,7 @@ public class EndOfGameFragment extends Fragment {
         }
     }
 
-    private class startGameListener implements View.OnClickListener { //for newgame Clicked
+    private class StartGameListener implements View.OnClickListener { //for newgame Clicked
         Bundle gameData = new Bundle();
         @Override
         public void onClick(final View v) {

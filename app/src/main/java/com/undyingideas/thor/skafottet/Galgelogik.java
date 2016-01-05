@@ -154,7 +154,7 @@ public class Galgelogik {
 
     private static String hentUrl(final String url) throws IOException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(new URL(url).openStream()));
-        final StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder(50);
         String linje = br.readLine();
         while (linje != null) {
             sb.append(linje).append("\n");

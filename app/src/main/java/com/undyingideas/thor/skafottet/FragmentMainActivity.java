@@ -9,16 +9,15 @@ import android.view.Window;
 import com.undyingideas.thor.skafottet.dialogs.YesNo;
 
 public class FragmentMainActivity extends AppCompatActivity implements YesNo.YesNoResultListener {
+    
+    private static String s_possibleWord;
 
-
-    private static String possibleWord;
-
-    public static String getPossibleWord() {
-        return possibleWord;
+    public static String getS_possibleWord() {
+        return s_possibleWord;
     }
 
-    public static void setPossibleWord(final String possibleWord) {
-        FragmentMainActivity.possibleWord = possibleWord;
+    public static void setS_possibleWord(final String s_possibleWord) {
+        FragmentMainActivity.s_possibleWord = s_possibleWord;
     }
 
     @Override
@@ -30,12 +29,12 @@ public class FragmentMainActivity extends AppCompatActivity implements YesNo.Yes
 
 
         if (savedInstanceState == null) {
-            final Bundle b = new Bundle();
-            b.putStringArrayList("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
+            final Bundle bundle = new Bundle();
+            bundle.putStringArrayList("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
 
             final FragmentStartPage fragment = new FragmentStartPage();
 //            final FragmentStartPage fragment = new FragmentStartPage();
-            fragment.setArguments(b);
+            fragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragmentindhold, fragment)// tom container i layout
                     .addToBackStack(null)
@@ -52,7 +51,7 @@ public class FragmentMainActivity extends AppCompatActivity implements YesNo.Yes
             final HangmanButtonFragment startGame = new HangmanButtonFragment();
             final Bundle data = new Bundle();
             data.putBoolean("isHotSeat", true);
-            data.putString("theWord", possibleWord);
+            data.putString("theWord", s_possibleWord);
             startGame.setArguments(data);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragmentindhold, startGame)

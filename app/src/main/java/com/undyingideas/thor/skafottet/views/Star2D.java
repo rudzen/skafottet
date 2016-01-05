@@ -12,6 +12,7 @@ package com.undyingideas.thor.skafottet.views;
 
 import android.graphics.PointF;
 
+@SuppressWarnings("ClassNamingConvention")
 class Star2D {
     public PointF xy;
     private float size;

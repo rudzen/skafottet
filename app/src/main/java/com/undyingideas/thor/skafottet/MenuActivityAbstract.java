@@ -45,7 +45,7 @@ public abstract class MenuActivityAbstract extends AppCompatActivity {
     @Nullable
     private SensorManager mSensorManager;
     private Sensor mSensor;
-    private SensorEventListener sensorListener;
+    private MenuSensorEventListener sensorListener;
 
     private static final String TAG = "MenuActivityAbstract";
 
@@ -96,14 +96,14 @@ public abstract class MenuActivityAbstract extends AppCompatActivity {
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
         if (mSensor != null) {
-            sensorListener = new SensorEventListener(this);
+            sensorListener = new MenuSensorEventListener(this);
             mSensorManager.registerListener(sensorListener, mSensor, SensorManager.SENSOR_DELAY_GAME);
             Log.i(TAG, "TYPE_GRAVITY sensor registered");
         } else {
             Log.e(TAG, "TYPE_GRAVITY sensor NOT registered");
             mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             if (mSensor != null) {
-                sensorListener = new SensorEventListener(this);
+                sensorListener = new MenuSensorEventListener(this);
                 mSensorManager.registerListener(sensorListener, mSensor, SensorManager.SENSOR_DELAY_GAME);
                 Log.i(TAG, "TYPE_ACCELEROMETER sensor registered");
             } else {
@@ -131,11 +131,11 @@ public abstract class MenuActivityAbstract extends AppCompatActivity {
         }
     }
 
-    private static class SensorEventListener implements android.hardware.SensorEventListener {
+    private static class MenuSensorEventListener implements android.hardware.SensorEventListener {
 
         final WeakReference<MenuActivityAbstract> menuActivityAbstractWeakReference;
 
-        public SensorEventListener(final MenuActivityAbstract menuActivityAbstract) {
+        public MenuSensorEventListener(final MenuActivityAbstract menuActivityAbstract) {
             menuActivityAbstractWeakReference = new WeakReference<>(menuActivityAbstract);
         }
 

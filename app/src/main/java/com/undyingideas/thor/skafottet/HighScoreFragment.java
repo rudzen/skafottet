@@ -6,18 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.firebase.client.Firebase;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-
 /**
- * Created by Gump on 04-01-2016.
+ * Created on 04-01-2016, 06:34.
+ * Project : skafottet
+ * @author Gump
  */
 public class HighScoreFragment extends Fragment{
 
@@ -29,9 +26,9 @@ public class HighScoreFragment extends Fragment{
     HighScoreController pc;
 
     @Override
-    public View onCreateView(final LayoutInflater i, final ViewGroup container, final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        final View rot = i.inflate(R.layout.activity_high_score, container, false);
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+        onCreate(savedInstanceState);
+        final View rot = inflater.inflate(R.layout.activity_high_score, container, false);
 
         //getActivity might not work!
         Firebase.setAndroidContext(getActivity());
@@ -41,7 +38,6 @@ public class HighScoreFragment extends Fragment{
 
         highScoreList = (ListView) rot.findViewById(R.id.listHighScore);
         title = (TextView) rot.findViewById(R.id.txtHighScores);
-
 
         highScoreList.setAdapter(new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, pc.players));
 

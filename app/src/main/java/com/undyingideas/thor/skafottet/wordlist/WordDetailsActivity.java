@@ -14,8 +14,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.undyingideas.thor.skafottet.R;
-
 /**
  * Responsible for showin the word lists
  * <p>Supports dual layout :</p>
@@ -45,7 +43,7 @@ public class WordDetailsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         /* TESTING */
-        int id = item.getItemId();
+        final int id = item.getItemId();
         if (id == android.R.id.home) {
             finish();
             return true;

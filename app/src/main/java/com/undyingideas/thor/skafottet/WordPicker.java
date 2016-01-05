@@ -28,9 +28,9 @@ public class WordPicker extends Fragment {
     private boolean isHotseat;
     private String possibleWord;
     @Override
-    public View onCreateView(final LayoutInflater i, final ViewGroup container, final Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
 
-        final View rot = i.inflate(R.layout.activity_ord_vaelger,container,false);
+        final View rot = inflater.inflate(R.layout.activity_ord_vaelger,container,false);
         wordListGetter = PreferenceManager.getDefaultSharedPreferences(getActivity());
         if(getArguments() != null){ data = getArguments();
         isHotseat = data.getBoolean("isHotSeat", false);}
@@ -55,7 +55,7 @@ public class WordPicker extends Fragment {
 
         @Override
         public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-            FragmentMainActivity.setPossibleWord(muligeOrd.get(position));
+            FragmentMainActivity.setS_possibleWord(muligeOrd.get(position));
             final DialogFragment nf = YesNo.newInstance("Skal ordet være?", muligeOrd.get(position), "Ja", "Nej");
 
             Log.d("lol", "clicked");

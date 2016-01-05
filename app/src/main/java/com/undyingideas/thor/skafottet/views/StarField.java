@@ -31,7 +31,6 @@ public class StarField extends View {
     private int width, height;
     private PointF gravity;
     private float z;
-    private int color;
 
     private static final String TAG = "Starfield";
 
@@ -70,7 +69,6 @@ public class StarField extends View {
     }
 
     public void init(final int w, final int h, final int color) {
-        this.color = color;
         gravity = new PointF(0f, 0f);
         width = w;
         height = h;

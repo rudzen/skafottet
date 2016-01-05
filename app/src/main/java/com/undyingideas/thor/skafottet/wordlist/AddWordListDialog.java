@@ -39,7 +39,7 @@ public class AddWordListDialog extends DialogFragment {
         void onFinishAddWordListDialog(String title, String url, boolean startDownload);
     }
 
-    private static Pattern validHttp;
+    private Pattern s_validHttp;
 
     public static AddWordListDialog newInstance(final String title, final String okButton, final String cancelButton, final boolean cancelable) {
         final AddWordListDialog frag = new AddWordListDialog();
@@ -53,24 +53,25 @@ public class AddWordListDialog extends DialogFragment {
     }
 
     public AddWordListDialog() {
-        validHttp = Pattern.compile("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
+        s_validHttp = Pattern.compile("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
     }
 
     private boolean isValid() {
-        if (Views.editURL == null) return false;
-        final String url = Views.editURL.getText().toString();
-        final boolean validStuff = !Views.editTitle.getText().toString().isEmpty() && !url.isEmpty() && validHttp.matcher(url).find();
+        if (ViewHolder.s_editURL == null) return false;
+        final String url = ViewHolder.s_editURL.getText().toString();
+        final boolean validStuff = !ViewHolder.s_editTitle.getText().toString().isEmpty() && !url.isEmpty() && s_validHttp.matcher(url).find();
         if (validStuff) return true;
         Toast.makeText(getActivity(), "Forkert indtastede informationer.", Toast.LENGTH_SHORT).show();
         return false;
     }
 
-    private static class Views {
-        public static EditText editTitle, editURL;
-        public static Button btnOk, btnCancel;
-        public static CheckBox chkDLnow;
+    private final static class ViewHolder {
+        public static EditText s_editTitle, s_editURL;
+        public static Button s_btnOk, s_btnCancel;
+        public static CheckBox s_chkDLnow;
     }
 
+    @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.dialog_add_wordlist, container);
@@ -78,23 +79,23 @@ public class AddWordListDialog extends DialogFragment {
         getDialog().setTitle(getArguments().getString("title"));
         getDialog().setCancelable(getArguments().getBoolean("cancelable"));
 
-        Views.editTitle = (EditText) view.findViewById(R.id.dialog_add_word_list_edit_title);
-        Views.editURL   = (EditText) view.findViewById(R.id.dialog_add_word_list_edit_url);
-        Views.btnOk     = (Button) view.findViewById(R.id.btn_dialog_add_wordlist_ok);
-        Views.btnCancel = (Button) view.findViewById(R.id.btn_dialog_add_wordlist_cancel);
-        Views.chkDLnow  = (CheckBox) view.findViewById(R.id.chk_dialog_add_wordlist_download);
+        ViewHolder.s_editTitle = (EditText) view.findViewById(R.id.dialog_add_word_list_edit_title);
+        ViewHolder.s_editURL = (EditText) view.findViewById(R.id.dialog_add_word_list_edit_url);
+        ViewHolder.s_btnOk = (Button) view.findViewById(R.id.btn_dialog_add_wordlist_ok);
+        ViewHolder.s_btnCancel = (Button) view.findViewById(R.id.btn_dialog_add_wordlist_cancel);
+        ViewHolder.s_chkDLnow = (CheckBox) view.findViewById(R.id.chk_dialog_add_wordlist_download);
 
         final EditTextClickHandler handler = new EditTextClickHandler(this);
-        Views.editTitle.setOnKeyListener(handler);
-        Views.editURL.setOnKeyListener(handler);
+        ViewHolder.s_editTitle.setOnKeyListener(handler);
+        ViewHolder.s_editURL.setOnKeyListener(handler);
 
-        Views.btnOk.setOnClickListener(new OnResultClick(this, true));
-        Views.btnCancel.setOnClickListener(new OnResultClick(this, false));
+        ViewHolder.s_btnOk.setOnClickListener(new OnResultClick(this, true));
+        ViewHolder.s_btnCancel.setOnClickListener(new OnResultClick(this, false));
 
-        Views.btnOk.setText(getArguments().getString("okButton"));
-        Views.btnCancel.setText(getArguments().getString("cancelButton"));
+        ViewHolder.s_btnOk.setText(getArguments().getString("okButton"));
+        ViewHolder.s_btnCancel.setText(getArguments().getString("cancelButton"));
 
-        Views.editTitle.requestFocus();
+        ViewHolder.s_editTitle.requestFocus();
         getDialog().getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
         return view;
@@ -105,14 +106,16 @@ public class AddWordListDialog extends DialogFragment {
         final AddWordListListener activity = (AddWordListListener) getActivity();
 
         /* grab what we need from the views */
-        final String title = Views.editTitle.getText().toString();
-        final String url = Views.editURL.getText().toString();
-        final boolean dlnow = Views.chkDLnow.isChecked();
+        final String title = ViewHolder.s_editTitle.getText().toString();
+        final String url = ViewHolder.s_editURL.getText().toString();
+        final boolean dlnow = ViewHolder.s_chkDLnow.isChecked();
 
         /* null them */
-        Views.btnCancel = Views.btnOk = null;
-        Views.editTitle = Views.editURL = null;
-        Views.chkDLnow = null;
+        ViewHolder.s_btnCancel = null;
+        ViewHolder.s_btnOk = null;
+        ViewHolder.s_editTitle = null;
+        ViewHolder.s_editURL = null;
+        ViewHolder.s_chkDLnow = null;
 
         activity.onFinishAddWordListDialog(title, url, dlnow);
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
@@ -131,15 +134,20 @@ public class AddWordListDialog extends DialogFragment {
         public boolean onKey(final View v, final int keyCode, final KeyEvent event) {
             final AddWordListDialog addWordListDialog = addWordListDialogWeakReference.get();
             if (addWordListDialog != null) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN
-                        && (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER)
-                        && addWordListDialog.isValid()) {
+                if (isCorrectAction(keyCode, event, addWordListDialog)) {
                     Log.d("AddDialog", "Ok for katten");
                     addWordListDialog.postResult();
                     return true;
                 }
             }
             return false;
+        }
+
+        @SuppressWarnings("OverlyComplexBooleanExpression")
+        private static boolean isCorrectAction(final int keyCode, final KeyEvent event, final AddWordListDialog addWordListDialog) {
+            return event.getAction() == KeyEvent.ACTION_DOWN
+                    && (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER)
+                    && addWordListDialog.isValid();
         }
     }
 

@@ -25,7 +25,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.nineoldandroids.animation.Animator;
-import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.views.NewGameAdapter;
 import com.undyingideas.thor.skafottet.views.NewGameItem;

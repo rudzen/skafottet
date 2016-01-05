@@ -8,8 +8,9 @@ import com.undyingideas.thor.skafottet.wordlist.data.WordList;
  *
  * @author rudz
  */
-public abstract class Game {
+public abstract class GameUtility {
 
-    public static WordList wl;
+    @SuppressWarnings("StaticVariableOfConcreteClass")
+    public static WordList s_wordList;
 
 }

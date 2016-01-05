@@ -20,7 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.undyingideas.thor.skafottet.utility.Game;
+import com.undyingideas.thor.skafottet.utility.GameUtility;
 
 import java.lang.ref.WeakReference;
 
@@ -59,10 +59,10 @@ public class WordDetailsFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
 
         /* configure adapter */
-        final ArrayAdapter detailsAdapter = new HangmanWordsAdapter(getActivity(), Game.wl.getListByIndex(getShownIndex()));
+        final ArrayAdapter detailsAdapter = new HangmanWordsAdapter(getActivity(), GameUtility.s_wordList.getListByIndex(getShownIndex()));
 
         Log.d("WDFrag", "Index    : " + Integer.toString(getShownIndex()));
-        Log.d("WDFrag", "ListSize : " + Integer.toString(Game.wl.getListByIndex(getShownIndex()).size()));
+        Log.d("WDFrag", "ListSize : " + Integer.toString(GameUtility.s_wordList.getListByIndex(getShownIndex()).size()));
 
         /* set up list view */
         final ListView lv = new ListView(getActivity());

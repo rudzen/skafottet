@@ -20,17 +20,17 @@ public class MultiPlayerFragment extends Fragment {
     private BluetoothAdapter mBluetoothAdapter;
 
     @Override
-    public View onCreateView(final LayoutInflater i, final ViewGroup container, final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        final View rod = i.inflate(R.layout.activity_multiplayer, container, false);
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+        onCreate(savedInstanceState);
+        final View rod = inflater.inflate(R.layout.activity_multiplayer, container, false);
         final Button hotSeatBtn = (Button) rod.findViewById(R.id.HotSeatBtn);
-        hotSeatBtn.setOnClickListener(new hotSeatClick());
+        hotSeatBtn.setOnClickListener(new HotSeatClick());
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         return rod;
     }
 
-    private class hotSeatClick implements View.OnClickListener {
+    private class HotSeatClick implements View.OnClickListener {
 
         @Override
         public void onClick(final View v) {

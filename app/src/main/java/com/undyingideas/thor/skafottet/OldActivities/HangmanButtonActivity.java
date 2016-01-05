@@ -28,10 +28,7 @@ public class HangmanButtonActivity extends Activity {
         imageView = (ImageView) findViewById(R.id.imageView);
         imageView.setImageResource(R.drawable.galge);
 
-        if (getIntent().getExtras().getBoolean("isHotSeat"))
-            game = new Galgelogik(getIntent().getExtras().getString("wordToBeGuessed"));
-        else
-            game = new Galgelogik(getIntent().getExtras().getStringArrayList("muligeOrd"));
+        game = getIntent().getExtras().getBoolean("isHotSeat") ? new Galgelogik(getIntent().getExtras().getString("wordToBeGuessed")) : new Galgelogik(getIntent().getExtras().getStringArrayList("muligeOrd"));
         //game.nulstil();
         ordet = (TextView) findViewById(R.id.visibleText);
         ordet.setText(game.getSynligtOrd());

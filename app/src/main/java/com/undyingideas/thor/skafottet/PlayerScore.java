@@ -1,7 +1,9 @@
 package com.undyingideas.thor.skafottet;
 
 /**
- * Created by Gump on 04-01-2016.
+ * Created on 04-01-2016, 06:34.
+ * Project : skafottet
+ * @author Gump
  */
 public class PlayerScore {
     String name;
@@ -10,7 +12,7 @@ public class PlayerScore {
     public PlayerScore(){
 
     }
-    public PlayerScore(String name, int score){
+    public PlayerScore(final String name, final int score){
         this.name = name;
         this.score = score;
     }
@@ -18,7 +20,7 @@ public class PlayerScore {
 
     public String getName() {        return name;    }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -26,7 +28,7 @@ public class PlayerScore {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(final int score) {
         this.score = score;
     }
 

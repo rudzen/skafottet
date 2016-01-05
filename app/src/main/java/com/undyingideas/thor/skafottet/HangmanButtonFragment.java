@@ -18,9 +18,9 @@ public class HangmanButtonFragment extends AbstractPlayFragment implements View.
     private View root;
 
     @Override
-    public View onCreateView(final LayoutInflater i, final ViewGroup container, final Bundle savedInstanceState)  {
-        super.onCreate(savedInstanceState);
-        root = i.inflate(R.layout.hangman_button,container,false);
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)  {
+        onCreate(savedInstanceState);
+        root = inflater.inflate(R.layout.hangman_button,container,false);
 
         galgen = (ImageView) root.findViewById(R.id.imageView);
         galgen.setImageResource(R.drawable.galge);
@@ -54,7 +54,7 @@ public class HangmanButtonFragment extends AbstractPlayFragment implements View.
 
     /**
      * well this is annoying
-     * @return
+     * @return The letter buttons as arraylist
      */
     private ArrayList<Button> initButtons(){
         final ArrayList<Button> returnList = new ArrayList<>();
@@ -72,8 +72,8 @@ public class HangmanButtonFragment extends AbstractPlayFragment implements View.
         return returnList;
     }
 
-    private ArrayList<Button> getChildren(ViewGroup vg) {
-        ArrayList<Button> a = new ArrayList<>();
+    private static ArrayList<Button> getChildren(final ViewGroup vg) {
+        final ArrayList<Button> a = new ArrayList<>();
         for(int i = 0; i < vg.getChildCount(); i++) a.add((Button)vg.getChildAt(i));
         return a;
     }

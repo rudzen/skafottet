@@ -15,21 +15,21 @@ import java.util.LinkedList;
  * todo clean language
  */
 public class WordCollector {
-    private static ArrayList<String> muligeOrd;
+    private static ArrayList<String> s_muligeOrd;
 
     private static ArrayList<String> samlOrd(final String url) throws Exception {
-        muligeOrd = new ArrayList<>();
+        s_muligeOrd = new ArrayList<>();
         if (url == null) {
             hentOrdFra("http://dr.dk");
         } else {
             hentOrdFra(url);
         }
-        return muligeOrd;
+        return s_muligeOrd;
     }
 
     private static String hentUrl(final String url) throws IOException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(new URL(url).openStream()));
-        final StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder(50);
         String linje = br.readLine();
         while (linje != null) {
             sb.append(linje).append("\n");
@@ -44,9 +44,9 @@ public class WordCollector {
         System.out.println("data = " + data);
         data = data.replaceAll("<.+?>", " ").toLowerCase().replaceAll("[^a-zæøå]", " ");
         System.out.println("data = " + data);
-        muligeOrd.clear();
-        muligeOrd.addAll(new HashSet<>(Arrays.asList(data.split(" "))));
-        System.out.println("muligeOrd = " + muligeOrd);
+        s_muligeOrd.clear();
+        s_muligeOrd.addAll(new HashSet<>(Arrays.asList(data.split(" "))));
+        System.out.println("s_muligeOrd = " + s_muligeOrd);
 
     }
 
@@ -57,21 +57,21 @@ public class WordCollector {
 
         data = data.replaceAll("<.+?>", " ").toLowerCase().replaceAll("[^a-zæøå]", " ");
         System.out.println("data = " + data);
-        muligeOrd.clear();
-        muligeOrd.addAll(new HashSet<>(Arrays.asList(data.split(" "))));
+        s_muligeOrd.clear();
+        s_muligeOrd.addAll(new HashSet<>(Arrays.asList(data.split(" "))));
 
-        System.out.println("muligeOrd = " + muligeOrd);
+        System.out.println("s_muligeOrd = " + s_muligeOrd);
 
     }
 
     private static void hentOrdFra(final String url) throws Exception {
         String data = hentUrl(url);
         data = data.replaceAll("<.+?>", " ").toLowerCase().replaceAll("[^a-zæøå]", " ");
-        muligeOrd.clear();
+        s_muligeOrd.clear();
         final LinkedList<String> list = new LinkedList<>();
         for (final String s : data.split(" "))
             if (s.length() > 2) list.add(s);
-        muligeOrd.addAll(new HashSet<>(list));
+        s_muligeOrd.addAll(new HashSet<>(list));
     }
 
     public static ArrayList<String> samlOrd() throws Exception {

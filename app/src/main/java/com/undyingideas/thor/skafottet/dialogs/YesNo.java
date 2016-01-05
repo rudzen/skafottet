@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 
@@ -15,8 +16,9 @@ import android.util.Log;
  * by rudz.
  */
 public class YesNo extends DialogFragment {
-    // TODO : Re-write
+    // TODO : Re-write using mat dialog lib
 
+    @Nullable
     private YesNoResultListener listener;
 
     public interface YesNoResultListener { void onDone(boolean result); }

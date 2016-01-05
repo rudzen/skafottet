@@ -22,6 +22,8 @@ import java.util.regex.Pattern;
  */
 public class WordList implements Serializable {
 
+    // TODO : Clean up, too many methods
+
     private static final long serialVersionUID = 14324;
     public static final String KEY = "word_list";
     private static final Pattern httpKill = Pattern.compile("http://");
@@ -35,7 +37,7 @@ public class WordList implements Serializable {
 
 
     /* the current active list */
-    private int currentList = 0;
+    private int currentList;
 
 
 
@@ -195,20 +197,20 @@ public class WordList implements Serializable {
      *
      * @param url
      *         the url
-     * @return true if found, false if not
+     * @return List number which was set to if suceeded, otherwise -1
      */
-    public boolean setCurrentListByURL(final String url) {
+    public int setCurrentListByURL(final String url) {
         int i = 0;
         for (final WordItem wi : words) {
             Log.d("WordList", "Søger efter : " + url);
             Log.d("WordList", "Fandt       : " + wi.getUrl());
             if (wi.getUrl().equals(url)) {
                 currentList = i;
-                return true;
+                return i;
             }
             i++;
         }
-        return false;
+        return -1;
     }
 
     /**
@@ -225,15 +227,16 @@ public class WordList implements Serializable {
      *         the url
      * @return the boolean
      */
-    public boolean addWordList(String title, final String url) {
+    public boolean addWordList(final String title, final String url) {
+        String theTitle = title;
         Log.d("addWordList", "Forsøger at tilføje");
-        Log.d("addWordList", "title : " + title);
+        Log.d("addWordList", "title : " + theTitle);
         Log.d("addWordList", "url   : " + url);
 
         if (url != null && url.isEmpty()) return false;
-        if (title != null && title.isEmpty()) title = httpKill.matcher(url).replaceAll("");
+        if (theTitle != null && theTitle.isEmpty()) theTitle = httpKill.matcher(url).replaceAll("");
 
-        words.addLast(new WordItem(title, url));
+        words.addLast(new WordItem(theTitle, url));
         return true;
 
 //        boolean alreadyExists = false;
@@ -264,7 +267,7 @@ public class WordList implements Serializable {
     public void appendWordList(final WordItem wordItem) {
         if (words.contains(wordItem)) {
             for (final WordItem wi : words)
-                if (wordItem.equals(wi)) for (String s : wordItem.getWords()) wi.addWord(s);
+                if (wordItem.equals(wi)) for (final String s : wordItem.getWords()) wi.addWord(s);
         } else {
             words.addLast(wordItem);
         }
@@ -282,18 +285,18 @@ public class WordList implements Serializable {
      *         the key
      * @param list
      *         the list
-     * @return the boolean
+     * @return 0 if appended, otherwise -1
      */
-    public boolean appendWordListByTitle(final String title, final ArrayList<String> list) {
+    public int appendWordListByTitle(final String title, final ArrayList<String> list) {
         if (!title.equals(DEFAULT_KEY)) {
             for (final WordItem wi : words) {
                 if (wi.getTitle().equals(title)) {
-                    for (String s : list) wi.addWord(s);
-                    return true;
+                    for (final String s : list) wi.addWord(s);
+                    return 0;
                 }
             }
         }
-        return false;
+        return -1;
     }
 
 
@@ -302,16 +305,16 @@ public class WordList implements Serializable {
      *
      * @param title
      *         the title
-     * @return the boolean
+     * @return 0 if deleted, otherwise -1
      */
-    public boolean deleteListByTitle(final String title) {
+    public int deleteListByTitle(final String title) {
         for (final WordItem wi : words) {
             if (wi.getTitle().equals(title)) {
                 words.remove(wi);
-                return true;
+                return 0;
             }
         }
-        return false;
+        return -1;
     }
 
     /**
@@ -319,17 +322,17 @@ public class WordList implements Serializable {
      *
      * @param index
      *         the index
-     * @return the boolean
+     * @return the index removed, otherwise -1
      */
-    public boolean deleteListByIndex(final int index) {
+    public int deleteListByIndex(final int index) {
         int i = 0;
         for (final WordItem wi : words) {
             if (i++ == index) {
                 words.remove(wi);
-                return true;
+                return i - 1;
             }
         }
-        return false;
+        return -1;
     }
 
     /**

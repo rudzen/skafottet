@@ -3,14 +3,10 @@ package com.undyingideas.thor.skafottet;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.webkit.WebView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -46,7 +42,7 @@ public class Instructions extends AppCompatActivity {
         myFirebaseRef = new Firebase("https://hangmandtu.firebaseio.com/");
         //limit = 10,
 
-        list = new ArrayList<PlayerScore>();
+        list = new ArrayList<>();
 
         pc = new HighScoreController(myFirebaseRef,10, list,instructionDisplay);
 
@@ -57,7 +53,7 @@ public class Instructions extends AppCompatActivity {
 
     }
 
-    private String wrap(String text){
+    private static String wrap(final String text){
         return "<li>"+text+"</li>";
     }
 
