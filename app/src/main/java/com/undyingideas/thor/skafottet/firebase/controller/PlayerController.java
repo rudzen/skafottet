@@ -27,6 +27,8 @@ public class PlayerController {
         fireBaseCreate h = new fireBaseCreate(name);
         playersRef.runTransaction(h);
     }
+
+
 }
 
 class fireBaseCreate implements Transaction.Handler{

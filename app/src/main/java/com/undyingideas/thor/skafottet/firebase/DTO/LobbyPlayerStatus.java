@@ -7,10 +7,12 @@ import java.util.ArrayList;
  */
 public class LobbyPlayerStatus {
     ArrayList<WordStatus> wordList = new ArrayList<>();
+    String name;
 
     public LobbyPlayerStatus(){}
 
-    public LobbyPlayerStatus(ArrayList<WordStatus> wordList) {
+    public LobbyPlayerStatus(String name, ArrayList<WordStatus> wordList) {
+        this.name = name;
         this.wordList = wordList;
     }
 
@@ -20,5 +22,13 @@ public class LobbyPlayerStatus {
 
     public void setWordList(ArrayList<WordStatus> wordList) {
         this.wordList = wordList;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
