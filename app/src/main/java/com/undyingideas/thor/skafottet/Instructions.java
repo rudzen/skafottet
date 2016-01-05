@@ -2,11 +2,13 @@ package com.undyingideas.thor.skafottet;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.webkit.WebView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.firebase.client.Firebase;
+import com.undyingideas.thor.skafottet.firebase.controller.PlayerController;
 
 import java.util.ArrayList;
 
@@ -44,8 +46,10 @@ public class Instructions extends AppCompatActivity {
 
         list = new ArrayList<>();
 
-        pc = new HighScoreController(myFirebaseRef,10, list,instructionDisplay);
+       // pc = new HighScoreController(myFirebaseRef,10, list,instructionDisplay);
 
+
+        Log.d("Firebase create player","succes = " +new PlayerController(myFirebaseRef).createPlayer("Rudy"));
 
 
 //        pc.createHighScore(player);

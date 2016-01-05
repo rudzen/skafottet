@@ -1,11 +1,15 @@
 package com.undyingideas.thor.skafottet.firebase.controller;
 
+import android.util.Log;
+
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.MutableData;
 import com.firebase.client.Transaction;
 import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
+
+import java.util.ArrayList;
 
 /**
  * Created by theis on 05-01-2016.
@@ -18,12 +22,10 @@ public class PlayerController {
         this.ref = ref;
     }
 
-    public boolean createPlayer(final String name) {
-        final boolean succes;
+    public void createPlayer(final String name) {
         Firebase playersRef = ref.child("MultiPlayer").child("Players").child(name);
         fireBaseCreate h = new fireBaseCreate(name);
         playersRef.runTransaction(h);
-        return h.succes;
     }
 }
 
@@ -47,5 +49,6 @@ class fireBaseCreate implements Transaction.Handler{
     @Override
     public void onComplete(FirebaseError firebaseError, boolean b, DataSnapshot dataSnapshot) {
         succes = b;
+        Log.d("firebase", "succes = " +b);
     }
 }
