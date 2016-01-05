@@ -24,18 +24,13 @@ public class LobbyController {
 
     Firebase ref;
     Firebase lobbyRef;
-    LobbyDTO lobbyDTO;
 
-    public LobbyController(final Firebase ref, LobbyDTO lobbyDTO){
-
+    public LobbyController(final Firebase ref){
         this.ref = ref;
         lobbyRef = ref.child("Lobby");
-        this.lobbyDTO = lobbyDTO;
-
-
     }
 
-    public void createLobby(){
+    public void createLobby( LobbyDTO lobbyDTO){
 
         //This genetates uniqe ID in firebase
         final Firebase newPostRef = lobbyRef.push();
@@ -57,7 +52,6 @@ public class LobbyController {
 
     public void getGameWord(String lobbyId, String playerName) {
         lobbyRef.child(lobbyId).child("Lobby").child("playerList").addListenerForSingleValueEvent(new FirebaseEventListener());
-
     }
 
     class FirebaseEventListener implements ValueEventListener{

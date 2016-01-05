@@ -64,9 +64,11 @@ public class Instructions extends AppCompatActivity {
         ArrayList<LobbyPlayerStatus> ar2 = new ArrayList<>();
         ar2.add(lps);
         ar2.add(lps2);
-        LobbyController l = new LobbyController(myFirebaseRef, new LobbyDTO(ar2));
-        l.createLobby();
+        LobbyController l = new LobbyController(myFirebaseRef);
+        l.createLobby(new LobbyDTO(ar2));
 
+        pc.getLobbyKey("Rudy");
+        pc.getLobbyKey("Adam");
 //        pc.createHighScore(player);
 
 
