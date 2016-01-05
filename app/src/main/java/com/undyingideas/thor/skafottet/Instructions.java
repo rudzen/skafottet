@@ -3,6 +3,16 @@ package com.undyingideas.thor.skafottet;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.webkit.WebView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class Instructions extends AppCompatActivity {
 
@@ -16,6 +26,13 @@ public class Instructions extends AppCompatActivity {
             "</ol></body></html>" ;
     private WebView instructionDisplay;
 
+    private ListView highScoreList;
+    private TextView title;
+
+    //FIREBASE
+    Firebase myFirebaseRef;
+    HighScoreController pc;
+    ArrayList<PlayerScore> list;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -23,7 +40,26 @@ public class Instructions extends AppCompatActivity {
         setContentView(R.layout.activity_instruktioner);
 
         instructionDisplay = (WebView) findViewById(R.id.webView);
-        instructionDisplay.loadData(instructionText, "text/html; charset=UTF-8", null);
+      //  instructionDisplay.loadData(instructionText, "text/html; charset=UTF-8", null);
+
+        Firebase.setAndroidContext(this);
+        myFirebaseRef = new Firebase("https://hangmandtu.firebaseio.com/");
+        //limit = 10,
+
+        list = new ArrayList<PlayerScore>();
+
+        pc = new HighScoreController(myFirebaseRef,10, list,instructionDisplay);
+
+
+
+//        pc.createHighScore(player);
+
 
     }
+
+    private String wrap(String text){
+        return "<li>"+text+"</li>";
+    }
+
+
 }

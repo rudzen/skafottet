@@ -266,6 +266,7 @@ public class MenuActivity extends MenuActivityAbstract {
     private void showHelp() {
         sf.setRun(false);
         startActivity(new Intent(this, Instructions.class));
+
     }
 
     @SuppressWarnings("unused")
@@ -294,6 +295,7 @@ public class MenuActivity extends MenuActivityAbstract {
         sf.setRun(false);
         startActivity(intent);
     }
+
 
     private void callMethod(final String method_name) {
         if ("finish".equals(method_name)) {

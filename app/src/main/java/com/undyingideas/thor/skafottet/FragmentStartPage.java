@@ -86,4 +86,12 @@ public class FragmentStartPage extends Fragment {
                         .addToBackStack(null).commit();
         }
     }
+
+    private class HighScoreClick implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            final HighScoreFragment fragment = new HighScoreFragment();
+        }
+    }
 }

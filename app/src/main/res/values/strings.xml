@@ -62,4 +62,8 @@
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="dialog_yes">Ja</string>
     <string name="dialog_no">Nej</string>
+    <string name="title_activity_activity_high_score">activity_high_score</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>
