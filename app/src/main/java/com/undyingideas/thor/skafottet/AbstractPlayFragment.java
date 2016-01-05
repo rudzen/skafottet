@@ -6,9 +6,7 @@ package com.undyingideas.thor.skafottet;
  * @author Thor
  */
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Button;
@@ -16,7 +14,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.undyingideas.thor.skafottet.utility.GameUtility;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Holds the shared gamelogik/flow, in order to allow different layouts to be utilized
@@ -25,10 +26,10 @@ import java.util.ArrayList;
 public class AbstractPlayFragment extends Fragment {
 
     protected Galgelogik logik;
-    ArrayList<String> possibleWords;
+    ArrayList<String> possibleWords = new ArrayList<>();
     private boolean isHotSeat;
     private String theGuess; //bruges til at holde det aktuelle gæt
-    private SharedPreferences data;
+//    private SharedPreferences data;
     ImageView galgen;
 
     Button ok;
@@ -100,10 +101,11 @@ public class AbstractPlayFragment extends Fragment {
         else if(logik != null && logik.erSpilletSlut()){
             logik.nulstil();
         } else{// for det tilfældes skyld at der er tale om et nyt spil
-            data = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            final ArrayList<String> candidateLlist = new ArrayList<>();
-            candidateLlist.addAll(data.getStringSet("possibleWords", null));
-            possibleWords = candidateLlist; //
+//            data = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            possibleWords.addAll((HashSet<String>) GameUtility.prefs.getObject("possibleWords", HashSet.class));
+//            final ArrayList<String> candidateLlist = new ArrayList<>();
+//            candidateLlist.addAll(data.getStringSet("possibleWords", null));
+//            possibleWords = candidateLlist; //
         }
         logik = new Galgelogik(possibleWords);
     }
