@@ -13,4 +13,6 @@ public abstract class GameUtility {
     @SuppressWarnings("StaticVariableOfConcreteClass")
     public static WordList s_wordList;
 
+    public static TinyDB prefs;
+
 }

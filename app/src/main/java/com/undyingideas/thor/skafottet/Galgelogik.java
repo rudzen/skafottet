@@ -151,7 +151,6 @@ public class Galgelogik {
         System.out.println("---------- ");
     }
 
-
     private static String hentUrl(final String url) throws IOException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(new URL(url).openStream()));
         final StringBuilder sb = new StringBuilder(50);

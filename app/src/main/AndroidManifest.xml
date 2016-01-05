@@ -9,8 +9,8 @@
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:hardwareAccelerated="true"
-        android:isGame="true"
         android:icon="@mipmap/ic_launcher"
+        android:isGame="true"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
@@ -63,8 +63,7 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
-        <activity
-            android:name=".MenuActivity">
+        <activity android:name=".MenuActivity" >
         </activity>
     </application>
 

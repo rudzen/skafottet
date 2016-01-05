@@ -59,7 +59,6 @@ public class AbstractPlayFragment extends Fragment {
        guess(guess, true);
     }
 
-
     private void updateScreen(final boolean hasUsedLettersStat, final boolean hasInputTxtField){
         ordet.setText(logik.getSynligtOrd());
         if(hasUsedLettersStat) usedLetters.append(theGuess);
@@ -105,8 +104,6 @@ public class AbstractPlayFragment extends Fragment {
             final ArrayList<String> candidateLlist = new ArrayList<>();
             candidateLlist.addAll(data.getStringSet("possibleWords", null));
             possibleWords = candidateLlist; //
-
-
         }
         logik = new Galgelogik(possibleWords);
     }
