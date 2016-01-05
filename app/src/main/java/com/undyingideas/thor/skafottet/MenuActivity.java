@@ -120,6 +120,7 @@ public class MenuActivity extends MenuActivityAbstract {
     }
 
     private void showAll() {
+
         YoYo.with(Techniques.FadeIn).duration(300).withListener(new EnterAnimatorHandler(this)).playOn(findViewById(R.id.menu_background));
     }
 
@@ -273,8 +274,8 @@ public class MenuActivity extends MenuActivityAbstract {
         final NewGameItem[] newGameItems = new NewGameItem[3];
 
         newGameItems[0] = new NewGameItem(0, "Wuhuu..", "Bare start spillet mester", R.drawable.forkert6);
-        newGameItems[1] = new NewGameItem(1, "Anden mulighed", "For hulvate dude!", R.drawable.ic_sync_black_24dp);
-        newGameItems[2] = new NewGameItem(1, "Nothing here!...", "Starter også bare spillet !", R.drawable.ic_notifications_black_24dp);
+        newGameItems[1] = new NewGameItem(1, "Anden mulighed", "For hulvate dude!", R.drawable.forkert5);
+        newGameItems[2] = new NewGameItem(1, "Nothing here!...", "Starter også bare spillet !", R.drawable.forkert4);
 
         final NewGameAdapter adapter = new NewGameAdapter(this, R.layout.new_game_list_row, newGameItems);
         final ListView listViewItems = new ListView(this);
