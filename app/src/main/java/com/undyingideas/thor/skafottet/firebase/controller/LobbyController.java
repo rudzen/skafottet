@@ -50,23 +50,4 @@ public class LobbyController {
 
     }
 
-    public void getGameWord(String lobbyId, String playerName) {
-        lobbyRef.child(lobbyId).child("Lobby").child("playerList").addListenerForSingleValueEvent(new FirebaseEventListener());
-    }
-
-    class FirebaseEventListener implements ValueEventListener{
-
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            for(DataSnapshot s:  dataSnapshot.getChildren()){
-                Log.d("firebase", s.toString());
-            }
-
-        }
-
-        @Override
-        public void onCancelled(FirebaseError firebaseError) {
-
-        }
-    }
 }

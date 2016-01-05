@@ -32,26 +32,14 @@ public class PlayerController {
 
     public void getLobbyKey(final String name) {
         Firebase keyLobbyRef = ref.child("MultiPlayer").child("Players").child(name).child("gameList");
-        keyLobbyRef.addValueEventListener(new FireBaseEventListener());
+        keyLobbyRef.addChildEventListener(new LobbyEventListenter(ref,name));
     }
 
-    class FireBaseEventListener implements ValueEventListener {
 
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            ArrayList<LobbyKeyDTO> l = new ArrayList<>();
-            for(DataSnapshot s : dataSnapshot.getChildren()) {
-                l.add(s.getValue(LobbyKeyDTO.class));
-            }
-            LobbyController lc = new LobbyController(ref);
-            lc.getGameWord(l.get(0).getKey(), "Rudy");
-        }
+  //  public void getGameWord(String lobbyId, String playerName) {
+  //      ref.child("Lobby").child(lobbyId).child("Lobby").child("playerList").addValueEventListener(new LobbyEventListener());
+ //   }
 
-        @Override
-        public void onCancelled (FirebaseError er) {
-
-        }
-    }
 }
 
 class fireBaseCreate implements Transaction.Handler{
@@ -74,7 +62,7 @@ class fireBaseCreate implements Transaction.Handler{
     @Override
     public void onComplete(FirebaseError firebaseError, boolean b, DataSnapshot dataSnapshot) {
         succes = b;
-        Log.d("firebase", "succes = " +b);
+        Log.d("firebase", "succes = " + b);
     }
 }
 
