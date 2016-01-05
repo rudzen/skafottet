@@ -14,6 +14,10 @@ public class PlayerDTO {
     public PlayerDTO(){
     }
 
+    public PlayerDTO(String name) {
+        this(name, 0, new ArrayList<String>());
+    }
+
     public PlayerDTO(String name, int score, ArrayList<String> gameList) {
         this.name = name;
         this.score = score;
