@@ -7,6 +7,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.firebase.client.Firebase;
+import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
+import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
+import com.undyingideas.thor.skafottet.firebase.DTO.WordStatus;
+import com.undyingideas.thor.skafottet.firebase.controller.LobbyController;
+import com.undyingideas.thor.skafottet.firebase.controller.PlayerController;
 
 import java.util.ArrayList;
 
@@ -44,10 +49,26 @@ public class Instructions extends AppCompatActivity {
 
         list = new ArrayList<>();
 
-        pc = new HighScoreController(myFirebaseRef,10, list,instructionDisplay);
+//        pc = new HighScoreController(myFirebaseRef,10, list,instructionDisplay);
 
+        PlayerController pc = new PlayerController(myFirebaseRef);
+        pc.createPlayer("Rudy");
+        pc.createPlayer("Adam");
+        pc.createPlayer("Theis");
 
+        WordStatus ws = new WordStatus("hej", -1);
+        ArrayList<WordStatus> ar = new ArrayList<>();
+        ar.add(ws);
+        LobbyPlayerStatus lps = new LobbyPlayerStatus("Rudy", ar);
+        LobbyPlayerStatus lps2 = new LobbyPlayerStatus("Theis", ar);
+        ArrayList<LobbyPlayerStatus> ar2 = new ArrayList<>();
+        ar2.add(lps);
+        ar2.add(lps2);
+        LobbyController l = new LobbyController(myFirebaseRef);
+        l.createLobby(new LobbyDTO(ar2));
 
+        pc.getLobbyKey("Rudy");
+        pc.getLobbyKey("Adam");
 //        pc.createHighScore(player);
 
 

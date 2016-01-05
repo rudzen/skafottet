@@ -7,6 +7,8 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.MutableData;
 import com.firebase.client.Transaction;
+import com.firebase.client.ValueEventListener;
+import com.undyingideas.thor.skafottet.firebase.DTO.LobbyKeyDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
 
 import java.util.ArrayList;
@@ -16,7 +18,7 @@ import java.util.ArrayList;
  */
 public class PlayerController {
 
-    Firebase ref;
+    final Firebase ref;
 
     public PlayerController(final Firebase ref){
         this.ref = ref;
@@ -27,6 +29,17 @@ public class PlayerController {
         fireBaseCreate h = new fireBaseCreate(name);
         playersRef.runTransaction(h);
     }
+
+    public void getLobbyKey(final String name) {
+        Firebase keyLobbyRef = ref.child("MultiPlayer").child("Players").child(name).child("gameList");
+        keyLobbyRef.addChildEventListener(new LobbyEventListenter(ref,name));
+    }
+
+
+  //  public void getGameWord(String lobbyId, String playerName) {
+  //      ref.child("Lobby").child(lobbyId).child("Lobby").child("playerList").addValueEventListener(new LobbyEventListener());
+ //   }
+
 }
 
 class fireBaseCreate implements Transaction.Handler{
@@ -49,6 +62,7 @@ class fireBaseCreate implements Transaction.Handler{
     @Override
     public void onComplete(FirebaseError firebaseError, boolean b, DataSnapshot dataSnapshot) {
         succes = b;
-        Log.d("firebase", "succes = " +b);
+        Log.d("firebase", "succes = " + b);
     }
 }
+
