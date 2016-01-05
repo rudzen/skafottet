@@ -1,4 +1,4 @@
-package com.undyingideas.thor.skafottet.firebase;
+package com.undyingideas.thor.skafottet.firebase.DTO;
 
 import java.util.ArrayList;
 

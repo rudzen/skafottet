@@ -1,4 +1,4 @@
-package com.undyingideas.thor.skafottet.firebase;
+package com.undyingideas.thor.skafottet.firebase.DTO;
 
 /**
  * Created by theis on 05-01-2016.
