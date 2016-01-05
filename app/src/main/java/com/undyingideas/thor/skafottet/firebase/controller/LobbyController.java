@@ -55,8 +55,9 @@ public class LobbyController {
 
     }
 
-    public String getGameWord(String lobbyId, String playerName) {
+    public void getGameWord(String lobbyId, String playerName) {
         lobbyRef.child(lobbyId).child("Lobby").child("playerList").addListenerForSingleValueEvent(new FirebaseEventListener());
+
     }
 
     class FirebaseEventListener implements ValueEventListener{
