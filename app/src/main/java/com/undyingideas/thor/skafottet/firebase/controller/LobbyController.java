@@ -1,19 +1,9 @@
 package com.undyingideas.thor.skafottet.firebase.controller;
 
-import android.util.Log;
-
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
-import com.undyingideas.thor.skafottet.PlayerScore;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
-import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
-import com.undyingideas.thor.skafottet.firebase.DTO.WordStatus;
-import com.undyingideas.thor.skafottet.wordlist.data.WordList;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,10 +14,12 @@ public class LobbyController {
 
     Firebase ref;
     Firebase lobbyRef;
+    final MultiplayerController mpcRef;
 
-    public LobbyController(final Firebase ref){
+    public LobbyController(final MultiplayerController mp, final Firebase ref){
         this.ref = ref;
         lobbyRef = ref.child("Lobby");
+        this.mpcRef = mp;
     }
 
     public void createLobby( LobbyDTO lobbyDTO){

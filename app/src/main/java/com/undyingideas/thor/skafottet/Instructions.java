@@ -11,6 +11,7 @@ import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.firebase.DTO.WordStatus;
 import com.undyingideas.thor.skafottet.firebase.controller.LobbyController;
+import com.undyingideas.thor.skafottet.firebase.controller.MultiplayerController;
 import com.undyingideas.thor.skafottet.firebase.controller.PlayerController;
 
 import java.util.ArrayList;
@@ -51,10 +52,11 @@ public class Instructions extends AppCompatActivity {
 
 //        pc = new HighScoreController(myFirebaseRef,10, list,instructionDisplay);
 
-        PlayerController pc = new PlayerController(myFirebaseRef);
-        pc.createPlayer("Rudy");
-        pc.createPlayer("Adam");
-        pc.createPlayer("Theis");
+        MultiplayerController mpc = new MultiplayerController(myFirebaseRef);
+
+        mpc.pc.createPlayer("Rudy");
+        mpc.pc.createPlayer("Adam");
+        mpc.pc.createPlayer("Theis");
 
         WordStatus ws = new WordStatus("hej", -1);
         ArrayList<WordStatus> ar = new ArrayList<>();
@@ -64,12 +66,13 @@ public class Instructions extends AppCompatActivity {
         ArrayList<LobbyPlayerStatus> ar2 = new ArrayList<>();
         ar2.add(lps);
         ar2.add(lps2);
-        LobbyController l = new LobbyController(myFirebaseRef);
-        l.createLobby(new LobbyDTO(ar2));
 
-        pc.getLobbyKey("Rudy");
-        pc.getLobbyKey("Adam");
+        mpc.lc.createLobby(new LobbyDTO(ar2));
+
+        mpc.pc.getLobbyDTOByLobbyKey("Rudy");
+        mpc.pc.getLobbyDTOByLobbyKey("Adam");
 //        pc.createHighScore(player);
+
 
 
     }
