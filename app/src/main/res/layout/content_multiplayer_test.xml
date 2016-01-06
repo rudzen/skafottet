@@ -13,4 +13,8 @@
     tools:context="com.undyingideas.thor.skafottet.MultiplayerTest"
     tools:showIn="@layout/activity_multiplayer_test">
 
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/multiplayer_player_list"/>
 </RelativeLayout>
