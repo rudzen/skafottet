@@ -20,6 +20,7 @@ public class MultiplayerController {
     final Firebase ref;
     String name;
     HashMap<String, PlayerDTO> playerList = new HashMap<>();
+    HashMap<String, LobbyDTO> lobbyList = new HashMap<>();
 
     public MultiplayerController(Firebase ref){
         this.ref = ref;
@@ -41,6 +42,14 @@ public class MultiplayerController {
         for(String dtokey : playerList.keySet()) {
             dto = playerList.get(dtokey);
             Log.d("firebase update", dto.getName() + "  " + dto.getGameList().size());
+        }
+    }
+
+    public void lobbyUpdate() {
+        LobbyDTO dto;
+        for(String dtokey : lobbyList.keySet()) {
+            dto = lobbyList.get(dtokey);
+            Log.d("firebase update", dtokey + "  " + dto.toString() + " " + dto.getPlayerList().size());
         }
     }
 }

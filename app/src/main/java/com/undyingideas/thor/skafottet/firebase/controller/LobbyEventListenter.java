@@ -18,8 +18,6 @@ import java.util.ArrayList;
  */
 public class LobbyEventListenter implements ChildEventListener {
 
-
-
     Firebase ref;
     Firebase keyLobbyRef;
 

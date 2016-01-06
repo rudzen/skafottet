@@ -87,7 +87,6 @@ class NameGetter implements ChildEventListener {
 
     @Override
     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-        Log.d("firebase child changed", dataSnapshot.toString());
         mpcref.playerList.remove(dataSnapshot.getKey());
         mpcref.playerList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
         mpcref.update();

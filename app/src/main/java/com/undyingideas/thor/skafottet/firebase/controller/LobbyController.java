@@ -20,6 +20,7 @@ public class LobbyController {
         this.ref = ref;
         lobbyRef = ref.child("Lobby");
         this.mpcRef = mp;
+        lobbyRef.addChildEventListener(new lobbyListener(mpcRef));
     }
 
     public void createLobby( LobbyDTO lobbyDTO){
