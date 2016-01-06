@@ -1,7 +1,6 @@
 package com.undyingideas.thor.skafottet.firebase.controller;
 
 import android.os.Handler;
-import android.util.Log;
 
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
@@ -39,6 +38,10 @@ public class MultiplayerController {
 
     public ArrayList<LobbyDTO> getActiveGames() {
         return null;
+    }
+    public boolean loobyFinished(){
+
+        return true;
     }
 
 
