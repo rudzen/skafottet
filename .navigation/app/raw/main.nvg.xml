@@ -62,7 +62,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.undyingideas.thor.skafottet.WordPicker"/>
+        className = "com.undyingideas.thor.skafottet.game_ui.WordPickerFragment"/>
       <point      
         x = "124"      
         y = "128"/>
