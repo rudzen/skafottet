@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.WordPicker;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 
 /**
@@ -76,7 +75,7 @@ public class EndOfGameFragment extends Fragment {
 
             if (getArguments().getBoolean("wasHotSeat", false)){//starting new multiyPlayer game by going to wordPicker
                 gameData.putBoolean(GameUtility.KEY_IS_HOT_SEAT, true);
-                final WordPicker newMultiPGame = new WordPicker();
+                final WordPickerFragment newMultiPGame = new WordPickerFragment();
                 newMultiPGame.setArguments(gameData);
                 getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, newMultiPGame).commit();
             }

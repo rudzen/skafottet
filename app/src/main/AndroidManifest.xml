@@ -3,7 +3,11 @@
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.READ_PROFILE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
         android:allowBackup="true"
@@ -25,7 +29,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".OldActivities$Play"
+            android:name=".wordlist.WordDetailsActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".wordlist.WordFragmentLayout"
             android:screenOrientation="portrait">
         </activity>
         <activity
@@ -37,7 +45,7 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".WordPicker"
+            android:name=".activity_high_score"
             android:screenOrientation="portrait">
         </activity>
         <activity
@@ -56,6 +64,14 @@
             android:name=".MultiplayerTest"
             android:label="@string/title_activity_multiplayer_test"
             android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login"
+            android:parentActivityName=".game_ui.main_menu.MenuActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.undyingideas.thor.skafottet.game_ui.main_menu.MenuActivity"/>
         </activity>
     </application>
 

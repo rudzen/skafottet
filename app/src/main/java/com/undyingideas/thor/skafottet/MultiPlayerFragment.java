@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.undyingideas.thor.skafottet.game_ui.WordPickerFragment;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 
 /**
@@ -37,7 +38,7 @@ public class MultiPlayerFragment extends Fragment {
         @Override
         public void onClick(final View v) {
             Log.d("multiFrag", "button clicked");
-            final Fragment hotSeatStart = new WordPicker();
+            final Fragment hotSeatStart = new WordPickerFragment();
             final Bundle wordPickerData = new Bundle();
             wordPickerData.putBoolean(GameUtility.KEY_IS_HOT_SEAT,true);
             hotSeatStart.setArguments(wordPickerData);
