@@ -1,4 +1,4 @@
-package com.undyingideas.thor.skafottet;
+package com.undyingideas.thor.skafottet.game_ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,9 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.undyingideas.thor.skafottet.HighScoreFragment;
+import com.undyingideas.thor.skafottet.Instructions;
+import com.undyingideas.thor.skafottet.MultiPlayerFragment;
+import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.SettingsActivity;
+import com.undyingideas.thor.skafottet.WordPicker;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 
-public class FragmentStartPage extends Fragment {
+public class FragmentMenu_OLD extends Fragment {
 
     private Button StartBtn, instructionBtn, preferenceBtn;
 

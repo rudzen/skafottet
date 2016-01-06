@@ -8,7 +8,7 @@
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
 
-package com.undyingideas.thor.skafottet;
+package com.undyingideas.thor.skafottet.game_ui.main_menu;
 
 import android.graphics.Color;
 import android.graphics.Point;
@@ -22,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
 
+import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.views.StarField;
 
 import java.lang.ref.WeakReference;

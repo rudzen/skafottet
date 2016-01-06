@@ -8,7 +8,7 @@
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
 
-package com.undyingideas.thor.skafottet;
+package com.undyingideas.thor.skafottet.game_ui.main_menu;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +25,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.nineoldandroids.animation.Animator;
+import com.undyingideas.thor.skafottet.Instructions;
+import com.undyingideas.thor.skafottet.MultiplayerTest;
+import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.game_ui.MainActivity;
 import com.undyingideas.thor.skafottet.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.views.NewGameAdapter;
 import com.undyingideas.thor.skafottet.views.NewGameItem;
@@ -299,7 +303,7 @@ public class MenuActivity extends MenuActivityAbstract {
 
     @SuppressWarnings("unused")
     private void startNewGame() {
-        final Intent intent = new Intent(this, FragmentMainActivity.class);
+        final Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("NEW_GAME", newGameID);
         sf.setRun(false);
         startActivity(intent);

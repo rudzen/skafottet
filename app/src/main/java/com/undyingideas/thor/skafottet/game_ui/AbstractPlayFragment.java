@@ -1,4 +1,4 @@
-package com.undyingideas.thor.skafottet;
+package com.undyingideas.thor.skafottet.game_ui;
 
 /**
  * Created on 09-11-2015, 08:39.
@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.undyingideas.thor.skafottet.Galgelogik;
+import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 

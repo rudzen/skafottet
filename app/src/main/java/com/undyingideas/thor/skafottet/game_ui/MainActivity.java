@@ -1,4 +1,4 @@
-package com.undyingideas.thor.skafottet;
+package com.undyingideas.thor.skafottet.game_ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,10 +6,11 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.Window;
 
+import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.dialogs.YesNo;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 
-public class FragmentMainActivity extends AppCompatActivity implements YesNo.YesNoResultListener {
+public class MainActivity extends AppCompatActivity implements YesNo.YesNoResultListener {
     
     private static String s_possibleWord;
 
@@ -18,7 +19,7 @@ public class FragmentMainActivity extends AppCompatActivity implements YesNo.Yes
     }
 
     public static void setS_possibleWord(final String s_possibleWord) {
-        FragmentMainActivity.s_possibleWord = s_possibleWord;
+        MainActivity.s_possibleWord = s_possibleWord;
     }
 
     @Override
@@ -31,8 +32,8 @@ public class FragmentMainActivity extends AppCompatActivity implements YesNo.Yes
             final Bundle bundle = new Bundle();
             bundle.putStringArrayList(GameUtility.KEY_MULIGE_ORD, getIntent().getStringArrayListExtra(GameUtility.KEY_MULIGE_ORD));
 
-            final FragmentStartPage fragment = new FragmentStartPage();
-//            final FragmentStartPage fragment = new FragmentStartPage();
+            final FragmentMenu_OLD fragment = new FragmentMenu_OLD();
+//            final FragmentMenu_OLD fragment = new FragmentMenu_OLD();
             fragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragmentindhold, fragment)// tom container i layout

@@ -1,4 +1,4 @@
-package com.undyingideas.thor.skafottet;
+package com.undyingideas.thor.skafottet.game_ui;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,6 +12,8 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.WordPicker;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 
 /**
@@ -62,8 +64,8 @@ public class EndOfGameFragment extends Fragment {
         @Override
         public void onClick(final View v) {
             Log.d("endgame", "going to start Screen");
-            final FragmentStartPage fragmentStartPage = new FragmentStartPage();
-            getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, fragmentStartPage).commit();
+            final FragmentMenu_OLD fragmentMenuOLD = new FragmentMenu_OLD();
+            getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, fragmentMenuOLD).commit();
         }
     }
 

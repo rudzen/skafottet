@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.undyingideas.thor.skafottet.dialogs.YesNo;
+import com.undyingideas.thor.skafottet.game_ui.MainActivity;
 import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 
@@ -61,7 +62,7 @@ public class WordPicker extends Fragment {
         public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
             final WordPicker wordPicker = wordPickerWeakReference.get();
             if (wordPicker != null) {
-                FragmentMainActivity.setS_possibleWord(wordPicker.muligeOrd.get(position));
+                MainActivity.setS_possibleWord(wordPicker.muligeOrd.get(position));
                 final DialogFragment nf = YesNo.newInstance("Skal ordet være?", wordPicker.muligeOrd.get(position), "Ja", "Nej");
                 Log.d("lol", "clicked");
                 nf.show(wordPicker.getFragmentManager(), "newAcceptDialog");

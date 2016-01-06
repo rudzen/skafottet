@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".LoadingScreen"
+            android:name=".game_ui.LoadingActivity"
             android:noHistory="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -28,8 +28,6 @@
             android:name=".OldActivities$Play"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".OldActivities$HangmanButtonActivity">
-        </activity>
         <activity
             android:name=".Instructions"
             android:screenOrientation="portrait">
@@ -39,23 +37,12 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".OldActivities$EndOfGame"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name=".OldActivities$MainActivity"
-            android:parentActivityName=".LoadingScreen"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
             android:name=".WordPicker"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".OldActivities$MultiplayerActivity">
-        </activity>
         <activity
-            android:name=".FragmentMainActivity"
-            android:parentActivityName=".LoadingScreen"
+            android:name=".game_ui.MainActivity"
+            android:parentActivityName=".game_ui.LoadingActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
@@ -63,7 +50,7 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings">
         </activity>
-        <activity android:name=".MenuActivity">
+        <activity android:name=".game_ui.main_menu.MenuActivity">
         </activity>
         <activity
             android:name=".MultiplayerTest"
