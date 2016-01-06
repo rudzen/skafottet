@@ -1,7 +1,7 @@
 package com.undyingideas.thor.skafottet;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -10,13 +10,11 @@ import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.firebase.DTO.WordStatus;
-import com.undyingideas.thor.skafottet.firebase.controller.LobbyController;
 import com.undyingideas.thor.skafottet.firebase.controller.MultiplayerController;
-import com.undyingideas.thor.skafottet.firebase.controller.PlayerController;
 
 import java.util.ArrayList;
 
-public class Instructions extends AppCompatActivity {
+public class Instructions extends AppCompatActivity implements Runnable {
 
     private static final String instructionText = "<html><body><ol>" +
             "<li>Gæt på et bogstav ved at trykke på det</li>"+
@@ -52,7 +50,7 @@ public class Instructions extends AppCompatActivity {
 
 //        pc = new HighScoreController(myFirebaseRef,10, list,instructionDisplay);
 
-        MultiplayerController mpc = new MultiplayerController(myFirebaseRef);
+        MultiplayerController mpc = new MultiplayerController(myFirebaseRef, this);
 
         mpc.pc.createPlayer("Rudy");
         mpc.pc.createPlayer("Adam");
@@ -82,4 +80,8 @@ public class Instructions extends AppCompatActivity {
     }
 
 
+    @Override
+    public void run() {
+
+    }
 }

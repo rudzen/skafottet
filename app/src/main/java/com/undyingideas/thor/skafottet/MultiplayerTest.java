@@ -20,7 +20,7 @@ import com.undyingideas.thor.skafottet.multiplayer.MultiplayerPlayersAdapter;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class MultiplayerTest extends AppCompatActivity {
+public class MultiplayerTest extends AppCompatActivity implements Runnable {
 
     private ListView listView;
     private final ArrayList<PlayerDTO> players = new ArrayList<>();
@@ -28,7 +28,6 @@ public class MultiplayerTest extends AppCompatActivity {
     private Firebase myFirebaseRef;
     private Handler handler;
     private MultiplayerPlayersAdapter adapter;
-    private Runnable updater;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -45,7 +44,7 @@ public class MultiplayerTest extends AppCompatActivity {
         Firebase.setAndroidContext(this);
         myFirebaseRef = new Firebase("https://hangmandtu.firebaseio.com/");
 
-        multiplayerController = new MultiplayerController(myFirebaseRef);
+        multiplayerController = new MultiplayerController(myFirebaseRef, this);
 
         adapter = new MultiplayerPlayersAdapter(this, R.layout.multiplayer_player_list_row, players);
         listView.setAdapter(adapter);
@@ -53,33 +52,35 @@ public class MultiplayerTest extends AppCompatActivity {
 
         handler = new Handler();
 
-        updater = new UpdateList();
-        handler.postDelayed(updater, 2000);
+        //handler.postDelayed(this, 5000);
     }
 
-    private class UpdateList implements Runnable {
+    @Override
+    public void run() {
+        Log.d("firebase", "Updater in action");
 
-        @Override
-        public void run() {
-            Log.d("firebase", "Updater in action");
+        adapter = new MultiplayerPlayersAdapter(this, R.layout.multiplayer_player_list_row, players);
+        listView.setAdapter(adapter);
 
-            players.clear();
-            players.addAll(multiplayerController.playerList.values());
+        players.clear();
+        players.addAll(multiplayerController.playerList.values());
 
-            Log.d("firebase", players.toString());
+        Log.d("firebase", players.toString());
 
 
-            adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
 
+//        handler.postDelayed(this, 5000);
 
 //
 //        newGameItems[0] = new NewGameItem(0, "Wuhuu..", "Bare start spillet mester", R.drawable.forkert6);
 //        newGameItems[1] = new NewGameItem(1, "Anden mulighed", "For hulvate dude!", R.drawable.forkert5);
 //        newGameItems[2] = new NewGameItem(1, "Nothing here!...", "Starter også bare spillet !", R.drawable.forkert4);
 
-            //final ListView listViewItems = new ListView(this);
-        }
+        //final ListView listViewItems = new ListView(this);
+
     }
+
 
     private static class OnMultiPlayerPlayerClick implements AdapterView.OnItemClickListener {
 
@@ -90,7 +91,7 @@ public class MultiplayerTest extends AppCompatActivity {
             if (context != null) {
                 Log.d("NG", String.valueOf(id));
                 // do stuff!!!
-
+                Snackbar.make(view, ((MultiplayerTest) context).players.get(position).getName(), Snackbar.LENGTH_SHORT).show();
 //                ((MenuActivity) context).md.dismiss();
 //                ((MenuActivity) context).newGameID = id;
 //                ((MenuActivity) context).endMenu("startNewGame", ((MenuActivity) context).buttons[BUTTON_NEW_GAME]);

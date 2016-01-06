@@ -68,7 +68,7 @@ public class MultiplayerPlayersAdapter extends ArrayAdapter<PlayerDTO> {
         viewHolder.textViewName.setText(playerDTO.getName());
         //viewHolder.textViewName.setTag(playerDTO.hashCode());
 
-        viewHolder.textViewScore.setText(playerDTO.getScore());
+        viewHolder.textViewScore.setText(Integer.toString(playerDTO.getScore()));
         //viewHolder.textViewScore.setTag(playerDTO.hashCode());
 
 

@@ -8,12 +8,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.MutableData;
 import com.firebase.client.Transaction;
-import com.firebase.client.ValueEventListener;
-import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
-import com.undyingideas.thor.skafottet.firebase.DTO.LobbyKeyDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
-
-import java.util.ArrayList;
 
 /**
  * Created by theis on 05-01-2016.
@@ -110,10 +105,14 @@ class NameGetter implements ChildEventListener {
 
     protected PlayerDTO getDTO(DataSnapshot dataSnapshot) {
         PlayerDTO dto = new PlayerDTO(dataSnapshot.getKey());
-        dto.setScore(Integer.valueOf(dataSnapshot.child("score").getValue().toString()));
-        if (dataSnapshot.hasChild("gameList"))
-            for(DataSnapshot ds : dataSnapshot.child("gameList").getChildren())
-                dto.getGameList().add(ds.getValue().toString());
+        try {
+            dto.setScore(Integer.valueOf(dataSnapshot.child("score").getValue().toString()));
+            if (dataSnapshot.hasChild("gameList"))
+                for(DataSnapshot ds : dataSnapshot.child("gameList").getChildren())
+                    dto.getGameList().add(ds.getValue().toString());
+        } catch (final Exception e) {
+
+        }
         return dto;
     }
 }
