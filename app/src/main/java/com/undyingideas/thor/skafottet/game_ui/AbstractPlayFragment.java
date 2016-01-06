@@ -15,8 +15,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.undyingideas.thor.skafottet.Galgelogik;
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.game.Galgelogik;
 import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 

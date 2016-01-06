@@ -1,4 +1,4 @@
-package com.undyingideas.thor.skafottet;
+package com.undyingideas.thor.skafottet.game;
 
 import java.io.BufferedReader;
 import java.io.IOException;

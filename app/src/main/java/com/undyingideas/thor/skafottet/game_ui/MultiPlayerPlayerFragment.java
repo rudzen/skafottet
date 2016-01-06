@@ -37,7 +37,6 @@ public class MultiPlayerPlayerFragment extends Fragment {
     private ListView listView;
     private ArrayList<PlayerDTO> players;
     private MultiplayerController multiplayerController;
-    private Firebase myFirebaseRef;
     private MultiplayerPlayersAdapter adapter;
     private Runnable updater;
 
@@ -71,7 +70,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
                 ArrayList<PlayerDTO> ply = (ArrayList<PlayerDTO>) GameUtility.s_prefereces.getObject(KEY_LAST_PLAYER_LIST, ArrayList.class);
                 players.addAll(ply);
             } catch (final Exception e) {
-                // oh well :-)
+                onListFail();
             }
         }
     }
@@ -141,8 +140,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
         configureAdapter();
 
         Firebase.setAndroidContext(getActivity());
-        myFirebaseRef = new Firebase("https://hangmandtu.firebaseio.com/Multiplayer");
-        multiplayerController = new MultiplayerController(myFirebaseRef, updater);
+        multiplayerController = new MultiplayerController(new Firebase("https://hangmandtu.firebaseio.com/Multiplayer"), updater);
     }
 
     private void onListFail() {
