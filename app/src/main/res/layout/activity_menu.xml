@@ -45,21 +45,19 @@
     <ImageView
         android:id="@+id/menu_cont_game"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:background="@drawable/button_cont_game"
         android:clickable="true"
         android:contentDescription="New game button"
         android:cropToPadding="false"
         android:layout_gravity="center"
-        android:layout_marginTop="42dp"
         android:layout_below="@+id/menu_title"
-        android:layout_alignLeft="@+id/menu_multiplayer"
         android:layout_alignStart="@+id/menu_multiplayer"/>
 
     <ImageView
         android:id="@+id/menu_new_game"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:background="@drawable/button_new_game"
         android:clickable="true"
         android:contentDescription="New game button"
@@ -73,7 +71,7 @@
     <ImageView
         android:id="@+id/menu_settings"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:clickable="true"
         android:background="@drawable/button_settings"
         android:contentDescription="Settings button"
@@ -86,7 +84,7 @@
     <ImageView
         android:id="@+id/menu_word_lists"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:background="@drawable/button_word_lists"
         android:clickable="true"
         android:contentDescription="Options button"
@@ -98,7 +96,7 @@
     <ImageView
         android:id="@+id/menu_multiplayer"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:background="@drawable/button_multiplayer"
         android:clickable="true"
         android:contentDescription="Options button"
@@ -110,7 +108,7 @@
     <ImageView
         android:id="@+id/menu_help"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:background="@drawable/button_help"
         android:clickable="true"
         android:contentDescription="Help button"
@@ -122,7 +120,7 @@
     <ImageView
         android:id="@+id/menu_quit"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:background="@drawable/button_quit"
         android:clickable="true"
         android:contentDescription="Quit button"

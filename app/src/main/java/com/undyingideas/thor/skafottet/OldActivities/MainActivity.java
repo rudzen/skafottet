@@ -22,15 +22,7 @@ public class MainActivity extends Activity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        findViewById(R.id.btnMultiplayer).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                startActivity(new Intent(MainActivity.this, MultiplayerActivity.class)
-                        .putExtra(GameUtility.KEY_MULIGE_ORD,getIntent().getStringArrayListExtra(GameUtility.KEY_MULIGE_ORD)));
-            }
-        });
-
+        findViewById(R.id.btnMultiplayer).setOnClickListener(new ButtonOnClickListener());
     }
 
     /**
@@ -72,5 +64,13 @@ public class MainActivity extends Activity {
 //                .replace(R.id.fragmentContentView, fragment)
 //                .addToBackStack(null)
 //                .commit();
+    }
+
+    private class ButtonOnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(final View v) {
+            startActivity(new Intent(MainActivity.this, MultiplayerActivity.class)
+                    .putExtra(GameUtility.KEY_MULIGE_ORD,getIntent().getStringArrayListExtra(GameUtility.KEY_MULIGE_ORD)));
+        }
     }
 }

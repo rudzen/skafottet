@@ -233,13 +233,15 @@ public class MenuActivity extends MenuActivityAbstract {
             final MenuActivity menuActivity = menuActivityWeakReference.get();
             if (menuActivity != null) {
                 menuActivity.button_clicked = BUTTON_VALUE;
-                if (BUTTON_VALUE == BUTTON_CONT_GAME || BUTTON_VALUE == BUTTON_MULTIPLAYER || BUTTON_VALUE == BUTTON_WORD_LISTS || BUTTON_VALUE == BUTTON_SETTINGS) {
+                if (BUTTON_VALUE == BUTTON_CONT_GAME || BUTTON_VALUE == BUTTON_WORD_LISTS || BUTTON_VALUE == BUTTON_SETTINGS) {
                     new MaterialDialog.Builder(menuActivity)
                             .content("Ikke implementeret!!!")
                             .cancelable(true)
                             .positiveText(R.string.dialog_yes)
                             .title("STOP DA PRESS!!!")
                             .show();
+                } else if (BUTTON_VALUE == BUTTON_MULTIPLAYER) {
+                    menuActivity.endMenu("showHelp", menuActivity.buttons[BUTTON_VALUE]);
                 } else if (BUTTON_VALUE == BUTTON_NEW_GAME) {
                     menuActivity.setMenuButtonsClickable(false);
                     menuActivity.callMethod("showNewGame");
@@ -262,6 +264,11 @@ public class MenuActivity extends MenuActivityAbstract {
             for (final ImageView iv : buttons) if (iv != clickedImageView) YoYo.with(Techniques.FadeOut).duration(100).playOn(iv);
             YoYo.with(Techniques.RotateOut).duration(500).withListener(new ExitAnimatorHandler(this, method_name)).playOn(clickedImageView);
         }
+    }
+
+    @SuppressWarnings("unused")
+    private void showMultiplayer() {
+        startActivity(new Intent(this, MultiplayerTest.class));
     }
 
     @SuppressWarnings("unused")

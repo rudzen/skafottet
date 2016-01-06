@@ -39,7 +39,7 @@ public class AddWordListDialog extends DialogFragment {
         void onFinishAddWordListDialog(String title, String url, boolean startDownload);
     }
 
-    private Pattern s_validHttp;
+    private final Pattern s_validHttp;
 
     public static AddWordListDialog newInstance(final String title, final String okButton, final String cancelButton, final boolean cancelable) {
         final AddWordListDialog frag = new AddWordListDialog();
