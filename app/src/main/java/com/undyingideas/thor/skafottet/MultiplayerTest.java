@@ -20,7 +20,7 @@ import com.undyingideas.thor.skafottet.multiplayer.MultiplayerPlayersAdapter;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class MultiplayerTest extends AppCompatActivity implements Runnable {
+public class MultiplayerTest extends AppCompatActivity {
 
     private ListView listView;
     private final ArrayList<PlayerDTO> players = new ArrayList<>();
@@ -28,6 +28,7 @@ public class MultiplayerTest extends AppCompatActivity implements Runnable {
     private Firebase myFirebaseRef;
     private Handler handler;
     private MultiplayerPlayersAdapter adapter;
+    private Runnable updater;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -52,21 +53,23 @@ public class MultiplayerTest extends AppCompatActivity implements Runnable {
 
         handler = new Handler();
 
-        handler.postDelayed(this, 2000);
+        updater = new UpdateList();
+        handler.postDelayed(updater, 2000);
     }
 
+    private class UpdateList implements Runnable {
+
+        @Override
+        public void run() {
+            Log.d("firebase", "Updater in action");
+
+            players.clear();
+            players.addAll(multiplayerController.playerList.values());
+
+            Log.d("firebase", players.toString());
 
 
-
-
-    @Override
-    public void run() {
-
-
-        players.clear();
-        players.addAll(multiplayerController.playerList.values());
-
-        adapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
 
 
 //
@@ -74,8 +77,8 @@ public class MultiplayerTest extends AppCompatActivity implements Runnable {
 //        newGameItems[1] = new NewGameItem(1, "Anden mulighed", "For hulvate dude!", R.drawable.forkert5);
 //        newGameItems[2] = new NewGameItem(1, "Nothing here!...", "Starter også bare spillet !", R.drawable.forkert4);
 
-        //final ListView listViewItems = new ListView(this);
-
+            //final ListView listViewItems = new ListView(this);
+        }
     }
 
     private static class OnMultiPlayerPlayerClick implements AdapterView.OnItemClickListener {
