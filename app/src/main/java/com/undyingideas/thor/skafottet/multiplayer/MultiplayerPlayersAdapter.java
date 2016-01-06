@@ -26,8 +26,8 @@ import java.util.ArrayList;
 
 /**
  * Created on 27-12-2015, 09:59.<br>
- * Project : R-TicTacToe<br>
- * Adapter for showing the relevant information about new game selection.
+ * Project : skafottet<br>
+ * Adapter for showing multiplayer players from firebase..
  * @author rudz
  */
 public class MultiplayerPlayersAdapter extends ArrayAdapter<PlayerDTO> {

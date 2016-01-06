@@ -23,9 +23,7 @@ public class EndOfGameFragment extends Fragment {
 
     private WebView resultaterDisp; //skal bruges til at vise spillets resultater, og om det er vundet etc.
     private ImageView endImage; //skal vise et vinder/taber billede, eller et straffende taberbillede
-    private Bundle gameData;
     String resultText;
-    Button newGame, endGame;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
@@ -40,9 +38,7 @@ public class EndOfGameFragment extends Fragment {
         final Button newGameBtn = (Button) root.findViewById(R.id.nytSplBtn);
         newGameBtn.setOnClickListener(new StartGameListener());
 
-        gameData = getArguments();
-
-        displayResults(gameData);
+        displayResults(getArguments());
         return root;
 
     }
@@ -66,8 +62,8 @@ public class EndOfGameFragment extends Fragment {
         @Override
         public void onClick(final View v) {
             Log.d("endgame", "going to start Screen");
-            final FragmentStartPage newGame = new FragmentStartPage();
-            getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, newGame).commit();
+            final FragmentStartPage fragmentStartPage = new FragmentStartPage();
+            getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, fragmentStartPage).commit();
         }
     }
 
@@ -85,9 +81,9 @@ public class EndOfGameFragment extends Fragment {
 
             else{//starting new singleplayergame
                 gameData.putBoolean(GameUtility.KEY_IS_HOT_SEAT, false);
-                final HangmanButtonFragment newGame = new HangmanButtonFragment();
-                newGame.setArguments(gameData);
-                getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, newGame).commit();
+                final HangmanButtonFragment hangmanButtonFragment = new HangmanButtonFragment();
+                hangmanButtonFragment.setArguments(gameData);
+                getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, hangmanButtonFragment).commit();
             }
         }
     }

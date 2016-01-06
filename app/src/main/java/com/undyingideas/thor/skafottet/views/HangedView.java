@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
@@ -55,6 +56,7 @@ public class HangedView extends View {
 
     @Override
     protected void onDraw(final Canvas canvas) {
+        canvas.drawColor(Color.TRANSPARENT);
         canvas.drawBitmap(images.get(state), 0, 0, p);
         super.onDraw(canvas);
     }
