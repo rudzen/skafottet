@@ -1,12 +1,13 @@
 package com.undyingideas.thor.skafottet;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.Window;
 
 import com.undyingideas.thor.skafottet.dialogs.YesNo;
+import com.undyingideas.thor.skafottet.utility.GameUtility;
 
 public class FragmentMainActivity extends AppCompatActivity implements YesNo.YesNoResultListener {
     
@@ -26,11 +27,9 @@ public class FragmentMainActivity extends AppCompatActivity implements YesNo.Yes
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_main);
 
-
-
         if (savedInstanceState == null) {
             final Bundle bundle = new Bundle();
-            bundle.putStringArrayList("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
+            bundle.putStringArrayList(GameUtility.KEY_MULIGE_ORD, getIntent().getStringArrayListExtra(GameUtility.KEY_MULIGE_ORD));
 
             final FragmentStartPage fragment = new FragmentStartPage();
 //            final FragmentStartPage fragment = new FragmentStartPage();
@@ -50,7 +49,7 @@ public class FragmentMainActivity extends AppCompatActivity implements YesNo.Yes
             Log.d("wordPicker", "WordAccepted");
             final HangmanButtonFragment startGame = new HangmanButtonFragment();
             final Bundle data = new Bundle();
-            data.putBoolean("isHotSeat", true);
+            data.putBoolean(GameUtility.KEY_IS_HOT_SEAT, true);
             data.putString("theWord", s_possibleWord);
             startGame.setArguments(data);
             getSupportFragmentManager().beginTransaction()

@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.WordPicker;
+import com.undyingideas.thor.skafottet.utility.GameUtility;
 
 public class EndOfGame extends Activity {
 
@@ -52,10 +53,10 @@ public class EndOfGame extends Activity {
         final Intent intent;
         if(getIntent().getBooleanExtra("wasHotSeat", false)){
             intent = new Intent(this, WordPicker.class);
-            intent.putExtra("isHotSeat", true);
+            intent.putExtra(GameUtility.KEY_IS_HOT_SEAT, true);
         } else{
             intent = new Intent(this, HangmanButtonActivity.class);
-            intent.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
+            intent.putExtra(GameUtility.KEY_MULIGE_ORD, getIntent().getStringArrayListExtra(GameUtility.KEY_MULIGE_ORD));
         }
         startActivity(intent);
         finish();

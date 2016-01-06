@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.undyingideas.thor.skafottet.utility.GameUtility;
+
 /**
  * Created on 17-11-2015, 08:39.
  * Project : skafottet
@@ -37,7 +39,7 @@ public class MultiPlayerFragment extends Fragment {
             Log.d("multiFrag", "button clicked");
             final Fragment hotSeatStart = new WordPicker();
             final Bundle wordPickerData = new Bundle();
-            wordPickerData.putBoolean("isHotSeat",true);
+            wordPickerData.putBoolean(GameUtility.KEY_IS_HOT_SEAT,true);
             hotSeatStart.setArguments(wordPickerData);
             getFragmentManager().beginTransaction().
                     replace(R.id.fragmentindhold, hotSeatStart).commit();

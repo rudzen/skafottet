@@ -39,6 +39,7 @@ import java.lang.ref.WeakReference;
 public class MenuActivity extends MenuActivityAbstract {
 
     private static final int BUTTON_COUNT = 7;
+    private static final String FINISH = "finish";
     private final ImageView[] buttons = new ImageView[BUTTON_COUNT];
     private ImageView title;
     private static final int TITLE = -1;
@@ -138,7 +139,7 @@ public class MenuActivity extends MenuActivityAbstract {
             final MenuActivity menuActivity = menuActivityWeakReference.get();
             if (menuActivity != null) {
                 if (which == DialogAction.POSITIVE) {
-                    menuActivity.endMenu("finish", menuActivity.buttons[menuActivity.BUTTON_QUIT]);
+                    menuActivity.endMenu(FINISH, menuActivity.buttons[menuActivity.BUTTON_QUIT]);
                 } else {
                     menuActivity.click_status = true;
                     menuActivity.setMenuButtonsClickable(true);
@@ -298,7 +299,7 @@ public class MenuActivity extends MenuActivityAbstract {
 
 
     private void callMethod(final String method_name) {
-        if ("finish".equals(method_name)) {
+        if (FINISH.equals(method_name)) {
             overridePendingTransition(0, 0);
             finish();
         } else {
@@ -339,5 +340,4 @@ public class MenuActivity extends MenuActivityAbstract {
             }
         }
     }
-
 }

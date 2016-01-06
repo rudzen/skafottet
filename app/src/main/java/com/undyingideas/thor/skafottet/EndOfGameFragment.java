@@ -12,6 +12,8 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.undyingideas.thor.skafottet.utility.GameUtility;
+
 /**
  * Created on 17-11-2015, 08:39.
  * Project : skafottet
@@ -75,14 +77,14 @@ public class EndOfGameFragment extends Fragment {
         public void onClick(final View v) {
 
             if (getArguments().getBoolean("wasHotSeat", false)){//starting new multiyPlayer game by going to wordPicker
-                gameData.putBoolean("isHotSeat", true);
+                gameData.putBoolean(GameUtility.KEY_IS_HOT_SEAT, true);
                 final WordPicker newMultiPGame = new WordPicker();
                 newMultiPGame.setArguments(gameData);
                 getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, newMultiPGame).commit();
             }
 
             else{//starting new singleplayergame
-                gameData.putBoolean("isHotSeat", false);
+                gameData.putBoolean(GameUtility.KEY_IS_HOT_SEAT, false);
                 final HangmanButtonFragment newGame = new HangmanButtonFragment();
                 newGame.setArguments(gameData);
                 getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, newGame).commit();

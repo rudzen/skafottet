@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.undyingideas.thor.skafottet.utility.GameUtility;
+
 public class FragmentStartPage extends Fragment {
 
     private Button StartBtn, instructionBtn, preferenceBtn;
@@ -35,7 +37,7 @@ public class FragmentStartPage extends Fragment {
         public void onClick(final View v) {
 
             final Bundle bundle = new Bundle();
-            bundle.putBoolean("isHotSeat", false);
+            bundle.putBoolean(GameUtility.KEY_IS_HOT_SEAT, false);
             final HangmanButtonFragment fragment = new HangmanButtonFragment();
             fragment.setArguments(bundle);
             getFragmentManager().beginTransaction()

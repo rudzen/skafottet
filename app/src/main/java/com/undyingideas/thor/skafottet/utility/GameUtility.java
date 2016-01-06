@@ -10,9 +10,12 @@ import com.undyingideas.thor.skafottet.wordlist.data.WordList;
  */
 public abstract class GameUtility {
 
+    public static final String KEY_IS_HOT_SEAT = "isHotSeat";
+    public static final String KEY_MULIGE_ORD = "muligeOrd";
     @SuppressWarnings("StaticVariableOfConcreteClass")
     public static WordList s_wordList;
 
-    public static TinyDB prefs;
+    @SuppressWarnings("StaticVariableOfConcreteClass")
+    public static TinyDB s_prefereces;
 
 }

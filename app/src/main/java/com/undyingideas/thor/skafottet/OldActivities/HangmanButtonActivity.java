@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.undyingideas.thor.skafottet.Galgelogik;
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.utility.GameUtility;
 
 import java.util.ArrayList;
 
@@ -28,7 +29,7 @@ public class HangmanButtonActivity extends Activity {
         imageView = (ImageView) findViewById(R.id.imageView);
         imageView.setImageResource(R.drawable.galge);
 
-        game = getIntent().getExtras().getBoolean("isHotSeat") ? new Galgelogik(getIntent().getExtras().getString("wordToBeGuessed")) : new Galgelogik(getIntent().getExtras().getStringArrayList("muligeOrd"));
+        game = getIntent().getExtras().getBoolean(GameUtility.KEY_IS_HOT_SEAT) ? new Galgelogik(getIntent().getExtras().getString("wordToBeGuessed")) : new Galgelogik(getIntent().getExtras().getStringArrayList(GameUtility.KEY_MULIGE_ORD));
         //game.nulstil();
         ordet = (TextView) findViewById(R.id.visibleText);
         ordet.setText(game.getSynligtOrd());
@@ -65,7 +66,7 @@ public class HangmanButtonActivity extends Activity {
             endgame.putExtra("forsøg", game.getAntalForkerteBogstaver());
             endgame.putExtra("ordet", game.getOrdet());
             endgame.putExtra("spiller", "Du");
-            endgame.putExtra("muligeOrd", getIntent().getStringArrayListExtra("muligeOrd"));
+            endgame.putExtra(GameUtility.KEY_MULIGE_ORD, getIntent().getStringArrayListExtra(GameUtility.KEY_MULIGE_ORD));
             startActivity(endgame);
             Log.d("play", "finishing");
             finish();

@@ -16,11 +16,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.undyingideas.thor.skafottet.utility.Constant;
+import com.undyingideas.thor.skafottet.utility.GameUtility;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import static com.undyingideas.thor.skafottet.utility.GameUtility.prefs;
+import static com.undyingideas.thor.skafottet.utility.GameUtility.s_prefereces;
 
 /**
  * Holds the shared gamelogik/flow, in order to allow different layouts to be utilized
@@ -90,14 +91,14 @@ public class AbstractPlayFragment extends Fragment {
     }
 
     void CheckGameType() {//checks gametype, to se whether its a newgame by some extra info from activating classes, but that would require more refactoring
-        isHotSeat = getArguments().getBoolean("isHotSeat", false);
+        isHotSeat = getArguments().getBoolean(GameUtility.KEY_IS_HOT_SEAT, false);
         Log.d("Play", "CheckGameType: isHotseat " + isHotSeat);
         if (isHotSeat) {
             possibleWords.add(getArguments().getString("theWord"));
         } else if (logik != null && logik.erSpilletSlut()) {
             logik.nulstil();
         } else {// for det tilfældes skyld at der er tale om et nyt spil
-            possibleWords.addAll((HashSet<String>) prefs.getObject(Constant.KEY_PREF_POSSIBLE_WORDS, HashSet.class));
+            possibleWords.addAll((HashSet<String>) s_prefereces.getObject(Constant.KEY_PREF_POSSIBLE_WORDS, HashSet.class));
         }
         logik = new Galgelogik(possibleWords);
     }
