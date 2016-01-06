@@ -1,19 +1,25 @@
 package com.undyingideas.thor.skafottet.firebase.controller;
 
+import android.util.Log;
+
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
+import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
+import com.undyingideas.thor.skafottet.highscore.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by theis on 06-01-2016.
  */
 public class MultiplayerController {
-    ArrayList<LobbyDTO> games;
-    LobbyController lc;
-    PlayerController pc;
+    public ArrayList<LobbyDTO> games;
+    public LobbyController lc;
+    public PlayerController pc;
     final Firebase ref;
     String name;
+    HashMap<String, PlayerDTO> playerList = new HashMap<>();
 
     public MultiplayerController(Firebase ref){
         this.ref = ref;
@@ -30,4 +36,11 @@ public class MultiplayerController {
         return null;
     }
 
+    public void update() {
+        PlayerDTO dto;
+        for(String dtokey : playerList.keySet()) {
+            dto = playerList.get(dtokey);
+            Log.d("firebase update", dto.getName() + "  " + dto.getGameList().size());
+        }
+    }
 }
