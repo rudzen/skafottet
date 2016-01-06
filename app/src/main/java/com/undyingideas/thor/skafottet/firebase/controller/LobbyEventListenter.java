@@ -30,7 +30,7 @@ public class LobbyEventListenter implements ChildEventListener {
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
         String lobbykey = dataSnapshot.getValue().toString();
-        ref.child(lobbykey).child("playerList").addValueEventListener(new MyValueEventListener());
+        ref.child("Lobby").child(lobbykey).child("playerList").addValueEventListener(new MyValueEventListener());
     }
 
     @Override
