@@ -8,6 +8,7 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.MutableData;
 import com.firebase.client.Transaction;
 import com.firebase.client.ValueEventListener;
+import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyKeyDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
 
@@ -19,9 +20,16 @@ import java.util.ArrayList;
 public class PlayerController {
 
     final Firebase ref;
+    final MultiplayerController mpcRef;
 
-    public PlayerController(final Firebase ref){
+
+    public PlayerController(final MultiplayerController mp, final Firebase ref){
         this.ref = ref;
+        this.mpcRef = mp;
+    }
+
+    public void login(final String name) {
+
     }
 
     public void createPlayer(final String name) {
@@ -30,7 +38,7 @@ public class PlayerController {
         playersRef.runTransaction(h);
     }
 
-    public void getLobbyKey(final String name) {
+    public void getLobbyDTOByLobbyKey(final String name) {
         Firebase keyLobbyRef = ref.child("MultiPlayer").child("Players").child(name).child("gameList");
         keyLobbyRef.addChildEventListener(new LobbyEventListenter(ref,name));
     }

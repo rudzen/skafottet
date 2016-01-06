@@ -13,6 +13,10 @@ public class LobbyDTO {
 
     }
 
+    public void add(LobbyPlayerStatus lps) {
+        this.playerList.add(lps);
+    }
+
     public LobbyDTO(ArrayList<LobbyPlayerStatus> playerList) {
         this.playerList = playerList;
     }

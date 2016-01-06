@@ -67,8 +67,8 @@ public class Instructions extends AppCompatActivity {
         LobbyController l = new LobbyController(myFirebaseRef);
         l.createLobby(new LobbyDTO(ar2));
 
-        pc.getLobbyKey("Rudy");
-        pc.getLobbyKey("Adam");
+        pc.getLobbyDTOByLobbyKey("Rudy");
+        pc.getLobbyDTOByLobbyKey("Adam");
 //        pc.createHighScore(player);
 
 
