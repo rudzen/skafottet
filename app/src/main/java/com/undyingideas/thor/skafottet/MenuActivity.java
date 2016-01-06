@@ -40,6 +40,7 @@ public class MenuActivity extends MenuActivityAbstract {
 
     private static final int BUTTON_COUNT = 7;
     private static final String FINISH = "finish";
+    public static final int BACK_PRESSED_DELAY = 2000;
     private final ImageView[] buttons = new ImageView[BUTTON_COUNT];
     private ImageView title;
     private static final int TITLE = -1;
@@ -101,7 +102,7 @@ public class MenuActivity extends MenuActivityAbstract {
 
     @Override
     public void onBackPressed() {
-        if (backPressed + 2000 > System.currentTimeMillis()) {
+        if (backPressed + BACK_PRESSED_DELAY > System.currentTimeMillis()) {
             YoYo.with(Techniques.ZoomOut).duration(300).playOn(findViewById(R.id.menu_background));
             sf.setRun(false);
             super.onBackPressed();

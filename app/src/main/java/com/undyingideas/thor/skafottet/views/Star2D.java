@@ -14,6 +14,7 @@ import android.graphics.PointF;
 
 @SuppressWarnings("ClassNamingConvention")
 class Star2D {
+    public static final int FADE_MULTIPLIER = 50;
     public PointF xy;
     private float size;
     public float speedX;
@@ -26,7 +27,7 @@ class Star2D {
     public Star2D(final float x, final float y, final float speed) {
         xy = new PointF(x, y);
         speedX = speed;
-        fade = (int) (Math.random() * 50);
+        fade = (int) (Math.random() * FADE_MULTIPLIER);
         fadeDirection = (int) (Math.random() + 1) == 1;
         fadespeed = (float) (Math.random() * 3 + 1);
     }

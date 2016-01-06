@@ -24,13 +24,17 @@ import java.util.ArrayList;
 
 public class StarField extends View {
 
-    private final ArrayList<Star2D> stars = new ArrayList<>(100);
+    public static final float LOW_PASS_FILTER = 0.3f;
+    public static final int UPDATE_RATE = 1000 / 70;
+
+    private final ArrayList<Star2D> stars = new ArrayList<>(75);
     private Paint p;
     private Handler updateHandler;
     private boolean run;
     private int width, height;
     private PointF gravity;
     private float z;
+    private Runnable updater;
 
     private static final String TAG = "Starfield";
 
@@ -42,7 +46,8 @@ public class StarField extends View {
         this.run = run;
         if (run) {
             updateHandler = new Handler();
-            updateHandler.post(new UpdateStarfield());
+            updater = new UpdateStarfield();
+            updateHandler.post(updater);
         } else {
             updateHandler.removeCallbacksAndMessages(null);
         }
@@ -88,10 +93,12 @@ public class StarField extends View {
             addStar((float) Math.random() * w, (float) Math.random() * h, (float) Math.random() * 3);
             addStar((float) Math.random() * w, (float) Math.random() * h, (float) Math.random() * 3);
         }
+        stars.trimToSize();
 
-        updateHandler = new Handler();
         run = true;
-        updateHandler.post(new UpdateStarfield());
+        updateHandler = new Handler();
+        updater = new UpdateStarfield();
+        updateHandler.post(updater);
     }
 
     private class UpdateStarfield implements Runnable {
@@ -111,17 +118,17 @@ public class StarField extends View {
                 if (star2D.fade > 249) star2D.fadeDirection = true;
                 else if (star2D.fade < 10) star2D.fadeDirection = false;
 
-                if (!star2D.fadeDirection) star2D.fade += star2D.fadespeed;
-                else star2D.fade -= star2D.fadespeed;
+                if (!star2D.fadeDirection) star2D.fade += (int) star2D.fadespeed;
+                else star2D.fade -= (int) star2D.fadespeed;
             }
             //Log.d(TAG, "Time to update was (ns) : " + (System.nanoTime() - time));
-            if (run) updateHandler.postDelayed(new UpdateStarfield(), 1000 / 70);
+            if (run) updateHandler.postDelayed(updater, UPDATE_RATE);
         }
     }
 
     public void setGravity(final float x, final float y) {
-        gravity.x = x >= 0.3f || x <= -0.3f ? x : 0f;
-        gravity.y = y >= 0.3f || y <= -0.3f ? y : 0f;
+        gravity.x = x >= LOW_PASS_FILTER || x <= -LOW_PASS_FILTER ? x : 0f;
+        gravity.y = y >= LOW_PASS_FILTER || y <= -LOW_PASS_FILTER ? y : 0f;
     }
 
     public void removeStar() {

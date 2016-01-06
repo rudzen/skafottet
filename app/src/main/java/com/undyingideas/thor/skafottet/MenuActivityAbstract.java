@@ -116,6 +116,7 @@ public abstract class MenuActivityAbstract extends AppCompatActivity {
 
     private static class UpdateStarfield implements Runnable {
         private final WeakReference<MenuActivityAbstract> menuActivityAbstractWeakReference;
+        private static final int FPS = 1000 / 30;
 
         public UpdateStarfield(final MenuActivityAbstract menuActivityAbstract) {
             menuActivityAbstractWeakReference = new WeakReference<>(menuActivityAbstract);
@@ -126,7 +127,7 @@ public abstract class MenuActivityAbstract extends AppCompatActivity {
             final MenuActivityAbstract menuActivityAbstract = menuActivityAbstractWeakReference.get();
             if (menuActivityAbstract != null) {
                 menuActivityAbstract.sf.invalidate();
-                menuActivityAbstract.starhandler.postDelayed(menuActivityAbstract.updateStarfield, 1000 / 30);
+                menuActivityAbstract.starhandler.postDelayed(menuActivityAbstract.updateStarfield, FPS);
             }
         }
     }
