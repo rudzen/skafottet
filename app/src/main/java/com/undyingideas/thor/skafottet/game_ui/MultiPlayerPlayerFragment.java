@@ -68,6 +68,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
             // read the last list used...
             try {
                 ArrayList<PlayerDTO> ply = (ArrayList<PlayerDTO>) GameUtility.s_prefereces.getObject(KEY_LAST_PLAYER_LIST, ArrayList.class);
+                players = new ArrayList<>();
                 players.addAll(ply);
             } catch (final Exception e) {
                 onListFail();
