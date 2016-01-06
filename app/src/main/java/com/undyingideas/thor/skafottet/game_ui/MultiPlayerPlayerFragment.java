@@ -23,6 +23,11 @@ import com.undyingideas.thor.skafottet.utility.GameUtility;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+/**
+ * This Fragment is responsible for showing the current Multiplayer players that are online.<br>
+ * It presents a list of them using a custom adapter with data retrieved from the firebase db.<br>
+ * @author rudz
+ */
 public class MultiPlayerPlayerFragment extends Fragment {
     private static final String KEY_IS_ONLINE = "o";
     private static final String KEY_LAST_PLAYER_LIST = "lpl";
@@ -59,6 +64,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
             isOnline = getArguments().getBoolean(KEY_IS_ONLINE);
         }
         if (isOnline) {
+            updateList();
         } else {
             // read the last list used...
             try {
