@@ -241,7 +241,7 @@ public class MenuActivity extends MenuActivityAbstract {
                             .title("STOP DA PRESS!!!")
                             .show();
                 } else if (BUTTON_VALUE == BUTTON_MULTIPLAYER) {
-                    menuActivity.endMenu("showHelp", menuActivity.buttons[BUTTON_VALUE]);
+                    menuActivity.endMenu("showMultiplayer", menuActivity.buttons[BUTTON_VALUE]);
                 } else if (BUTTON_VALUE == BUTTON_NEW_GAME) {
                     menuActivity.setMenuButtonsClickable(false);
                     menuActivity.callMethod("showNewGame");
