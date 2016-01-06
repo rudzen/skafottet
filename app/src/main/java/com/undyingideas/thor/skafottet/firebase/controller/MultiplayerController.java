@@ -43,19 +43,9 @@ public class MultiplayerController {
 
 
     public void update() {
-//        PlayerDTO dto;
-//        for(Map.Entry<String, PlayerDTO> stringPlayerDTOEntry : playerList.entrySet()) {
-//            dto = stringPlayerDTOEntry.getValue();
-//            Log.d("firebase update", dto.getName() + "  " + dto.getGameList().size());
-//        }
         updateHandler.post(playerUpdater);
     }
 
     public void lobbyUpdate() {
-        LobbyDTO dto;
-        for(String dtokey : lobbyList.keySet()) {
-            dto = lobbyList.get(dtokey);
-            Log.d("firebase update", dtokey + "  " + dto.toString() + " " + dto.getPlayerList().size());
-        }
     }
 }

@@ -42,7 +42,7 @@ public class MultiplayerTest extends AppCompatActivity implements Runnable {
         listView = (ListView) findViewById(R.id.multiplayer_player_list);
 
         Firebase.setAndroidContext(this);
-        myFirebaseRef = new Firebase("https://hangmandtu.firebaseio.com/");
+        myFirebaseRef = new Firebase("https://hangmandtu.firebaseio.com/Multiplayer");
 
         multiplayerController = new MultiplayerController(myFirebaseRef, this);
 

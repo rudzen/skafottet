@@ -19,24 +19,18 @@ import java.util.ArrayList;
 public class LobbyEventListenter implements ChildEventListener {
 
     Firebase ref;
-    Firebase keyLobbyRef;
+
 
 
     public LobbyEventListenter(Firebase ref,String name){
         this.ref= ref;
-        keyLobbyRef = ref.child("MultiPlayer").child("Players").child(name).child("gameList");
+
     }
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        Log.d("firebase",""+dataSnapshot.getKey() + "   " + dataSnapshot.getValue().toString());
         String lobbykey = dataSnapshot.getValue().toString();
-
-        ref.child("Lobby").child(lobbykey)
-                .child("Lobby").child("playerList").addValueEventListener(new MyValueEventListener());
-        Log.d("firebase", "Valueeventlistener created");
-
-
+        ref.child(lobbykey).child("playerList").addValueEventListener(new MyValueEventListener());
     }
 
     @Override

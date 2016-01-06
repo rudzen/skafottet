@@ -21,17 +21,17 @@ public class PlayerController {
     public PlayerController(final MultiplayerController mp, final Firebase ref){
         this.ref = ref;
         this.mpcRef = mp;
-        ref.child("MultiPlayer").child("Players").addChildEventListener(new NameGetter(mpcRef));
+        this.ref.addChildEventListener(new NameGetter(mpcRef));
     }
 
     public void createPlayer(final String name) {
-        Firebase playersRef = ref.child("MultiPlayer").child("Players").child(name);
+        Firebase playersRef = ref.child(name);
         fireBaseCreate h = new fireBaseCreate(name);
         playersRef.runTransaction(h);
     }
 
     public void getLobbyDTOByLobbyKey(final String name) {
-        Firebase keyLobbyRef = ref.child("MultiPlayer").child("Players").child(name).child("gameList");
+        Firebase keyLobbyRef = ref.child(name).child("gameList");
         keyLobbyRef.addChildEventListener(new LobbyEventListenter(ref,name));
     }
 
