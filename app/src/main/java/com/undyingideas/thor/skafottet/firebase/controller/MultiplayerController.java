@@ -19,7 +19,7 @@ public class MultiplayerController {
     public PlayerController pc;
     final Firebase ref;
     String name;
-    HashMap<String, PlayerDTO> playerList = new HashMap<>();
+    public HashMap<String, PlayerDTO> playerList = new HashMap<>();
     HashMap<String, LobbyDTO> lobbyList = new HashMap<>();
 
     public MultiplayerController(Firebase ref){
