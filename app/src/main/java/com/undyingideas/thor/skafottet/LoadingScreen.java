@@ -1,9 +1,9 @@
 package com.undyingideas.thor.skafottet;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.undyingideas.thor.skafottet.SupportClasses.WordCollector;
@@ -23,7 +23,7 @@ import static com.undyingideas.thor.skafottet.utility.GameUtility.s_prefereces;
  * preliminary screen and process, that makes sure that the game is ready to start, by downloading
  * or fetching words from the cache
  */
-public class LoadingScreen extends Activity {
+public class LoadingScreen extends AppCompatActivity {
 
     private static final String TAG = "LoadingScreen";
 
