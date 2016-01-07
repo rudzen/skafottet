@@ -26,7 +26,6 @@ public class MultiplayerTest extends AppCompatActivity implements Runnable {
     private final ArrayList<PlayerDTO> players = new ArrayList<>();
     private MultiplayerController multiplayerController;
     private Firebase myFirebaseRef;
-    private Handler handler;
     private MultiplayerPlayersAdapter adapter;
 
     @Override
@@ -42,17 +41,14 @@ public class MultiplayerTest extends AppCompatActivity implements Runnable {
         listView = (ListView) findViewById(R.id.multiplayer_player_list);
 
         Firebase.setAndroidContext(this);
-        myFirebaseRef = new Firebase("https://hangmandtu.firebaseio.com/Multiplayer");
+        myFirebaseRef = new Firebase("https://hangmandtu.firebaseio.com");
 
         multiplayerController = new MultiplayerController(myFirebaseRef, this);
 
         adapter = new MultiplayerPlayersAdapter(this, R.layout.multiplayer_player_list_row, players);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new OnMultiPlayerPlayerClick());
-
-        handler = new Handler();
-
-        //handler.postDelayed(this, 5000);
+        Log.d("firebase", "Multiplayertest started");
     }
 
     @Override
