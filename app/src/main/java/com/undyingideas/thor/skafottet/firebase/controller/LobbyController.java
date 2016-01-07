@@ -1,9 +1,11 @@
 package com.undyingideas.thor.skafottet.firebase.controller;
 
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,12 +17,12 @@ public class LobbyController {
     Firebase ref;
     Firebase lobbyRef;
     final MultiplayerController mpcRef;
+    HashMap<String, ChildEventListener> listeners = new HashMap<>();
 
     public LobbyController(final MultiplayerController mp, final Firebase ref){
         this.ref = ref;
         lobbyRef = ref.child("MultiPlayer").child("Lobby");
         this.mpcRef = mp;
-        lobbyRef.addChildEventListener(new lobbyListener(mpcRef));
     }
 
     public void createLobby( LobbyDTO lobbyDTO){
@@ -40,7 +42,14 @@ public class LobbyController {
         for(LobbyPlayerStatus s : lobbyDTO.getPlayerList()) {
             ref.child("MultiPlayer").child("Players").child(s.getName()).child("gameList").push().setValue(postId);
         }
-
     }
 
+    public void addLobbyListener(String key) {
+        listeners.put(key, new LobbyListener(mpcRef));
+        ref.child("MultiPlayer").child("Lobby").child(key).addChildEventListener(listeners.get(key));
+    }
+
+    public void removeLobbyListener(String key) {
+        ref.child("MultiPlayer").child("Lobby").child(key).removeEventListener(listeners.remove(key));
+    }
 }

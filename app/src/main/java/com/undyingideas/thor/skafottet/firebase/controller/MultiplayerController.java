@@ -37,18 +37,23 @@ public class MultiplayerController {
         lc.createLobby(dto);
     }
 
-    public ArrayList<LobbyDTO> getActiveGames() {
-        return null;
+    public boolean login(String name) {
+        if (playerList.containsKey(name)){
+            logout();
+            this.name = name;
+            pc.addListener(name);
+            return true;
+        } else return false;
     }
-    public boolean loobyFinished(){
 
-        return true;
+    public void logout() {
+        if (name == null) return;
+        lc = new LobbyController(this, ref);
+        games.clear();
     }
-
 
     public void update() {
         updateHandler.post(playerUpdater);
-        Log.d("firebase", ""+playerList.size());
     }
 
     public void lobbyUpdate() {

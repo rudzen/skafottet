@@ -67,8 +67,6 @@ public class Instructions extends AppCompatActivity implements Runnable {
 
         mpc.lc.createLobby(new LobbyDTO(ar2));
 
-        mpc.pc.getLobbyDTOByLobbyKey("Rudy");
-        mpc.pc.getLobbyDTOByLobbyKey("Adam");
 //        pc.createHighScore(player);
 
 

@@ -30,16 +30,9 @@ public class PlayerController {
         playersRef.runTransaction(h);
     }
 
-    public void getLobbyDTOByLobbyKey(final String name) {
-        Firebase keyLobbyRef = ref.child("MultiPlayer").child("Players").child(name).child("gameList");
-        keyLobbyRef.addChildEventListener(new LobbyEventListenter(ref,name));
+    public void addListener(String name) {
+        ref.child("MultiPlayer").child("Players").child(name).child("gameList").addChildEventListener(new GameListListener(mpcRef));
     }
-
-
-  //  public void getGameWord(String lobbyId, String playerName) {
-  //      ref.child("Lobby").child(lobbyId).child("Lobby").child("playerList").addValueEventListener(new LobbyEventListener());
- //   }
-
 }
 
 class fireBaseCreate implements Transaction.Handler{
@@ -110,5 +103,40 @@ class NameGetter implements ChildEventListener {
                 dto.getGameList().add(ds.getValue().toString());
         Log.d("firebase dto", dto.getName() + " " + dto.getScore());
         return dto;
+    }
+}
+
+class GameListListener implements ChildEventListener {
+    final MultiplayerController mpc;
+
+    GameListListener(MultiplayerController mpc) {
+        this.mpc = mpc;
+    }
+
+    @Override
+    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        mpc.lc.addLobbyListener(dataSnapshot.getValue().toString());
+    }
+
+    @Override
+    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        // shouldn't happen
+        Log.d("firebaseError", "childchangede"+dataSnapshot.toString());
+    }
+
+    @Override
+    public void onChildRemoved(DataSnapshot dataSnapshot) {
+        mpc.lc.removeLobbyListener(dataSnapshot.getValue().toString());
+    }
+
+    @Override
+    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        // shouldn't happen
+        Log.d("firebaseError", "childMoved"+dataSnapshot.toString());
+    }
+
+    @Override
+    public void onCancelled(FirebaseError firebaseError) {
+        Log.d("firebaseError", "cancelled"+firebaseError.toString());
     }
 }
