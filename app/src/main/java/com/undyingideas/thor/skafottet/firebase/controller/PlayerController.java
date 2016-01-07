@@ -21,17 +21,17 @@ public class PlayerController {
     public PlayerController(final MultiplayerController mp, final Firebase ref){
         this.ref = ref;
         this.mpcRef = mp;
-        this.ref.addChildEventListener(new NameGetter(mpcRef));
+        this.ref.child("MultiPlayer").child("Players").addChildEventListener(new NameGetter(mpcRef));
     }
 
     public void createPlayer(final String name) {
-        Firebase playersRef = ref.child(name);
+        Firebase playersRef = ref.child("MultiPlayer").child("Players").child(name);
         fireBaseCreate h = new fireBaseCreate(name);
         playersRef.runTransaction(h);
     }
 
     public void getLobbyDTOByLobbyKey(final String name) {
-        Firebase keyLobbyRef = ref.child(name).child("gameList");
+        Firebase keyLobbyRef = ref.child("MultiPlayer").child("Players").child(name).child("gameList");
         keyLobbyRef.addChildEventListener(new LobbyEventListenter(ref,name));
     }
 
@@ -75,7 +75,6 @@ class NameGetter implements ChildEventListener {
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
         mpcref.playerList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
         mpcref.update();
     }

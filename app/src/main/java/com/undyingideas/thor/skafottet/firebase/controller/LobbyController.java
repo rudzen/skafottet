@@ -18,7 +18,7 @@ public class LobbyController {
 
     public LobbyController(final MultiplayerController mp, final Firebase ref){
         this.ref = ref;
-        lobbyRef = ref.child("Lobby");
+        lobbyRef = ref.child("MultiPlayer").child("Lobby");
         this.mpcRef = mp;
         lobbyRef.addChildEventListener(new lobbyListener(mpcRef));
     }

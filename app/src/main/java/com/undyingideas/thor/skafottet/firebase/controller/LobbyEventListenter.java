@@ -20,17 +20,14 @@ public class LobbyEventListenter implements ChildEventListener {
 
     Firebase ref;
 
-
-
     public LobbyEventListenter(Firebase ref,String name){
         this.ref= ref;
-
     }
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
         String lobbykey = dataSnapshot.getValue().toString();
-        ref.child("Lobby").child(lobbykey).child("playerList").addValueEventListener(new MyValueEventListener());
+        ref.child("MultiPlayer").child("Lobby").child(lobbykey).child("playerList").addValueEventListener(new MyValueEventListener());
     }
 
     @Override
