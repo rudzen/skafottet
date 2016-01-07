@@ -1,9 +1,7 @@
 package com.undyingideas.thor.skafottet;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,23 +12,26 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.firebase.client.Firebase;
+import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
 import com.undyingideas.thor.skafottet.firebase.controller.MultiplayerController;
+import com.undyingideas.thor.skafottet.multiplayer.MultiplayerLobbyAdapter;
 import com.undyingideas.thor.skafottet.multiplayer.MultiplayerPlayersAdapter;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class MultiplayerTest extends AppCompatActivity implements Runnable {
+public class MultiplayerTestLobby extends AppCompatActivity implements Runnable {
 
     private ListView listView;
-    private final ArrayList<PlayerDTO> players = new ArrayList<>();
+    private ArrayList<LobbyDTO> lobbies = new ArrayList<>();
     private MultiplayerController multiplayerController;
     private Firebase myFirebaseRef;
-    private MultiplayerPlayersAdapter adapter;
+    private MultiplayerLobbyAdapter adapter;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+        Log.d("firebaselobby", "lobby");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiplayer_test);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -45,26 +46,22 @@ public class MultiplayerTest extends AppCompatActivity implements Runnable {
         myFirebaseRef = new Firebase("https://hangmandtu.firebaseio.com");
 
         multiplayerController = new MultiplayerController(myFirebaseRef, this);
-
-        adapter = new MultiplayerPlayersAdapter(this, R.layout.multiplayer_player_list_row, players);
+        lobbies = multiplayerController.games;
+        multiplayerController.login(savedInstanceState.getString("name"));
+        adapter = new MultiplayerLobbyAdapter(this, R.layout.multiplayer_player_list_row, lobbies);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new OnMultiPlayerPlayerClick());
+
         Log.d("firebase", "Multiplayertest started");
     }
 
     @Override
     public void run() {
-        adapter = new MultiplayerPlayersAdapter(this, R.layout.multiplayer_player_list_row, players);
-        listView.setAdapter(adapter);
-        players.clear();
-        players.addAll(multiplayerController.playerList.values());
+        //adapter = new MultiplayerPlayersAdapter(this, R.layout.multiplayer_player_list_row, lobbies);
+        //listView.setAdapter(adapter);
+        //lobbies.clear();
+        //lobbies.addAll(multiplayerController.games.toArray());
         adapter.notifyDataSetChanged();
-    }
-
-    protected void login(String name) {
-
-        Log.d("firebaselogin", "login");
-        startActivity(new Intent(this, MultiplayerTestLobby.class).putExtra("name", name));
     }
 
     private class OnMultiPlayerPlayerClick implements AdapterView.OnItemClickListener {
@@ -76,8 +73,7 @@ public class MultiplayerTest extends AppCompatActivity implements Runnable {
             if (context != null) {
                 Log.d("NG", String.valueOf(id));
                 // do stuff!!!
-                Snackbar.make(view, ((MultiplayerTest) context).players.get(position).getName(), Snackbar.LENGTH_SHORT).show();
-                login(((MultiplayerTest) context).players.get(position).getName());
+                //Snackbar.make(view, ((MultiplayerTestLobby) context).lobbies.get(position).getName(), Snackbar.LENGTH_SHORT).show();
             }
         }
     }
