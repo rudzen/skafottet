@@ -1,7 +1,5 @@
 package com.undyingideas.thor.skafottet.firebase.controller;
 
-import android.util.Log;
-
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
@@ -11,7 +9,7 @@ import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
 /**
  * Created by Theis' on 07-01-2016.
  */
-public class LobbyListener implements ChildEventListener {
+class LobbyListener implements ChildEventListener {
     final MultiplayerController mpc;
 
     public LobbyListener(MultiplayerController mpc) {

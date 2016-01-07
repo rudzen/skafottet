@@ -3,7 +3,6 @@ package com.undyingideas.thor.skafottet;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -62,7 +61,6 @@ public class MultiplayerTest extends AppCompatActivity implements Runnable {
     }
 
     protected void login(String name) {
-
         Log.d("firebaselogin", "login");
         startActivity(new Intent(this, MultiplayerTestLobby.class).putExtra("name", name));
     }

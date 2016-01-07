@@ -16,7 +16,8 @@
 #   public *;
 #}
 
+# picasso
+-dontwarn com.squareup.okhttp.**
 
 
-# for TextSurface:
--keep class su.levenetc.android.textsurface.** { *; }
+
