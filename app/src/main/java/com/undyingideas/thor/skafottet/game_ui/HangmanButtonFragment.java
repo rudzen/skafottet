@@ -6,26 +6,48 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.nineoldandroids.animation.Animator;
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.views.HangedView;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class HangmanButtonFragment extends AbstractPlayFragment implements View.OnClickListener {
 
-
     private ArrayList<Button> listOfButtons;
     private View root;
+
+    public static HangmanButtonFragment newInstance(final int gameState) {
+        final HangmanButtonFragment hangmanButtonFragment = new HangmanButtonFragment();
+        final Bundle args = new Bundle();
+        args.putInt("game_state", gameState);
+        hangmanButtonFragment.setArguments(args);
+        return hangmanButtonFragment;
+    }
+
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)  {
         onCreate(savedInstanceState);
         root = inflater.inflate(R.layout.hangman_button,container,false);
 
-        galgen = (ImageView) root.findViewById(R.id.imageView);
-        galgen.setImageResource(R.drawable.galge);
+        galgen = (HangedView) root.findViewById(R.id.imageView);
+
+
+//        final Point size = new Point();
+//        final Display display = getActivity().getWindowManager().getDefaultDisplay();
+//        display.getSize(size);
+
+//        galgen.init(size.x, galgen.getHeight());
+//        Log.d("galge", String.valueOf(size.x));
+//        Log.d("galge", String.valueOf(size.y));
+
+        //galgen.setImageResource(R.drawable.galge);
 
         CheckGameType();
         ordet = (TextView) root.findViewById(R.id.visibleText);
@@ -35,23 +57,28 @@ public class HangmanButtonFragment extends AbstractPlayFragment implements View.
         return root;
     }
 
-    private void resetButtons(){
-        for(int i=0; i<listOfButtons.size();i++){
-            final Button button;
-            button = listOfButtons.get(i);
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        galgen.init();
+        galgen.setState(0);
+    }
+
+    private void resetButtons() {
+        for (final Button button : listOfButtons) {
+            YoYo.with(Techniques.RollIn).duration(250).playOn(button);
             button.setVisibility(View.VISIBLE);
             button.setOnClickListener(this);
         }
+        listOfButtons.clear();
     }
 
     @Override
     public void onClick(final View v) {
+        YoYo.with(Techniques.ZoomOutUp).duration(200).withListener(new OnButtonClickAnimatorListener(v)).playOn(v);
         Log.d("buttons", "button clicked");
-        v.setVisibility(View.INVISIBLE);
-
         listOfButtons.add((Button) v);
-        final String letter = ((Button) v).getText().toString();
-        guess(letter, true);
+        guess(((Button) v).getText().toString(), true);
     }
 
     /**
@@ -81,4 +108,29 @@ public class HangmanButtonFragment extends AbstractPlayFragment implements View.
     }
 
 
+    private static class OnButtonClickAnimatorListener implements Animator.AnimatorListener {
+
+        private final WeakReference<View> viewWeakReference;
+
+        public OnButtonClickAnimatorListener(final View view) {
+            viewWeakReference = new WeakReference<>(view);
+        }
+
+        @Override
+        public void onAnimationStart(final Animator animation) { }
+
+        @Override
+        public void onAnimationEnd(final Animator animation) {
+            final View view = viewWeakReference.get();
+            if (view != null) {
+                view.setVisibility(View.GONE);
+            }
+        }
+
+        @Override
+        public void onAnimationCancel(final Animator animation) { }
+
+        @Override
+        public void onAnimationRepeat(final Animator animation) { }
+    }
 }

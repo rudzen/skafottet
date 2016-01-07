@@ -12,13 +12,15 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game.Galgelogik;
 import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
+import com.undyingideas.thor.skafottet.views.HangedView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,7 +37,7 @@ public class AbstractPlayFragment extends Fragment {
     ArrayList<String> possibleWords = new ArrayList<>();
     private boolean isHotSeat;
     private String theGuess; //bruges til at holde det aktuelle gæt
-    ImageView galgen;
+    HangedView galgen;
 
     Button ok;
     TextView usedLetters, ordet, status;
@@ -71,19 +73,21 @@ public class AbstractPlayFragment extends Fragment {
         if (hasUsedLettersStat) usedLetters.append(theGuess);
         if (!logik.erSidsteBogstavKorrekt()) {
             final int wrongs = logik.getAntalForkerteBogstaver();
-            if (wrongs == 1) {
-                galgen.setImageResource(R.drawable.forkert1);
-            } else if (wrongs == 2) {
-                galgen.setImageResource(R.drawable.forkert2);
-            } else if (wrongs == 3) {
-                galgen.setImageResource(R.drawable.forkert3);
-            } else if (wrongs == 4) {
-                galgen.setImageResource(R.drawable.forkert4);
-            } else if (wrongs == 5) {
-                galgen.setImageResource(R.drawable.forkert5);
-            } else if (wrongs == 6) {
-                galgen.setImageResource(R.drawable.forkert6);
-            }
+            galgen.setState(wrongs);
+            YoYo.with(Techniques.Landing).duration(100).playOn(galgen);
+//            if (wrongs == 1) {
+//                galgen.setImageResource(R.drawable.forkert1);
+//            } else if (wrongs == 2) {
+//                galgen.setImageResource(R.drawable.forkert2);
+//            } else if (wrongs == 3) {
+//                galgen.setImageResource(R.drawable.forkert3);
+//            } else if (wrongs == 4) {
+//                galgen.setImageResource(R.drawable.forkert4);
+//            } else if (wrongs == 5) {
+//                galgen.setImageResource(R.drawable.forkert5);
+//            } else if (wrongs == 6) {
+//                galgen.setImageResource(R.drawable.forkert6);
+//            }
         }
         if (hasInputTxtField) input.setText(null);
     }
