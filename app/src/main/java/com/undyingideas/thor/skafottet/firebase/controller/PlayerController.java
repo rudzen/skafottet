@@ -104,14 +104,11 @@ class NameGetter implements ChildEventListener {
 
     protected PlayerDTO getDTO(DataSnapshot dataSnapshot) {
         PlayerDTO dto = new PlayerDTO(dataSnapshot.getKey());
-        try {
-            dto.setScore(Integer.valueOf(dataSnapshot.child("score").getValue().toString()));
-            if (dataSnapshot.hasChild("gameList"))
-                for(DataSnapshot ds : dataSnapshot.child("gameList").getChildren())
-                    dto.getGameList().add(ds.getValue().toString());
-        } catch (final Exception e) {
-
-        }
+        dto.setScore(Integer.valueOf(dataSnapshot.child("score").getValue().toString()));
+        if (dataSnapshot.hasChild("gameList"))
+            for(DataSnapshot ds : dataSnapshot.child("gameList").getChildren())
+                dto.getGameList().add(ds.getValue().toString());
+        Log.d("firebase dto", dto.getName() + " " + dto.getScore());
         return dto;
     }
 }
