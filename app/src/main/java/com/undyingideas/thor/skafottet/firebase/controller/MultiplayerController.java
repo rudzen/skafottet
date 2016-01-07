@@ -5,10 +5,14 @@ import android.util.Log;
 
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
+import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
+import com.undyingideas.thor.skafottet.firebase.DTO.WordStatus;
+import com.undyingideas.thor.skafottet.game_ui.hichscorecontent.HighScoreContent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by theis on 06-01-2016.
@@ -31,6 +35,7 @@ public class MultiplayerController {
         pc = new PlayerController(this, ref);
         updateHandler = new Handler();
         this.playerUpdater = playerUpdater;
+        Log.d("firebase", "Creating MultiplayerController");
     }
 
     public void createLobby(LobbyDTO dto) {
@@ -59,4 +64,36 @@ public class MultiplayerController {
     public void lobbyUpdate() {
         updateHandler.post(playerUpdater);
     }
+
+    public List<HighScoreContent.HighScoreItem> getHighScoreItems(){
+        final ArrayList<PlayerDTO> players = new ArrayList<>();
+        players.clear();
+        players.addAll(playerList.values());
+
+        List<HighScoreContent.HighScoreItem> list = new ArrayList<>();
+
+        HighScoreContent.HighScoreItem item;
+        int i = 1;
+        ArrayList<LobbyPlayerStatus> lobby = new ArrayList<>();
+        ArrayList<WordStatus> word = new ArrayList<>();
+        word.add(new WordStatus("Mordor",100));
+        for (PlayerDTO player : players){
+
+            lobby.add(new LobbyPlayerStatus(player.getName() ,word));
+
+        }
+
+
+        for (PlayerDTO player : players){
+
+            item = HighScoreContent.createHighScoreItem(i++,player,lobby);
+            list.add(item);
+            HighScoreContent.addItem(item);
+
+        }
+
+
+        return list;
+    }
+
 }

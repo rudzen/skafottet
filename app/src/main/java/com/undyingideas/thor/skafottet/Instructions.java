@@ -67,14 +67,10 @@ public class Instructions extends AppCompatActivity implements Runnable {
 
         mpc.lc.createLobby(new LobbyDTO(ar2));
 
-//        pc.createHighScore(player);
+//      pc.createHighScore(player);
 
 
 
-    }
-
-    private static String wrap(final String text){
-        return "<li>"+text+"</li>";
     }
 
 

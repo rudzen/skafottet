@@ -29,6 +29,7 @@ import com.undyingideas.thor.skafottet.Instructions;
 import com.undyingideas.thor.skafottet.MultiplayerTest;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game_ui.MainActivity;
+import com.undyingideas.thor.skafottet.game_ui.hichscorecontent.PlayerListActivity;
 import com.undyingideas.thor.skafottet.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.views.NewGameAdapter;
 import com.undyingideas.thor.skafottet.views.NewGameItem;
@@ -237,7 +238,7 @@ public class MenuActivity extends MenuActivityAbstract {
             final MenuActivity menuActivity = menuActivityWeakReference.get();
             if (menuActivity != null) {
                 menuActivity.button_clicked = BUTTON_VALUE;
-                if (BUTTON_VALUE == BUTTON_CONT_GAME || BUTTON_VALUE == BUTTON_WORD_LISTS || BUTTON_VALUE == BUTTON_SETTINGS) {
+                if (BUTTON_VALUE == BUTTON_CONT_GAME || BUTTON_VALUE == BUTTON_WORD_LISTS) {
                     new MaterialDialog.Builder(menuActivity)
                             .content("Ikke implementeret!!!")
                             .cancelable(true)
@@ -257,6 +258,8 @@ public class MenuActivity extends MenuActivityAbstract {
                 } else if (BUTTON_VALUE == TITLE) {
                     // figure out some funky stuff here !!! :-)
                     menuActivity.showAll();
+                } else if (BUTTON_VALUE == BUTTON_SETTINGS){
+                   menuActivity.showHighScore();
                 }
             }
         }
@@ -280,6 +283,11 @@ public class MenuActivity extends MenuActivityAbstract {
         sf.setRun(false);
         startActivity(new Intent(this, Instructions.class));
 
+    }
+
+    private void showHighScore(){
+        final Intent PlayerListActivity = new Intent(this, com.undyingideas.thor.skafottet.game_ui.hichscorecontent.PlayerListActivity.class);
+        startActivity(PlayerListActivity);
     }
 
     @SuppressWarnings("unused")

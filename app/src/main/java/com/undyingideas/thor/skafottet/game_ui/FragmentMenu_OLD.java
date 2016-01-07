@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.undyingideas.thor.skafottet.HighScoreFragment;
-import com.undyingideas.thor.skafottet.Instructions;
 import com.undyingideas.thor.skafottet.MultiPlayerFragment;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.SettingsActivity;
@@ -64,8 +63,8 @@ public class FragmentMenu_OLD extends Fragment {
 
         @Override
         public void onClick(final View v) {
-            final Intent Instillinger = new Intent(getActivity(), Instructions.class);
-            startActivity(Instillinger);
+            final Intent PlayerListActivity = new Intent(getActivity(), com.undyingideas.thor.skafottet.game_ui.hichscorecontent.PlayerListActivity.class);
+            startActivity(PlayerListActivity);
         }
     }
 

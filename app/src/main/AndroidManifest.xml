@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.undyingideas.thor.skafottet" >
+    package="com.undyingideas.thor.skafottet">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -17,11 +17,11 @@
         android:isGame="true"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".game_ui.LoadingActivity"
             android:noHistory="true"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,51 +30,52 @@
         </activity>
         <activity
             android:name=".wordlist.WordDetailsActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".wordlist.WordFragmentLayout"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".Instructions"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".Preferences"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity_high_score"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".game_ui.MainActivity"
             android:parentActivityName=".game_ui.LoadingActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" >
-        </activity>
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings" >
-        </activity>
-        <activity android:name=".game_ui.main_menu.MenuActivity" >
-        </activity>
+            android:label="@string/title_activity_settings"></activity>
+        <activity android:name=".game_ui.main_menu.MenuActivity"></activity>
         <activity
             android:name=".MultiplayerTest"
             android:label="@string/title_activity_multiplayer_test"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".game_ui.login.LoginActivity"
+            android:name=".LoginActivity"
             android:label="@string/title_activity_login"
-            android:parentActivityName=".game_ui.main_menu.MenuActivity" >
+            android:parentActivityName=".game_ui.main_menu.MenuActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.undyingideas.thor.skafottet.game_ui.main_menu.MenuActivity" />
         </activity>
         <activity
-            android:name=".MultiplayerTestLobby">
+            android:name=".game_ui.hichscorecontent.PlayerListActivity"
+            android:label="@string/title_player_list"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".game_ui.hichscorecontent.PlayerDetailActivity"
+            android:label="@string/title_player_detail"
+            android:parentActivityName=".game_ui.hichscorecontent.PlayerListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".game_ui.hichscorecontent.PlayerListActivity" />
         </activity>
     </application>
 
