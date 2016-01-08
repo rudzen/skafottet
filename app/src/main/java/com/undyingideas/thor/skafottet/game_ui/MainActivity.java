@@ -29,27 +29,17 @@ public class MainActivity extends AppCompatActivity implements YesNo.YesNoResult
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_main);
 
-        if (savedInstanceState == null) {
-            final Bundle bundle = new Bundle();
-            bundle.putStringArrayList(GameUtility.KEY_MULIGE_ORD, getIntent().getStringArrayListExtra(GameUtility.KEY_MULIGE_ORD));
-
-            final HangmanButtonFragment gameFragment = HangmanButtonFragment.newInstance(0, false);
-
-
-//            final FragmentMenu_OLD fragment = new FragmentMenu_OLD();
-//            final FragmentMenu_OLD fragment = new FragmentMenu_OLD();
-//            fragment.setArguments(bundle);
-
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_content, gameFragment)// tom container i layout
-                    .addToBackStack(null)
-                    .commit();
-        }
-
         final Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(tb);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        if (savedInstanceState == null) {
+//            final Bundle bundle = new Bundle();
+//            bundle.putStringArrayList(GameUtility.KEY_MULIGE_ORD, getIntent().getStringArrayListExtra(GameUtility.KEY_MULIGE_ORD));
+
+            final HangmanButtonFragment gameFragment = HangmanButtonFragment.newInstance(0, false, GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD));
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_content, gameFragment).addToBackStack(null).commit();
+        }
     }
 
     @Override

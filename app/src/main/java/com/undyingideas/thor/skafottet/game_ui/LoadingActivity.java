@@ -13,6 +13,7 @@ import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.FontsOverride;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 import com.undyingideas.thor.skafottet.utility.TinyDB;
+import com.undyingideas.thor.skafottet.utility.WindowLayout;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -51,6 +52,8 @@ public class LoadingActivity extends AppCompatActivity {
             final LoadingActivity loadingActivity = loadingScreenWeakReference.get();
             if (loadingActivity != null) {
                 /* This is the first code executed, thus some configuration of the application takes place.. */
+                WindowLayout.setScreenDimension(loadingActivity);
+
                 FontsOverride.setDefaultFont(loadingActivity.getApplicationContext(), "DEFAULT", Constant.DEF_FONT);
                 FontsOverride.setDefaultFont(loadingActivity.getApplicationContext(), "MONOSPACE", Constant.DEF_FONT);
                 FontsOverride.setDefaultFont(loadingActivity.getApplicationContext(), "SERIF", Constant.DEF_FONT);
@@ -84,7 +87,8 @@ public class LoadingActivity extends AppCompatActivity {
             final LoadingActivity loadingActivity = loadingScreenWeakReference.get();
             if (possibleWords != null && loadingActivity != null) { // med seler og livrem
                 final Intent StartApp = new Intent(loadingActivity, MenuActivity.class);
-                StartApp.putExtra(GameUtility.KEY_MULIGE_ORD, possibleWords);
+                s_prefereces.putListString(GameUtility.KEY_MULIGE_ORD, possibleWords);
+//                StartApp.putExtra(GameUtility.KEY_MULIGE_ORD, possibleWords);
                 StartApp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);// Fjerner loadscreen fra stacken
                 loadingActivity.startActivity(StartApp);
                 try {
