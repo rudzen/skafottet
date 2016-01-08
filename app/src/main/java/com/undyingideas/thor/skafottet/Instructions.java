@@ -2,6 +2,7 @@ package com.undyingideas.thor.skafottet;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.webkit.WebView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -55,7 +56,9 @@ public class Instructions extends AppCompatActivity implements Runnable {
         wordListDog.add("scæfer");
         wordListDog.add("Pudel");
         wordListDog.add("Granddanois");
+        Log.d("emil", ""+wordListDog.size());
         WordListDTO wlDTO = new WordListDTO(wordListDog);
+        Log.d("emil", ""+wlDTO.getWordList().size());
 //        pc = new HighScoreController(myFirebaseRef,10, list,instructionDisplay);
         WordListController wlc = new WordListController(myFirebaseRef);
         MultiplayerController mpc = new MultiplayerController(myFirebaseRef, this);

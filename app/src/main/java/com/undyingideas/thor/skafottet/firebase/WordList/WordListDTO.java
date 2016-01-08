@@ -6,9 +6,14 @@ import java.util.List;
 /**
  * Created by Emil on 08-01-2016.
  */
-public class WordListDTO extends ArrayList<String> {
-    public WordListDTO(ArrayList<String> wordList){
+public class WordListDTO  {
+    ArrayList<String> wordList = new ArrayList<>();
 
+    public WordListDTO() {
+    }
+
+    public WordListDTO(ArrayList<String> wordList){
+        this.wordList = wordList;
     }
 
     public ArrayList<String> getWordList() {
@@ -19,5 +24,5 @@ public class WordListDTO extends ArrayList<String> {
         this.wordList = wordList;
     }
 
-    ArrayList<String> wordList = new ArrayList<>();
+
 }
