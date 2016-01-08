@@ -49,6 +49,7 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
     private HangedView galgen;
     private String multiPlayerWord;
     private String multiPlayerOpponent;
+    private boolean isMultiplayer;
 
     private TextView usedLetters, ordet, status;
     private EditText input;
@@ -143,7 +144,8 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
 
     private void getBundleConfig(final Bundle bundle) {
         if (bundle != null) {
-            if (bundle.containsKey(KEY_MULTIPLAYER) && bundle.getBoolean(KEY_MULTIPLAYER) && bundle.containsKey(KEY_OPPONENT_NAME)) {
+            isMultiplayer = bundle.containsKey(KEY_MULTIPLAYER) && bundle.getBoolean(KEY_MULTIPLAYER) && bundle.containsKey(KEY_OPPONENT_NAME);
+            if (isMultiplayer) {
                 multiPlayerOpponent = bundle.getString(KEY_OPPONENT_NAME);
                 multiPlayerWord = bundle.getString(KEY_WORD_SINGLE);
             } else {

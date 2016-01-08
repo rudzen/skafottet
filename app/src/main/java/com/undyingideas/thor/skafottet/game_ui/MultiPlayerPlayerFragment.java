@@ -40,7 +40,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
 
     private ListView listView;
     private ArrayList<PlayerDTO> players;
-    private ArrayList<LobbyDTO> lobbys;
+    private ArrayList<LobbyDTO> lobbys = new ArrayList<>();
     private MultiplayerController multiplayerController;
     private MultiplayerPlayersAdapter playerAdapter;
     private MultiplayerLobbyAdapter lobbyAdapter;
@@ -218,10 +218,10 @@ public class MultiPlayerPlayerFragment extends Fragment {
                 playerAdapter.notifyDataSetChanged();
                 GameUtility.s_prefereces.putObject(KEY_LAST_PLAYER_LIST, players);
             } else {
-                ArrayList<LobbyDTO> l = new ArrayList<>();
-                l.addAll(multiplayerController.lc.lobbyList.values());
-                Log.d("firebase", l.size() + "  " + multiplayerController.lc.lobbyList.size());
-                lobbyAdapter = new MultiplayerLobbyAdapter(multiplayerController.name, getContext(), R.layout.multiplayer_player_list_row, l);
+                lobbys.clear();
+                lobbys.addAll(multiplayerController.lc.lobbyList.values());
+                Log.d("firebase", lobbys.size() + "  " + multiplayerController.lc.lobbyList.size());
+                lobbyAdapter = new MultiplayerLobbyAdapter(multiplayerController.name, getContext(), R.layout.multiplayer_player_list_row, lobbys);
                 listView.setAdapter(lobbyAdapter);
                 lobbyAdapter.notifyDataSetChanged();
             }
