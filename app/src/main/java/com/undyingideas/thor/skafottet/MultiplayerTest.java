@@ -64,8 +64,7 @@ public class MultiplayerTest extends AppCompatActivity implements Runnable {
         } else {
             ArrayList<LobbyDTO> l = new ArrayList<>();
             l.addAll(multiplayerController.lc.lobbyList.values());
-            Log.d("firebase", ""+l.size() + "  " + multiplayerController.lc.lobbyList.size());
-            lobbyAdapter = new MultiplayerLobbyAdapter(this, R.layout.multiplayer_player_list_row, l);
+            lobbyAdapter = new MultiplayerLobbyAdapter(multiplayerController.name, this, R.layout.multiplayer_player_list_row, l);
             listView.setAdapter(lobbyAdapter);
             lobbyAdapter.notifyDataSetChanged();
         }
@@ -87,7 +86,8 @@ public class MultiplayerTest extends AppCompatActivity implements Runnable {
                 Log.d("NG", String.valueOf(id));
                 // do stuff!!!
                 Snackbar.make(view, ((MultiplayerTest) context).players.get(position).getName(), Snackbar.LENGTH_SHORT).show();
-                login(((MultiplayerTest) context).players.get(position).getName());
+                if(multiplayerController.name != null)  login(((MultiplayerTest) context).players.get(position).getName());
+                else ;
             }
         }
     }
