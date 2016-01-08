@@ -57,6 +57,10 @@ public class MainActivity extends AppCompatActivity implements YesNo.YesNoResult
     }
 
     private void addFragment(final Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_content, fragment).addToBackStack(null).commit();
+    }
+
+    private void replaceFragment(final Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content, fragment).addToBackStack(null).commit();
     }
 
@@ -106,6 +110,6 @@ public class MainActivity extends AppCompatActivity implements YesNo.YesNoResult
     @Override
     public void startNewMultiplayerGame(final String opponentName, final String theWord) {
         Log.d("MainActivity", "Wan't to start new game against : " + opponentName + " with word : " + theWord);
-        addFragment(HangmanButtonFragment.newInstance(opponentName, theWord));
+        replaceFragment(HangmanButtonFragment.newInstance(opponentName, theWord));
     }
 }

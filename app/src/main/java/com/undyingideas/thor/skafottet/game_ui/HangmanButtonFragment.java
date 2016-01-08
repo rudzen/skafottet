@@ -17,7 +17,6 @@ import com.nineoldandroids.animation.Animator;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game.Galgelogik;
 import com.undyingideas.thor.skafottet.utility.Constant;
-import com.undyingideas.thor.skafottet.utility.GameUtility;
 import com.undyingideas.thor.skafottet.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.views.HangedView;
 
@@ -229,17 +228,15 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
         updateScreen(true, true);
     }
 
-    void CheckGameType() {//checks gametype, to se whether its a newgame by some extra info from activating classes, but that would require more refactoring
-        isHotSeat = getArguments().getBoolean(GameUtility.KEY_IS_HOT_SEAT, false);
-        Log.d("Play", "CheckGameType: isHotseat " + isHotSeat);
-        if (isHotSeat) {
-            possibleWords.add(getArguments().getString("theWord"));
-        } else if (logik != null && logik.erSpilletSlut()) {
+    void CheckGameType() {
+        if (logik != null && logik.erSpilletSlut()) {
             logik.nulstil();
         } else {// for det tilfældes skyld at der er tale om et nyt spil
+            // TODO : Handle multiplayer shit here! :-)
             possibleWords.addAll((HashSet<String>) s_prefereces.getObject(Constant.KEY_PREF_POSSIBLE_WORDS, HashSet.class));
         }
-        logik = new Galgelogik(possibleWords);
+        Log.d("Play", "CheckGameType : MultiPlayer = " + isMultiplayer);
+        logik = isMultiplayer ? new Galgelogik(multiPlayerWord) : new Galgelogik(possibleWords);
     }
 
     private void StartEndgame() {// gathers need data for starting up the endgame Fragment
