@@ -57,7 +57,7 @@ public class Instructions extends AppCompatActivity implements Runnable {
         wordListDog.add("Pudel");
         wordListDog.add("Granddanois");
         Log.d("emil", ""+wordListDog.size());
-        WordListDTO wlDTO = new WordListDTO(wordListDog);
+        WordListDTO wlDTO = new WordListDTO("Hunde",wordListDog);
         Log.d("emil", ""+wlDTO.getWordList().size());
 //        pc = new HighScoreController(myFirebaseRef,10, list,instructionDisplay);
         WordListController wlc = new WordListController(myFirebaseRef);

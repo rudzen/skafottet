@@ -7,12 +7,14 @@ import java.util.List;
  * Created by Emil on 08-01-2016.
  */
 public class WordListDTO  {
+    String title;
     ArrayList<String> wordList = new ArrayList<>();
 
     public WordListDTO() {
     }
 
-    public WordListDTO(ArrayList<String> wordList){
+    public WordListDTO(String title, ArrayList<String> wordList){
+        this.title = title;
         this.wordList = wordList;
     }
 
@@ -24,5 +26,12 @@ public class WordListDTO  {
         this.wordList = wordList;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
 }
