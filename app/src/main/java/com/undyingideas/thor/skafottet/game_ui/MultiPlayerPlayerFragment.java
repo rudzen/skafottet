@@ -203,7 +203,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
                 ArrayList<LobbyDTO> l = new ArrayList<>();
                 l.addAll(multiplayerController.lc.lobbyList.values());
                 Log.d("firebase", l.size() + "  " + multiplayerController.lc.lobbyList.size());
-                lobbyAdapter = new MultiplayerLobbyAdapter(getContext(), R.layout.multiplayer_player_list_row, l);
+                lobbyAdapter = new MultiplayerLobbyAdapter(multiplayerController.name, getContext(), R.layout.multiplayer_player_list_row, l);
                 listView.setAdapter(lobbyAdapter);
                 lobbyAdapter.notifyDataSetChanged();
             }
