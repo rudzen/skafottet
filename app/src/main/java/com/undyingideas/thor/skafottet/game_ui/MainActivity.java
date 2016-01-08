@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements YesNo.YesNoResult
     }
 
     private void addFragment(final Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_content, fragment).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content, fragment).addToBackStack(null).commit();
     }
 
     @Override
