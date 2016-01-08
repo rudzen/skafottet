@@ -19,24 +19,18 @@ import java.util.List;
  * Created by theis on 06-01-2016.
  */
 public class MultiplayerController {
-    public ArrayList<LobbyDTO> games;
     public LobbyController lc;
     public PlayerController pc;
     final Firebase ref;
-    String name;
-    public HashMap<String, PlayerDTO> playerList = new HashMap<>();
-    public HashMap<String, LobbyDTO> lobbyList = new HashMap<>();
+    public String name;
     private Handler updateHandler;
     private Runnable playerUpdater;
 
     public MultiplayerController(final Firebase ref, final Runnable playerUpdater) {
         this.ref = ref;
-        games = new ArrayList<>();
-        lc = new LobbyController(this, ref);
         pc = new PlayerController(this, ref);
         updateHandler = new Handler();
         this.playerUpdater = playerUpdater;
-        Log.d("firebase", "Creating MultiplayerController");
     }
 
     public void createLobby(LobbyDTO dto) {
@@ -44,18 +38,21 @@ public class MultiplayerController {
     }
 
     public boolean login(String name) {
-        if (playerList.containsKey(name)) {
+        if (pc.playerList.containsKey(name)) {
             logout();
             this.name = name;
             pc.addListener(name);
+            lc = new LobbyController(this, ref);
+            for (String key : pc.playerList.get(name).getGameList())
+            {Log.d("firebase", key); lc.addLobbyListener(key);}
             return true;
         } else return false;
     }
 
     public void logout() {
         if (name == null) return;
-        lc = new LobbyController(this, ref);
-        games.clear();
+        name = null;
+        lc = null;
     }
 
     public void update() {
@@ -63,7 +60,6 @@ public class MultiplayerController {
     }
 
     public void lobbyUpdate() {
-        Log.d("firebase", "lobbyUpdate MultiplayerController");
         updateHandler.post(playerUpdater);
     }
 
@@ -74,10 +70,10 @@ public class MultiplayerController {
         ArrayList<HighScoreDTO> playerHighScoreList = new ArrayList<>();
 
         players.clear();
-        players.addAll(playerList.values());
+        players.addAll(pc.playerList.values());
         playerLobbys.clear();
 
-        playerLobbys.addAll(lobbyList.values());
+        playerLobbys.addAll(lc.lobbyList.values());
         //We look inside all lobbys
         //Then inside all lobbys we look at all players
         //If the player match with the lobby being looked at we add the score and word from the lobby.
@@ -92,8 +88,8 @@ public class MultiplayerController {
             for (String gamekey : player.getGameList()) {
                 //I get the correct lobby status in the lobby with the key
                 //Make sure not to get null into loop
-                if (!lobbyList.isEmpty()) {
-                    for (LobbyPlayerStatus status : lobbyList.get(gamekey).getPlayerList()) {
+                if (!lc.lobbyList.isEmpty()) {
+                    for (LobbyPlayerStatus status : lc.lobbyList.get(gamekey).getPlayerList()) {
                         //I then look at all playerStatus in the lobby and compare it with the name im looking for.
                         if (status.getName().equals(player.getName())) {
                             gameStatus.add(status);

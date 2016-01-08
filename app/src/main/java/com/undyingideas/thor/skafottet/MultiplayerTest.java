@@ -1,7 +1,6 @@
 package com.undyingideas.thor.skafottet;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,8 +12,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.firebase.client.Firebase;
+import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
 import com.undyingideas.thor.skafottet.firebase.controller.MultiplayerController;
+import com.undyingideas.thor.skafottet.multiplayer.MultiplayerLobbyAdapter;
 import com.undyingideas.thor.skafottet.multiplayer.MultiplayerPlayersAdapter;
 
 import java.lang.ref.WeakReference;
@@ -26,7 +27,8 @@ public class MultiplayerTest extends AppCompatActivity implements Runnable {
     private final ArrayList<PlayerDTO> players = new ArrayList<>();
     private MultiplayerController multiplayerController;
     private Firebase myFirebaseRef;
-    private MultiplayerPlayersAdapter adapter;
+    private MultiplayerPlayersAdapter playerAdapter;
+    private MultiplayerLobbyAdapter lobbyAdapter;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -45,24 +47,34 @@ public class MultiplayerTest extends AppCompatActivity implements Runnable {
 
         multiplayerController = new MultiplayerController(myFirebaseRef, this);
 
-        adapter = new MultiplayerPlayersAdapter(this, R.layout.multiplayer_player_list_row, players);
-        listView.setAdapter(adapter);
+        playerAdapter = new MultiplayerPlayersAdapter(this, R.layout.multiplayer_player_list_row, players);
+        listView.setAdapter(playerAdapter);
         listView.setOnItemClickListener(new OnMultiPlayerPlayerClick());
         Log.d("firebase", "Multiplayertest started");
     }
 
     @Override
     public void run() {
-        adapter = new MultiplayerPlayersAdapter(this, R.layout.multiplayer_player_list_row, players);
-        listView.setAdapter(adapter);
-        players.clear();
-        players.addAll(multiplayerController.playerList.values());
-        adapter.notifyDataSetChanged();
+        if (multiplayerController.name == null) {
+            playerAdapter = new MultiplayerPlayersAdapter(this, R.layout.multiplayer_player_list_row, players);
+            listView.setAdapter(playerAdapter);
+            players.clear();
+            players.addAll(multiplayerController.pc.playerList.values());
+            playerAdapter.notifyDataSetChanged();
+        } else {
+            ArrayList<LobbyDTO> l = new ArrayList<>();
+            l.addAll(multiplayerController.lc.lobbyList.values());
+            Log.d("firebase", ""+l.size() + "  " + multiplayerController.lc.lobbyList.size());
+            lobbyAdapter = new MultiplayerLobbyAdapter(this, R.layout.multiplayer_player_list_row, l);
+            listView.setAdapter(lobbyAdapter);
+            lobbyAdapter.notifyDataSetChanged();
+        }
     }
 
     protected void login(String name) {
         Log.d("firebaselogin", "login");
-        startActivity(new Intent(this, MultiplayerTestLobby.class).putExtra("name", name));
+        //startActivity(new Intent(this, MultiplayerTestLobby.class).putExtra("name", name));
+        multiplayerController.login(name);
     }
 
     private class OnMultiPlayerPlayerClick implements AdapterView.OnItemClickListener {

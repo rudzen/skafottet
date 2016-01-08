@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
+import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.WordStatus;
 import com.undyingideas.thor.skafottet.firebase.controller.MultiplayerController;
 
@@ -56,11 +57,13 @@ public class Instructions extends AppCompatActivity implements Runnable {
         mpc.pc.createPlayer("Adam");
         mpc.pc.createPlayer("Theis");
 
+        mpc.pc.playerList.put("Rudy", new PlayerDTO("Rudy", 0, new ArrayList<String>()));
+        mpc.login("Rudy");
         WordStatus ws = new WordStatus("hej", -1);
         ArrayList<WordStatus> ar = new ArrayList<>();
         ar.add(ws);
         LobbyPlayerStatus lps = new LobbyPlayerStatus("Rudy", ar);
-        LobbyPlayerStatus lps2 = new LobbyPlayerStatus("Theis", ar);
+        LobbyPlayerStatus lps2 = new LobbyPlayerStatus("Adam", ar);
         ArrayList<LobbyPlayerStatus> ar2 = new ArrayList<>();
         ar2.add(lps);
         ar2.add(lps2);
