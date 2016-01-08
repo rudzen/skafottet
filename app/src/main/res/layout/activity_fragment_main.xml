@@ -11,7 +11,7 @@
     <include layout="@layout/toolbar"/>
 
     <LinearLayout
-        android:id="@+id/fragmentindhold"
+        android:id="@+id/fragment_content"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

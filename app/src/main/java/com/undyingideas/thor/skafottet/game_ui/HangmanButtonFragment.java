@@ -19,13 +19,20 @@ import java.util.ArrayList;
 
 public class HangmanButtonFragment extends AbstractPlayFragment implements View.OnClickListener {
 
+    private static final String KEY_MULTIPLAYER = "mp";
+    private static final String KEY_GAME_STATE = "gs";
     private ArrayList<Button> listOfButtons;
     private View root;
 
-    public static HangmanButtonFragment newInstance(final int gameState) {
+    private int gameState;
+
+    private Bundle lastBundle;
+
+    public static HangmanButtonFragment newInstance(final int gameState, final boolean multiPlayer) {
         final HangmanButtonFragment hangmanButtonFragment = new HangmanButtonFragment();
         final Bundle args = new Bundle();
-        args.putInt("game_state", gameState);
+        args.putInt(KEY_GAME_STATE, gameState);
+        args.putBoolean(KEY_MULTIPLAYER, multiPlayer);
         hangmanButtonFragment.setArguments(args);
         return hangmanButtonFragment;
     }
@@ -37,6 +44,18 @@ public class HangmanButtonFragment extends AbstractPlayFragment implements View.
         root = inflater.inflate(R.layout.hangman_button,container,false);
 
         galgen = (HangedView) root.findViewById(R.id.imageView);
+
+        if (getArguments() != null) {
+            lastBundle = getArguments();
+            getBundleConfig(lastBundle);
+        } else if (savedInstanceState != null) {
+            lastBundle = savedInstanceState;
+            getBundleConfig(lastBundle);
+        }
+
+//        if (lastBundle != null) {
+//            getBundleConfig(lastBundle);
+//        }
 
 
 //        final Point size = new Point();
@@ -51,17 +70,43 @@ public class HangmanButtonFragment extends AbstractPlayFragment implements View.
 
         CheckGameType();
         ordet = (TextView) root.findViewById(R.id.visibleText);
-        ordet.setText(logik.getSynligtOrd());
-        listOfButtons = initButtons();
-        resetButtons();
         return root;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ordet.setText(logik.getSynligtOrd());
+        listOfButtons = initButtons();
+        resetButtons();
         galgen.init();
-        galgen.setState(0);
+        galgen.setState(gameState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState = setBundleConfig();
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        getBundleConfig(savedInstanceState);
+        super.onViewStateRestored(savedInstanceState);
+    }
+
+    private Bundle setBundleConfig() {
+        final Bundle bundle = new Bundle();
+        bundle.putBoolean(KEY_MULTIPLAYER, isHotSeat);
+        bundle.putInt(KEY_GAME_STATE, gameState);
+        return bundle;
+    }
+
+    private void getBundleConfig(final Bundle bundle) {
+        if (bundle != null) {
+            isHotSeat = bundle.getBoolean(KEY_MULTIPLAYER);
+            gameState = bundle.getInt(KEY_GAME_STATE);
+        }
     }
 
     private void resetButtons() {
@@ -106,7 +151,6 @@ public class HangmanButtonFragment extends AbstractPlayFragment implements View.
         for(int i = 0; i < vg.getChildCount(); i++) a.add((Button)vg.getChildAt(i));
         return a;
     }
-
 
     private static class OnButtonClickAnimatorListener implements Animator.AnimatorListener {
 
