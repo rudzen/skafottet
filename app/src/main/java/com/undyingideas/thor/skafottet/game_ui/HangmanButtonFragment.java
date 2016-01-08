@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -16,7 +17,7 @@ import com.nineoldandroids.animation.Animator;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game.Galgelogik;
 import com.undyingideas.thor.skafottet.utility.Constant;
-import com.undyingideas.thor.skafottet.utility.GameUtility;
+import com.undyingideas.thor.skafottet.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.views.HangedView;
 
 import java.lang.ref.WeakReference;
@@ -29,7 +30,12 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
 
     private static final String KEY_MULTIPLAYER = "mp";
     private static final String KEY_GAME_STATE = "gs";
-    private static final String KEY_POSSIBLE_WORDS = "posw";
+    private static final String KEY_WORD_LIST = "posw";
+    private static final String KEY_WORD_SINGLE = "sinw";
+
+    private static final String KEY_OPPONENT_NAME = "on";
+
+
     private ArrayList<Button> listOfButtons;
     private int gameState;
 
@@ -40,6 +46,9 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
     private boolean isHotSeat;
     private String theGuess; //bruges til at holde det aktuelle gæt
     private HangedView galgen;
+    private String multiPlayerWord;
+    private String multiPlayerOpponent;
+    private boolean isMultiplayer;
 
     private TextView usedLetters, ordet, status;
     private EditText input;
@@ -49,10 +58,21 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
         final Bundle args = new Bundle();
         args.putInt(KEY_GAME_STATE, gameState);
         args.putBoolean(KEY_MULTIPLAYER, multiPlayer);
-        args.putStringArrayList(KEY_POSSIBLE_WORDS, possibleWords);
+        args.putStringArrayList(KEY_WORD_LIST, possibleWords);
         hangmanButtonFragment.setArguments(args);
         return hangmanButtonFragment;
     }
+
+    public static HangmanButtonFragment newInstance(final String opponentName, final String theWord) {
+        final HangmanButtonFragment hangmanButtonFragment = new HangmanButtonFragment();
+        final Bundle args = new Bundle();
+        args.putBoolean(KEY_MULTIPLAYER, true);
+        args.putString(KEY_OPPONENT_NAME, opponentName);
+        args.putString(KEY_WORD_SINGLE, theWord);
+        hangmanButtonFragment.setArguments(args);
+        return hangmanButtonFragment;
+    }
+
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)  {
@@ -87,7 +107,6 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
 
 
 
-
         return root;
     }
 
@@ -98,6 +117,8 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
         resetButtons();
         galgen.init();
         galgen.setState(gameState);
+        WindowLayout.showSnack(multiPlayerOpponent, ordet, true);
+        Toast.makeText(getContext(), multiPlayerWord, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -116,18 +137,24 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
         final Bundle bundle = new Bundle();
         bundle.putBoolean(KEY_MULTIPLAYER, isHotSeat);
         bundle.putInt(KEY_GAME_STATE, gameState);
-        bundle.putStringArrayList(KEY_POSSIBLE_WORDS, possibleWords);
+        bundle.putStringArrayList(KEY_WORD_LIST, possibleWords);
         return bundle;
     }
 
     private void getBundleConfig(final Bundle bundle) {
         if (bundle != null) {
-            isHotSeat = bundle.getBoolean(KEY_MULTIPLAYER);
-            gameState = bundle.getInt(KEY_GAME_STATE);
-            possibleWords.clear();
-            //noinspection ConstantConditions
-            if (bundle.containsKey(KEY_POSSIBLE_WORDS)) {
-                possibleWords.addAll(bundle.getStringArrayList(KEY_POSSIBLE_WORDS));
+            isMultiplayer = bundle.containsKey(KEY_MULTIPLAYER) && bundle.getBoolean(KEY_MULTIPLAYER) && bundle.containsKey(KEY_OPPONENT_NAME);
+            if (isMultiplayer) {
+                multiPlayerOpponent = bundle.getString(KEY_OPPONENT_NAME);
+                multiPlayerWord = bundle.getString(KEY_WORD_SINGLE);
+            } else {
+                isHotSeat = bundle.getBoolean(KEY_MULTIPLAYER);
+                gameState = bundle.getInt(KEY_GAME_STATE);
+                possibleWords.clear();
+                //noinspection ConstantConditions
+                if (bundle.containsKey(KEY_WORD_LIST)) {
+                    possibleWords.addAll(bundle.getStringArrayList(KEY_WORD_LIST));
+                }
             }
         }
     }
@@ -201,17 +228,15 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
         updateScreen(true, true);
     }
 
-    void CheckGameType() {//checks gametype, to se whether its a newgame by some extra info from activating classes, but that would require more refactoring
-        isHotSeat = getArguments().getBoolean(GameUtility.KEY_IS_HOT_SEAT, false);
-        Log.d("Play", "CheckGameType: isHotseat " + isHotSeat);
-        if (isHotSeat) {
-            possibleWords.add(getArguments().getString("theWord"));
-        } else if (logik != null && logik.erSpilletSlut()) {
+    void CheckGameType() {
+        if (logik != null && logik.erSpilletSlut()) {
             logik.nulstil();
         } else {// for det tilfældes skyld at der er tale om et nyt spil
+            // TODO : Handle multiplayer shit here! :-)
             possibleWords.addAll((HashSet<String>) s_prefereces.getObject(Constant.KEY_PREF_POSSIBLE_WORDS, HashSet.class));
         }
-        logik = new Galgelogik(possibleWords);
+        Log.d("Play", "CheckGameType : MultiPlayer = " + isMultiplayer);
+        logik = isMultiplayer ? new Galgelogik(multiPlayerWord) : new Galgelogik(possibleWords);
     }
 
     private void StartEndgame() {// gathers need data for starting up the endgame Fragment

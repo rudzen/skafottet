@@ -16,7 +16,9 @@ import android.widget.ListView;
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
+import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
+import com.undyingideas.thor.skafottet.firebase.DTO.WordStatus;
 import com.undyingideas.thor.skafottet.firebase.controller.MultiplayerController;
 import com.undyingideas.thor.skafottet.multiplayer.MultiplayerLobbyAdapter;
 import com.undyingideas.thor.skafottet.multiplayer.MultiplayerPlayersAdapter;
@@ -38,6 +40,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
 
     private ListView listView;
     private ArrayList<PlayerDTO> players;
+    private ArrayList<LobbyDTO> lobbys = new ArrayList<>();
     private MultiplayerController multiplayerController;
     private MultiplayerPlayersAdapter playerAdapter;
     private MultiplayerLobbyAdapter lobbyAdapter;
@@ -121,6 +124,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
      */
     public interface OnMultiPlayerPlayerFragmentInteractionListener {
         void onPlayerClicked(final String playerName);
+        void startNewMultiplayerGame(final String opponentName, final String theWord);
     }
 
     public void onButtonPressed(final int position) {
@@ -177,7 +181,21 @@ public class MultiPlayerPlayerFragment extends Fragment {
                 // do stuff!!!
                 multiPlayerPlayerFragment.onButtonPressed(position);
                 Log.d("firebaselogin", "login");
-                multiPlayerPlayerFragment.multiplayerController.login(multiPlayerPlayerFragment.players.get(position).getName());
+                if(multiPlayerPlayerFragment.multiplayerController.name == null)
+                    multiPlayerPlayerFragment.multiplayerController.login(multiPlayerPlayerFragment.players.get(position).getName());
+                else {
+                    for (final LobbyPlayerStatus lobbyPlayerStatus : multiPlayerPlayerFragment.lobbys.get(position).getPlayerList())
+                        if (lobbyPlayerStatus.getName().equals(multiPlayerPlayerFragment.multiplayerController.name))
+                            for(final WordStatus wordStatus : lobbyPlayerStatus.getWordList()) {
+                                if (wordStatus.getScore() == -1) {
+                                    Log.d("firebaseopengame", wordStatus.getWordID());
+                                    multiPlayerPlayerFragment.mListener.startNewMultiplayerGame("ib", wordStatus.getWordID());
+                                    //TODO
+                                    return;
+                                }
+                            }
+
+                }
             }
         }
     }
@@ -200,10 +218,10 @@ public class MultiPlayerPlayerFragment extends Fragment {
                 playerAdapter.notifyDataSetChanged();
                 GameUtility.s_prefereces.putObject(KEY_LAST_PLAYER_LIST, players);
             } else {
-                ArrayList<LobbyDTO> l = new ArrayList<>();
-                l.addAll(multiplayerController.lc.lobbyList.values());
-                Log.d("firebase", l.size() + "  " + multiplayerController.lc.lobbyList.size());
-                lobbyAdapter = new MultiplayerLobbyAdapter(multiplayerController.name, getContext(), R.layout.multiplayer_player_list_row, l);
+                lobbys.clear();
+                lobbys.addAll(multiplayerController.lc.lobbyList.values());
+                Log.d("firebase", lobbys.size() + "  " + multiplayerController.lc.lobbyList.size());
+                lobbyAdapter = new MultiplayerLobbyAdapter(multiplayerController.name, getContext(), R.layout.multiplayer_player_list_row, lobbys);
                 listView.setAdapter(lobbyAdapter);
                 lobbyAdapter.notifyDataSetChanged();
             }

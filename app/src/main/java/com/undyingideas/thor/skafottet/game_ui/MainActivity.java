@@ -60,6 +60,10 @@ public class MainActivity extends AppCompatActivity implements YesNo.YesNoResult
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_content, fragment).addToBackStack(null).commit();
     }
 
+    private void replaceFragment(final Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content, fragment).addToBackStack(null).commit();
+    }
+
     @Override
     public void onDone(final boolean result) {
         if(result){
@@ -101,5 +105,11 @@ public class MainActivity extends AppCompatActivity implements YesNo.YesNoResult
     @Override
     public void onPlayerClicked(final String playerName) {
         Log.d("MainActivity", playerName + " clicked.");
+    }
+
+    @Override
+    public void startNewMultiplayerGame(final String opponentName, final String theWord) {
+        Log.d("MainActivity", "Wan't to start new game against : " + opponentName + " with word : " + theWord);
+        replaceFragment(HangmanButtonFragment.newInstance(opponentName, theWord));
     }
 }
