@@ -26,10 +26,9 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.nineoldandroids.animation.Animator;
 import com.undyingideas.thor.skafottet.Instructions;
-import com.undyingideas.thor.skafottet.MultiplayerTest;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game_ui.MainActivity;
-import com.undyingideas.thor.skafottet.game_ui.hichscorecontent.PlayerListActivity;
+import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.views.NewGameAdapter;
 import com.undyingideas.thor.skafottet.views.NewGameItem;
@@ -275,7 +274,7 @@ public class MenuActivity extends MenuActivityAbstract {
 
     @SuppressWarnings("unused")
     private void showMultiplayer() {
-        startActivity(new Intent(this, MultiplayerTest.class));
+        startActivity(new Intent(this, MainActivity.class).putExtra(Constant.KEY_GAME_MODE, Constant.KEY_MULTI_PLAYER));
     }
 
     @SuppressWarnings("unused")
@@ -312,11 +311,10 @@ public class MenuActivity extends MenuActivityAbstract {
     @SuppressWarnings("unused")
     private void startNewGame() {
         final Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("NEW_GAME", newGameID);
+        intent.putExtra(Constant.KEY_GAME_MODE, Constant.KEY_SINGLE_PLAYER);
         sf.setRun(false);
         startActivity(intent);
     }
-
 
     private void callMethod(final String method_name) {
         if (FINISH.equals(method_name)) {

@@ -53,9 +53,9 @@ public class EndOfGameFragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         onCreate(savedInstanceState);
-        final View root = inflater.inflate(R.layout.activity_end_of_game, container, false);
-        endImage = (ImageView) root.findViewById(R.id.PokalBillede);
-        resultaterDisp = (WebView) root.findViewById(R.id.SpilresultaterWebView);
+        final View root = inflater.inflate(R.layout.fragment_end_game, container, false);
+        endImage = (ImageView) root.findViewById(R.id.end_game_image);
+        resultaterDisp = (WebView) root.findViewById(R.id.end_game_web_view);
 
         final Button endGameBtn = (Button) root.findViewById(R.id.end_game_quit);
         endGameBtn.setOnClickListener(new EndGameListener());

@@ -1,6 +1,7 @@
 package com.undyingideas.thor.skafottet.game_ui;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -9,11 +10,18 @@ import android.view.Window;
 
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.dialogs.YesNo;
+import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 
-public class MainActivity extends AppCompatActivity implements YesNo.YesNoResultListener {
+public class MainActivity extends AppCompatActivity implements YesNo.YesNoResultListener, MultiPlayerPlayerFragment.OnMultiPlayerPlayerFragmentInteractionListener {
     
     private static String s_possibleWord;
+
+    /*
+     1 = single player
+     2 = multiplayer
+     */
+    private int gameMode;
 
     public static String getS_possibleWord() {
         return s_possibleWord;
@@ -33,13 +41,23 @@ public class MainActivity extends AppCompatActivity implements YesNo.YesNoResult
         setSupportActionBar(tb);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if (savedInstanceState == null) {
-//            final Bundle bundle = new Bundle();
-//            bundle.putStringArrayList(GameUtility.KEY_MULIGE_ORD, getIntent().getStringArrayListExtra(GameUtility.KEY_MULIGE_ORD));
+        if (getIntent() != null) {
+            final Bundle bundle = getIntent().getExtras();
+            gameMode = bundle.getInt(Constant.KEY_GAME_MODE);
 
-            final HangmanButtonFragment gameFragment = HangmanButtonFragment.newInstance(0, false, GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD));
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment_content, gameFragment).addToBackStack(null).commit();
+            if (gameMode == Constant.KEY_SINGLE_PLAYER) {
+                addFragment(HangmanButtonFragment.newInstance(0, false, GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)));
+            } else if (gameMode == Constant.KEY_MULTI_PLAYER) {
+                // just show the current player list
+                addFragment(MultiPlayerPlayerFragment.newInstance(true));
+            }
+        } else {
+            addFragment(HangmanButtonFragment.newInstance(0, false, GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)));
         }
+    }
+
+    private void addFragment(final Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_content, fragment).addToBackStack(null).commit();
     }
 
     @Override
@@ -78,5 +96,10 @@ public class MainActivity extends AppCompatActivity implements YesNo.YesNoResult
         } else {
             getFragmentManager().popBackStack();
         }
+    }
+
+    @Override
+    public void onPlayerClicked(final String playerName) {
+        Log.d("MainActivity", playerName + " clicked.");
     }
 }

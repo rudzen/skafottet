@@ -18,4 +18,18 @@ public final class Constant {
     /* instance keys */
 
 
+
+    /* game mode keys */
+    public static final String KEY_GAME_MODE = "gm";
+
+    public static final int KEY_SINGLE_PLAYER = 1;
+    public static final int KEY_MULTI_PLAYER = 2;
+    public static final int KEY_MULTI_PLAYER_LOBBY = 4;
+    public static final int KEY_MULtI_PLAYER_LOGIN = 8;
+    public static final int KEY_MULTI_PLAYER_WORD_SELECT = 16;
+    public static final int KEY_WORD_LIST = 32;
+
+
+
+
 }

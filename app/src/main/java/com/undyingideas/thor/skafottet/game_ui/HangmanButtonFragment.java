@@ -126,7 +126,9 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
             gameState = bundle.getInt(KEY_GAME_STATE);
             possibleWords.clear();
             //noinspection ConstantConditions
-            possibleWords.addAll(bundle.getStringArrayList(KEY_POSSIBLE_WORDS));
+            if (bundle.containsKey(KEY_POSSIBLE_WORDS)) {
+                possibleWords.addAll(bundle.getStringArrayList(KEY_POSSIBLE_WORDS));
+            }
         }
     }
 

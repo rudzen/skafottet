@@ -15,8 +15,10 @@ import android.widget.ListView;
 
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
 import com.undyingideas.thor.skafottet.firebase.controller.MultiplayerController;
+import com.undyingideas.thor.skafottet.multiplayer.MultiplayerLobbyAdapter;
 import com.undyingideas.thor.skafottet.multiplayer.MultiplayerPlayersAdapter;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 
@@ -37,7 +39,8 @@ public class MultiPlayerPlayerFragment extends Fragment {
     private ListView listView;
     private ArrayList<PlayerDTO> players;
     private MultiplayerController multiplayerController;
-    private MultiplayerPlayersAdapter adapter;
+    private MultiplayerPlayersAdapter playerAdapter;
+    private MultiplayerLobbyAdapter lobbyAdapter;
     private Runnable updater;
 
     @Nullable
@@ -62,9 +65,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
         if (getArguments() != null) {
             isOnline = getArguments().getBoolean(KEY_IS_ONLINE);
         }
-        if (isOnline) {
-            updateList();
-        } else {
+        if (!isOnline) {
             // read the last list used...
             try {
                 ArrayList<PlayerDTO> ply = (ArrayList<PlayerDTO>) GameUtility.s_prefereces.getObject(KEY_LAST_PLAYER_LIST, ArrayList.class);
@@ -85,7 +86,9 @@ public class MultiPlayerPlayerFragment extends Fragment {
 
         listView = (ListView) root.findViewById(R.id.multiplayer_player_list);
 
-        if (!players.isEmpty()) configureAdapter();
+        updateList();
+
+        configureAdapter();
 
         return root;
     }
@@ -125,8 +128,8 @@ public class MultiPlayerPlayerFragment extends Fragment {
     }
 
     private void configureAdapter() {
-        if (adapter == null) adapter = new MultiplayerPlayersAdapter(getActivity(), R.layout.multiplayer_player_list_row, players);
-        listView.setAdapter(adapter);
+        playerAdapter = new MultiplayerPlayersAdapter(getContext(), R.layout.multiplayer_player_list_row, players);
+        listView.setAdapter(playerAdapter);
         listView.setOnItemClickListener(new OnMultiPlayerPlayerClick(this));
     }
 
@@ -141,7 +144,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
         configureAdapter();
 
         Firebase.setAndroidContext(getActivity());
-        multiplayerController = new MultiplayerController(new Firebase("https://hangmandtu.firebaseio.com/Multiplayer"), updater);
+        multiplayerController = new MultiplayerController(new Firebase("https://hangmandtu.firebaseio.com"), updater);
     }
 
     private void onListFail() {
@@ -173,7 +176,8 @@ public class MultiPlayerPlayerFragment extends Fragment {
                 Log.d("NG", String.valueOf(id));
                 // do stuff!!!
                 multiPlayerPlayerFragment.onButtonPressed(position);
-                Snackbar.make(view, multiPlayerPlayerFragment.players.get(position).getName(), Snackbar.LENGTH_SHORT).show();
+                Log.d("firebaselogin", "login");
+                multiPlayerPlayerFragment.multiplayerController.login(multiPlayerPlayerFragment.players.get(position).getName());
             }
         }
     }
@@ -188,20 +192,21 @@ public class MultiPlayerPlayerFragment extends Fragment {
     private class UpdateList implements Runnable {
         @Override
         public void run() {
-            Log.d("firebase", "Updater in action");
-
-            players.clear();
-            players.addAll(multiplayerController.pc.playerList.values());
-
-            Log.d("firebase", players.toString());
-
-            adapter.notifyDataSetChanged();
-
-            adapter = new MultiplayerPlayersAdapter(getActivity(), R.layout.multiplayer_player_list_row, players);
-            listView.setAdapter(adapter);
-
-            GameUtility.s_prefereces.putObject(KEY_LAST_PLAYER_LIST, players);
-
+            if (multiplayerController.name == null) {
+                playerAdapter = new MultiplayerPlayersAdapter(getContext(), R.layout.multiplayer_player_list_row, players);
+                listView.setAdapter(playerAdapter);
+                players.clear();
+                players.addAll(multiplayerController.pc.playerList.values());
+                playerAdapter.notifyDataSetChanged();
+                GameUtility.s_prefereces.putObject(KEY_LAST_PLAYER_LIST, players);
+            } else {
+                ArrayList<LobbyDTO> l = new ArrayList<>();
+                l.addAll(multiplayerController.lc.lobbyList.values());
+                Log.d("firebase", l.size() + "  " + multiplayerController.lc.lobbyList.size());
+                lobbyAdapter = new MultiplayerLobbyAdapter(getContext(), R.layout.multiplayer_player_list_row, l);
+                listView.setAdapter(lobbyAdapter);
+                lobbyAdapter.notifyDataSetChanged();
+            }
         }
     }
 
