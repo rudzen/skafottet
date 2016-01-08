@@ -124,6 +124,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
      */
     public interface OnMultiPlayerPlayerFragmentInteractionListener {
         void onPlayerClicked(final String playerName);
+        void startNewMultiplayerGame(final String opponentName, final String theWord);
     }
 
     public void onButtonPressed(final int position) {
