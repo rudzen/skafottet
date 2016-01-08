@@ -1,13 +1,13 @@
 package com.undyingideas.thor.skafottet.firebase.controller;
 
+import android.util.Log;
+
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by theis on 05-01-2016.
@@ -45,6 +45,7 @@ public class LobbyController {
     }
 
     public void addLobbyListener(String key) {
+        Log.d("firebase lobby", "addLobbyListener()");
         listeners.put(key, new LobbyListener(mpcRef));
         ref.child("MultiPlayer").child("Lobby").child(key).addChildEventListener(listeners.get(key));
     }

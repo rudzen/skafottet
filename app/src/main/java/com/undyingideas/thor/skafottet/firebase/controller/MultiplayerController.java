@@ -7,7 +7,6 @@ import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
-import com.undyingideas.thor.skafottet.firebase.DTO.WordStatus;
 import com.undyingideas.thor.skafottet.game_ui.hichscorecontent.HighScoreContent;
 import com.undyingideas.thor.skafottet.game_ui.hichscorecontent.HighScoreDTO;
 
@@ -64,6 +63,7 @@ public class MultiplayerController {
     }
 
     public void lobbyUpdate() {
+        Log.d("firebase", "lobbyUpdate MultiplayerController");
         updateHandler.post(playerUpdater);
     }
 

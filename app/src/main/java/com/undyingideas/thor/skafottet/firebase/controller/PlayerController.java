@@ -115,6 +115,7 @@ class GameListListener implements ChildEventListener {
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        Log.d("firebase LobbyListener", s + " added");
         mpc.lc.addLobbyListener(dataSnapshot.getValue().toString());
     }
 

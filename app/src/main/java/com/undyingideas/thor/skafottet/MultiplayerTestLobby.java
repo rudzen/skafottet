@@ -13,10 +13,8 @@ import android.widget.ListView;
 
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
-import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
 import com.undyingideas.thor.skafottet.firebase.controller.MultiplayerController;
 import com.undyingideas.thor.skafottet.multiplayer.MultiplayerLobbyAdapter;
-import com.undyingideas.thor.skafottet.multiplayer.MultiplayerPlayersAdapter;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -46,10 +44,12 @@ public class MultiplayerTestLobby extends AppCompatActivity implements Runnable 
         myFirebaseRef = new Firebase("https://hangmandtu.firebaseio.com");
 
         multiplayerController = new MultiplayerController(myFirebaseRef, this);
-        lobbies = multiplayerController.games;
-        multiplayerController.login(savedInstanceState.getString("name"));
-        adapter = new MultiplayerLobbyAdapter(this, R.layout.multiplayer_player_list_row, lobbies);
-        listView.setAdapter(adapter);
+//        lobbies = multiplayerController.games;
+        final Bundle bundle = getIntent().getExtras();
+        Log.d("firebase Lobby", "Navn fodret : " + bundle.getString("name"));
+        Log.d("firebase Lobby", String.valueOf(multiplayerController.login(bundle.getString("name"))));
+//        adapter = new MultiplayerLobbyAdapter(this, R.layout.multiplayer_player_list_row, lobbies);
+//        listView.setAdapter(adapter);
         listView.setOnItemClickListener(new OnMultiPlayerPlayerClick());
 
         Log.d("firebase", "Multiplayertest started");
@@ -57,8 +57,8 @@ public class MultiplayerTestLobby extends AppCompatActivity implements Runnable 
 
     @Override
     public void run() {
-        //adapter = new MultiplayerPlayersAdapter(this, R.layout.multiplayer_player_list_row, lobbies);
-        //listView.setAdapter(adapter);
+        adapter = new MultiplayerLobbyAdapter(this, R.layout.multiplayer_player_list_row, multiplayerController.games);
+        listView.setAdapter(adapter);
         //lobbies.clear();
         //lobbies.addAll(multiplayerController.games.toArray());
         adapter.notifyDataSetChanged();

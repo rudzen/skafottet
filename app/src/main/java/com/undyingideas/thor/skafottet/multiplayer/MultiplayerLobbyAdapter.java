@@ -12,6 +12,7 @@ package com.undyingideas.thor.skafottet.multiplayer;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,6 @@ import android.widget.TextView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
-import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
 
 import java.util.ArrayList;
 
@@ -57,6 +57,7 @@ public class MultiplayerLobbyAdapter extends ArrayAdapter<LobbyDTO> {
     public View getView(final int position, final View convertView, final ViewGroup parent) {
         View view = convertView;
         if (view == null) {
+            Log.d("Lobby", "Start");
             final LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
             view = inflater.inflate(layoutResourceId, parent, false);
             viewHolder.textViewName = (TextView) view.findViewById(R.id.new_game_item);
@@ -65,6 +66,8 @@ public class MultiplayerLobbyAdapter extends ArrayAdapter<LobbyDTO> {
             viewHolder.icon.setImageResource(R.drawable.vundet);
         }
 
+
+
         final LobbyDTO dto = data.get(position);
 
         String names = "";
@@ -72,7 +75,7 @@ public class MultiplayerLobbyAdapter extends ArrayAdapter<LobbyDTO> {
             names += s.getName() + " , ";
         }
         viewHolder.textViewName.setText(names);
-
+        Log.d("Lobby", "Item added : " + names);
 
         viewHolder.textViewScore.setText("TODO");
 
