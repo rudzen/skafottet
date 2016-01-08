@@ -107,8 +107,6 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
         ordet = (TextView) root.findViewById(R.id.visibleText);
 
 
-        WindowLayout.showSnack(multiPlayerOpponent, ordet, true);
-        Toast.makeText(getContext(), multiPlayerWord, Toast.LENGTH_SHORT).show();
 
         return root;
     }
@@ -120,6 +118,8 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
         resetButtons();
         galgen.init();
         galgen.setState(gameState);
+        WindowLayout.showSnack(multiPlayerOpponent, ordet, true);
+        Toast.makeText(getContext(), multiPlayerWord, Toast.LENGTH_SHORT).show();
     }
 
     @Override
