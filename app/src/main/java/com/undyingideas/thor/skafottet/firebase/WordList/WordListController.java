@@ -33,27 +33,30 @@ public class WordListController {
     public void addList(WordListDTO wordListDTO) {
 
         ArrayList<String> words = wordListDTO.getWordList();
+        String title = wordListDTO.getTitle();
         Log.d("emil", "addlist started " + words.size());
         for(String s : words){
             Log.d("emil", s);
-            Firebase wordRef = firebase.child("Wordlist");
-            fireBaseCreate h = new fireBaseCreate(words);
+            Firebase wordRef = firebase.child("Wordlist").child(title);
+            FireBaseCreate h = new FireBaseCreate(title , words);
             wordRef.push().setValue(s);
         }
     }
 }
 
-class fireBaseCreate implements Transaction.Handler{
+class FireBaseCreate implements Transaction.Handler{
     boolean succes;
     final ArrayList<String> wordList;
-    fireBaseCreate(ArrayList<String> wordList){
+    final String title;
+    FireBaseCreate(String title,ArrayList<String> wordList){
         this.wordList = wordList;
+        this.title = title;
     }
 
     @Override
     public Transaction.Result doTransaction(MutableData mutableData) {
         if (mutableData.getValue() == null) {
-            mutableData.setValue(new WordListDTO(wordList));
+            mutableData.setValue(new WordListDTO(title,wordList));
             return Transaction.success(mutableData);
         } else {
             return Transaction.abort();
@@ -75,7 +78,8 @@ class WordGetter implements ChildEventListener {
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        wlcRef.addList(getDTO(dataSnapshot));
+        wlcRef.wordList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
+        Log.d("emil", dataSnapshot.toString());
         }
 
     @Override
@@ -110,4 +114,5 @@ class WordGetter implements ChildEventListener {
         return dto;
     }
 }
+
 
