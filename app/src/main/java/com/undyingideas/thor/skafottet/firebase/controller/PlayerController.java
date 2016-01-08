@@ -10,6 +10,8 @@ import com.firebase.client.MutableData;
 import com.firebase.client.Transaction;
 import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
 
+import java.util.HashMap;
+
 /**
  * Created by theis on 05-01-2016.
  */
@@ -17,6 +19,7 @@ public class PlayerController {
 
     final Firebase ref;
     final MultiplayerController mpcRef;
+    public HashMap<String, PlayerDTO> playerList = new HashMap<>();
 
     public PlayerController(final MultiplayerController mp, final Firebase ref){
         this.ref = ref;
@@ -55,7 +58,6 @@ class fireBaseCreate implements Transaction.Handler{
     @Override
     public void onComplete(FirebaseError firebaseError, boolean b, DataSnapshot dataSnapshot) {
         succes = b;
-        Log.d("firebase", "succes = " + b);
     }
 }
 
@@ -68,20 +70,20 @@ class NameGetter implements ChildEventListener {
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        mpcref.playerList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
+        mpcref.pc.playerList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
         mpcref.update();
     }
 
     @Override
     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-        mpcref.playerList.remove(dataSnapshot.getKey());
-        mpcref.playerList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
+        mpcref.pc.playerList.remove(dataSnapshot.getKey());
+        mpcref.pc.playerList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
         mpcref.update();
     }
 
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
-        mpcref.playerList.remove(dataSnapshot.getKey());
+        mpcref.pc.playerList.remove(dataSnapshot.getKey());
         mpcref.update();
     }
 
@@ -101,7 +103,6 @@ class NameGetter implements ChildEventListener {
         if (dataSnapshot.hasChild("gameList"))
             for(DataSnapshot ds : dataSnapshot.child("gameList").getChildren())
                 dto.getGameList().add(ds.getValue().toString());
-        Log.d("firebase dto", dto.getName() + " " + dto.getScore());
         return dto;
     }
 }
@@ -115,7 +116,6 @@ class GameListListener implements ChildEventListener {
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        Log.d("firebase LobbyListener", s + " added");
         mpc.lc.addLobbyListener(dataSnapshot.getValue().toString());
     }
 
@@ -127,7 +127,7 @@ class GameListListener implements ChildEventListener {
 
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
-        mpc.lc.removeLobbyListener(dataSnapshot.getValue().toString());
+        Log.d("firebase childremoved", dataSnapshot.toString());
     }
 
     @Override

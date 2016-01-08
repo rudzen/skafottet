@@ -17,7 +17,7 @@ public class LobbyController {
     Firebase ref;
     Firebase lobbyRef;
     final MultiplayerController mpcRef;
-    HashMap<String, ChildEventListener> listeners = new HashMap<>();
+    public HashMap<String, LobbyDTO> lobbyList = new HashMap<>();
 
     public LobbyController(final MultiplayerController mp, final Firebase ref){
         this.ref = ref;
@@ -45,12 +45,6 @@ public class LobbyController {
     }
 
     public void addLobbyListener(String key) {
-        Log.d("firebase lobby", "addLobbyListener()");
-        listeners.put(key, new LobbyListener(mpcRef));
-        ref.child("MultiPlayer").child("Lobby").child(key).addChildEventListener(listeners.get(key));
-    }
-
-    public void removeLobbyListener(String key) {
-        ref.child("MultiPlayer").child("Lobby").child(key).removeEventListener(listeners.remove(key));
+        ref.child("MultiPlayer").child("Lobby").child(key).addChildEventListener(new LobbyListener(mpcRef));
     }
 }

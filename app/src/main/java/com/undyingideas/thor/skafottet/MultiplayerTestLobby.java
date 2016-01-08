@@ -57,7 +57,9 @@ public class MultiplayerTestLobby extends AppCompatActivity implements Runnable 
 
     @Override
     public void run() {
-        adapter = new MultiplayerLobbyAdapter(this, R.layout.multiplayer_player_list_row, multiplayerController.games);
+        ArrayList<LobbyDTO> l = new ArrayList<>();
+        l.addAll(multiplayerController.lc.lobbyList.values());
+        adapter = new MultiplayerLobbyAdapter(this, R.layout.multiplayer_player_list_row,l);
         listView.setAdapter(adapter);
         //lobbies.clear();
         //lobbies.addAll(multiplayerController.games.toArray());
