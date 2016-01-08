@@ -1,6 +1,7 @@
 package com.undyingideas.thor.skafottet.firebase.controller;
 
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.firebase.client.Firebase;
@@ -12,19 +13,20 @@ import com.undyingideas.thor.skafottet.game_ui.hichscorecontent.HighScoreDTO;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 /**
  * Created by theis on 06-01-2016.
  */
 public class MultiplayerController {
+    @Nullable
     public LobbyController lc;
     public PlayerController pc;
     final Firebase ref;
+    @Nullable
     public String name;
-    private Handler updateHandler;
-    private Runnable playerUpdater;
+    private final Handler updateHandler;
+    private final Runnable playerUpdater;
 
     public MultiplayerController(final Firebase ref, final Runnable playerUpdater) {
         this.ref = ref;
@@ -33,17 +35,17 @@ public class MultiplayerController {
         this.playerUpdater = playerUpdater;
     }
 
-    public void createLobby(LobbyDTO dto) {
+    public void createLobby(final LobbyDTO dto) {
         lc.createLobby(dto);
     }
 
-    public boolean login(String name) {
+    public boolean login(final String name) {
         if (pc.playerList.containsKey(name)) {
             logout();
             this.name = name;
             pc.addListener(name);
             lc = new LobbyController(this, ref);
-            for (String key : pc.playerList.get(name).getGameList())
+            for (final String key : pc.playerList.get(name).getGameList())
             {Log.d("firebase", key); lc.addLobbyListener(key);}
             return true;
         } else return false;
@@ -65,9 +67,9 @@ public class MultiplayerController {
 
     public List<HighScoreContent.HighScoreItem> getHighScoreItems() {
         final ArrayList<PlayerDTO> players = new ArrayList<>();
-        final ArrayList<LobbyDTO> playerLobbys = new ArrayList<>();
+        final ArrayList<LobbyDTO> playerLobbys = new ArrayList<>(); // aldrig brugt?!?!
 
-        ArrayList<HighScoreDTO> playerHighScoreList = new ArrayList<>();
+        final ArrayList<HighScoreDTO> playerHighScoreList = new ArrayList<>();
 
         players.clear();
         players.addAll(pc.playerList.values());
@@ -78,18 +80,22 @@ public class MultiplayerController {
         //Then inside all lobbys we look at all players
         //If the player match with the lobby being looked at we add the score and word from the lobby.
 
-        for (PlayerDTO player : players) {
+        //Make the list that the player is in
+        final ArrayList<LobbyPlayerStatus> gameStatus = new ArrayList<>();
+
+        for (final PlayerDTO player : players) {
             //Make a HighScoreDTO
-            HighScoreDTO highScoreDTO = new HighScoreDTO(player);
-            //Make the list that the player is in
-            ArrayList<LobbyPlayerStatus> gameStatus = new ArrayList<>();
+            final HighScoreDTO highScoreDTO = new HighScoreDTO(player);
+
+            //Clear the list
+            gameStatus.clear();
 
             //Look at all lobbys where the player has a key to
-            for (String gamekey : player.getGameList()) {
+            for (final String gamekey : player.getGameList()) {
                 //I get the correct lobby status in the lobby with the key
                 //Make sure not to get null into loop
                 if (!lc.lobbyList.isEmpty()) {
-                    for (LobbyPlayerStatus status : lc.lobbyList.get(gamekey).getPlayerList()) {
+                    for (final LobbyPlayerStatus status : lc.lobbyList.get(gamekey).getPlayerList()) {
                         //I then look at all playerStatus in the lobby and compare it with the name im looking for.
                         if (status.getName().equals(player.getName())) {
                             gameStatus.add(status);
@@ -108,12 +114,12 @@ public class MultiplayerController {
         HighScoreContent.HighScoreItem item;
 
         int i = 1;
-        List<HighScoreContent.HighScoreItem> list = new ArrayList<>();
+        final List<HighScoreContent.HighScoreItem> list = new ArrayList<>();
 
       //  playerHighScoreList = sortHighScoreList(playerHighScoreList);
         Collections.sort(playerHighScoreList);
         //Now i have to make the list of highscore dtos finally.
-        for (HighScoreDTO highScoreDTO : playerHighScoreList) {
+        for (final HighScoreDTO highScoreDTO : playerHighScoreList) {
             //Add a Item with all of the players lobby words.
             item = HighScoreContent.createHighScoreItem(i++, highScoreDTO.getPlayer(), highScoreDTO.getLobbyList());
             list.add(item);

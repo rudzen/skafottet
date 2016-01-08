@@ -10,7 +10,7 @@ public class LobbyKeyDTO {
     public LobbyKeyDTO() {
     }
 
-    public LobbyKeyDTO(String key) {
+    public LobbyKeyDTO(final String key) {
         this.key = key;
     }
 
@@ -18,7 +18,7 @@ public class LobbyKeyDTO {
         return key;
     }
 
-    public void setKey(String key) {
+    public void setKey(final String key) {
         this.key = key;
     }
 }

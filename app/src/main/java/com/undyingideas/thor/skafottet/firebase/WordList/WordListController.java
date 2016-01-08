@@ -8,8 +8,6 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.MutableData;
 import com.firebase.client.Transaction;
-import com.undyingideas.thor.skafottet.wordlist.data.WordList;
-
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,20 +23,20 @@ public class WordListController {
 
 
 
-    public WordListController(Firebase firebase){
+    public WordListController(final Firebase firebase){
         this.firebase=firebase;
         this.firebase.child("WordList").addChildEventListener(new WordGetter(this));
 
     }
-    public void addList(WordListDTO wordListDTO) {
+    public void addList(final WordListDTO wordListDTO) {
 
-        ArrayList<String> words = wordListDTO.getWordList();
-        String title = wordListDTO.getTitle();
+        final ArrayList<String> words = wordListDTO.getWordList();
+        final String title = wordListDTO.getTitle();
         Log.d("emil", "addlist started " + words.size());
-        for(String s : words){
+        for(final String s : words){
             Log.d("emil", s);
-            Firebase wordRef = firebase.child("Wordlist").child(title);
-            FireBaseCreate h = new FireBaseCreate(title , words);
+            final Firebase wordRef = firebase.child("Wordlist").child(title);
+            final FireBaseCreate h = new FireBaseCreate(title , words);
             wordRef.push().setValue(s);
         }
     }
@@ -48,13 +46,13 @@ class FireBaseCreate implements Transaction.Handler{
     boolean succes;
     final ArrayList<String> wordList;
     final String title;
-    FireBaseCreate(String title,ArrayList<String> wordList){
+    FireBaseCreate(final String title, final ArrayList<String> wordList){
         this.wordList = wordList;
         this.title = title;
     }
 
     @Override
-    public Transaction.Result doTransaction(MutableData mutableData) {
+    public Transaction.Result doTransaction(final MutableData mutableData) {
         if (mutableData.getValue() == null) {
             mutableData.setValue(new WordListDTO(title,wordList));
             return Transaction.success(mutableData);
@@ -64,7 +62,7 @@ class FireBaseCreate implements Transaction.Handler{
     }
 
     @Override
-    public void onComplete(FirebaseError firebaseError, boolean b, DataSnapshot dataSnapshot) {
+    public void onComplete(final FirebaseError firebaseError, final boolean b, final DataSnapshot dataSnapshot) {
         succes = b;
         Log.d("firebase", "succes = " + b);
     }
@@ -72,39 +70,39 @@ class FireBaseCreate implements Transaction.Handler{
 
 class WordGetter implements ChildEventListener {
     final WordListController wlcRef;
-    public WordGetter(WordListController wlcRef) {
+    public WordGetter(final WordListController wlcRef) {
         this.wlcRef = wlcRef;
     }
 
     @Override
-    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+    public void onChildAdded(final DataSnapshot dataSnapshot, final String s) {
         wlcRef.wordList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
         Log.d("emil", dataSnapshot.toString());
         }
 
     @Override
-    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+    public void onChildChanged(final DataSnapshot dataSnapshot, final String s) {
         Log.d("firebaseError", "childchangede"+dataSnapshot.toString());
         }
 
     @Override
-    public void onChildRemoved(DataSnapshot dataSnapshot) {
+    public void onChildRemoved(final DataSnapshot dataSnapshot) {
 
         }
 
     @Override
-    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+    public void onChildMoved(final DataSnapshot dataSnapshot, final String s) {
         // void
     }
 
     @Override
-    public void onCancelled(FirebaseError firebaseError) {
+    public void onCancelled(final FirebaseError firebaseError) {
         // void
     }
 
-    protected WordListDTO getDTO(DataSnapshot dataSnapshot) {
-        WordListDTO dto = new WordListDTO();
-        for(DataSnapshot s : dataSnapshot.getChildren()) dto.getWordList().add(s.getValue().toString());
+    protected static WordListDTO getDTO(final DataSnapshot dataSnapshot) {
+        final WordListDTO dto = new WordListDTO();
+        for(final DataSnapshot s : dataSnapshot.getChildren()) dto.getWordList().add(s.getValue().toString());
 
         //dto.setScore(Integer.valueOf(dataSnapshot.child("score").getValue().toString()));
         //if (dataSnapshot.hasChild("gameList"))

@@ -29,6 +29,7 @@ public final class Constant {
     public static final int KEY_MULTI_PLAYER_WORD_SELECT = 16;
     public static final int KEY_WORD_LIST = 32;
 
+    public static final String KEY_GAME_LOGIC = "log";
 
 
 

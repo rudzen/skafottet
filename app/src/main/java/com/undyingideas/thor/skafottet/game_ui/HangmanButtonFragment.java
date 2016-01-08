@@ -109,7 +109,7 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ordet.setText(hangedLogic.getVisibleWord().toString());
         resetButtons();
@@ -121,12 +121,12 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState = setBundleConfig();
-        super.onSaveInstanceState(outState);
+        Bundle outState1 = setBundleConfig();
+        super.onSaveInstanceState(outState1);
     }
 
     @Override
-    public void onViewStateRestored(Bundle savedInstanceState) {
+    public void onViewStateRestored(final Bundle savedInstanceState) {
         getBundleConfig(savedInstanceState);
         super.onViewStateRestored(savedInstanceState);
     }
@@ -136,6 +136,7 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
         bundle.putBoolean(KEY_MULTIPLAYER, isHotSeat);
         bundle.putInt(KEY_GAME_STATE, gameState);
         bundle.putStringArrayList(KEY_WORD_LIST, possibleWords);
+        bundle.putParcelable(Constant.KEY_GAME_LOGIC, hangedLogic);
         return bundle;
     }
 
@@ -145,12 +146,14 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
             if (isMultiplayer) {
                 multiPlayerOpponent = bundle.getString(KEY_OPPONENT_NAME);
                 multiPlayerWord = bundle.getString(KEY_WORD_SINGLE);
+                hangedLogic = bundle.getParcelable(Constant.KEY_GAME_LOGIC);
             } else {
                 isHotSeat = bundle.getBoolean(KEY_MULTIPLAYER);
                 gameState = bundle.getInt(KEY_GAME_STATE);
                 possibleWords.clear();
                 //noinspection ConstantConditions
                 if (bundle.containsKey(KEY_WORD_LIST)) {
+                    //noinspection ConstantConditions
                     possibleWords.addAll(bundle.getStringArrayList(KEY_WORD_LIST));
                 }
             }

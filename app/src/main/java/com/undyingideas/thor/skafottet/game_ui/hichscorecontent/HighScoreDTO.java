@@ -1,5 +1,7 @@
 package com.undyingideas.thor.skafottet.game_ui.hichscorecontent;
 
+import android.support.annotation.NonNull;
+
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
 
@@ -14,7 +16,7 @@ public class HighScoreDTO implements Comparable {
     ArrayList<LobbyPlayerStatus> lobbyList;
 
 
-    public HighScoreDTO(PlayerDTO player) {
+    public HighScoreDTO(final PlayerDTO player) {
         this.player = player;
         lobbyList = new ArrayList<>();
     }
@@ -25,7 +27,7 @@ public class HighScoreDTO implements Comparable {
         return player;
     }
 
-    public void setPlayer(PlayerDTO player) {
+    public void setPlayer(final PlayerDTO player) {
         this.player = player;
     }
 
@@ -33,23 +35,21 @@ public class HighScoreDTO implements Comparable {
         return lobbyList;
     }
 
-    public void addLobbyStatus(LobbyPlayerStatus l){
+    public void addLobbyStatus(final LobbyPlayerStatus l){
         lobbyList.add(l);
     }
 
-    public void setLobbyList(ArrayList<LobbyPlayerStatus> lobbyList) {
-        this.lobbyList = lobbyList;
+    public void setLobbyList(final ArrayList<LobbyPlayerStatus> lobbyList) {
+        this.lobbyList.clear();
+        this.lobbyList.addAll(lobbyList);
     }
 
     @Override
-    public int compareTo(Object temp) {
-        HighScoreDTO other = (HighScoreDTO) temp;
+    public int compareTo(@NonNull final Object temp) {
+        final HighScoreDTO other = (HighScoreDTO) temp;
         //High score gets highest
         if(player.getScore() < other.getPlayer().getScore()){
             return 1;
-        }else if(player.getScore() > other.getPlayer().getScore()){
-            return -1;
-        }
-        else return 0;
+        }else return player.getScore() > other.getPlayer().getScore() ? -1 : 0;
     }
 }

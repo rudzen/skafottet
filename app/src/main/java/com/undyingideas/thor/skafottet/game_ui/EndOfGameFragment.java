@@ -14,6 +14,7 @@ import android.widget.ImageView;
 
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game.Hanged;
+import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 
 /**
@@ -29,7 +30,6 @@ public class EndOfGameFragment extends Fragment {
     private static final String KEY_PLAYER_THIS = "ply";
     private static final String KEY_PLAYER_OPPONENT = "opp";
     private static final String KEY_THE_WORD = "wor";
-    private static final String KEY_LOGIC = "log";
 
     private static final String TAG = "EndGameFragment";
 
@@ -56,23 +56,21 @@ public class EndOfGameFragment extends Fragment {
         final EndOfGameFragment endOfGameFragment = new EndOfGameFragment();
         final Bundle args = new Bundle();
         args.putBoolean(KEY_MULTIPLAYER, isMultiPlayer);
-        args.putParcelable(KEY_LOGIC, gameLogic);
+        args.putParcelable(Constant.KEY_GAME_LOGIC, gameLogic);
         args.putCharSequence(KEY_PLAYER_THIS, playerNames[0]);
         if (isMultiPlayer) args.putCharSequence(KEY_PLAYER_OPPONENT, playerNames[1]);
         endOfGameFragment.setArguments(args);
         return endOfGameFragment;
     }
 
-
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            if (getArguments().containsKey(KEY_LOGIC)) {
-
+            if (getArguments().containsKey(Constant.KEY_GAME_LOGIC)) {
+                // TODO : read in the stuff to local variables.
             }
         }
-
     }
 
     @Override

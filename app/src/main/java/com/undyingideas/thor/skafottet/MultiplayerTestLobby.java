@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class MultiplayerTestLobby extends AppCompatActivity implements Runnable {
 
     private ListView listView;
-    private ArrayList<LobbyDTO> lobbies = new ArrayList<>();
+    private final ArrayList<LobbyDTO> lobbies = new ArrayList<>();
     private MultiplayerController multiplayerController;
     private Firebase myFirebaseRef;
     private MultiplayerLobbyAdapter adapter;
@@ -57,7 +57,7 @@ public class MultiplayerTestLobby extends AppCompatActivity implements Runnable 
 
     @Override
     public void run() {
-        ArrayList<LobbyDTO> l = new ArrayList<>();
+        final ArrayList<LobbyDTO> l = new ArrayList<>();
         l.addAll(multiplayerController.lc.lobbyList.values());
         adapter = new MultiplayerLobbyAdapter(multiplayerController.name, this, R.layout.multiplayer_player_list_row,l);
         listView.setAdapter(adapter);
@@ -82,7 +82,7 @@ public class MultiplayerTestLobby extends AppCompatActivity implements Runnable 
 
     private static class FloatListener implements View.OnClickListener {
         @Override
-        public void onClick(View view) {
+        public void onClick(final View view) {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
     }

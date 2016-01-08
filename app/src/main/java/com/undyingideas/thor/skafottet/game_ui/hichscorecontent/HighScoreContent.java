@@ -2,8 +2,6 @@ package com.undyingideas.thor.skafottet.game_ui.hichscorecontent;
 
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
-import com.undyingideas.thor.skafottet.firebase.DTO.WordStatus;
-import com.undyingideas.thor.skafottet.highscore.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,28 +43,28 @@ public class HighScoreContent {
 //        }
 //    }
 
-    public static void initItems(int position, PlayerDTO p, ArrayList<LobbyPlayerStatus> lobby){
+    public static void initItems(final int position, final PlayerDTO p, final ArrayList<LobbyPlayerStatus> lobby){
         for (int i = 1; i <= COUNT; i++) {
             addItem(createHighScoreItem(i, p, lobby ));
         }
     }
 
-    public static void addItem(HighScoreItem item) {
+    public static void addItem(final HighScoreItem item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);
     }
 
-    public static HighScoreItem createHighScoreItem(int position, PlayerDTO player, ArrayList<LobbyPlayerStatus> gamesPlayedByPlayer)  {
+    public static HighScoreItem createHighScoreItem(final int position, final PlayerDTO player, final ArrayList<LobbyPlayerStatus> gamesPlayedByPlayer)  {
         //Creates
         return new HighScoreItem(String.valueOf(position), player.getName() + " : Score " + player.getScore(), makeDetails(position,gamesPlayedByPlayer,player.getName()));
     }
 
     //This is a list of games that the player has played.
-    public static String makeDetails(int position, ArrayList<LobbyPlayerStatus> playedGames,String playerName) {
+    public static String makeDetails(final int position, final ArrayList<LobbyPlayerStatus> playedGames, final String playerName) {
         //This list should be sorted for the player only.
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
        builder.append("Rank " + position +"\nWords Guessed\n");
-        for (LobbyPlayerStatus game : playedGames) {
+        for (final LobbyPlayerStatus game : playedGames) {
             //Adds nextline (Word : Score xxxx) to details
             if(game.getName().equals(playerName)) {
                 builder.append("\n" + game.getWordList().get(0).getWordID())
@@ -84,7 +82,7 @@ public class HighScoreContent {
         public final String content;
         public final String details;
 
-        public HighScoreItem(String id, String content, String details) {
+        public HighScoreItem(final String id, final String content, final String details) {
             this.id = id;
             this.content = content;
             this.details = details;

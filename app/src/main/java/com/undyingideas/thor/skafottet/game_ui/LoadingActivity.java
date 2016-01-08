@@ -1,6 +1,8 @@
 package com.undyingideas.thor.skafottet.game_ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,12 +12,12 @@ import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.SupportClasses.WordCollector;
 import com.undyingideas.thor.skafottet.game_ui.main_menu.MenuActivity;
 import com.undyingideas.thor.skafottet.utility.Constant;
-import com.undyingideas.thor.skafottet.utility.FontsOverride;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 import com.undyingideas.thor.skafottet.utility.TinyDB;
 import com.undyingideas.thor.skafottet.utility.WindowLayout;
 
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -47,6 +49,20 @@ public class LoadingActivity extends AppCompatActivity {
             loadingScreenWeakReference = new WeakReference<>(loadingActivity);
         }
 
+        private static void setDefaultFont(final Context context, final String staticTypefaceFieldName, final String fontAssetName) {
+            replaceFont(staticTypefaceFieldName, Typeface.createFromAsset(context.getAssets(), fontAssetName));
+        }
+
+        private static void replaceFont(final String staticTypefaceFieldName, final Typeface newTypeface) {
+            try {
+                final Field staticField = Typeface.class.getDeclaredField(staticTypefaceFieldName);
+                staticField.setAccessible(true);
+                staticField.set(null, newTypeface);
+            } catch (final Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         @Override
         protected ArrayList<String> doInBackground(final Void... params) {
             final LoadingActivity loadingActivity = loadingScreenWeakReference.get();
@@ -54,10 +70,11 @@ public class LoadingActivity extends AppCompatActivity {
                 /* This is the first code executed, thus some configuration of the application takes place.. */
                 WindowLayout.setScreenDimension(loadingActivity);
 
-                FontsOverride.setDefaultFont(loadingActivity.getApplicationContext(), "DEFAULT", Constant.DEF_FONT);
-                FontsOverride.setDefaultFont(loadingActivity.getApplicationContext(), "MONOSPACE", Constant.DEF_FONT);
-                FontsOverride.setDefaultFont(loadingActivity.getApplicationContext(), "SERIF", Constant.DEF_FONT);
-                FontsOverride.setDefaultFont(loadingActivity.getApplicationContext(), "SANS_SERIF", Constant.DEF_FONT);
+
+                setDefaultFont(loadingActivity.getApplicationContext(), "DEFAULT", Constant.DEF_FONT);
+                setDefaultFont(loadingActivity.getApplicationContext(), "MONOSPACE", Constant.DEF_FONT);
+                setDefaultFont(loadingActivity.getApplicationContext(), "SERIF", Constant.DEF_FONT);
+                setDefaultFont(loadingActivity.getApplicationContext(), "SANS_SERIF", Constant.DEF_FONT);
                 //noinspection AssignmentToStaticFieldFromInstanceMethod
                 s_prefereces = new TinyDB(loadingActivity.getApplicationContext());
 

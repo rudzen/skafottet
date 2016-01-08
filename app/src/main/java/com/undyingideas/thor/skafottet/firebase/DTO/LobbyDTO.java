@@ -13,11 +13,11 @@ public class LobbyDTO {
 
     }
 
-    public void add(LobbyPlayerStatus lps) {
+    public void add(final LobbyPlayerStatus lps) {
         this.playerList.add(lps);
     }
 
-    public LobbyDTO(ArrayList<LobbyPlayerStatus> playerList) {
+    public LobbyDTO(final ArrayList<LobbyPlayerStatus> playerList) {
         this.playerList = playerList;
     }
 
@@ -25,7 +25,7 @@ public class LobbyDTO {
         return playerList;
     }
 
-    public void setPlayerList(ArrayList<LobbyPlayerStatus> playerList) {
+    public void setPlayerList(final ArrayList<LobbyPlayerStatus> playerList) {
         this.playerList = playerList;
     }
 }

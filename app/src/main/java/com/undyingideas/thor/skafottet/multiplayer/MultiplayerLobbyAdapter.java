@@ -12,7 +12,6 @@ package com.undyingideas.thor.skafottet.multiplayer;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +32,7 @@ import java.util.ArrayList;
  * Adapter for showing multiplayer players from firebase..
  * @author rudz
  */
+@SuppressWarnings("StaticVariableOfConcreteClass")
 public class MultiplayerLobbyAdapter extends ArrayAdapter<LobbyDTO> {
 
     private final Context mContext;
@@ -71,19 +71,34 @@ public class MultiplayerLobbyAdapter extends ArrayAdapter<LobbyDTO> {
 
         final LobbyDTO dto = data.get(position);
 
-        String names = "";
-        for (LobbyPlayerStatus s : dto.getPlayerList() ){
-            if (!s.getName().equals(activePlayer))
-                names += s.getName() + " , ";
-        }
-        names = names.substring(0, names.length()-3);
-        viewHolder.textViewName.setText(names);
-        names = "";
-        for (WordStatus s : dto.getPlayerList().get(0).getWordList())
-        names += s.getScore() + " , ";
-        names = names.substring(0,names.length()-3);
-        viewHolder.textViewScore.setText(names);
+        StringBuilder sb = new StringBuilder(100);
 
+//        String names = "";
+        for (final LobbyPlayerStatus lobbyPlayerStatus : dto.getPlayerList() ){
+            if (!lobbyPlayerStatus.getName().equals(activePlayer))
+                sb.append(lobbyPlayerStatus.getName()).append(" , ");
+//                names += lobbyPlayerStatus.getName() + " , ";
+        }
+        if (sb.length() > 3) {
+            sb.delete(sb.length() - 3, sb.length());
+        }
+//        names = names.substring(0, names.length()-3);
+        viewHolder.textViewName.setText(sb.toString());
+
+        sb = new StringBuilder(100);
+        for (final WordStatus wordStatus : dto.getPlayerList().get(0).getWordList()) {
+            sb.append(wordStatus.getScore()).append(" , ");
+        }
+        if (sb.length() > 3) {
+            sb.delete(sb.length() - 3, sb.length());
+        }
+        viewHolder.textViewScore.setText(sb.toString());
+
+//        names = "";
+//        for (final WordStatus s : dto.getPlayerList().get(0).getWordList())
+//            names += s.getScore() + " , ";
+//        names = names.substring(0,names.length()-3);
+//        viewHolder.textViewScore.setText(names);
 
         return view;
     }

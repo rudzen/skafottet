@@ -17,7 +17,6 @@ import com.undyingideas.thor.skafottet.firebase.WordList.WordListDTO;
 import com.undyingideas.thor.skafottet.firebase.controller.MultiplayerController;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Instructions extends AppCompatActivity implements Runnable {
 
@@ -57,11 +56,11 @@ public class Instructions extends AppCompatActivity implements Runnable {
         wordListDog.add("Pudel");
         wordListDog.add("Granddanois");
         Log.d("emil", ""+wordListDog.size());
-        WordListDTO wlDTO = new WordListDTO("Hunde",wordListDog);
+        final WordListDTO wlDTO = new WordListDTO("Hunde",wordListDog);
         Log.d("emil", ""+wlDTO.getWordList().size());
 //        pc = new HighScoreController(myFirebaseRef,10, list,instructionDisplay);
-        WordListController wlc = new WordListController(myFirebaseRef);
-        MultiplayerController mpc = new MultiplayerController(myFirebaseRef, this);
+        final WordListController wlc = new WordListController(myFirebaseRef);
+        final MultiplayerController mpc = new MultiplayerController(myFirebaseRef, this);
 
         wlc.addList(wlDTO);
 
@@ -71,12 +70,12 @@ public class Instructions extends AppCompatActivity implements Runnable {
 
         mpc.pc.playerList.put("Rudy", new PlayerDTO("Rudy", 0, new ArrayList<String>()));
         mpc.login("Rudy");
-        WordStatus ws = new WordStatus("hej", -1);
-        ArrayList<WordStatus> ar = new ArrayList<>();
+        final WordStatus ws = new WordStatus("hej", -1);
+        final ArrayList<WordStatus> ar = new ArrayList<>();
         ar.add(ws);
-        LobbyPlayerStatus lps = new LobbyPlayerStatus("Rudy", ar);
-        LobbyPlayerStatus lps2 = new LobbyPlayerStatus("Adam", ar);
-        ArrayList<LobbyPlayerStatus> ar2 = new ArrayList<>();
+        final LobbyPlayerStatus lps = new LobbyPlayerStatus("Rudy", ar);
+        final LobbyPlayerStatus lps2 = new LobbyPlayerStatus("Adam", ar);
+        final ArrayList<LobbyPlayerStatus> ar2 = new ArrayList<>();
         ar2.add(lps);
         ar2.add(lps2);
 

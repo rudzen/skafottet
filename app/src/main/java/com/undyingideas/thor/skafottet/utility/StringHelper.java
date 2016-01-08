@@ -24,7 +24,7 @@ public class StringHelper {
 
     /* Settings for regEx matching of incomming words */
     public final static String regLowerCase = "[a-zæøå]";
-    public final static String regJavaScript = "<script[^>]*>([\\s\\S]*?)<\\/script>";
+    public final static String regJavaScript = "<script[^>]*>([\\s\\S]*?)</script>";
 
     public final static Pattern patGuess = Pattern.compile(regLowerCase);
     //Pattern.compile(regLowerCase + "|[A-ZÆØÅ]{" + Integer.toString(WORD_LENGTH) + ",}");
@@ -71,7 +71,7 @@ public class StringHelper {
      */
     public static String validFileName(String filename) {
         final int len = filename.length();
-        for (Character c : invalidChars)
+        for (final Character c : invalidChars)
             if (filename.contains(c.toString())) filename = filename.replace(c, '_');
         return filename;
     }

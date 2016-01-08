@@ -40,7 +40,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
 
     private ListView listView;
     private ArrayList<PlayerDTO> players;
-    private ArrayList<LobbyDTO> lobbys = new ArrayList<>();
+    private final ArrayList<LobbyDTO> lobbys = new ArrayList<>();
     private MultiplayerController multiplayerController;
     private MultiplayerPlayersAdapter playerAdapter;
     private MultiplayerLobbyAdapter lobbyAdapter;
@@ -71,7 +71,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
         if (!isOnline) {
             // read the last list used...
             try {
-                ArrayList<PlayerDTO> ply = (ArrayList<PlayerDTO>) GameUtility.s_prefereces.getObject(KEY_LAST_PLAYER_LIST, ArrayList.class);
+                final ArrayList<PlayerDTO> ply = (ArrayList<PlayerDTO>) GameUtility.s_prefereces.getObject(KEY_LAST_PLAYER_LIST, ArrayList.class);
                 players = new ArrayList<>();
                 players.addAll(ply);
             } catch (final Exception e) {
@@ -189,6 +189,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
                             for(final WordStatus wordStatus : lobbyPlayerStatus.getWordList()) {
                                 if (wordStatus.getScore() == -1) {
                                     Log.d("firebaseopengame", wordStatus.getWordID());
+                                    //noinspection ConstantConditions
                                     multiPlayerPlayerFragment.mListener.startNewMultiplayerGame("ib", wordStatus.getWordID());
                                     //TODO
                                     return;

@@ -28,12 +28,12 @@ public class PlayerController {
     }
 
     public void createPlayer(final String name) {
-        Firebase playersRef = ref.child("MultiPlayer").child("Players").child(name);
-        fireBaseCreate h = new fireBaseCreate(name);
+        final Firebase playersRef = ref.child("MultiPlayer").child("Players").child(name);
+        final fireBaseCreate h = new fireBaseCreate(name);
         playersRef.runTransaction(h);
     }
 
-    public void addListener(String name) {
+    public void addListener(final String name) {
         ref.child("MultiPlayer").child("Players").child(name).child("gameList").addChildEventListener(new GameListListener(mpcRef));
     }
 }
@@ -41,12 +41,12 @@ public class PlayerController {
 class fireBaseCreate implements Transaction.Handler{
     boolean succes;
     final String name;
-    fireBaseCreate(String name){
+    fireBaseCreate(final String name){
         this.name = name;
 }
 
     @Override
-    public Transaction.Result doTransaction(MutableData mutableData) {
+    public Transaction.Result doTransaction(final MutableData mutableData) {
         if (mutableData.getValue() == null) {
             mutableData.setValue(new PlayerDTO(name));
             return Transaction.success(mutableData);
@@ -56,7 +56,7 @@ class fireBaseCreate implements Transaction.Handler{
     }
 
     @Override
-    public void onComplete(FirebaseError firebaseError, boolean b, DataSnapshot dataSnapshot) {
+    public void onComplete(final FirebaseError firebaseError, final boolean b, final DataSnapshot dataSnapshot) {
         succes = b;
     }
 }
@@ -64,44 +64,44 @@ class fireBaseCreate implements Transaction.Handler{
 class NameGetter implements ChildEventListener {
     final MultiplayerController mpcref;
 
-    public NameGetter(MultiplayerController mpcref) {
+    public NameGetter(final MultiplayerController mpcref) {
         this.mpcref = mpcref;
     }
 
     @Override
-    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+    public void onChildAdded(final DataSnapshot dataSnapshot, final String s) {
         mpcref.pc.playerList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
         mpcref.update();
     }
 
     @Override
-    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+    public void onChildChanged(final DataSnapshot dataSnapshot, final String s) {
         mpcref.pc.playerList.remove(dataSnapshot.getKey());
         mpcref.pc.playerList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
         mpcref.update();
     }
 
     @Override
-    public void onChildRemoved(DataSnapshot dataSnapshot) {
+    public void onChildRemoved(final DataSnapshot dataSnapshot) {
         mpcref.pc.playerList.remove(dataSnapshot.getKey());
         mpcref.update();
     }
 
     @Override
-    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+    public void onChildMoved(final DataSnapshot dataSnapshot, final String s) {
         // void
     }
 
     @Override
-    public void onCancelled(FirebaseError firebaseError) {
+    public void onCancelled(final FirebaseError firebaseError) {
         // void
     }
 
-    protected PlayerDTO getDTO(DataSnapshot dataSnapshot) {
-        PlayerDTO dto = new PlayerDTO(dataSnapshot.getKey());
+    protected static PlayerDTO getDTO(final DataSnapshot dataSnapshot) {
+        final PlayerDTO dto = new PlayerDTO(dataSnapshot.getKey());
         dto.setScore(Integer.valueOf(dataSnapshot.child("score").getValue().toString()));
         if (dataSnapshot.hasChild("gameList"))
-            for(DataSnapshot ds : dataSnapshot.child("gameList").getChildren())
+            for(final DataSnapshot ds : dataSnapshot.child("gameList").getChildren())
                 dto.getGameList().add(ds.getValue().toString());
         return dto;
     }
@@ -110,34 +110,34 @@ class NameGetter implements ChildEventListener {
 class GameListListener implements ChildEventListener {
     final MultiplayerController mpc;
 
-    GameListListener(MultiplayerController mpc) {
+    GameListListener(final MultiplayerController mpc) {
         this.mpc = mpc;
     }
 
     @Override
-    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+    public void onChildAdded(final DataSnapshot dataSnapshot, final String s) {
         mpc.lc.addLobbyListener(dataSnapshot.getValue().toString());
     }
 
     @Override
-    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+    public void onChildChanged(final DataSnapshot dataSnapshot, final String s) {
         // shouldn't happen
         Log.d("firebaseError", "childchangede"+dataSnapshot.toString());
     }
 
     @Override
-    public void onChildRemoved(DataSnapshot dataSnapshot) {
+    public void onChildRemoved(final DataSnapshot dataSnapshot) {
         Log.d("firebase childremoved", dataSnapshot.toString());
     }
 
     @Override
-    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+    public void onChildMoved(final DataSnapshot dataSnapshot, final String s) {
         // shouldn't happen
         Log.d("firebaseError", "childMoved"+dataSnapshot.toString());
     }
 
     @Override
-    public void onCancelled(FirebaseError firebaseError) {
+    public void onCancelled(final FirebaseError firebaseError) {
         Log.d("firebaseError", "cancelled"+firebaseError.toString());
     }
 }

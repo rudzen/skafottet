@@ -17,7 +17,7 @@ public class Score implements Serializable, Comparator<Score> {
     private final String name;
     private final int score, day, month, year;
 
-    public Score(String name, int score, int day, int month, int year) {
+    public Score(final String name, final int score, final int day, final int month, final int year) {
         this.score = score;
         this.name = name;
         this.day = day;
@@ -25,7 +25,7 @@ public class Score implements Serializable, Comparator<Score> {
         this.year = year;
     }
 
-    public Score(Score s) {
+    public Score(final Score s) {
         this(s.getName(), s.getScore(), s.getDay(), s.getMonth(), s.getYear());
     }
 
@@ -50,7 +50,7 @@ public class Score implements Serializable, Comparator<Score> {
     }
 
     @Override
-    public int compare(Score o1, Score o2) {
+    public int compare(final Score o1, final Score o2) {
         if (o1.getScore() < o2.getScore()) return 1;
         if (o1.getScore() > o2.getScore()) return -1;
 

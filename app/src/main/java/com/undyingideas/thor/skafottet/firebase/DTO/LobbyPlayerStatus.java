@@ -11,7 +11,7 @@ public class LobbyPlayerStatus {
 
     public LobbyPlayerStatus(){}
 
-    public LobbyPlayerStatus(String name, ArrayList<WordStatus> wordList) {
+    public LobbyPlayerStatus(final String name, final ArrayList<WordStatus> wordList) {
         this.name = name;
         this.wordList = wordList;
     }
@@ -20,7 +20,7 @@ public class LobbyPlayerStatus {
         return wordList;
     }
 
-    public void setWordList(ArrayList<WordStatus> wordList) {
+    public void setWordList(final ArrayList<WordStatus> wordList) {
         this.wordList = wordList;
     }
 
@@ -28,7 +28,7 @@ public class LobbyPlayerStatus {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 }

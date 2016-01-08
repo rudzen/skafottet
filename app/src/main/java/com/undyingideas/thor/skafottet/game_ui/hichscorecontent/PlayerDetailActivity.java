@@ -4,11 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.undyingideas.thor.skafottet.R;
 
@@ -21,23 +21,23 @@ import com.undyingideas.thor.skafottet.R;
 public class PlayerDetailActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 Snackbar.make(view, "Challange sent!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
 
         // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
+        final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
@@ -54,10 +54,10 @@ public class PlayerDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            Bundle arguments = new Bundle();
+            final Bundle arguments = new Bundle();
             arguments.putString(PlayerDetailFragment.ARG_ITEM_ID,
                     getIntent().getStringExtra(PlayerDetailFragment.ARG_ITEM_ID));
-            PlayerDetailFragment fragment = new PlayerDetailFragment();
+            final PlayerDetailFragment fragment = new PlayerDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.player_detail_container, fragment)
@@ -66,8 +66,8 @@ public class PlayerDetailActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        final int id = item.getItemId();
         if (id == android.R.id.home) {
             // This ID represents the Home or Up button. In the case of this
             // activity, the Up button is shown. For

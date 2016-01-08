@@ -32,7 +32,7 @@ public class HighscoreManager {
         scores = new ArrayList<>();
     }
 
-    public ArrayList<Score> getScores(Context c) {
+    public ArrayList<Score> getScores(final Context c) {
         loadScoreFile(c);
         sort();
         return scores;
@@ -42,34 +42,34 @@ public class HighscoreManager {
         Collections.sort(scores, new ScoreComparator());
     }
 
-    public boolean checkScore(int score) {
+    public boolean checkScore(final int score) {
         return score >= scores.get(scores.size() - 1).getScore();
     }
 
-    public void addScore(String name, int score, Context c) {
+    public void addScore(final String name, final int score, final Context c) {
         loadScoreFile(c);
-        Calendar cal = Calendar.getInstance();
+        final Calendar cal = Calendar.getInstance();
         scores.add(new Score(name, score, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
         Collections.sort(scores, new ScoreComparator());
         if (scores.size() > 10) while (scores.size() > 10) scores.remove(scores.size() - 1);
         updateScoreFile(c);
     }
 
-    public void loadScoreFile(Context c) {
+    public void loadScoreFile(final Context c) {
         try {
-            ObjectInputStream inputStream = new ObjectInputStream(c.openFileInput(HIGHSCORE_FILE));
+            final ObjectInputStream inputStream = new ObjectInputStream(c.openFileInput(HIGHSCORE_FILE));
             scores = (ArrayList<Score>) inputStream.readObject();
             if (scores.size() < MAX) {
-                Calendar cal = Calendar.getInstance();
+                final Calendar cal = Calendar.getInstance();
                 for (int i = 1; i < MAX - scores.size(); i++) {
                     scores.add(new Score("rudz.dk", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
                 }
             }
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             Log.e("HighScore", "[Load] FNF Error: " + e.getMessage());
-        } catch (IOException e) {
+        } catch (final IOException e) {
             Log.e("HighScore", "[Load] IO Error: " + e.getMessage());
-        } catch (ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
             Log.e("HighScore", "[Load] CNF Error: " + e.getMessage());
         } finally {
             try {
@@ -77,20 +77,20 @@ public class HighscoreManager {
                     outputStream.flush();
                     outputStream.close();
                 }
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 Log.e("HighScore", "[Load] IO Error: " + e.getMessage());
             }
         }
     }
 
-    public void updateScoreFile(Context c) {
+    public void updateScoreFile(final Context c) {
         try {
             outputStream = new ObjectOutputStream(c.openFileOutput(HIGHSCORE_FILE, Context.MODE_PRIVATE));
             scores.trimToSize();
             outputStream.writeObject(scores);
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             Log.e("HighScore", "[Update] FNF Error: " + e.getMessage() + ", the program will try and make a new file");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             Log.e("HighScore", "[Update] IO Error: " + e.getMessage());
         } finally {
             try {
@@ -98,14 +98,14 @@ public class HighscoreManager {
                     outputStream.flush();
                     outputStream.close();
                 }
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 Log.e("HighScore", "[Update] Error: " + e.getMessage());
             }
         }
     }
 
     public String getHighscoreString() {
-        StringBuilder sb = new StringBuilder((MAX << 4) + (MAX << 3));
+        final StringBuilder sb = new StringBuilder((MAX << 4) + (MAX << 3));
         int x = scores.size();
         if (x > MAX) x = MAX;
         for (int i = 0; i < x; i++) {
@@ -119,12 +119,12 @@ public class HighscoreManager {
         return sb.toString();
     }
 
-    public static boolean deleteHighScore(Context c) {
+    public static boolean deleteHighScore(final Context c) {
         return c.deleteFile(HIGHSCORE_FILE);
     }
 
     private void generateDefaults() {
-        Calendar cal = Calendar.getInstance();
+        final Calendar cal = Calendar.getInstance();
         scores.clear();
         for (int i = 1; i <= MAX; i++) {
             scores.add(new Score("rudz.dk", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
@@ -141,8 +141,8 @@ public class HighscoreManager {
      *         The value to search for
      * @return the index of found value, or -1 if fails.
      */
-    public static int interpolationSearch(int[] A, int val) {
-        int len = A.length;
+    public static int interpolationSearch(final int[] A, final int val) {
+        final int len = A.length;
         if (len == 0) return -1;
         else if (len == 1 && A[0] == val) return 0;
         int mid, low = 0, high = len - 1;

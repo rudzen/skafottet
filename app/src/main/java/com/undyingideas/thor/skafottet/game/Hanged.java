@@ -95,8 +95,8 @@ public class Hanged implements Parcelable {
 
     public void guessLetter(String letter) {
         if (letter.length() != 1) return;
-        Log.d(TAG, "Der gættes på bogstavet: " + letter);
         if (visibleWord.toString().contains(letter) || isGameWon || isGameLost) return;
+        Log.d(TAG, "Der gættes på bogstavet: " + letter);
 
         usedLetters.add(letter);
 
@@ -241,9 +241,9 @@ public class Hanged implements Parcelable {
 
     private static class HangedCreator implements Creator<Hanged> {
         @Override
-        public Hanged createFromParcel(Parcel source) {return new Hanged(source);}
+        public Hanged createFromParcel(final Parcel source) {return new Hanged(source);}
 
         @Override
-        public Hanged[] newArray(int size) {return new Hanged[size];}
+        public Hanged[] newArray(final int size) {return new Hanged[size];}
     }
 }

@@ -9,7 +9,7 @@ public class WordStatus {
 
     public WordStatus(){}
 
-    public WordStatus(String wordID, int score) {
+    public WordStatus(final String wordID, final int score) {
         this.wordID = wordID;
         this.score = score;
     }
@@ -18,7 +18,7 @@ public class WordStatus {
         return wordID;
     }
 
-    public void setWordID(String wordID) {
+    public void setWordID(final String wordID) {
         this.wordID = wordID;
     }
 
@@ -26,7 +26,7 @@ public class WordStatus {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(final int score) {
         this.score = score;
     }
 }

@@ -56,6 +56,7 @@ public class YesNo extends DialogFragment {
 
         @Override
         public void onClick(final DialogInterface dialog, final int which) {
+            //noinspection ConstantConditions
             listener.onDone(re);
             dismiss();
         }

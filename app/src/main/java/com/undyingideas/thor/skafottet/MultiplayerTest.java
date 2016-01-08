@@ -73,7 +73,7 @@ public class MultiplayerTest extends AppCompatActivity implements Runnable {
         }
     }
 
-    protected void login(String name) {
+    protected void login(final String name) {
         Log.d("firebaselogin", "login");
         //startActivity(new Intent(this, MultiplayerTestLobby.class).putExtra("name", name));
         multiplayerController.login(name);
@@ -92,9 +92,9 @@ public class MultiplayerTest extends AppCompatActivity implements Runnable {
                 if(multiplayerController.name == null)
                     login(((MultiplayerTest) context).players.get(position).getName());
                 else {
-                    for (LobbyPlayerStatus s : l.get(position).getPlayerList())
+                    for (final LobbyPlayerStatus s : l.get(position).getPlayerList())
                         if (s.getName().equals(multiplayerController.name))
-                            for(WordStatus w : s.getWordList()) {
+                            for(final WordStatus w : s.getWordList()) {
                                 if (w.getScore() == -1) {
                                     Log.d("firebaseopengame", w.getWordID());
                                     //TODO
@@ -109,7 +109,7 @@ public class MultiplayerTest extends AppCompatActivity implements Runnable {
 
     private static class FloatListener implements View.OnClickListener {
         @Override
-        public void onClick(View view) {
+        public void onClick(final View view) {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
     }

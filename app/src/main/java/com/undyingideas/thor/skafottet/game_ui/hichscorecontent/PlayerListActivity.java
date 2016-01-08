@@ -4,11 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +44,7 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
     private final ArrayList<PlayerDTO> players = new ArrayList<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_list);
 
@@ -56,14 +56,14 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
 
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -83,7 +83,7 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
         }
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<HighScoreContent.HighScoreItem> items) {
+    private void setupRecyclerView(@NonNull final RecyclerView recyclerView, final List<HighScoreContent.HighScoreItem> items) {
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(items));
     }
     //This method is called on update
@@ -101,19 +101,19 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
 
         private final List<HighScoreContent.HighScoreItem> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<HighScoreContent.HighScoreItem> items) {
+        public SimpleItemRecyclerViewAdapter(final List<HighScoreContent.HighScoreItem> items) {
             mValues = items;
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
+        public ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
+            final View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.player_list_content, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.mItem = mValues.get(position);
             holder.mIdView.setText(mValues.get(position).id);
             holder.mContentView.setText(mValues.get(position).content);
@@ -132,7 +132,7 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
             public final TextView mContentView;
             public HighScoreContent.HighScoreItem mItem;
 
-            public ViewHolder(View view) {
+            public ViewHolder(final View view) {
                 super(view);
                 mView = view;
                 mIdView = (TextView) view.findViewById(R.id.id);
@@ -148,23 +148,23 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
         private class MyOnClickListener implements View.OnClickListener {
             private final ViewHolder holder;
 
-            public MyOnClickListener(ViewHolder holder) {
+            public MyOnClickListener(final ViewHolder holder) {
                 this.holder = holder;
             }
 
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 if (mTwoPane) {
-                    Bundle arguments = new Bundle();
+                    final Bundle arguments = new Bundle();
                     arguments.putString(PlayerDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-                    PlayerDetailFragment fragment = new PlayerDetailFragment();
+                    final PlayerDetailFragment fragment = new PlayerDetailFragment();
                     fragment.setArguments(arguments);
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.player_detail_container, fragment)
                             .commit();
                 } else {
-                    Context context = v.getContext();
-                    Intent intent = new Intent(context, PlayerDetailActivity.class);
+                    final Context context = v.getContext();
+                    final Intent intent = new Intent(context, PlayerDetailActivity.class);
                     intent.putExtra(PlayerDetailFragment.ARG_ITEM_ID, holder.mItem.id);
 
                     context.startActivity(intent);

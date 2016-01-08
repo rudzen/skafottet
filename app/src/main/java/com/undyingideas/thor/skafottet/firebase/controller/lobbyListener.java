@@ -1,7 +1,5 @@
 package com.undyingideas.thor.skafottet.firebase.controller;
 
-import android.util.Log;
-
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
@@ -14,42 +12,42 @@ import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
 class LobbyListener implements ChildEventListener {
     final MultiplayerController mpc;
 
-    public LobbyListener(MultiplayerController mpc) {
+    public LobbyListener(final MultiplayerController mpc) {
         this.mpc = mpc;
     }
 
     @Override
-    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+    public void onChildAdded(final DataSnapshot dataSnapshot, final String s) {
         mpc.lc.lobbyList.put(dataSnapshot.getRef().getParent().getKey(), getDTO(dataSnapshot));
         mpc.lobbyUpdate();
     }
 
     @Override
-    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+    public void onChildChanged(final DataSnapshot dataSnapshot, final String s) {
         mpc.lc.lobbyList.remove(dataSnapshot.getRef().getParent().getKey());
         mpc.lc.lobbyList.put(dataSnapshot.getRef().getParent().getKey(), getDTO(dataSnapshot));
         mpc.lobbyUpdate();
     }
 
     @Override
-    public void onChildRemoved(DataSnapshot dataSnapshot) {
+    public void onChildRemoved(final DataSnapshot dataSnapshot) {
         mpc.lc.lobbyList.remove(dataSnapshot.getRef().getParent().getKey());
         mpc.lobbyUpdate();
     }
 
     @Override
-    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+    public void onChildMoved(final DataSnapshot dataSnapshot, final String s) {
         // void
     }
 
     @Override
-    public void onCancelled(FirebaseError firebaseError) {
+    public void onCancelled(final FirebaseError firebaseError) {
         // void
     }
 
-    protected LobbyDTO getDTO(DataSnapshot ds) {
-        LobbyDTO dto = new LobbyDTO();
-        for(DataSnapshot s : ds.getChildren()) dto.add(s.getValue(LobbyPlayerStatus.class));
+    protected static LobbyDTO getDTO(final DataSnapshot ds) {
+        final LobbyDTO dto = new LobbyDTO();
+        for(final DataSnapshot s : ds.getChildren()) dto.add(s.getValue(LobbyPlayerStatus.class));
         return dto;
     }
 }

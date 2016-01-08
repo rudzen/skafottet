@@ -14,11 +14,11 @@ public class PlayerDTO {
     public PlayerDTO(){
     }
 
-    public PlayerDTO(String name) {
+    public PlayerDTO(final String name) {
         this(name, 0, new ArrayList<String>());
     }
 
-    public PlayerDTO(String name, int score, ArrayList<String> gameList) {
+    public PlayerDTO(final String name, final int score, final ArrayList<String> gameList) {
         this.name = name;
         this.score = score;
         this.gameList = gameList;
@@ -28,7 +28,7 @@ public class PlayerDTO {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -36,7 +36,7 @@ public class PlayerDTO {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(final int score) {
         this.score = score;
     }
 
@@ -44,7 +44,7 @@ public class PlayerDTO {
         return gameList;
     }
 
-    public void setGameList(ArrayList<String> gameList) {
+    public void setGameList(final ArrayList<String> gameList) {
         this.gameList = gameList;
     }
 }

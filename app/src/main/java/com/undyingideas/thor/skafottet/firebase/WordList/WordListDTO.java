@@ -1,7 +1,6 @@
 package com.undyingideas.thor.skafottet.firebase.WordList;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Emil on 08-01-2016.
@@ -13,7 +12,7 @@ public class WordListDTO  {
     public WordListDTO() {
     }
 
-    public WordListDTO(String title, ArrayList<String> wordList){
+    public WordListDTO(final String title, final ArrayList<String> wordList){
         this.title = title;
         this.wordList = wordList;
     }
@@ -22,7 +21,7 @@ public class WordListDTO  {
         return wordList;
     }
 
-    public void setWordList(ArrayList<String> wordList) {
+    public void setWordList(final ArrayList<String> wordList) {
         this.wordList = wordList;
     }
 
@@ -30,7 +29,7 @@ public class WordListDTO  {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
