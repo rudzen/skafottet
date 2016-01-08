@@ -3,6 +3,7 @@ package com.undyingideas.thor.skafottet.game_ui.hichscorecontent;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.WordStatus;
+import com.undyingideas.thor.skafottet.highscore.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,18 +58,20 @@ public class HighScoreContent {
 
     public static HighScoreItem createHighScoreItem(int position, PlayerDTO player, ArrayList<LobbyPlayerStatus> gamesPlayedByPlayer)  {
         //Creates
-        return new HighScoreItem(String.valueOf(position), player.getName() + " : Score " + player.getScore(), makeDetails(position,gamesPlayedByPlayer));
+        return new HighScoreItem(String.valueOf(position), player.getName() + " : Score " + player.getScore(), makeDetails(position,gamesPlayedByPlayer,player.getName()));
     }
 
     //This is a list of games that the player has played.
-    public static String makeDetails(int position, ArrayList<LobbyPlayerStatus> playedGames) {
+    public static String makeDetails(int position, ArrayList<LobbyPlayerStatus> playedGames,String playerName) {
         //This list should be sorted for the player only.
         StringBuilder builder = new StringBuilder();
        builder.append("Rank " + position +"\nWords Guessed\n");
-        for (int i = 0 ; i < 50 ; i ++) {
+        for (LobbyPlayerStatus game : playedGames) {
             //Adds nextline (Word : Score xxxx) to details
-            builder.append("\n" + playedGames.get(0).getWordList().get(0).getWordID())
-                    .append(" -> Score : ").append(playedGames.get(0).getWordList().get(0).getScore());
+            if(game.getName().equals(playerName)) {
+                builder.append("\n" + game.getWordList().get(0).getWordID())
+                        .append(" -> Score : ").append(game.getWordList().get(0).getScore());
+            }
         }
         return builder.toString();
     }
