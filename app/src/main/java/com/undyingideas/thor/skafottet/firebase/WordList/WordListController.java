@@ -34,6 +34,7 @@ public class WordListController {
         ArrayList<String> words;
         words =wordListDTO.getWordList();
         for(int i=0; i > words.size();i++){
+            Log.d("addord", words.get(i));
             Firebase wordRef = firebase.child("Wordlist");
             fireBaseCreate h = new fireBaseCreate(words);
             wordRef.push().setValue(words.get(i));
@@ -97,6 +98,7 @@ class WordGetter implements ChildEventListener {
     }
 
     protected WordListDTO getDTO(DataSnapshot dataSnapshot) {
+        Log.d("emil",dataSnapshot.toString());
         WordListDTO dto = new WordListDTO(dataSnapshot.getValue(WordListDTO.class));
         dto.setWordList(dataSnapshot.getValue(WordListDTO.class));
         //dto.setScore(Integer.valueOf(dataSnapshot.child("score").getValue().toString()));
