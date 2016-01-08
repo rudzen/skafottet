@@ -189,6 +189,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
                             for(final WordStatus wordStatus : lobbyPlayerStatus.getWordList()) {
                                 if (wordStatus.getScore() == -1) {
                                     Log.d("firebaseopengame", wordStatus.getWordID());
+                                    multiPlayerPlayerFragment.mListener.startNewMultiplayerGame("ib", wordStatus.getWordID());
                                     //TODO
                                     return;
                                 }
