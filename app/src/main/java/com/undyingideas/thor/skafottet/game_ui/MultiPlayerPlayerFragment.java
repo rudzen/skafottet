@@ -16,7 +16,9 @@ import android.widget.ListView;
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
+import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
+import com.undyingideas.thor.skafottet.firebase.DTO.WordStatus;
 import com.undyingideas.thor.skafottet.firebase.controller.MultiplayerController;
 import com.undyingideas.thor.skafottet.multiplayer.MultiplayerLobbyAdapter;
 import com.undyingideas.thor.skafottet.multiplayer.MultiplayerPlayersAdapter;
@@ -38,6 +40,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
 
     private ListView listView;
     private ArrayList<PlayerDTO> players;
+    private ArrayList<LobbyDTO> lobbys;
     private MultiplayerController multiplayerController;
     private MultiplayerPlayersAdapter playerAdapter;
     private MultiplayerLobbyAdapter lobbyAdapter;
@@ -177,7 +180,20 @@ public class MultiPlayerPlayerFragment extends Fragment {
                 // do stuff!!!
                 multiPlayerPlayerFragment.onButtonPressed(position);
                 Log.d("firebaselogin", "login");
-                multiPlayerPlayerFragment.multiplayerController.login(multiPlayerPlayerFragment.players.get(position).getName());
+                if(multiPlayerPlayerFragment.multiplayerController.name == null)
+                    multiPlayerPlayerFragment.multiplayerController.login(multiPlayerPlayerFragment.players.get(position).getName());
+                else {
+                    for (final LobbyPlayerStatus lobbyPlayerStatus : multiPlayerPlayerFragment.lobbys.get(position).getPlayerList())
+                        if (lobbyPlayerStatus.getName().equals(multiPlayerPlayerFragment.multiplayerController.name))
+                            for(final WordStatus wordStatus : lobbyPlayerStatus.getWordList()) {
+                                if (wordStatus.getScore() == -1) {
+                                    Log.d("firebaseopengame", wordStatus.getWordID());
+                                    //TODO
+                                    return;
+                                }
+                            }
+
+                }
             }
         }
     }
