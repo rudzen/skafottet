@@ -13,7 +13,9 @@ import android.widget.ListView;
 
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
+import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
+import com.undyingideas.thor.skafottet.firebase.DTO.WordStatus;
 import com.undyingideas.thor.skafottet.firebase.controller.MultiplayerController;
 import com.undyingideas.thor.skafottet.multiplayer.MultiplayerLobbyAdapter;
 import com.undyingideas.thor.skafottet.multiplayer.MultiplayerPlayersAdapter;
@@ -29,6 +31,7 @@ public class MultiplayerTest extends AppCompatActivity implements Runnable {
     private Firebase myFirebaseRef;
     private MultiplayerPlayersAdapter playerAdapter;
     private MultiplayerLobbyAdapter lobbyAdapter;
+    private ArrayList<LobbyDTO> l;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -62,10 +65,9 @@ public class MultiplayerTest extends AppCompatActivity implements Runnable {
             players.addAll(multiplayerController.pc.playerList.values());
             playerAdapter.notifyDataSetChanged();
         } else {
-            ArrayList<LobbyDTO> l = new ArrayList<>();
+            l = new ArrayList<>();
             l.addAll(multiplayerController.lc.lobbyList.values());
-            Log.d("firebase", ""+l.size() + "  " + multiplayerController.lc.lobbyList.size());
-            lobbyAdapter = new MultiplayerLobbyAdapter(this, R.layout.multiplayer_player_list_row, l);
+            lobbyAdapter = new MultiplayerLobbyAdapter(multiplayerController.name, this, R.layout.multiplayer_player_list_row, l);
             listView.setAdapter(lobbyAdapter);
             lobbyAdapter.notifyDataSetChanged();
         }
@@ -87,7 +89,20 @@ public class MultiplayerTest extends AppCompatActivity implements Runnable {
                 Log.d("NG", String.valueOf(id));
                 // do stuff!!!
                 Snackbar.make(view, ((MultiplayerTest) context).players.get(position).getName(), Snackbar.LENGTH_SHORT).show();
-                login(((MultiplayerTest) context).players.get(position).getName());
+                if(multiplayerController.name == null)
+                    login(((MultiplayerTest) context).players.get(position).getName());
+                else {
+                    for (LobbyPlayerStatus s : l.get(position).getPlayerList())
+                        if (s.getName().equals(multiplayerController.name))
+                            for(WordStatus w : s.getWordList()) {
+                                if (w.getScore() == -1) {
+                                    Log.d("firebaseopengame", w.getWordID());
+                                    //TODO
+                                    return;
+                                }
+                            }
+
+                }
             }
         }
     }

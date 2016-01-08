@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
+import com.undyingideas.thor.skafottet.firebase.DTO.WordStatus;
 
 import java.util.ArrayList;
 
@@ -38,10 +39,11 @@ public class MultiplayerLobbyAdapter extends ArrayAdapter<LobbyDTO> {
     private final int layoutResourceId;
     private final ArrayList<LobbyDTO> data;
     private static final ViewHolder viewHolder = new ViewHolder();
+    private final String activePlayer;
 
-    public MultiplayerLobbyAdapter(final Context mContext, final int layoutResourceId, final ArrayList<LobbyDTO> data) {
+    public MultiplayerLobbyAdapter(final String player, final Context mContext, final int layoutResourceId, final ArrayList<LobbyDTO> data) {
         super(mContext, layoutResourceId, data);
-
+        activePlayer = player;
         this.layoutResourceId = layoutResourceId;
         this.mContext = mContext;
         this.data = data;
@@ -57,7 +59,6 @@ public class MultiplayerLobbyAdapter extends ArrayAdapter<LobbyDTO> {
     public View getView(final int position, final View convertView, final ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            Log.d("Lobby", "Start");
             final LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
             view = inflater.inflate(layoutResourceId, parent, false);
             viewHolder.textViewName = (TextView) view.findViewById(R.id.new_game_item);
@@ -72,12 +73,16 @@ public class MultiplayerLobbyAdapter extends ArrayAdapter<LobbyDTO> {
 
         String names = "";
         for (LobbyPlayerStatus s : dto.getPlayerList() ){
-            names += s.getName() + " , ";
+            if (!s.getName().equals(activePlayer))
+                names += s.getName() + " , ";
         }
+        names = names.substring(0, names.length()-3);
         viewHolder.textViewName.setText(names);
-        Log.d("Lobby", "Item added : " + names);
-
-        viewHolder.textViewScore.setText("TODO");
+        names = "";
+        for (WordStatus s : dto.getPlayerList().get(0).getWordList())
+        names += s.getScore() + " , ";
+        names = names.substring(0,names.length()-3);
+        viewHolder.textViewScore.setText(names);
 
 
         return view;

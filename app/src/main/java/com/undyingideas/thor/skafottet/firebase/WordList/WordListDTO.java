@@ -6,18 +6,23 @@ import java.util.List;
 /**
  * Created by Emil on 08-01-2016.
  */
-public class WordListDTO {
-    WordListDTO(List<String> wordList){
+public class WordListDTO  {
+    ArrayList<String> wordList = new ArrayList<>();
 
+    public WordListDTO() {
     }
 
-    public List<String> getWordList() {
-        return wordList;
-    }
-
-    public void setWordList(List<String> wordList) {
+    public WordListDTO(ArrayList<String> wordList){
         this.wordList = wordList;
     }
 
-    List<String> wordList = new ArrayList<>();
+    public ArrayList<String> getWordList() {
+        return wordList;
+    }
+
+    public void setWordList(ArrayList<String> wordList) {
+        this.wordList = wordList;
+    }
+
+
 }
