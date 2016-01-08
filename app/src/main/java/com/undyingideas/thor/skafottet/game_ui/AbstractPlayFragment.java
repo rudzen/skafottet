@@ -7,7 +7,6 @@ package com.undyingideas.thor.skafottet.game_ui;
  * @author Thor
  */
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Button;
@@ -35,7 +34,7 @@ public class AbstractPlayFragment extends Fragment {
 
     protected Galgelogik logik;
     ArrayList<String> possibleWords = new ArrayList<>();
-    private boolean isHotSeat;
+    protected boolean isHotSeat;
     private String theGuess; //bruges til at holde det aktuelle gæt
     HangedView galgen;
 
@@ -110,21 +109,9 @@ public class AbstractPlayFragment extends Fragment {
     }
 
     private void StartEndgame() {// gathers need data for starting up the endgame Fragment
-        final EndOfGameFragment fragment = new EndOfGameFragment();
-        final Bundle endgame = new Bundle();
-        endgame.putBoolean("vundet", logik.erSpilletVundet());
-        endgame.putInt("forsøg", logik.getAntalForkerteBogstaver());
-        endgame.putString("ordet", logik.getOrdet());
-        endgame.putString("spiller", "Du");
-        endgame.putBoolean("wasHotSeat", isHotSeat);
-
-        fragment.setArguments(endgame);
-
-        getFragmentManager().beginTransaction().replace(R.id.fragmentindhold, fragment).commit();
-
+        // TODO : Erstat DU med spillerens navn..
+        final EndOfGameFragment endOfGameFragment = EndOfGameFragment.newInstance(logik.erSpilletVundet(), logik.getAntalForkerteBogstaver(), logik.getOrdet(), "DU", "HAM", isHotSeat);
+        getFragmentManager().beginTransaction().replace(R.id.fragment_content, endOfGameFragment).commit();
         Log.d("play", "finishing");
-
     }
-
-
 }

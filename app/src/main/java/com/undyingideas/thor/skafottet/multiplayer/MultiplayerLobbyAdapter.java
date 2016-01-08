@@ -63,7 +63,7 @@ public class MultiplayerLobbyAdapter extends ArrayAdapter<LobbyDTO> {
             viewHolder.textViewName = (TextView) view.findViewById(R.id.new_game_item);
             viewHolder.textViewScore = (TextView) view.findViewById(R.id.new_game_description);
             viewHolder.icon = (ImageView) view.findViewById(R.id.new_game_icon);
-            viewHolder.icon.setImageResource(R.drawable.vundet);
+            viewHolder.icon.setImageResource(R.drawable.game_end_won);
         }
 
 

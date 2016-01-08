@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/SpilresultaterWebView"
-        android:layout_above="@+id/nytSplBtn"
+        android:layout_above="@+id/end_game_new_game"
         android:layout_below="@+id/PokalBillede"
         android:layout_alignStart="@+id/PokalBillede"
         android:layout_alignEnd="@+id/PokalBillede" />
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:text="Afslut"
 
-        android:id="@+id/afslutBtn"
-        android:layout_alignTop="@+id/nytSplBtn"
+        android:id="@+id/end_game_quit"
+        android:layout_alignTop="@+id/end_game_new_game"
         android:layout_alignParentEnd="true" />
 </RelativeLayout>

@@ -45,7 +45,7 @@ public class FragmentMenu_OLD extends Fragment {
             final HangmanButtonFragment fragment = new HangmanButtonFragment();
             fragment.setArguments(bundle);
             getFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentindhold, fragment).addToBackStack(null)
+                    .replace(R.id.fragment_content, fragment).addToBackStack(null)
                     .commit();
         }
     }
@@ -75,7 +75,7 @@ public class FragmentMenu_OLD extends Fragment {
 
         final WordPickerFragment fragment = new WordPickerFragment();
         getFragmentManager().beginTransaction()
-               .add(R.id.fragmentindhold, fragment).addToBackStack(null)
+               .add(R.id.fragment_content, fragment).addToBackStack(null)
                 .commit();
         }
     }
@@ -88,7 +88,7 @@ public class FragmentMenu_OLD extends Fragment {
 //            multiplayerData.putStringArrayList("muligeOrd", getArguments().getStringArrayList("muligeOrd"));
             fragment.setArguments(multiplayerData);
             getFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentindhold, fragment)
+                    .replace(R.id.fragment_content, fragment)
                         .addToBackStack(null).commit();
         }
     }

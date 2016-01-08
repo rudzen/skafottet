@@ -33,18 +33,22 @@ public class MainActivity extends AppCompatActivity implements YesNo.YesNoResult
             final Bundle bundle = new Bundle();
             bundle.putStringArrayList(GameUtility.KEY_MULIGE_ORD, getIntent().getStringArrayListExtra(GameUtility.KEY_MULIGE_ORD));
 
-            final FragmentMenu_OLD fragment = new FragmentMenu_OLD();
+            final HangmanButtonFragment gameFragment = HangmanButtonFragment.newInstance(0, false);
+
+
 //            final FragmentMenu_OLD fragment = new FragmentMenu_OLD();
-            fragment.setArguments(bundle);
+//            final FragmentMenu_OLD fragment = new FragmentMenu_OLD();
+//            fragment.setArguments(bundle);
+
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragmentindhold, fragment)// tom container i layout
+                    .add(R.id.fragment_content, gameFragment)// tom container i layout
                     .addToBackStack(null)
                     .commit();
         }
 
-        Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(tb);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
@@ -58,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements YesNo.YesNoResult
             data.putString("theWord", s_possibleWord);
             startGame.setArguments(data);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragmentindhold, startGame)
+                    .add(R.id.fragment_content, startGame)
                         .addToBackStack(null)
                             .commit();
         }

@@ -43,7 +43,7 @@ public class MultiPlayerFragment extends Fragment {
             wordPickerData.putBoolean(GameUtility.KEY_IS_HOT_SEAT,true);
             hotSeatStart.setArguments(wordPickerData);
             getFragmentManager().beginTransaction().
-                    replace(R.id.fragmentindhold, hotSeatStart).commit();
+                    replace(R.id.fragment_content, hotSeatStart).commit();
         }
     }
 

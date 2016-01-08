@@ -191,7 +191,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
             Log.d("firebase", "Updater in action");
 
             players.clear();
-            players.addAll(multiplayerController.playerList.values());
+            players.addAll(multiplayerController.pc.playerList.values());
 
             Log.d("firebase", players.toString());
 

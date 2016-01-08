@@ -134,7 +134,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:contentDescription="Logo"
-        android:background="@drawable/rip"
+        android:background="@drawable/game_end_lost"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>

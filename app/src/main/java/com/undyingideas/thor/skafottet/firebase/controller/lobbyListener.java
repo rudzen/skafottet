@@ -1,5 +1,7 @@
 package com.undyingideas.thor.skafottet.firebase.controller;
 
+import android.util.Log;
+
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
@@ -18,20 +20,20 @@ class LobbyListener implements ChildEventListener {
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        mpc.lobbyList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
+        mpc.lc.lobbyList.put(dataSnapshot.getRef().getParent().getKey(), getDTO(dataSnapshot));
         mpc.lobbyUpdate();
     }
 
     @Override
     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-        mpc.lobbyList.remove(dataSnapshot.getKey());
-        mpc.lobbyList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
+        mpc.lc.lobbyList.remove(dataSnapshot.getRef().getParent().getKey());
+        mpc.lc.lobbyList.put(dataSnapshot.getRef().getParent().getKey(), getDTO(dataSnapshot));
         mpc.lobbyUpdate();
     }
 
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
-        mpc.lobbyList.remove(dataSnapshot.getKey());
+        mpc.lc.lobbyList.remove(dataSnapshot.getRef().getParent().getKey());
         mpc.lobbyUpdate();
     }
 
