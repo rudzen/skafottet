@@ -10,8 +10,10 @@ import com.firebase.client.MutableData;
 import com.firebase.client.Transaction;
 import com.undyingideas.thor.skafottet.wordlist.data.WordList;
 
+
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+
 
 /**
  * Created by Emil on 08-01-2016.
@@ -19,30 +21,30 @@ import java.util.List;
 public class WordListController {
     private final Firebase firebase;
     public HashMap<String, WordListDTO> wordList = new HashMap<>();
-    WordListController wlcRef;
 
 
 
-    WordListController(Firebase firebase){
+
+    public WordListController(Firebase firebase){
         this.firebase=firebase;
-        this.firebase.child("WordList").addChildEventListener(new WordGetter(wlcRef));
+        this.firebase.child("WordList").addChildEventListener(new WordGetter(this));
 
     }
     public void addList(WordListDTO wordListDTO) {
-        List<String> words;
+        ArrayList<String> words;
         words =wordListDTO.getWordList();
         for(int i=0; i > words.size();i++){
-            Firebase wordRef = firebase.child("Wordlist").child(words.get(i));
+            Firebase wordRef = firebase.child("Wordlist");
             fireBaseCreate h = new fireBaseCreate(words);
-            wordRef.runTransaction(h);
+            wordRef.push().setValue(words.get(i));
         }
     }
 }
 
 class fireBaseCreate implements Transaction.Handler{
     boolean succes;
-    final List<String> wordList;
-    fireBaseCreate(List<String> wordList){
+    final ArrayList<String> wordList;
+    fireBaseCreate(ArrayList<String> wordList){
         this.wordList = wordList;
     }
 
@@ -95,7 +97,8 @@ class WordGetter implements ChildEventListener {
     }
 
     protected WordListDTO getDTO(DataSnapshot dataSnapshot) {
-        WordListDTO dto = new WordListDTO((List<String>) dataSnapshot.getValue(WordListDTO.class));
+        WordListDTO dto = new WordListDTO(dataSnapshot.getValue(WordListDTO.class));
+        dto.setWordList(dataSnapshot.getValue(WordListDTO.class));
         //dto.setScore(Integer.valueOf(dataSnapshot.child("score").getValue().toString()));
         //if (dataSnapshot.hasChild("gameList"))
           //  for(DataSnapshot ds : dataSnapshot.child("gameList").getChildren())

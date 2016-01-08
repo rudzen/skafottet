@@ -11,9 +11,12 @@ import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.WordStatus;
+import com.undyingideas.thor.skafottet.firebase.WordList.WordListController;
+import com.undyingideas.thor.skafottet.firebase.WordList.WordListDTO;
 import com.undyingideas.thor.skafottet.firebase.controller.MultiplayerController;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Instructions extends AppCompatActivity implements Runnable {
 
@@ -34,6 +37,7 @@ public class Instructions extends AppCompatActivity implements Runnable {
     Firebase myFirebaseRef;
     HighScoreController pc;
     ArrayList<PlayerScore> list;
+    ArrayList<String> wordListDog = new ArrayList<>();
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -48,10 +52,15 @@ public class Instructions extends AppCompatActivity implements Runnable {
         //limit = 10,
 
         list = new ArrayList<>();
-
+        wordListDog.add("scæfer");
+        wordListDog.add("Pudel");
+        wordListDog.add("Granddanois");
+        WordListDTO wlDTO = new WordListDTO(wordListDog);
 //        pc = new HighScoreController(myFirebaseRef,10, list,instructionDisplay);
-
+        WordListController wlc = new WordListController(myFirebaseRef);
         MultiplayerController mpc = new MultiplayerController(myFirebaseRef, this);
+
+        wlc.addList(wlDTO);
 
         mpc.pc.createPlayer("Rudy");
         mpc.pc.createPlayer("Adam");
