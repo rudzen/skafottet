@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.utility.StringHelper;
 
 import java.lang.ref.WeakReference;
 import java.util.regex.Pattern;
@@ -53,7 +54,7 @@ public class AddWordListDialog extends DialogFragment {
     }
 
     public AddWordListDialog() {
-        s_validHttp = Pattern.compile("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
+        s_validHttp = Pattern.compile(StringHelper.VALID_URL);
     }
 
     private boolean isValid() {

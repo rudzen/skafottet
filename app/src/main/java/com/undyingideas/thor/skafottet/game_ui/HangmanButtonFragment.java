@@ -15,7 +15,7 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.nineoldandroids.animation.Animator;
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.game.Galgelogik;
+import com.undyingideas.thor.skafottet.game.Hanged;
 import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.views.HangedView;
@@ -41,7 +41,7 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
 
     private Bundle lastBundle;
 
-    private Galgelogik logik;
+    private Hanged hangedLogic;
     private final ArrayList<String> possibleWords = new ArrayList<>();
     private boolean isHotSeat;
     private String theGuess; //bruges til at holde det aktuelle gæt
@@ -105,15 +105,13 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
         CheckGameType();
         ordet = (TextView) root.findViewById(R.id.visibleText);
 
-
-
         return root;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ordet.setText(logik.getSynligtOrd());
+        ordet.setText(hangedLogic.getVisibleWord().toString());
         resetButtons();
         galgen.init();
         galgen.setState(gameState);
@@ -214,10 +212,10 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
     }
 
     private void updateScreen(final boolean hasUsedLettersStat, final boolean hasInputTxtField) {
-        ordet.setText(logik.getSynligtOrd());
+        ordet.setText(hangedLogic.getVisibleWord().toString());
         if (hasUsedLettersStat) usedLetters.append(theGuess);
-        if (!logik.erSidsteBogstavKorrekt()) {
-            final int wrongs = logik.getAntalForkerteBogstaver();
+        if (!hangedLogic.isLastLetterCorrect()) {
+            final int wrongs = hangedLogic.getNumWrongLetters();
             galgen.setState(wrongs);
             YoYo.with(Techniques.Landing).duration(100).playOn(galgen);
         }
@@ -229,20 +227,22 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
     }
 
     void CheckGameType() {
-        if (logik != null && logik.erSpilletSlut()) {
-            logik.nulstil();
+        if (hangedLogic != null && hangedLogic.isGameOver()) {
+            hangedLogic.reset(4);
         } else {// for det tilfældes skyld at der er tale om et nyt spil
             // TODO : Handle multiplayer shit here! :-)
             possibleWords.addAll((HashSet<String>) s_prefereces.getObject(Constant.KEY_PREF_POSSIBLE_WORDS, HashSet.class));
         }
         Log.d("Play", "CheckGameType : MultiPlayer = " + isMultiplayer);
-        logik = isMultiplayer ? new Galgelogik(multiPlayerWord) : new Galgelogik(possibleWords);
+        hangedLogic = isMultiplayer ? new Hanged(multiPlayerWord) : new Hanged(possibleWords);
     }
 
     private void StartEndgame() {// gathers need data for starting up the endgame Fragment
         // TODO : Erstat DU med spillerens navn og HAM med modstanderens navn..
-        final EndOfGameFragment endOfGameFragment = EndOfGameFragment.newInstance(logik.erSpilletVundet(), logik.getAntalForkerteBogstaver(), logik.getOrdet(), "DU", "HAM", isHotSeat);
-        getFragmentManager().beginTransaction().replace(R.id.fragment_content, endOfGameFragment).commit();
+
+//1        final EndOfGameFragment endOfGameFragment = EndOfGameFragment.newInstance(logik.erSpilletVundet(), logik.getAntalForkerteBogstaver(), logik.getOrdet(), "DU", "HAM", isHotSeat);
+        final EndOfGameFragment endOfGameFragment1 = EndOfGameFragment.newInstance(hangedLogic, isMultiplayer, "DU", "HAM");
+        getFragmentManager().beginTransaction().replace(R.id.fragment_content, endOfGameFragment1).commit();
         Log.d("play", "finishing");
     }
     void guess(final String guess, final boolean isMultiButtonInterface) {
@@ -251,14 +251,14 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
         theGuess = guess;
         if (theGuess.length() > 1) {
             theGuess = theGuess.substring(0, 1);
-            logik.gætBogstav(theGuess);
+            hangedLogic.guessLetter(theGuess);
             status.setText("Brug kun ét bogstav, resten vil blive ignoreret");
         } else {
             if (!isMultiBtn) status.setText("");
-            logik.gætBogstav(theGuess);
+            hangedLogic.guessLetter(theGuess);
         }
 
-        if (!logik.erSpilletSlut()) {
+        if (!hangedLogic.isGameOver()) {
             if (!isMultiBtn) updateScreen();
             else updateScreen(false, false); // because its the Hangman with mulityple buttons an no input fields
         } else {

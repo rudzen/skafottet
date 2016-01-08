@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.game.Hanged;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 
 /**
@@ -22,12 +23,13 @@ import com.undyingideas.thor.skafottet.utility.GameUtility;
  * @author Thor
  */
 public class EndOfGameFragment extends Fragment {
-    private static final String KEY_ATTEMPTS = "forsøg";
-    private static final String KEY_MULTIPLAYER = "wasHotSeat";
-    private static final String KEY_VUNDET = "vundet";
-    private static final String KEY_PLAYER_THIS = "spiller";
-    private static final String KEY_PLAYER_OPPONENT = "modstander";
-    private static final String KEY_THE_WORD = "ordet";
+    private static final String KEY_ATTEMPTS = "try";
+    private static final String KEY_MULTIPLAYER = "mul";
+    private static final String KEY_WON = "won";
+    private static final String KEY_PLAYER_THIS = "ply";
+    private static final String KEY_PLAYER_OPPONENT = "opp";
+    private static final String KEY_THE_WORD = "wor";
+    private static final String KEY_LOGIC = "log";
 
     private static final String TAG = "EndGameFragment";
 
@@ -40,7 +42,7 @@ public class EndOfGameFragment extends Fragment {
     public static EndOfGameFragment newInstance(final boolean isGameWon, final int wrongGuessCount, final CharSequence theWord, final CharSequence thisPlayerName, final CharSequence opponentPlayerName, final boolean isHotSeat) {
         final EndOfGameFragment endOfGameFragment = new EndOfGameFragment();
         final Bundle args = new Bundle();
-        args.putBoolean(KEY_VUNDET, isGameWon);
+        args.putBoolean(KEY_WON, isGameWon);
         args.putInt(KEY_ATTEMPTS, wrongGuessCount);
         args.putCharSequence(KEY_THE_WORD, theWord);
         args.putCharSequence(KEY_PLAYER_THIS, thisPlayerName);
@@ -48,6 +50,29 @@ public class EndOfGameFragment extends Fragment {
         args.putBoolean(KEY_MULTIPLAYER, isHotSeat);
         endOfGameFragment.setArguments(args);
         return endOfGameFragment;
+    }
+
+    public static EndOfGameFragment newInstance(final Hanged gameLogic, final boolean isMultiPlayer, final CharSequence ... playerNames) {
+        final EndOfGameFragment endOfGameFragment = new EndOfGameFragment();
+        final Bundle args = new Bundle();
+        args.putBoolean(KEY_MULTIPLAYER, isMultiPlayer);
+        args.putParcelable(KEY_LOGIC, gameLogic);
+        args.putCharSequence(KEY_PLAYER_THIS, playerNames[0]);
+        if (isMultiPlayer) args.putCharSequence(KEY_PLAYER_OPPONENT, playerNames[1]);
+        endOfGameFragment.setArguments(args);
+        return endOfGameFragment;
+    }
+
+
+    @Override
+    public void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            if (getArguments().containsKey(KEY_LOGIC)) {
+
+            }
+        }
+
     }
 
     @Override
@@ -67,9 +92,14 @@ public class EndOfGameFragment extends Fragment {
         return root;
     }
 
+    private void displayResults(final Bundle args, final boolean isMultiplayer) {
+
+    }
+
+
     private void displayResults(final Bundle gameData) {
 
-        if (gameData.getBoolean(KEY_VUNDET)) {//checkes if the game is won
+        if (gameData.getBoolean(KEY_WON)) {//checkes if the game is won
             endImage.setImageResource(R.drawable.game_end_won);
             resultText = "<html><body>Tilykke " + gameData.getCharSequence(KEY_PLAYER_THIS) + ", du har vundet <br> <br> " + gameData.getInt(KEY_PLAYER_THIS) + " gættede forkert <b> " + gameData.getInt(KEY_ATTEMPTS) + " gange</b>.</body></html>";
             resultaterDisp.loadData(resultText, "text/html; charset=UTF-8", null);
@@ -78,7 +108,7 @@ public class EndOfGameFragment extends Fragment {
             resultText = "<html><body>Du har tabt <br> <br> Ordet du ledte efter var <b> " + gameData.getString(KEY_THE_WORD) + "</b>.</body></html>";
             resultaterDisp.loadData(resultText, "text/html; charset=UTF-8", null);
         }
-        Log.d(TAG, "data: " + gameData.getString("spiller ") + " " + gameData.getString(KEY_ATTEMPTS) + " " + gameData.getBoolean(KEY_VUNDET));
+        Log.d(TAG, "data: " + gameData.getString("spiller ") + " " + gameData.getString(KEY_ATTEMPTS) + " " + gameData.getBoolean(KEY_WON));
     }
 
     private class EndGameListener implements View.OnClickListener {
