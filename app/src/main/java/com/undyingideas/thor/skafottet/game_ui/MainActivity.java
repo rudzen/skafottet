@@ -2,6 +2,7 @@ package com.undyingideas.thor.skafottet.game_ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.Window;
@@ -40,6 +41,9 @@ public class MainActivity extends AppCompatActivity implements YesNo.YesNoResult
                     .addToBackStack(null)
                     .commit();
         }
+
+        Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(tb);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }

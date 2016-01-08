@@ -52,7 +52,7 @@ public class HangedView extends View {
     @Override
     protected void onDraw(final Canvas canvas) {
         canvas.drawColor(Color.TRANSPARENT);
-        canvas.drawBitmap(Bitmap.createScaledBitmap(images.get(state), canvas.getWidth(), canvas.getHeight(), true), 0, 0, p);
+        canvas.drawBitmap(images.get(state), 0, 0, p);
         super.onDraw(canvas);
     }
 
