@@ -105,7 +105,7 @@ public class WordPickerFragment extends Fragment {
             final WordPickerFragment wordPickerFragment = wordPickerWeakReference.get();
             if (wordPickerFragment != null) {
                 // TODO : Rudz, recode
-                MainActivity.setS_possibleWord(wordPickerFragment.wordList.get(position));
+                GameActivity.setS_possibleWord(wordPickerFragment.wordList.get(position));
                 final DialogFragment nf = YesNo.newInstance("Skal ordet være?", wordPickerFragment.wordList.get(position), "Ja", "Nej");
                 Log.d("lol", "clicked");
                 nf.show(wordPickerFragment.getFragmentManager(), "newAcceptDialog");

@@ -27,7 +27,7 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.nineoldandroids.animation.Animator;
 import com.undyingideas.thor.skafottet.Instructions;
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.game_ui.MainActivity;
+import com.undyingideas.thor.skafottet.game_ui.GameActivity;
 import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.views.NewGameAdapter;
@@ -164,7 +164,7 @@ public class MenuActivity extends MenuActivityAbstract {
 
     @SuppressWarnings("unused")
     private void showMultiplayer() {
-        startActivity(new Intent(this, MainActivity.class).putExtra(Constant.KEY_MODE, Constant.MODE_MULTI_PLAYER));
+        startActivity(new Intent(this, GameActivity.class).putExtra(Constant.KEY_MODE, Constant.MODE_MULTI_PLAYER));
     }
 
     @SuppressWarnings("unused")
@@ -182,7 +182,7 @@ public class MenuActivity extends MenuActivityAbstract {
 
     @SuppressWarnings("unused")
     private void showAbout() {
-        final Intent intent = new Intent(this, MainActivity.class);
+        final Intent intent = new Intent(this, GameActivity.class);
         intent.putExtra(Constant.KEY_MODE, Constant.MODE_ABOUT);
         startActivity(intent);
     }
@@ -217,7 +217,7 @@ public class MenuActivity extends MenuActivityAbstract {
 
     @SuppressWarnings("unused")
     private void startNewGame() {
-        final Intent intent = new Intent(this, MainActivity.class);
+        final Intent intent = new Intent(this, GameActivity.class);
         intent.putExtra(Constant.KEY_MODE, Constant.MODE_SINGLE_PLAYER);
         sf.setRun(false);
         startActivity(intent);

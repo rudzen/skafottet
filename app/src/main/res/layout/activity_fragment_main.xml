@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="#ff400000"
     android:orientation="vertical"
-    tools:context=".game_ui.MainActivity">
+    tools:context=".game_ui.GameActivity">
 
     <include layout="@layout/toolbar"
              android:layout_width="match_parent"

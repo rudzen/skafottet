@@ -13,7 +13,7 @@ import com.undyingideas.thor.skafottet.dialogs.YesNo;
 import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 
-public class MainActivity extends AppCompatActivity implements
+public class GameActivity extends AppCompatActivity implements
         YesNo.YesNoResultListener,
         MultiPlayerPlayerFragment.OnMultiPlayerPlayerFragmentInteractionListener,
         EndOfGameFragment.OnEndGameButtonClickListenerInterface
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public static void setS_possibleWord(final String s_possibleWord) {
-        MainActivity.s_possibleWord = s_possibleWord;
+        GameActivity.s_possibleWord = s_possibleWord;
     }
 
     @Override
@@ -114,12 +114,12 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onPlayerClicked(final String playerName) {
-        Log.d("MainActivity", playerName + " clicked.");
+        Log.d("GameActivity", playerName + " clicked.");
     }
 
     @Override
     public void startNewMultiplayerGame(final String opponentName, final String theWord) {
-        Log.d("MainActivity", "Wan't to start new game against : " + opponentName + " with word : " + theWord);
+        Log.d("GameActivity", "Wan't to start new game against : " + opponentName + " with word : " + theWord);
         replaceFragment(HangmanGameFragment.newInstance(opponentName, theWord));
     }
 
