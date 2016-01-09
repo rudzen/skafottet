@@ -12,7 +12,6 @@ package com.undyingideas.thor.skafottet.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.os.Handler;
@@ -141,7 +140,7 @@ public class StarField extends View {
     @Override
     protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawColor(Color.TRANSPARENT);
+        //canvas.drawColor(Color.TRANSPARENT);
         for (final Star2D star : stars) {
             p.setAlpha(star.fade);
 //            if (gravity.y > 5 || gravity.y < -5)

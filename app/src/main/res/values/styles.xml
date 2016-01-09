@@ -24,4 +24,14 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="menu_button_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:contentDescription">Menu button</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
 </resources>

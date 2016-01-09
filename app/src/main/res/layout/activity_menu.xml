@@ -29,7 +29,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
-        />
+        android:background="#00ffffff"/>
 
     <ImageView
         android:id="@+id/menu_title"
@@ -56,105 +56,48 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="15dp"
         android:layout_below="@+id/menu_title">
 
         <ImageView
             android:id="@+id/menu_button_single_player"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
             android:background="@drawable/button_single_player"
-            android:clickable="true"
-            android:contentDescription="Singleplayer button"
-            android:cropToPadding="false"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            />
+            style="@style/menu_button_style"/>
 
         <ImageView
             android:id="@+id/menu_button_multi_player"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
             android:background="@drawable/button_multiplayer"
-            android:clickable="true"
-            android:contentDescription="Multiplayer button"
-            android:cropToPadding="false"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:layout_marginTop="10dp"/>
+            style="@style/menu_button_style"/>
 
         <ImageView
             android:id="@+id/menu_button_highscore"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
             android:background="@drawable/button_highscore"
-            android:clickable="true"
-            android:contentDescription="Options button"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
-            />
+            style="@style/menu_button_style"/>
 
         <ImageView
             android:id="@+id/menu_button_word_lists"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
             android:background="@drawable/button_word_lists"
-            android:clickable="true"
-            android:contentDescription="Options button"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
-            />
+            style="@style/menu_button_style"/>
 
         <ImageView
             android:id="@+id/menu_button_settings"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:clickable="true"
             android:background="@drawable/button_settings"
-            android:contentDescription="Highscore button"
-            android:cropToPadding="false"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
-            />
+            style="@style/menu_button_style"/>
 
         <ImageView
             android:id="@+id/menu_button_about"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
             android:background="@drawable/button_about"
-            android:clickable="true"
-            android:contentDescription="Options button"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
-            />
+            style="@style/menu_button_style"/>
 
         <ImageView
             android:id="@+id/menu_button_help"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
             android:background="@drawable/button_help"
-            android:clickable="true"
-            android:contentDescription="Help button"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
-            />
+            style="@style/menu_button_style"/>
 
         <ImageView
             android:id="@+id/menu_button_quit"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
             android:background="@drawable/button_end"
-            android:clickable="true"
-            android:contentDescription="Quit button"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
-            />
+            style="@style/menu_button_style"/>
 
     </LinearLayout>
 
