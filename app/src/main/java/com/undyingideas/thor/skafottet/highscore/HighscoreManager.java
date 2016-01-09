@@ -21,6 +21,7 @@ import java.util.Calendar;
 import java.util.Collections;
 
 public class HighscoreManager {
+    private static final String TAG = "HighScoreLoc";
     private ArrayList<Score> scores;
     private static final String HIGHSCORE_FILE = "scores.dat";
 
@@ -66,11 +67,11 @@ public class HighscoreManager {
                 }
             }
         } catch (final FileNotFoundException e) {
-            Log.e("HighScore", "[Load] FNF Error: " + e.getMessage());
+            Log.e(TAG, "[Load] FNF Error: " + e.getMessage());
         } catch (final IOException e) {
-            Log.e("HighScore", "[Load] IO Error: " + e.getMessage());
+            Log.e(TAG, "[Load] IO Error: " + e.getMessage());
         } catch (final ClassNotFoundException e) {
-            Log.e("HighScore", "[Load] CNF Error: " + e.getMessage());
+            Log.e(TAG, "[Load] CNF Error: " + e.getMessage());
         } finally {
             try {
                 if (outputStream != null) {
@@ -78,7 +79,7 @@ public class HighscoreManager {
                     outputStream.close();
                 }
             } catch (final IOException e) {
-                Log.e("HighScore", "[Load] IO Error: " + e.getMessage());
+                Log.e(TAG, "[Load] IO Error: " + e.getMessage());
             }
         }
     }
@@ -109,7 +110,7 @@ public class HighscoreManager {
         int x = scores.size();
         if (x > MAX) x = MAX;
         for (int i = 0; i < x; i++) {
-            sb.append((i + 1));
+            sb.append(i + 1);
             sb.append(".\t"); // padding can be inserted here if wanted!!!!
             sb.append(scores.get(i).getName());
             sb.append(" [");
@@ -125,10 +126,21 @@ public class HighscoreManager {
 
     private void generateDefaults() {
         final Calendar cal = Calendar.getInstance();
+
+        scores.add(new Score("Rudy", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+        scores.add(new Score("Thor", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+        scores.add(new Score("Adam", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+        scores.add(new Score("Emil", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+        scores.add(new Score("Theis", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+        scores.add(new Score("Christoffer", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+        scores.add(new Score("Papagøjs", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+        scores.add(new Score("Ole Olsen", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+        scores.add(new Score("Franz Jäger", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+        scores.add(new Score("Anker", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
         scores.clear();
-        for (int i = 1; i <= MAX; i++) {
-            scores.add(new Score("rudz.dk", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-        }
+//        for (int i = 1; i <= MAX; i++) {
+//            scores.add(new Score("rudz.dk", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+//        }
     }
 
     /**
@@ -150,7 +162,7 @@ public class HighscoreManager {
             mid = low + (val - A[low]) * (high - low) / (A[high] - A[low]);
             if (mid < 0) mid = 0;
             else if (mid > len - 1) mid = len;
-            else if (A[mid] < val) low = mid + 1;
+            if (A[mid] < val) low = mid + 1;
             else if (A[mid] > val) high = mid - 1;
             else return mid;
         }

@@ -13,7 +13,11 @@ import com.undyingideas.thor.skafottet.dialogs.YesNo;
 import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 
-public class MainActivity extends AppCompatActivity implements YesNo.YesNoResultListener, MultiPlayerPlayerFragment.OnMultiPlayerPlayerFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements
+        YesNo.YesNoResultListener,
+        MultiPlayerPlayerFragment.OnMultiPlayerPlayerFragmentInteractionListener,
+        EndOfGameFragment.OnEndGameButtonClickListenerInterface
+{
     
     private static String s_possibleWord;
 
@@ -46,13 +50,13 @@ public class MainActivity extends AppCompatActivity implements YesNo.YesNoResult
             gameMode = bundle.getInt(Constant.KEY_GAME_MODE);
 
             if (gameMode == Constant.KEY_SINGLE_PLAYER) {
-                addFragment(HangmanButtonFragment.newInstance(0, false, GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)));
+                addFragment(HangmanGameFragment.newInstance(0, false, GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)));
             } else if (gameMode == Constant.KEY_MULTI_PLAYER) {
                 // just show the current player list
                 addFragment(MultiPlayerPlayerFragment.newInstance(true));
             }
         } else {
-            addFragment(HangmanButtonFragment.newInstance(0, false, GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)));
+            addFragment(HangmanGameFragment.newInstance(0, false, GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)));
         }
     }
 
@@ -64,11 +68,12 @@ public class MainActivity extends AppCompatActivity implements YesNo.YesNoResult
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content, fragment).addToBackStack(null).commit();
     }
 
+
     @Override
     public void onDone(final boolean result) {
         if(result){
             Log.d("wordPicker", "WordAccepted");
-            final HangmanButtonFragment startGame = new HangmanButtonFragment();
+            final HangmanGameFragment startGame = new HangmanGameFragment();
             final Bundle data = new Bundle();
             data.putBoolean(GameUtility.KEY_IS_HOT_SEAT, true);
             data.putString("theWord", s_possibleWord);
@@ -110,6 +115,15 @@ public class MainActivity extends AppCompatActivity implements YesNo.YesNoResult
     @Override
     public void startNewMultiplayerGame(final String opponentName, final String theWord) {
         Log.d("MainActivity", "Wan't to start new game against : " + opponentName + " with word : " + theWord);
-        replaceFragment(HangmanButtonFragment.newInstance(opponentName, theWord));
+        replaceFragment(HangmanGameFragment.newInstance(opponentName, theWord));
+    }
+
+    @Override
+    public void onEndGameButtonClicked(final boolean newGame) {
+        if (newGame) {
+            replaceFragment(HangmanGameFragment.newInstance(0, false, GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)));
+        } else {
+            finish();
+        }
     }
 }

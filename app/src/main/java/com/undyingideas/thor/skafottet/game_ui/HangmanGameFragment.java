@@ -26,7 +26,7 @@ import java.util.HashSet;
 
 import static com.undyingideas.thor.skafottet.utility.GameUtility.s_prefereces;
 
-public class HangmanButtonFragment extends Fragment implements View.OnClickListener {
+public class HangmanGameFragment extends Fragment implements View.OnClickListener {
 
     private static final String KEY_MULTIPLAYER = "mp";
     private static final String KEY_GAME_STATE = "gs";
@@ -53,31 +53,31 @@ public class HangmanButtonFragment extends Fragment implements View.OnClickListe
     private TextView usedLetters, ordet, status;
     private EditText input;
 
-    public static HangmanButtonFragment newInstance(final int gameState, final boolean multiPlayer, final ArrayList<String> possibleWords) {
-        final HangmanButtonFragment hangmanButtonFragment = new HangmanButtonFragment();
+    public static HangmanGameFragment newInstance(final int gameState, final boolean multiPlayer, final ArrayList<String> possibleWords) {
+        final HangmanGameFragment hangmanGameFragment = new HangmanGameFragment();
         final Bundle args = new Bundle();
         args.putInt(KEY_GAME_STATE, gameState);
         args.putBoolean(KEY_MULTIPLAYER, multiPlayer);
         args.putStringArrayList(KEY_WORD_LIST, possibleWords);
-        hangmanButtonFragment.setArguments(args);
-        return hangmanButtonFragment;
+        hangmanGameFragment.setArguments(args);
+        return hangmanGameFragment;
     }
 
-    public static HangmanButtonFragment newInstance(final String opponentName, final String theWord) {
-        final HangmanButtonFragment hangmanButtonFragment = new HangmanButtonFragment();
+    public static HangmanGameFragment newInstance(final String opponentName, final String theWord) {
+        final HangmanGameFragment hangmanGameFragment = new HangmanGameFragment();
         final Bundle args = new Bundle();
         args.putBoolean(KEY_MULTIPLAYER, true);
         args.putString(KEY_OPPONENT_NAME, opponentName);
         args.putString(KEY_WORD_SINGLE, theWord);
-        hangmanButtonFragment.setArguments(args);
-        return hangmanButtonFragment;
+        hangmanGameFragment.setArguments(args);
+        return hangmanGameFragment;
     }
 
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)  {
         onCreate(savedInstanceState);
-        final View root = inflater.inflate(R.layout.hangman_button, container, false);
+        final View root = inflater.inflate(R.layout.fragment_hangman_game, container, false);
 
         galgen = (HangedView) root.findViewById(R.id.imageView);
 

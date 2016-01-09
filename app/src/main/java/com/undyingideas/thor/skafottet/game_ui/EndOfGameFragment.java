@@ -2,6 +2,7 @@ package com.undyingideas.thor.skafottet.game_ui;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,6 +40,9 @@ public class EndOfGameFragment extends Fragment {
     private ImageView endImage; //skal vise et vinder/taber billede, eller et straffende taberbillede
     String resultText;
 
+    @Nullable
+    private OnEndGameButtonClickListenerInterface mListener;
+
     public static EndOfGameFragment newInstance(final boolean isGameWon, final int wrongGuessCount, final CharSequence theWord, final CharSequence thisPlayerName, final CharSequence opponentPlayerName, final boolean isHotSeat) {
         final EndOfGameFragment endOfGameFragment = new EndOfGameFragment();
         final Bundle args = new Bundle();
@@ -61,6 +65,24 @@ public class EndOfGameFragment extends Fragment {
         if (isMultiPlayer) args.putCharSequence(KEY_PLAYER_OPPONENT, playerNames[1]);
         endOfGameFragment.setArguments(args);
         return endOfGameFragment;
+    }
+
+    /**
+     * As per Google's recommendation, an interface to communicate back to activity.
+     * Instructing it what to do, mainly because the fragments should not be allowed to replace themselves.
+     */
+    public interface OnEndGameButtonClickListenerInterface {
+        void onEndGameButtonClicked(final boolean newGame);
+    }
+
+    @Override
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        if (context instanceof OnEndGameButtonClickListenerInterface) {
+            mListener = (OnEndGameButtonClickListenerInterface) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement OnEndGameButtonClickListenerInterface");
+        }
     }
 
     @Override
@@ -114,8 +136,9 @@ public class EndOfGameFragment extends Fragment {
         @Override
         public void onClick(final View v) {
             Log.d(TAG, "going to start Screen");
-            final FragmentMenu_OLD fragmentMenuOLD = new FragmentMenu_OLD();
-            getFragmentManager().beginTransaction().replace(R.id.fragment_content, fragmentMenuOLD).commit();
+            mListener.onEndGameButtonClicked(false);
+//            final FragmentMenu_OLD fragmentMenuOLD = new FragmentMenu_OLD();
+//            getFragmentManager().beginTransaction().replace(R.id.fragment_content, fragmentMenuOLD).commit();
         }
     }
 
@@ -132,9 +155,9 @@ public class EndOfGameFragment extends Fragment {
                 getFragmentManager().beginTransaction().replace(R.id.fragment_content, newMultiPGame).commit();
             } else {//starting new singleplayergame
                 gameData.putBoolean(GameUtility.KEY_IS_HOT_SEAT, false);
-                final HangmanButtonFragment hangmanButtonFragment = new HangmanButtonFragment();
-                hangmanButtonFragment.setArguments(gameData);
-                getFragmentManager().beginTransaction().replace(R.id.fragment_content, hangmanButtonFragment).commit();
+                final HangmanGameFragment hangmanGameFragment = new HangmanGameFragment();
+                hangmanGameFragment.setArguments(gameData);
+                getFragmentManager().beginTransaction().replace(R.id.fragment_content, hangmanGameFragment).commit();
             }
         }
     }
