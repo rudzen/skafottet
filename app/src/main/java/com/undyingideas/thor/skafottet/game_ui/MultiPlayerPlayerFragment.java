@@ -212,7 +212,9 @@ public class MultiPlayerPlayerFragment extends Fragment {
                 players.clear();
                 players.addAll(multiplayerController.pc.playerList.values());
                 playerAdapter.notifyDataSetChanged();
-                GameUtility.s_prefereces.putObject(KEY_LAST_PLAYER_LIST, players);
+                if (players != null) {
+                    GameUtility.s_prefereces.putObject(KEY_LAST_PLAYER_LIST, players);
+                }
             } else {
                 lobbys.clear();
                 lobbys.addAll(multiplayerController.lc.lobbyList.values());

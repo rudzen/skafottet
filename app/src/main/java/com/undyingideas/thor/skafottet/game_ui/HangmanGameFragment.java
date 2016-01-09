@@ -75,10 +75,6 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
             btn.setOnClickListener(this);
         }
 
-        if (getArguments() != null) {
-            readFromBundle(getArguments());
-        }
-
         resetButtons();
 
 
@@ -88,6 +84,10 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (getArguments() != null) {
+            readFromBundle(getArguments());
+        }
+
         applySaveGameStatus();
 
         // testing :
@@ -122,7 +122,6 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
         noose.setImageResource(GameUtility.imageRefs[currentGame.getLogic().getNumWrongLetters()]);
     }
 
-
     private void readFromBundle(final Bundle bundle) {
         if (bundle != null) {
             if (bundle.containsKey(Constant.KEY_SAVE_GAME)) {
@@ -133,8 +132,13 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
     }
 
     private void resetButtons() {
+        YoYo.with(Techniques.RotateInDownLeft).duration(400).playOn(buttonRows[0]);
+        YoYo.with(Techniques.RotateInDownRight).duration(400).playOn(buttonRows[0]);
+        YoYo.with(Techniques.RotateInUpLeft).duration(400).playOn(buttonRows[0]);
+        YoYo.with(Techniques.RotateInUpRight).duration(400).playOn(buttonRows[0]);
+
         for (final Button button : listOfButtons) {
-            YoYo.with(Techniques.RollIn).duration(250).playOn(button);
+            YoYo.with(Techniques.RollIn).duration(400).playOn(button);
             button.setVisibility(View.VISIBLE);
             button.setOnClickListener(this);
         }
