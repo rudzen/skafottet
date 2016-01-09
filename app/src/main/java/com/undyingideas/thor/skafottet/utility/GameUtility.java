@@ -1,5 +1,12 @@
 package com.undyingideas.thor.skafottet.utility;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.support.annotation.DrawableRes;
 
 import com.undyingideas.thor.skafottet.R;
@@ -34,6 +41,30 @@ public abstract class GameUtility {
         imageRefs[5] = R.drawable.terror5;
         imageRefs[6] = R.drawable.terror6;
         imageRefs[7] = R.drawable.terror7;
+    }
+
+    public static Bitmap invert(final Context context, final int id) {
+        final Bitmap bm = BitmapFactory.decodeResource(context.getResources(), imageRefs[id]);
+        final Bitmap ret = Bitmap.createBitmap(bm.getWidth(), bm.getHeight(), bm.getConfig());
+        final Canvas canvas = new Canvas(ret);
+
+        final float[] m_Invert = {
+                -1f, 0f, 0f, 0f, 255f,
+                0f, -1f, 0f, 0f, 255f,
+                0f, 0f, -1f, 0f, 255f,
+                0f, 0f, 0f, 1f, 0f
+        };
+
+        final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        final ColorMatrix cm = new ColorMatrix(m_Invert);
+
+//        paint.setDither(true);
+//        paint.setAntiAlias(true);
+
+        paint.setColorFilter(new ColorMatrixColorFilter(cm));
+        canvas.drawBitmap(bm, 0, 0, paint);
+
+        return ret;
     }
 
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ "THE BEER-WARE LICENSE" (Revision 42):
+  ~ <s133235@student.dtu> wrote this file. As long as you retain this notice you
+  ~ can do whatever you want with this stuff. If we meet some day, and you think
+  ~ this stuff is worth it, you can buy me a beer in return - Rudy Alex Kohn
+  -->
+
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="90"
+        android:type="linear"
+        android:startColor="@android:color/transparent"
+        android:centerColor="@color/colorAccent"
+        android:endColor="@android:color/transparent">
+    </gradient>
+</shape>

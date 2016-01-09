@@ -1,6 +1,7 @@
 package com.undyingideas.thor.skafottet.game_ui;
 
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,12 +10,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.nineoldandroids.animation.Animator;
+import com.romainpiel.shimmer.Shimmer;
+import com.romainpiel.shimmer.ShimmerTextView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.utility.Constant;
@@ -26,13 +28,6 @@ import java.util.ArrayList;
 
 public class HangmanGameFragment extends Fragment implements View.OnClickListener {
 
-    private static final String KEY_MULTIPLAYER = "mp";
-    private static final String KEY_GAME_STATE = "gs";
-    private static final String KEY_WORD_LIST = "posw";
-    private static final String KEY_WORD_SINGLE = "sinw";
-
-    private static final String KEY_OPPONENT_NAME = "on";
-
     private final LinearLayout[] buttonRows = new LinearLayout[4];
 
     private ArrayList<Button> listOfButtons;
@@ -40,7 +35,10 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
 
     private ImageView noose;
 
-    private TextView usedLetters, textViewWord, status;
+    private ShimmerTextView textViewWord, textViewStatus;
+
+    private Vibrator vibrator;
+    private Shimmer shimmerWord, shimmerStatus;
 
     public static HangmanGameFragment newInstance(final SaveGame saveGame) {
         final HangmanGameFragment hangmanGameFragment = new HangmanGameFragment();
@@ -48,6 +46,17 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
         args.putParcelable(Constant.KEY_SAVE_GAME, saveGame);
         hangmanGameFragment.setArguments(args);
         return hangmanGameFragment;
+    }
+
+    @SuppressWarnings("AccessStaticViaInstance")
+    @Override
+    public void onCreate(final Bundle savedInstanceState) {
+        try {
+            vibrator = (Vibrator) getActivity().getSystemService(getActivity().VIBRATOR_SERVICE);
+        } catch (final Exception e) {
+            e.printStackTrace();
+        }
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -68,7 +77,8 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
             listOfButtons.addAll(getChildren(linearLayout));
         }
 
-        textViewWord = (TextView) root.findViewById(R.id.visibleText);
+        textViewWord = (ShimmerTextView) root.findViewById(R.id.hangman_game_known_letters);
+        textViewStatus = (ShimmerTextView) root.findViewById(R.id.hangman_game_status);
 
         //adding clickhandlers
         for (final Button btn : listOfButtons) {
@@ -76,7 +86,6 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
         }
 
         resetButtons();
-
 
         return root;
     }
@@ -95,6 +104,13 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
             WindowLayout.showSnack("Modstander: " + currentGame.getNames()[1], textViewWord, true);
         }
         Toast.makeText(getContext(), currentGame.getLogic().getTheWord(), Toast.LENGTH_SHORT).show();
+
+        shimmerWord = new Shimmer();
+        shimmerWord.start(textViewWord);
+        shimmerStatus = new Shimmer();
+        shimmerStatus.setDuration(600);
+        shimmerStatus.setStartDelay(200);
+        shimmerStatus.start(textViewStatus);
     }
 
     @Override
@@ -112,14 +128,25 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onPause() {
+        shimmerWord.cancel();
         GameUtility.s_prefereces.putObject(Constant.KEY_SAVE_GAME, currentGame);
         super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (shimmerWord == null) {
+            shimmerWord = new Shimmer();
+            shimmerWord.setDuration(400);
+        }
+        shimmerWord.start(textViewWord);
     }
 
     private void applySaveGameStatus() {
         textViewWord.setText(currentGame.getLogic().getVisibleWord());
         resetButtons();
-        noose.setImageResource(GameUtility.imageRefs[currentGame.getLogic().getNumWrongLetters()]);
+        noose.setImageBitmap(GameUtility.invert(getContext(), currentGame.getLogic().getNumWrongLetters()));
     }
 
     private void readFromBundle(final Bundle bundle) {
@@ -132,10 +159,12 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
     }
 
     private void resetButtons() {
-        YoYo.with(Techniques.RotateInDownLeft).duration(400).playOn(buttonRows[0]);
-        YoYo.with(Techniques.RotateInDownRight).duration(400).playOn(buttonRows[0]);
-        YoYo.with(Techniques.RotateInUpLeft).duration(400).playOn(buttonRows[0]);
-        YoYo.with(Techniques.RotateInUpRight).duration(400).playOn(buttonRows[0]);
+        YoYo.with(Techniques.Flash).duration(400).playOn(buttonRows[0]);
+        YoYo.with(Techniques.Flash).duration(400).playOn(buttonRows[1]);
+        YoYo.with(Techniques.Flash).duration(400).playOn(buttonRows[2]);
+        YoYo.with(Techniques.Flash).duration(400).playOn(buttonRows[3]);
+        YoYo.with(Techniques.Landing).duration(400).playOn(noose);
+
 
         for (final Button button : listOfButtons) {
             YoYo.with(Techniques.RollIn).duration(400).playOn(button);
@@ -188,7 +217,7 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
     private void updateScreen() {
         textViewWord.setText(currentGame.getLogic().getVisibleWord());
         if (!currentGame.getLogic().isLastLetterCorrect()) {
-            noose.setImageResource(GameUtility.imageRefs[currentGame.getLogic().getNumWrongLetters()]);
+            noose.setImageBitmap(GameUtility.invert(getContext(), currentGame.getLogic().getNumWrongLetters()));
             YoYo.with(Techniques.Landing).duration(100).playOn(noose);
         }
     }
@@ -201,6 +230,11 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
 
     private void guess(final String guess) {
         currentGame.getLogic().guessLetter(guess);
+        textViewWord.setText(currentGame.getLogic().getVisibleWord());
+        if (!currentGame.getLogic().isLastLetterCorrect()) {
+            if (vibrator != null) vibrator.vibrate(100);
+            YoYo.with(Techniques.Flash).duration(300).playOn(textViewWord);
+        }
         if (currentGame.getLogic().isGameOver()) {
             StartEndgame();
         } else {

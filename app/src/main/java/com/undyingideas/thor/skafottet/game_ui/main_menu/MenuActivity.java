@@ -12,6 +12,7 @@ package com.undyingideas.thor.skafottet.game_ui.main_menu;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -312,20 +313,25 @@ public class MenuActivity extends MenuActivityAbstract {
         public void onClick(final View v) {
             final MenuActivity menuActivity = menuActivityWeakReference.get();
             if (menuActivity != null) {
+                ((ImageView) v).setColorFilter(R.color.colorPrimaryDark, PorterDuff.Mode.MULTIPLY);
                 if (v == menuActivity.buttons[BUTTON_PLAY]) {
                     menuActivity.setMenuButtonsClickable(false);
                     menuActivity.callMethod("showNewGame");
                     menuActivity.button_clicked = BUTTON_PLAY;
                 } else if (v == menuActivity.buttons[BUTTON_HIGHSCORE]) {
+                    menuActivity.setMenuButtonsClickable(false);
                     menuActivity.endMenu("showHighScore", menuActivity.buttons[BUTTON_HIGHSCORE]);
                     menuActivity.button_clicked = BUTTON_HIGHSCORE;
                 } else if (v == menuActivity.buttons[BUTTON_WORD_LISTS]) {
+                    menuActivity.setMenuButtonsClickable(false);
                     menuActivity.endMenu("showWordList", menuActivity.buttons[BUTTON_WORD_LISTS]);
                     menuActivity.button_clicked = BUTTON_WORD_LISTS;
                 } else if (v == menuActivity.buttons[BUTTON_ABOUT]) {
+                    menuActivity.setMenuButtonsClickable(false);
                     menuActivity.endMenu("showAbout", menuActivity.buttons[BUTTON_ABOUT]);
                     menuActivity.button_clicked = BUTTON_ABOUT;
                 } else if (v == menuActivity.buttons[BUTTON_HELP]) {
+                    menuActivity.setMenuButtonsClickable(false);
                     menuActivity.endMenu("showHelp", menuActivity.buttons[BUTTON_HELP]);
                     menuActivity.button_clicked = BUTTON_HELP;
                 } else if (v == menuActivity.buttons[BUTTON_QUIT]) {
@@ -337,6 +343,7 @@ public class MenuActivity extends MenuActivityAbstract {
                     menuActivity.showAll();
                     menuActivity.button_clicked = TITLE;
                 }
+                ((ImageView) v).setColorFilter(null);
             }
         }
     }

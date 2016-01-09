@@ -37,7 +37,6 @@ public final class StringHelper {
     //'section'
 
     static {
-
         invalidChars.add(':');
         invalidChars.add('/');
         invalidChars.add('@');
@@ -70,7 +69,6 @@ public final class StringHelper {
      * @return The corrected filename string.
      */
     public static String validFileName(String filename) {
-        final int len = filename.length();
         for (final Character c : invalidChars)
             if (filename.contains(c.toString())) filename = filename.replace(c, '_');
         return filename;
