@@ -10,6 +10,8 @@ import android.view.Window;
 
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.dialogs.YesNo;
+import com.undyingideas.thor.skafottet.game.Hanged;
+import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 import com.undyingideas.thor.skafottet.utility.WindowLayout;
@@ -46,9 +48,8 @@ public class GameActivity extends AppCompatActivity implements
         if (getIntent() != null) {
             final Bundle bundle = getIntent().getExtras();
             final int gameMode = bundle.getInt(Constant.KEY_MODE);
-
             if (gameMode == Constant.MODE_SINGLE_PLAYER) {
-                addFragment(HangmanGameFragment.newInstance(0, false, GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)));
+                addFragment(HangmanGameFragment.newInstance(new SaveGame(new Hanged(GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)), false, "Du")));
             } else if (gameMode == Constant.MODE_MULTI_PLAYER) {
                 // just show the current player list
                 addFragment(MultiPlayerPlayerFragment.newInstance(true));
@@ -56,7 +57,7 @@ public class GameActivity extends AppCompatActivity implements
                 addFragment(new AboutFragment());
             }
         } else {
-            addFragment(HangmanGameFragment.newInstance(0, false, GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)));
+            addFragment(HangmanGameFragment.newInstance(new SaveGame(new Hanged(GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)), false, "Du")));
         }
     }
 
@@ -124,13 +125,14 @@ public class GameActivity extends AppCompatActivity implements
     @Override
     public void startNewMultiplayerGame(final String opponentName, final String theWord) {
         Log.d("GameActivity", "Wan't to start new game against : " + opponentName + " with word : " + theWord);
-        replaceFragment(HangmanGameFragment.newInstance(opponentName, theWord));
+        replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new Hanged(theWord), true, "Du", opponentName)));
     }
 
     @Override
     public void onEndGameButtonClicked(final boolean newGame) {
         if (newGame) {
-            replaceFragment(HangmanGameFragment.newInstance(0, false, GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)));
+            // only allowed in single player for now.
+            replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new Hanged(GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)), false, "Du")));
         } else {
             finish();
         }

@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.game.Hanged;
+import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 
@@ -39,30 +39,39 @@ public class EndOfGameFragment extends Fragment {
     private WebView resultaterDisp; //skal bruges til at vise spillets resultater, og om det er vundet etc.
     private ImageView endImage; //skal vise et vinder/taber billede, eller et straffende taberbillede
     private String resultText;
+    private SaveGame endGame;
 
     @Nullable
     private OnEndGameButtonClickListenerInterface mListener;
 
-    public static EndOfGameFragment newInstance(final boolean isGameWon, final int wrongGuessCount, final CharSequence theWord, final CharSequence thisPlayerName, final CharSequence opponentPlayerName, final boolean isHotSeat) {
-        final EndOfGameFragment endOfGameFragment = new EndOfGameFragment();
-        final Bundle args = new Bundle();
-        args.putBoolean(KEY_WON, isGameWon);
-        args.putInt(KEY_ATTEMPTS, wrongGuessCount);
-        args.putCharSequence(KEY_THE_WORD, theWord);
-        args.putCharSequence(KEY_PLAYER_THIS, thisPlayerName);
-        args.putCharSequence(KEY_PLAYER_OPPONENT, opponentPlayerName);
-        args.putBoolean(KEY_MULTIPLAYER, isHotSeat);
-        endOfGameFragment.setArguments(args);
-        return endOfGameFragment;
-    }
+//    public static EndOfGameFragment newInstance(final boolean isGameWon, final int wrongGuessCount, final CharSequence theWord, final CharSequence thisPlayerName, final CharSequence opponentPlayerName, final boolean isHotSeat) {
+//        final EndOfGameFragment endOfGameFragment = new EndOfGameFragment();
+//        final Bundle args = new Bundle();
+//        args.putBoolean(KEY_WON, isGameWon);
+//        args.putInt(KEY_ATTEMPTS, wrongGuessCount);
+//        args.putCharSequence(KEY_THE_WORD, theWord);
+//        args.putCharSequence(KEY_PLAYER_THIS, thisPlayerName);
+//        args.putCharSequence(KEY_PLAYER_OPPONENT, opponentPlayerName);
+//        args.putBoolean(KEY_MULTIPLAYER, isHotSeat);
+//        endOfGameFragment.setArguments(args);
+//        return endOfGameFragment;
+//    }
+//
+//    public static EndOfGameFragment newInstance(final Hanged gameLogic, final boolean isMultiPlayer, final CharSequence ... playerNames) {
+//        final EndOfGameFragment endOfGameFragment = new EndOfGameFragment();
+//        final Bundle args = new Bundle();
+//        args.putBoolean(KEY_MULTIPLAYER, isMultiPlayer);
+//        args.putParcelable(Constant.KEY_GAME_LOGIC, gameLogic);
+//        args.putCharSequence(KEY_PLAYER_THIS, playerNames[0]);
+//        if (isMultiPlayer) args.putCharSequence(KEY_PLAYER_OPPONENT, playerNames[1]);
+//        endOfGameFragment.setArguments(args);
+//        return endOfGameFragment;
+//    }
 
-    public static EndOfGameFragment newInstance(final Hanged gameLogic, final boolean isMultiPlayer, final CharSequence ... playerNames) {
+    public static EndOfGameFragment newInstance(final SaveGame saveGame) {
         final EndOfGameFragment endOfGameFragment = new EndOfGameFragment();
         final Bundle args = new Bundle();
-        args.putBoolean(KEY_MULTIPLAYER, isMultiPlayer);
-        args.putParcelable(Constant.KEY_GAME_LOGIC, gameLogic);
-        args.putCharSequence(KEY_PLAYER_THIS, playerNames[0]);
-        if (isMultiPlayer) args.putCharSequence(KEY_PLAYER_OPPONENT, playerNames[1]);
+        args.putParcelable(Constant.KEY_SAVE_GAME, saveGame);
         endOfGameFragment.setArguments(args);
         return endOfGameFragment;
     }
@@ -112,23 +121,26 @@ public class EndOfGameFragment extends Fragment {
         return root;
     }
 
-    private void displayResults(final Bundle args, final boolean isMultiplayer) {
-
-    }
-
-
     private void displayResults(final Bundle gameData) {
 
-        if (gameData.getBoolean(KEY_WON)) {//checkes if the game is won
-            endImage.setImageResource(R.drawable.game_end_won);
-            resultText = "<html><body>Tilykke " + gameData.getCharSequence(KEY_PLAYER_THIS) + ", du har vundet <br> <br> " + gameData.getInt(KEY_PLAYER_THIS) + " gættede forkert <b> " + gameData.getInt(KEY_ATTEMPTS) + " gange</b>.</body></html>";
-            resultaterDisp.loadData(resultText, "text/html; charset=UTF-8", null);
-        } else {// or lost
-            endImage.setImageResource(R.drawable.game_end_lost);
-            resultText = "<html><body>Du har tabt <br> <br> Ordet du ledte efter var <b> " + gameData.getString(KEY_THE_WORD) + "</b>.</body></html>";
-            resultaterDisp.loadData(resultText, "text/html; charset=UTF-8", null);
+        // if this is null, we are screwed...
+        endGame = gameData.getParcelable(Constant.KEY_SAVE_GAME);
+
+        if (endGame != null) {
+            // TODO : Re-do fragment layout ! :-)
         }
-        Log.d(TAG, "data: " + gameData.getString("spiller ") + " " + gameData.getString(KEY_ATTEMPTS) + " " + gameData.getBoolean(KEY_WON));
+
+
+//        if (gameData.getBoolean(KEY_WON)) {//checkes if the game is won
+//            endImage.setImageResource(R.drawable.game_end_won);
+//            resultText = "<html><body>Tilykke " + gameData.getCharSequence(KEY_PLAYER_THIS) + ", du har vundet <br> <br> " + gameData.getInt(KEY_PLAYER_THIS) + " gættede forkert <b> " + gameData.getInt(KEY_ATTEMPTS) + " gange</b>.</body></html>";
+//            resultaterDisp.loadData(resultText, "text/html; charset=UTF-8", null);
+//        } else {// or lost
+//            endImage.setImageResource(R.drawable.game_end_lost);
+//            resultText = "<html><body>Du har tabt <br> <br> Ordet du ledte efter var <b> " + gameData.getString(KEY_THE_WORD) + "</b>.</body></html>";
+//            resultaterDisp.loadData(resultText, "text/html; charset=UTF-8", null);
+//        }
+//        Log.d(TAG, "data: " + gameData.getString("spiller ") + " " + gameData.getString(KEY_ATTEMPTS) + " " + gameData.getBoolean(KEY_WON));
     }
 
     private class EndGameListener implements View.OnClickListener {

@@ -14,10 +14,7 @@ public final class Constant {
     /* preferences keys */
     public static final String KEY_PREF_POSSIBLE_WORDS = "possibleWords";
 
-
     /* instance keys */
-
-
 
     /* game mode keys */
     public static final String KEY_MODE = "mode";
@@ -30,11 +27,15 @@ public final class Constant {
     public static final int MODE_ABOUT = 64;
 
     public static final String KEY_GAME_LOGIC = "log";
+
+    /* firebase constants */
     public static final String FIREBASE_MULTI_PLAYER = "MultiPlayer";
     public static final String HANGMANDTU_FIREBASEIO = "https://hangmandtu.firebaseio.com/";
 
 
-    /* firebase constants */
+    /* save game keys */
+    public static final String KEY_SAVE_GAME = "svg";
+
 
 
 }
