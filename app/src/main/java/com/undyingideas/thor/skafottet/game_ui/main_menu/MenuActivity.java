@@ -12,6 +12,7 @@ package com.undyingideas.thor.skafottet.game_ui.main_menu;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -189,27 +190,24 @@ public class MenuActivity extends MenuActivityAbstract {
 
     @SuppressWarnings({"unused", "AccessStaticViaInstance"})
     private void showNewGame() {
-        // TODO : If existing game exists, put them in the list, with NEW game as the very first.
-
         final ArrayList<StartGameItem> startGameItem = new ArrayList<>(3);
         maxID = 3;
 
-        // If no previous game is in progress, don't add it to list :-)
         try {
+            // If previous game is found, add it to list :-)
             GameUtility.s_prefereces.checkForNullKey(Constant.KEY_SAVE_GAME);
             final SaveGame saveGame = (SaveGame) GameUtility.s_prefereces.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
-            if (saveGame != null) {
+            if (saveGame != null && !saveGame.getLogic().isGameOver()) {
                 startGameItem.add(new StartGameItem(0, "Fortsæt sidste spil", "Type : " + (saveGame.isMultiPlayer() ? "Multi" : "Single") + "player / Gæt : " + saveGame.getLogic().getVisibleWord(), GameUtility.imageRefs[saveGame.getLogic().getNumWrongLetters()]));
                 maxID++;
             }
-
         } catch (final NullPointerException npe) {
             // nothing happends here, it's just for not adding the option to continue a game.
         }
 
         startGameItem.add(new StartGameItem(1, "Nyt singleplayer", "Tilfældigt ord.", GameUtility.imageRefs[0]));
-        startGameItem.add(new StartGameItem(2, "Nyt multiplayer", "Udfordring.", GameUtility.imageRefs[0]));
-        startGameItem.add(new StartGameItem(3, "Nyt multiplayer", "Tværfaglig udfordring" , GameUtility.imageRefs[0]));
+        startGameItem.add(new StartGameItem(2, getString(R.string.menu_new_multi_player_game), "Udfordring.", GameUtility.imageRefs[0]));
+        startGameItem.add(new StartGameItem(3, getString(R.string.menu_new_multi_player_game), "Tværfaglig udfordring" , GameUtility.imageRefs[0]));
 
         final StartGameAdapter adapter = new StartGameAdapter(this, R.layout.new_game_list_row, startGameItem);
         final ListView listViewItems = new ListView(this);
@@ -249,6 +247,7 @@ public class MenuActivity extends MenuActivityAbstract {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void dialogQuit() {
         new MaterialDialog.Builder(this)
                 .content("Afslut svinet? KYYYYLING!?")
@@ -257,8 +256,12 @@ public class MenuActivity extends MenuActivityAbstract {
                 .positiveText(R.string.dialog_yes)
                 .negativeText(R.string.dialog_no)
                 .title("Quitos los Gamos...")
+                .backgroundColor(getResources().getColor(R.color.colorAccent))
+                .contentColor(Color.BLACK)
+                .buttonRippleColorRes(R.color.selector)
                 .show()
         ;
+//        .buttonRippleColor(Color.BLACK)
     }
 
     @SuppressWarnings("AccessStaticViaInstance")
@@ -338,6 +341,10 @@ public class MenuActivity extends MenuActivityAbstract {
                     menuActivity.setMenuButtonsClickable(false);
                     menuActivity.dialogQuit();
                     menuActivity.button_clicked = BUTTON_QUIT;
+                } else if (v == menuActivity.buttons[BUTTON_SETTINGS]) {
+                    menuActivity.setMenuButtonsClickable(false);
+                    menuActivity.endMenu("showSettings", menuActivity.buttons[BUTTON_SETTINGS]);
+                    menuActivity.button_clicked = BUTTON_SETTINGS;
                 } else if (v == menuActivity.title) {
                     // figure out some funky stuff here !!! :-)
                     menuActivity.showAll();
