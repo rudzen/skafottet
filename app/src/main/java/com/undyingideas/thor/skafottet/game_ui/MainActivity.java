@@ -21,6 +21,9 @@ public class MainActivity extends AppCompatActivity implements
     
     private static String s_possibleWord;
 
+
+    private Fragment currentFragment;
+
     /*
      1 = single player
      2 = multiplayer
@@ -47,11 +50,11 @@ public class MainActivity extends AppCompatActivity implements
 
         if (getIntent() != null) {
             final Bundle bundle = getIntent().getExtras();
-            gameMode = bundle.getInt(Constant.KEY_GAME_MODE);
+            gameMode = bundle.getInt(Constant.KEY_MODE);
 
-            if (gameMode == Constant.KEY_SINGLE_PLAYER) {
+            if (gameMode == Constant.MODE_SINGLE_PLAYER) {
                 addFragment(HangmanGameFragment.newInstance(0, false, GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)));
-            } else if (gameMode == Constant.KEY_MULTI_PLAYER) {
+            } else if (gameMode == Constant.MODE_MULTI_PLAYER) {
                 // just show the current player list
                 addFragment(MultiPlayerPlayerFragment.newInstance(true));
             }

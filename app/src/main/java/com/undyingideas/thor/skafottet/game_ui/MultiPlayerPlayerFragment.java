@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,13 +22,14 @@ import com.undyingideas.thor.skafottet.firebase.controller.MultiplayerController
 import com.undyingideas.thor.skafottet.multiplayer.MultiplayerLobbyAdapter;
 import com.undyingideas.thor.skafottet.multiplayer.MultiplayerPlayersAdapter;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
+import com.undyingideas.thor.skafottet.utility.WindowLayout;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 /**
  * This Fragment is responsible for showing the current Multiplayer players that are online.<br>
- * It presents a list of them using a custom adapter with data retrieved from the firebase db.<br>
+ * It presents a list of them using a custom adapter with data retrieved from firebase.<br>
  * @author rudz
  */
 public class MultiPlayerPlayerFragment extends Fragment {
@@ -75,7 +75,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
                 players = new ArrayList<>();
                 players.addAll(ply);
             } catch (final Exception e) {
-                onListFail();
+                WindowLayout.showSnack("Kunne ikke få fat i en spillerliste. Slå internet forbindelsen til og prøv igen.", listView, false);
             }
         }
     }
@@ -151,10 +151,6 @@ public class MultiPlayerPlayerFragment extends Fragment {
         multiplayerController = new MultiplayerController(new Firebase("https://hangmandtu.firebaseio.com"), updater);
     }
 
-    private void onListFail() {
-        Snackbar.make(listView, "Kunne ikke få fat i en spillerliste. Slå internet forbindelsen til og prøv igen.", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-    }
-
     public void setOnlineStatus(final boolean newStatus) {
         if (!isOnline && newStatus) {
             // we got connection!
@@ -195,7 +191,6 @@ public class MultiPlayerPlayerFragment extends Fragment {
                                     return;
                                 }
                             }
-
                 }
             }
         }
@@ -204,7 +199,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
     private static class FloatListener implements View.OnClickListener {
         @Override
         public void onClick(final View view) {
-            Snackbar.make(view, "Her kan der ske noget interesant! (manuel aktivering af liste opdatering?)", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            WindowLayout.showSnack("Her kan der ske noget interesant! (manuel aktivering af liste opdatering?)", view, true);
         }
     }
 

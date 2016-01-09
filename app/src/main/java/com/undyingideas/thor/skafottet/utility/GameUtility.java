@@ -12,6 +12,7 @@ public abstract class GameUtility {
 
     public static final String KEY_IS_HOT_SEAT = "isHotSeat";
     public static final String KEY_MULIGE_ORD = "muligeOrd";
+
     @SuppressWarnings("StaticVariableOfConcreteClass")
     public static WordList s_wordList;
 

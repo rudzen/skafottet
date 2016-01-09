@@ -274,7 +274,7 @@ public class MenuActivity extends MenuActivityAbstract {
 
     @SuppressWarnings("unused")
     private void showMultiplayer() {
-        startActivity(new Intent(this, MainActivity.class).putExtra(Constant.KEY_GAME_MODE, Constant.KEY_MULTI_PLAYER));
+        startActivity(new Intent(this, MainActivity.class).putExtra(Constant.KEY_MODE, Constant.MODE_MULTI_PLAYER));
     }
 
     @SuppressWarnings("unused")
@@ -311,7 +311,7 @@ public class MenuActivity extends MenuActivityAbstract {
     @SuppressWarnings("unused")
     private void startNewGame() {
         final Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(Constant.KEY_GAME_MODE, Constant.KEY_SINGLE_PLAYER);
+        intent.putExtra(Constant.KEY_MODE, Constant.MODE_SINGLE_PLAYER);
         sf.setRun(false);
         startActivity(intent);
     }
