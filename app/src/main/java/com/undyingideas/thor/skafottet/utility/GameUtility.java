@@ -22,16 +22,17 @@ public abstract class GameUtility {
     @SuppressWarnings("StaticVariableOfConcreteClass")
     public static TinyDB s_prefereces;
 
-    public static @DrawableRes int[] imageRefs = new int[7];
+    public static @DrawableRes int[] imageRefs = new int[8];
 
     static {
-        imageRefs[0] = R.drawable.galge;
-        imageRefs[1] = R.drawable.forkert1;
-        imageRefs[2] = R.drawable.forkert2;
-        imageRefs[3] = R.drawable.forkert3;
-        imageRefs[4] = R.drawable.forkert4;
-        imageRefs[5] = R.drawable.forkert5;
-        imageRefs[6] = R.drawable.forkert6;
+        imageRefs[0] = R.drawable.terror0;
+        imageRefs[1] = R.drawable.terror1;
+        imageRefs[2] = R.drawable.terror2;
+        imageRefs[3] = R.drawable.terror3;
+        imageRefs[4] = R.drawable.terror4;
+        imageRefs[5] = R.drawable.terror5;
+        imageRefs[6] = R.drawable.terror6;
+        imageRefs[7] = R.drawable.terror7;
     }
 
 }

@@ -69,7 +69,8 @@ public class MenuActivity extends MenuActivityAbstract {
 
     private MaterialDialog md;
 
-    private long newGameID = -1;
+    private int newGameID = -1;
+    private int maxID; // quick hack for the dialog ID mess
 
     private View.OnClickListener s_buttonListener;
 
@@ -192,13 +193,16 @@ public class MenuActivity extends MenuActivityAbstract {
         // TODO : If existing game exists, put them in the list, with NEW game as the very first.
 
         final ArrayList<StartGameItem> startGameItem = new ArrayList<>(3);
+        maxID = 3;
 
         // If no previous game is in progress, don't add it to list :-)
         try {
             GameUtility.s_prefereces.checkForNullKey(Constant.KEY_SAVE_GAME);
             final SaveGame saveGame = (SaveGame) GameUtility.s_prefereces.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
-            startGameItem.add(
-                    new StartGameItem(0, "Fortsæt sidste spil", "Type : " + (saveGame.isMultiPlayer() ? "Multi" : "Single") + "player / Gæt : " + saveGame.getLogic().getVisibleWord() , GameUtility.imageRefs[saveGame.getLogic().getNumWrongLetters()]));
+            if (saveGame != null) {
+                startGameItem.add(new StartGameItem(0, "Fortsæt sidste spil", "Type : " + (saveGame.isMultiPlayer() ? "Multi" : "Single") + "player / Gæt : " + saveGame.getLogic().getVisibleWord(), GameUtility.imageRefs[saveGame.getLogic().getNumWrongLetters()]));
+                maxID++;
+            }
 
         } catch (final NullPointerException npe) {
             // nothing happends here, it's just for not adding the option to continue a game.
@@ -222,6 +226,10 @@ public class MenuActivity extends MenuActivityAbstract {
     @SuppressWarnings("unused")
     private void startNewGame() {
         final Intent intent = new Intent(this, GameActivity.class);
+        if (maxID == 3) {
+            newGameID++;
+        }
+        Log.d(TAG, "Game mode started : " + newGameID);
         intent.putExtra(Constant.KEY_MODE, newGameID);
         sf.setRun(false);
         startActivity(intent);
@@ -284,11 +292,10 @@ public class MenuActivity extends MenuActivityAbstract {
             final WeakReference<Context> contextWeakReference = new WeakReference<>(view.getContext());
             final Context context = contextWeakReference.get();
             if (context != null) {
-                Log.d("NG", String.valueOf(id));
+                Log.d("NG", String.valueOf(position));
                 ((MenuActivity) context).md.dismiss();
-                ((MenuActivity) context).newGameID = id;
+                ((MenuActivity) context).newGameID = (int) id;
                 ((MenuActivity) context).endMenu("startNewGame", ((MenuActivity) context).buttons[BUTTON_PLAY]);
-                //((MenuActivity) context).startNewGame(id);
             }
         }
     }
@@ -356,7 +363,6 @@ public class MenuActivity extends MenuActivityAbstract {
                 YoYo.with(Techniques.BounceInRight).duration(700).playOn(menuActivity.buttons[4]);
                 YoYo.with(Techniques.BounceInRight).duration(700).playOn(menuActivity.buttons[5]);
                 YoYo.with(Techniques.BounceInDown).duration(600).playOn(menuActivity.buttons[6]);
-                YoYo.with(Techniques.BounceInDown).duration(500).playOn(menuActivity.buttons[7]);
                 menuActivity.click_status = true;
                 menuActivity.setMenuButtonsClickable(true);
             }
