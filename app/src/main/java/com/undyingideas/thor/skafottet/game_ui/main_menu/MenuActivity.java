@@ -42,11 +42,12 @@ import java.lang.ref.WeakReference;
  */
 public class MenuActivity extends MenuActivityAbstract {
 
-    private static final int BUTTON_COUNT = 7;
     private static final String FINISH = "finish";
     public static final int BACK_PRESSED_DELAY = 2000;
-    private final ImageView[] buttons = new ImageView[BUTTON_COUNT];
+
+    private static final int BUTTON_COUNT = 7;
     private ImageView title;
+    private final ImageView[] buttons = new ImageView[BUTTON_COUNT];
     private static final int TITLE = -1;
 
     private static final int BUTTON_CONT_GAME = 0;
@@ -66,8 +67,7 @@ public class MenuActivity extends MenuActivityAbstract {
 
     private long newGameID = -1;
 
-    private View.OnClickListener buttonListener;
-
+    private View.OnClickListener s_buttonListener;
 
     private static final String TAG = "MenuActivity";
 
@@ -76,13 +76,13 @@ public class MenuActivity extends MenuActivityAbstract {
         super.onCreate(savedInstanceState);
         // contentView is set in super class..
 
-        if (buttonListener == null) {
-            buttonListener = new MenuButtonClickHandler(this);
+        if (s_buttonListener == null) {
+            s_buttonListener = new MenuButtonClickHandler(this);
         }
 
         title = (ImageView) findViewById(R.id.menu_title);
         title.setClickable(true);
-        title.setOnClickListener(buttonListener);
+        title.setOnClickListener(s_buttonListener);
 
         buttons[BUTTON_CONT_GAME] = (ImageView) findViewById(R.id.menu_cont_game);
         buttons[BUTTON_NEW_GAME] = (ImageView) findViewById(R.id.menu_new_game);
@@ -94,7 +94,7 @@ public class MenuActivity extends MenuActivityAbstract {
 
         for (final ImageView button : buttons) {
             button.setClickable(true);
-            button.setOnClickListener(buttonListener);
+            button.setOnClickListener(s_buttonListener);
         }
     }
 
@@ -118,6 +118,19 @@ public class MenuActivity extends MenuActivityAbstract {
             super.onBackPressed();
         } else WindowLayout.showSnack("Tryk tilbage igen for at smutte.", findViewById(R.id.menu_background), false);
         backPressed = System.currentTimeMillis();
+    }
+
+    @Override
+    public void onWindowFocusChanged(final boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);}
     }
 
     private void setMenuButtonClickable(final int index, final boolean value) {
@@ -254,7 +267,6 @@ public class MenuActivity extends MenuActivityAbstract {
         }
     }
 
-    // TODO : Recode
     private static class MenuButtonClickHandler implements View.OnClickListener {
 
         private final WeakReference<MenuActivity> menuActivityWeakReference;
