@@ -45,18 +45,20 @@ public class MenuActivity extends MenuActivityAbstract {
     private static final String FINISH = "finish";
     public static final int BACK_PRESSED_DELAY = 2000;
 
-    private static final int BUTTON_COUNT = 7;
+    private static final int BUTTON_COUNT = 8;
     private ImageView title;
     private final ImageView[] buttons = new ImageView[BUTTON_COUNT];
     private static final int TITLE = -1;
 
-    private static final int BUTTON_CONT_GAME = 0;
-    private static final int BUTTON_NEW_GAME = 1;
-    private static final int BUTTON_MULTIPLAYER = 2;
+    private static final int BUTTON_SINGLE_PLAYER = 0;
+    private static final int BUTTON_MULTI_PLAYER = 1;
+    private static final int BUTTON_HIGHSCORE = 2;
     private static final int BUTTON_WORD_LISTS = 3;
     private static final int BUTTON_SETTINGS = 4;
-    private static final int BUTTON_HELP = 5;
-    private static final int BUTTON_QUIT = 6;
+    private static final int BUTTON_ABOUT = 5;
+    private static final int BUTTON_HELP = 6;
+    private static final int BUTTON_QUIT = 7;
+
 
     private int button_clicked;
 
@@ -84,13 +86,15 @@ public class MenuActivity extends MenuActivityAbstract {
         title.setClickable(true);
         title.setOnClickListener(s_buttonListener);
 
-        buttons[BUTTON_CONT_GAME] = (ImageView) findViewById(R.id.menu_cont_game);
-        buttons[BUTTON_NEW_GAME] = (ImageView) findViewById(R.id.menu_new_game);
-        buttons[BUTTON_MULTIPLAYER] = (ImageView) findViewById(R.id.menu_multiplayer);
-        buttons[BUTTON_WORD_LISTS] = (ImageView) findViewById(R.id.menu_word_lists);
-        buttons[BUTTON_SETTINGS] = (ImageView) findViewById(R.id.menu_settings);
-        buttons[BUTTON_HELP] = (ImageView) findViewById(R.id.menu_help);
-        buttons[BUTTON_QUIT] = (ImageView) findViewById(R.id.menu_quit);
+        buttons[BUTTON_SINGLE_PLAYER] = (ImageView) findViewById(R.id.menu_button_single_player);
+        buttons[BUTTON_MULTI_PLAYER] = (ImageView) findViewById(R.id.menu_button_multi_player);
+        buttons[BUTTON_HIGHSCORE] = (ImageView) findViewById(R.id.menu_button_highscore);
+
+        buttons[BUTTON_WORD_LISTS] = (ImageView) findViewById(R.id.menu_button_word_lists);
+        buttons[BUTTON_SETTINGS] = (ImageView) findViewById(R.id.menu_button_settings);
+        buttons[BUTTON_ABOUT] = (ImageView) findViewById(R.id.menu_button_about);
+        buttons[BUTTON_HELP] = (ImageView) findViewById(R.id.menu_button_help);
+        buttons[BUTTON_QUIT] = (ImageView) findViewById(R.id.menu_button_quit);
 
         for (final ImageView button : buttons) {
             button.setClickable(true);
@@ -130,7 +134,8 @@ public class MenuActivity extends MenuActivityAbstract {
                             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);}
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
     }
 
     private void setMenuButtonClickable(final int index, final boolean value) {
@@ -169,13 +174,30 @@ public class MenuActivity extends MenuActivityAbstract {
 
     }
 
-    private void showHighScore(){
+    @SuppressWarnings("unused")
+    private void showHighScore() {
         final Intent PlayerListActivity = new Intent(this, com.undyingideas.thor.skafottet.game_ui.hichscorecontent.PlayerListActivity.class);
         startActivity(PlayerListActivity);
     }
 
     @SuppressWarnings("unused")
+    private void showAbout() {
+        final Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(Constant.KEY_MODE, Constant.MODE_ABOUT);
+        startActivity(intent);
+    }
+
+    @SuppressWarnings("unused")
+    private void showSettings() {
+        WindowLayout.showSnack("Ikke implementeret (endnu)!", title, true);
+    }
+
+    @SuppressWarnings("unused")
     private void showNewGame() {
+        // TODO : If existing game exists, put them in the list, with NEW game as the very first.
+        // If no previous game is in progress, start a new game without showing this dialog.
+
+
         final NewGameItem[] newGameItems = new NewGameItem[3];
 
         newGameItems[0] = new NewGameItem(0, "Wuhuu..", "Bare start spillet mester", R.drawable.forkert6);
@@ -225,7 +247,7 @@ public class MenuActivity extends MenuActivityAbstract {
                 .negativeText(R.string.dialog_no)
                 .title("Quitos los Gamos...")
                 .show()
-                ;
+        ;
     }
 
     @SuppressWarnings("AccessStaticViaInstance")
@@ -256,12 +278,12 @@ public class MenuActivity extends MenuActivityAbstract {
         @Override
         public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
             final WeakReference<Context> contextWeakReference = new WeakReference<>(view.getContext());
-            final Context context =  contextWeakReference.get();
+            final Context context = contextWeakReference.get();
             if (context != null) {
                 Log.d("NG", String.valueOf(id));
                 ((MenuActivity) context).md.dismiss();
                 ((MenuActivity) context).newGameID = id;
-                ((MenuActivity) context).endMenu("startNewGame", ((MenuActivity) context).buttons[BUTTON_NEW_GAME]);
+                ((MenuActivity) context).endMenu("startNewGame", ((MenuActivity) context).buttons[BUTTON_SINGLE_PLAYER]);
                 //((MenuActivity) context).startNewGame(id);
             }
         }
@@ -270,6 +292,7 @@ public class MenuActivity extends MenuActivityAbstract {
     private static class MenuButtonClickHandler implements View.OnClickListener {
 
         private final WeakReference<MenuActivity> menuActivityWeakReference;
+
         @SuppressWarnings("NonConstantFieldWithUpperCaseName")
 
         public MenuButtonClickHandler(final MenuActivity menuActivity) {
@@ -280,20 +303,22 @@ public class MenuActivity extends MenuActivityAbstract {
         public void onClick(final View v) {
             final MenuActivity menuActivity = menuActivityWeakReference.get();
             if (menuActivity != null) {
-                if (v == menuActivity.buttons[BUTTON_CONT_GAME] || v == menuActivity.buttons[BUTTON_WORD_LISTS]) {
-                    new MaterialDialog.Builder(menuActivity)
-                            .content("Ikke implementeret!!!")
-                            .cancelable(true)
-                            .positiveText(R.string.dialog_yes)
-                            .title("STOP DA PRESS!!!")
-                            .show();
-                } else if (v == menuActivity.buttons[BUTTON_MULTIPLAYER]) {
-                    menuActivity.endMenu("showMultiplayer", menuActivity.buttons[BUTTON_MULTIPLAYER]);
-                    menuActivity.button_clicked = BUTTON_MULTIPLAYER;
-                } else if (v == menuActivity.buttons[BUTTON_NEW_GAME]) {
+                if (v == menuActivity.buttons[BUTTON_SINGLE_PLAYER]) {
                     menuActivity.setMenuButtonsClickable(false);
                     menuActivity.callMethod("showNewGame");
-                    menuActivity.button_clicked = BUTTON_NEW_GAME;
+                    menuActivity.button_clicked = BUTTON_SINGLE_PLAYER;
+                } else if (v == menuActivity.buttons[BUTTON_MULTI_PLAYER]) {
+                    menuActivity.endMenu("showMultiplayer", menuActivity.buttons[BUTTON_MULTI_PLAYER]);
+                    menuActivity.button_clicked = BUTTON_MULTI_PLAYER;
+                } else if (v == menuActivity.buttons[BUTTON_HIGHSCORE]) {
+                    menuActivity.endMenu("showHighScore", menuActivity.buttons[BUTTON_HIGHSCORE]);
+                    menuActivity.button_clicked = BUTTON_HIGHSCORE;
+                } else if (v == menuActivity.buttons[BUTTON_WORD_LISTS]) {
+                    menuActivity.endMenu("showWordList", menuActivity.buttons[BUTTON_WORD_LISTS]);
+                    menuActivity.button_clicked = BUTTON_WORD_LISTS;
+                } else if (v == menuActivity.buttons[BUTTON_ABOUT]) {
+                    menuActivity.endMenu("showAbout", menuActivity.buttons[BUTTON_ABOUT]);
+                    menuActivity.button_clicked = BUTTON_ABOUT;
                 } else if (v == menuActivity.buttons[BUTTON_HELP]) {
                     menuActivity.endMenu("showHelp", menuActivity.buttons[BUTTON_HELP]);
                     menuActivity.button_clicked = BUTTON_HELP;
@@ -301,13 +326,10 @@ public class MenuActivity extends MenuActivityAbstract {
                     menuActivity.setMenuButtonsClickable(false);
                     menuActivity.dialogQuit();
                     menuActivity.button_clicked = BUTTON_QUIT;
-                } else if (v == menuActivity.buttons[TITLE]) {
+                } else if (v == menuActivity.title) {
                     // figure out some funky stuff here !!! :-)
                     menuActivity.showAll();
                     menuActivity.button_clicked = TITLE;
-                } else if (v == menuActivity.buttons[BUTTON_SETTINGS]){
-                    menuActivity.showHighScore();
-                    menuActivity.button_clicked = BUTTON_SETTINGS;
                 }
             }
         }
@@ -326,18 +348,14 @@ public class MenuActivity extends MenuActivityAbstract {
             final MenuActivity menuActivity = menuActivityWeakReference.get();
             if (menuActivity != null) {
                 YoYo.with(Techniques.FadeInDown).duration(800).playOn(menuActivity.title);
-                if (menuActivity.buttons[BUTTON_CONT_GAME].getVisibility() == View.INVISIBLE) {
-                    YoYo.with(Techniques.BounceInUp).duration(900).playOn(menuActivity.buttons[1]);
-                } else {
-                    YoYo.with(Techniques.BounceInUp).duration(900).playOn(menuActivity.buttons[0]);
-                    YoYo.with(Techniques.BounceInLeft).duration(900).playOn(menuActivity.buttons[1]);
-                }
+                YoYo.with(Techniques.BounceInUp).duration(900).playOn(menuActivity.buttons[0]);
+                YoYo.with(Techniques.BounceInLeft).duration(900).playOn(menuActivity.buttons[1]);
                 YoYo.with(Techniques.BounceInLeft).duration(800).playOn(menuActivity.buttons[2]);
                 YoYo.with(Techniques.BounceInLeft).duration(800).playOn(menuActivity.buttons[3]);
                 YoYo.with(Techniques.BounceInRight).duration(700).playOn(menuActivity.buttons[4]);
                 YoYo.with(Techniques.BounceInRight).duration(700).playOn(menuActivity.buttons[5]);
                 YoYo.with(Techniques.BounceInDown).duration(600).playOn(menuActivity.buttons[6]);
-
+                YoYo.with(Techniques.BounceInDown).duration(500).playOn(menuActivity.buttons[7]);
                 menuActivity.click_status = true;
                 menuActivity.setMenuButtonsClickable(true);
             }

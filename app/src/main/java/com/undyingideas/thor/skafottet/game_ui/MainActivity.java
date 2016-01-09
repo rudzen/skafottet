@@ -57,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements
             } else if (gameMode == Constant.MODE_MULTI_PLAYER) {
                 // just show the current player list
                 addFragment(MultiPlayerPlayerFragment.newInstance(true));
+            } else if (gameMode == Constant.MODE_ABOUT) {
+                addFragment(new AboutFragment());
             }
         } else {
             addFragment(HangmanGameFragment.newInstance(0, false, GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)));

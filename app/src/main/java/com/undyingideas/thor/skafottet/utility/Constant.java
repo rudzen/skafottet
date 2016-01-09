@@ -27,9 +27,9 @@ public final class Constant {
     public static final int MODE_MULtI_PLAYER_LOGIN = 8;
     public static final int MODE_MULTI_PLAYER_WORD_SELECT = 16;
     public static final int MODE_WORD_LIST = 32;
+    public static final int MODE_ABOUT = 64;
 
     public static final String KEY_GAME_LOGIC = "log";
-
 
 
 }
