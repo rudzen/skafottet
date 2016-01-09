@@ -1,4 +1,4 @@
-package com.undyingideas.thor.skafottet.SupportClasses;
+package com.undyingideas.thor.skafottet.utility;
 
 import java.io.BufferedReader;
 import java.io.IOException;

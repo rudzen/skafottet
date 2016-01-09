@@ -9,12 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.SupportClasses.WordCollector;
 import com.undyingideas.thor.skafottet.game_ui.main_menu.MenuActivity;
 import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 import com.undyingideas.thor.skafottet.utility.TinyDB;
 import com.undyingideas.thor.skafottet.utility.WindowLayout;
+import com.undyingideas.thor.skafottet.utility.WordCollector;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
@@ -36,8 +36,6 @@ public class LoadingActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading_screen);
-//        s_prefereces = PreferenceManager.getDefaultSharedPreferences(this);
-
         new LoadWords(this).execute();
     }
 
@@ -68,9 +66,6 @@ public class LoadingActivity extends AppCompatActivity {
             final LoadingActivity loadingActivity = loadingScreenWeakReference.get();
             if (loadingActivity != null) {
                 /* This is the first code executed, thus some configuration of the application takes place.. */
-                WindowLayout.setScreenDimension(loadingActivity);
-
-
                 setDefaultFont(loadingActivity.getApplicationContext(), "DEFAULT", Constant.DEF_FONT);
                 setDefaultFont(loadingActivity.getApplicationContext(), "MONOSPACE", Constant.DEF_FONT);
                 setDefaultFont(loadingActivity.getApplicationContext(), "SERIF", Constant.DEF_FONT);
@@ -103,11 +98,10 @@ public class LoadingActivity extends AppCompatActivity {
             super.onPostExecute(possibleWords);
             final LoadingActivity loadingActivity = loadingScreenWeakReference.get();
             if (possibleWords != null && loadingActivity != null) { // med seler og livrem
-                final Intent StartApp = new Intent(loadingActivity, MenuActivity.class);
                 s_prefereces.putListString(GameUtility.KEY_MULIGE_ORD, possibleWords);
-//                StartApp.putExtra(GameUtility.KEY_MULIGE_ORD, possibleWords);
-                StartApp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);// Fjerner loadscreen fra stacken
-                loadingActivity.startActivity(StartApp);
+                final Intent intent = new Intent(loadingActivity, MenuActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);// Fjerner loadscreen fra stacken
+                loadingActivity.startActivity(intent);
                 try {
                     TinyDB.checkForNullKey(Constant.KEY_PREF_POSSIBLE_WORDS);
                     Log.d("cache", "contains " + s_prefereces.getObject(Constant.KEY_PREF_POSSIBLE_WORDS, HashSet.class)); //checkForNullKey(); s_prefereces.contains("possibleWords"));
@@ -122,9 +116,9 @@ public class LoadingActivity extends AppCompatActivity {
     public void onWindowFocusChanged(final boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
+            WindowLayout.setScreenDimension(this);
             WindowLayout.setImmersiveMode(getWindow());
         }
 
     }
-
 }
