@@ -7,7 +7,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package com.undyingideas.thor.skafottet.wordlist.data;
+package com.undyingideas.thor.skafottet.game_ui.wordlist.data;
 
 import android.util.Log;
 

@@ -242,12 +242,11 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
 
     private void StartEndgame() {// gathers need data for starting up the endgame Fragment
         // TODO : Erstat DU med spillerens navn og HAM med modstanderens navn..
-
-//1        final EndOfGameFragment endOfGameFragment = EndOfGameFragment.newInstance(logik.erSpilletVundet(), logik.getAntalForkerteBogstaver(), logik.getOrdet(), "DU", "HAM", isHotSeat);
-        final EndOfGameFragment endOfGameFragment1 = EndOfGameFragment.newInstance(hangedLogic, isMultiplayer, "DU", "HAM");
-        getFragmentManager().beginTransaction().replace(R.id.fragment_content, endOfGameFragment1).commit();
+        getFragmentManager().beginTransaction().replace(R.id.fragment_content, EndOfGameFragment.newInstance(hangedLogic, isMultiplayer, "DU", "HAM")).commit();
         Log.d("play", "finishing");
     }
+
+
     void guess(final String guess, final boolean isMultiButtonInterface) {
         final Boolean isMultiBtn = isMultiButtonInterface;
 

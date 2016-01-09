@@ -29,10 +29,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".wordlist.WordDetailsActivity"
+            android:name=".game_ui.wordlist.WordDetailsActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".wordlist.WordFragmentLayout"
+            android:name=".game_ui.wordlist.WordFragmentLayout"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".Instructions"

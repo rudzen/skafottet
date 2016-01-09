@@ -7,7 +7,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package com.undyingideas.thor.skafottet.wordlist;
+package com.undyingideas.thor.skafottet.game_ui.wordlist;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;

@@ -7,7 +7,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package com.undyingideas.thor.skafottet.wordlist;
+package com.undyingideas.thor.skafottet.game_ui.wordlist;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +21,7 @@ import android.view.MenuItem;
 
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.dialogs.YesNo;
-import com.undyingideas.thor.skafottet.wordlist.data.WordItem;
+import com.undyingideas.thor.skafottet.game_ui.wordlist.data.WordItem;
 
 /**
  * WordFragmentLayout class.

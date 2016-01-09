@@ -7,7 +7,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package com.undyingideas.thor.skafottet.wordlist;
+package com.undyingideas.thor.skafottet.game_ui.wordlist;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -19,7 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.wordlist.data.WordList;
+import com.undyingideas.thor.skafottet.game_ui.wordlist.data.WordList;
 
 import java.util.List;
 
