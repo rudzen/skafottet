@@ -8,15 +8,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.romainpiel.shimmer.Shimmer;
+import com.romainpiel.shimmer.ShimmerButton;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.utility.Constant;
-import com.undyingideas.thor.skafottet.utility.GameUtility;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Created on 17-11-2015, 08:39.
@@ -25,48 +26,20 @@ import com.undyingideas.thor.skafottet.utility.GameUtility;
  * @author Thor
  */
 public class EndOfGameFragment extends Fragment {
-    private static final String KEY_ATTEMPTS = "try";
-    private static final String KEY_MULTIPLAYER = "mul";
-    private static final String KEY_WON = "won";
-    private static final String KEY_PLAYER_THIS = "ply";
-    private static final String KEY_PLAYER_OPPONENT = "opp";
-    private static final String KEY_THE_WORD = "wor";
 
     private static final String TAG = "EndGameFragment";
 
-    // TODO : Skal omkrives til hurtigere og nemmere layout.
+    private ImageView imageViewResult;
+    private TextView textViewTop;
+    private ShimmerButton buttonNewGame, buttonMenu;
+    private Shimmer shimmerNewGame, shimmerMenu;
 
-    private WebView resultaterDisp; //skal bruges til at vise spillets resultater, og om det er vundet etc.
-    private ImageView endImage; //skal vise et vinder/taber billede, eller et straffende taberbillede
-    private String resultText;
     private SaveGame endGame;
+
+    private EndGameClickListener endGameClickListener;
 
     @Nullable
     private OnEndGameButtonClickListenerInterface mListener;
-
-//    public static EndOfGameFragment newInstance(final boolean isGameWon, final int wrongGuessCount, final CharSequence theWord, final CharSequence thisPlayerName, final CharSequence opponentPlayerName, final boolean isHotSeat) {
-//        final EndOfGameFragment endOfGameFragment = new EndOfGameFragment();
-//        final Bundle args = new Bundle();
-//        args.putBoolean(KEY_WON, isGameWon);
-//        args.putInt(KEY_ATTEMPTS, wrongGuessCount);
-//        args.putCharSequence(KEY_THE_WORD, theWord);
-//        args.putCharSequence(KEY_PLAYER_THIS, thisPlayerName);
-//        args.putCharSequence(KEY_PLAYER_OPPONENT, opponentPlayerName);
-//        args.putBoolean(KEY_MULTIPLAYER, isHotSeat);
-//        endOfGameFragment.setArguments(args);
-//        return endOfGameFragment;
-//    }
-//
-//    public static EndOfGameFragment newInstance(final Hanged gameLogic, final boolean isMultiPlayer, final CharSequence ... playerNames) {
-//        final EndOfGameFragment endOfGameFragment = new EndOfGameFragment();
-//        final Bundle args = new Bundle();
-//        args.putBoolean(KEY_MULTIPLAYER, isMultiPlayer);
-//        args.putParcelable(Constant.KEY_GAME_LOGIC, gameLogic);
-//        args.putCharSequence(KEY_PLAYER_THIS, playerNames[0]);
-//        if (isMultiPlayer) args.putCharSequence(KEY_PLAYER_OPPONENT, playerNames[1]);
-//        endOfGameFragment.setArguments(args);
-//        return endOfGameFragment;
-//    }
 
     public static EndOfGameFragment newInstance(final SaveGame saveGame) {
         final EndOfGameFragment endOfGameFragment = new EndOfGameFragment();
@@ -79,6 +52,7 @@ public class EndOfGameFragment extends Fragment {
     /**
      * As per Google's recommendation, an interface to communicate back to activity.
      * Instructing it what to do, mainly because the fragments should not be allowed to replace themselves.
+     * There is little chance of potential strong references if it's done with this setup.
      */
     public interface OnEndGameButtonClickListenerInterface {
         void onEndGameButtonClicked(final boolean newGame);
@@ -95,88 +69,70 @@ public class EndOfGameFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            if (getArguments().containsKey(Constant.KEY_GAME_LOGIC)) {
-                // TODO : read in the stuff to local variables.
-            }
-        }
-    }
-
-    @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         onCreate(savedInstanceState);
         final View root = inflater.inflate(R.layout.fragment_end_game, container, false);
-        endImage = (ImageView) root.findViewById(R.id.end_game_image);
-        resultaterDisp = (WebView) root.findViewById(R.id.end_game_web_view);
 
-        final Button endGameBtn = (Button) root.findViewById(R.id.end_game_quit);
-        endGameBtn.setOnClickListener(new EndGameListener());
+        imageViewResult = (ImageView) root.findViewById(R.id.end_game_image_view);
+        textViewTop = (TextView) root.findViewById(R.id.end_game_text_view_top);
 
-        final Button newGameBtn = (Button) root.findViewById(R.id.end_game_new_game);
-        newGameBtn.setOnClickListener(new StartGameListener());
+        buttonNewGame = (ShimmerButton) root.findViewById(R.id.end_game_button_new_game);
+        buttonMenu = (ShimmerButton) root.findViewById(R.id.end_game_button_menu);
 
         displayResults(getArguments());
+
         return root;
     }
 
-    private void displayResults(final Bundle gameData) {
+    @Override
+    public void onViewCreated(final View view, final Bundle savedInstanceState) {
+        shimmerMenu = new Shimmer();
+        shimmerNewGame = new Shimmer();
 
-        // if this is null, we are screwed...
+        shimmerMenu.setStartDelay(300);
+        shimmerMenu.setDuration(400);
+        shimmerNewGame.setDuration(400);
+
+        shimmerMenu.start(buttonMenu);
+        shimmerNewGame.start(buttonNewGame);
+
+    }
+    private void displayResults(final Bundle gameData) throws IllegalArgumentException {
         endGame = gameData.getParcelable(Constant.KEY_SAVE_GAME);
 
-        if (endGame != null) {
-            // TODO : Re-do fragment layout ! :-)
+        // if this is null, we are screwed...
+        if (endGame == null) {
+            throw new IllegalArgumentException("SaveGame not functional.");
         }
 
-
-//        if (gameData.getBoolean(KEY_WON)) {//checkes if the game is won
-//            endImage.setImageResource(R.drawable.game_end_won);
-//            resultText = "<html><body>Tilykke " + gameData.getCharSequence(KEY_PLAYER_THIS) + ", du har vundet <br> <br> " + gameData.getInt(KEY_PLAYER_THIS) + " gættede forkert <b> " + gameData.getInt(KEY_ATTEMPTS) + " gange</b>.</body></html>";
-//            resultaterDisp.loadData(resultText, "text/html; charset=UTF-8", null);
-//        } else {// or lost
-//            endImage.setImageResource(R.drawable.game_end_lost);
-//            resultText = "<html><body>Du har tabt <br> <br> Ordet du ledte efter var <b> " + gameData.getString(KEY_THE_WORD) + "</b>.</body></html>";
-//            resultaterDisp.loadData(resultText, "text/html; charset=UTF-8", null);
-//        }
-//        Log.d(TAG, "data: " + gameData.getString("spiller ") + " " + gameData.getString(KEY_ATTEMPTS) + " " + gameData.getBoolean(KEY_WON));
-    }
-
-    private class EndGameListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(final View v) {
-            Log.d(TAG, "going to start Screen");
-            //noinspection ConstantConditions
-            mListener.onEndGameButtonClicked(false);
+        if (endGame.getLogic().isGameOver()) {
+            imageViewResult.setImageResource(R.drawable.reaper);
+            textViewTop.setText("Du er død!");
+        } else {
+            imageViewResult.setImageResource(R.drawable.trophy);
+            textViewTop.setText("Du undslap galgen!");
         }
     }
 
-    private class StartGameListener implements View.OnClickListener {
+
+
+    private static class EndGameClickListener implements View.OnClickListener {
+
+        private final WeakReference<EndOfGameFragment> endOfGameFragmentWeakReference;
+
+        public EndGameClickListener(final EndOfGameFragment endOfGameFragment) {
+            endOfGameFragmentWeakReference = new WeakReference<>(endOfGameFragment);
+        }
 
         @Override
         public void onClick(final View v) {
-            final Bundle gameData = new Bundle();
-
-            if (getArguments().getBoolean(KEY_MULTIPLAYER, false)) {//starting new multiyPlayer game by going to wordPicker
-                gameData.putBoolean(GameUtility.KEY_IS_HOT_SEAT, true);
-                final WordPickerFragment newMultiPGame = new WordPickerFragment();
-                newMultiPGame.setArguments(gameData);
-                getFragmentManager().beginTransaction().replace(R.id.fragment_content, newMultiPGame).commit();
-            } else {//starting new singleplayergame
-                gameData.putBoolean(GameUtility.KEY_IS_HOT_SEAT, false);
-                final HangmanGameFragment hangmanGameFragment = new HangmanGameFragment();
-                hangmanGameFragment.setArguments(gameData);
-                getFragmentManager().beginTransaction().replace(R.id.fragment_content, hangmanGameFragment).commit();
+            final EndOfGameFragment endOfGameFragment = endOfGameFragmentWeakReference.get();
+            if (endOfGameFragment != null) {
+                Log.d(TAG, "going to start Screen");
+                //noinspection ConstantConditions
+                endOfGameFragment.mListener.onEndGameButtonClicked(false);
             }
         }
     }
 
-    @Override
-    public void onStart() {//this actually removes the keyboard
-        super.onStart();
-        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (getView() != null) imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-    }
 }
