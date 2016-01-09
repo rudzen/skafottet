@@ -33,7 +33,7 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
 
     private static final String KEY_OPPONENT_NAME = "on";
 
-    private LinearLayout[] buttonRows = new LinearLayout[4];
+    private final LinearLayout[] buttonRows = new LinearLayout[4];
 
     private ArrayList<Button> listOfButtons;
     private SaveGame currentGame;

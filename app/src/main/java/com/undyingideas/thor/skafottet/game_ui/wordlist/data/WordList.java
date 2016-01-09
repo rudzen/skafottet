@@ -25,7 +25,6 @@ public class WordList implements Serializable {
     // TODO : Clean up, too many methods
 
     private static final long serialVersionUID = 14324;
-    public static final String KEY = "word_list";
     private static final Pattern httpKill = Pattern.compile("http://");
 
     /* the word item list */

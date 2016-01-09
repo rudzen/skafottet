@@ -32,8 +32,6 @@ import com.undyingideas.thor.skafottet.game_ui.GameActivity;
 import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 import com.undyingideas.thor.skafottet.utility.WindowLayout;
-import com.undyingideas.thor.skafottet.views.StartGameAdapter;
-import com.undyingideas.thor.skafottet.views.StartGameItem;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

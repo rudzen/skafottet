@@ -8,7 +8,7 @@
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
 
-package com.undyingideas.thor.skafottet.views;
+package com.undyingideas.thor.skafottet.game_ui.main_menu;
 
 import android.app.Activity;
 import android.content.Context;

@@ -154,10 +154,10 @@ public class EndOfGameFragment extends Fragment {
     }
 
     private class StartGameListener implements View.OnClickListener {
-        Bundle gameData = new Bundle();
 
         @Override
         public void onClick(final View v) {
+            final Bundle gameData = new Bundle();
 
             if (getArguments().getBoolean(KEY_MULTIPLAYER, false)) {//starting new multiyPlayer game by going to wordPicker
                 gameData.putBoolean(GameUtility.KEY_IS_HOT_SEAT, true);

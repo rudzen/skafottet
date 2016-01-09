@@ -22,7 +22,8 @@ public abstract class GameUtility {
     @SuppressWarnings("StaticVariableOfConcreteClass")
     public static TinyDB s_prefereces;
 
-    public static @DrawableRes int[] imageRefs = new int[8];
+    public static @DrawableRes
+    final int[] imageRefs = new int[8];
 
     static {
         imageRefs[0] = R.drawable.terror0;
