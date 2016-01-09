@@ -92,10 +92,9 @@ public class MenuActivity extends MenuActivityAbstract {
         buttons[BUTTON_HELP] = (ImageView) findViewById(R.id.menu_help);
         buttons[BUTTON_QUIT] = (ImageView) findViewById(R.id.menu_quit);
 
-        for (int i = 0; i < buttons.length; i++) {
-            buttons[i].setClickable(true);
-            //noinspection ObjectAllocationInLoop
-            buttons[i].setOnClickListener(buttonListener);
+        for (final ImageView button : buttons) {
+            button.setClickable(true);
+            button.setOnClickListener(buttonListener);
         }
     }
 
