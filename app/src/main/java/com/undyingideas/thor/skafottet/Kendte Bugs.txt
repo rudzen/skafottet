@@ -1,0 +1,30 @@
+Spil :
+- Selve spillet skal justeres så der tages højde for blodpøl og eventuel delay for visning af EndGameFragment
+- Spilstatus i selve spillet har ingen funktionalitet endnu
+
+Layout :
+- EndGameFragment mangler.
+
+Ren Kode :
+- EndGameFragment mangler.
+- Ting der tager mere end 200ms skal over i en seperat tråd.
+- Message håndtering skal implementeres hvor der er seperat tråd.
+
+UI :
+- Ingen progress display for ting der tager lidt tid.
+- Ingen indstillinger.
+- Der er ingen instruktioner.
+- Backstack skal gennembankes.
+- Notifikation for multiplayer udfordringer findes ikke.
+- Knapper i menu activity bliver ikke farvet ved tryk.
+
+Ordlister :
+- Ord downloader er ikke tilkoblet.
+- Ordlister kan ikke vises efter hensigten.
+
+Firebase:
+- Firebase skal initieres i en seperat tråd.
+- Ingen Highscore der virker.
+- Der skal være en default instruktions html fra start,
+  denne skal kunne opdateres igennem firebase ved hjælp af en asynctask. (fordi async task er påkrævet).
+- Der er ingen login.
