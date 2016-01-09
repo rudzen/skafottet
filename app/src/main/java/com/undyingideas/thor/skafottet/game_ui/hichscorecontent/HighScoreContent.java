@@ -19,12 +19,12 @@ public class HighScoreContent {
     /**
      * An array of sample (dummy) items.
      */
-    public static final List<HighScoreItem> ITEMS = new ArrayList<HighScoreItem>();
+    private static final List<HighScoreItem> ITEMS = new ArrayList<>();
 
     /**
      * A map of sample (dummy) items, by ID.
      */
-    public static final Map<String, HighScoreItem> ITEM_MAP = new HashMap<String, HighScoreItem>();
+    public static final Map<String, HighScoreItem> ITEM_MAP = new HashMap<>();
 
     private static final int COUNT = 25;
 
@@ -60,14 +60,14 @@ public class HighScoreContent {
     }
 
     //This is a list of games that the player has played.
-    public static String makeDetails(final int position, final ArrayList<LobbyPlayerStatus> playedGames, final String playerName) {
+    private static String makeDetails(final int position, final ArrayList<LobbyPlayerStatus> playedGames, final String playerName) {
         //This list should be sorted for the player only.
         final StringBuilder builder = new StringBuilder();
-       builder.append("Rank " + position +"\nWords Guessed\n");
+       builder.append("Rank ").append(position).append("\nWords Guessed\n");
         for (final LobbyPlayerStatus game : playedGames) {
             //Adds nextline (Word : Score xxxx) to details
             if(game.getName().equals(playerName)) {
-                builder.append("\n" + game.getWordList().get(0).getWordID())
+                builder.append("\n").append(game.getWordList().get(0).getWordID())
                         .append(" -> Score : ").append(game.getWordList().get(0).getScore());
             }
         }

@@ -43,7 +43,7 @@ import java.lang.ref.WeakReference;
 public class MenuActivity extends MenuActivityAbstract {
 
     private static final String FINISH = "finish";
-    public static final int BACK_PRESSED_DELAY = 2000;
+    private static final int BACK_PRESSED_DELAY = 2000;
 
     private static final int BUTTON_COUNT = 8;
     private ImageView title;

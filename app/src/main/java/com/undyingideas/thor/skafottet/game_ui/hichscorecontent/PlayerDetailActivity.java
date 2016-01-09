@@ -3,7 +3,6 @@ package com.undyingideas.thor.skafottet.game_ui.hichscorecontent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.utility.WindowLayout;
 
 /**
  * An activity representing a single Player detail screen. This
@@ -28,13 +28,7 @@ public class PlayerDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                Snackbar.make(view, "Challange sent!", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(new FloaterClickHandler());
 
         // Show the Up button in the action bar.
         final ActionBar actionBar = getSupportActionBar();
@@ -55,13 +49,10 @@ public class PlayerDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             final Bundle arguments = new Bundle();
-            arguments.putString(PlayerDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(PlayerDetailFragment.ARG_ITEM_ID));
+            arguments.putString(PlayerDetailFragment.ARG_ITEM_ID,getIntent().getStringExtra(PlayerDetailFragment.ARG_ITEM_ID));
             final PlayerDetailFragment fragment = new PlayerDetailFragment();
             fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.player_detail_container, fragment)
-                    .commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.player_detail_container, fragment).commit();
         }
     }
 
@@ -79,5 +70,12 @@ public class PlayerDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private static class FloaterClickHandler implements View.OnClickListener {
+        @Override
+        public void onClick(final View view) {
+            WindowLayout.showSnack("Challange sent!", view, false);
+        }
     }
 }

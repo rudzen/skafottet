@@ -18,19 +18,19 @@ import java.util.regex.Pattern;
  *
  * @author rudz
  */
-public class StringHelper {
+public final class StringHelper {
 
     private static final ArrayList<Character> invalidChars = new ArrayList<>();
 
     /* Settings for regEx matching of incomming words */
-    public final static String regLowerCase = "[a-zæøå]";
-    public final static String regJavaScript = "<script[^>]*>([\\s\\S]*?)</script>";
+    private final static String regLowerCase = "[a-zæøå]";
+    private final static String regJavaScript = "<script[^>]*>([\\s\\S]*?)</script>";
 
     public final static Pattern patGuess = Pattern.compile(regLowerCase);
     //Pattern.compile(regLowerCase + "|[A-ZÆØÅ]{" + Integer.toString(WORD_LENGTH) + ",}");
     public final static Pattern patHTML = Pattern.compile("(?i)<[^>]*>");
     public static final String VALID_URL = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
-    public static Pattern patLoad = setWordLength(regLowerCase, 4);
+    private static Pattern patLoad = setWordLength(regLowerCase, 4);
     public static Pattern patJS = Pattern.compile(regJavaScript);
 
 
@@ -118,7 +118,7 @@ public class StringHelper {
         return count != len ? count / cLen : 0;
     }
 
-    public static Pattern setWordLength(final String regEx, final int length) {
+    private static Pattern setWordLength(final String regEx, final int length) {
         return Pattern.compile(regEx + "|" + regEx.toUpperCase() + "{" + Integer.toString(length) + ",25}");
     }
 

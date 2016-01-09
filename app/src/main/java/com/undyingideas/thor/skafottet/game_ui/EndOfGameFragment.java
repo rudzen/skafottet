@@ -38,7 +38,7 @@ public class EndOfGameFragment extends Fragment {
 
     private WebView resultaterDisp; //skal bruges til at vise spillets resultater, og om det er vundet etc.
     private ImageView endImage; //skal vise et vinder/taber billede, eller et straffende taberbillede
-    String resultText;
+    private String resultText;
 
     @Nullable
     private OnEndGameButtonClickListenerInterface mListener;
@@ -136,9 +136,8 @@ public class EndOfGameFragment extends Fragment {
         @Override
         public void onClick(final View v) {
             Log.d(TAG, "going to start Screen");
+            //noinspection ConstantConditions
             mListener.onEndGameButtonClicked(false);
-//            final FragmentMenu_OLD fragmentMenuOLD = new FragmentMenu_OLD();
-//            getFragmentManager().beginTransaction().replace(R.id.fragment_content, fragmentMenuOLD).commit();
         }
     }
 

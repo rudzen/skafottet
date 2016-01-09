@@ -3,11 +3,13 @@ package com.undyingideas.thor.skafottet.firebase.DTO;
 import java.util.ArrayList;
 
 /**
- * Created by theis on 05-01-2016.
+ * Created on 05-01-2016, 12:13.
+ * Project : skafottet
+ * @author theis
  */
 public class LobbyPlayerStatus {
-    ArrayList<WordStatus> wordList = new ArrayList<>();
-    String name;
+    private ArrayList<WordStatus> wordList = new ArrayList<>();
+    private String name;
 
     public LobbyPlayerStatus(){}
 

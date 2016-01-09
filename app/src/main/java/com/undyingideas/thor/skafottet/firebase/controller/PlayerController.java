@@ -9,38 +9,41 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.MutableData;
 import com.firebase.client.Transaction;
 import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
+import com.undyingideas.thor.skafottet.utility.Constant;
 
 import java.util.HashMap;
 
 /**
- * Created by theis on 05-01-2016.
+ * Created on 05-01-2016, 12:13.
+ * Project : skafottet
+ * @author theis
  */
 public class PlayerController {
 
-    final Firebase ref;
-    final MultiplayerController mpcRef;
+    private final Firebase ref;
+    private final MultiplayerController mpcRef;
     public HashMap<String, PlayerDTO> playerList = new HashMap<>();
 
     public PlayerController(final MultiplayerController mp, final Firebase ref){
         this.ref = ref;
-        this.mpcRef = mp;
-        this.ref.child("MultiPlayer").child("Players").addChildEventListener(new NameGetter(mpcRef));
+        mpcRef = mp;
+        this.ref.child(Constant.FIREBASE_MULTI_PLAYER).child("Players").addChildEventListener(new NameGetter(mpcRef));
     }
 
     public void createPlayer(final String name) {
-        final Firebase playersRef = ref.child("MultiPlayer").child("Players").child(name);
+        final Firebase playersRef = ref.child(Constant.FIREBASE_MULTI_PLAYER).child("Players").child(name);
         final fireBaseCreate h = new fireBaseCreate(name);
         playersRef.runTransaction(h);
     }
 
     public void addListener(final String name) {
-        ref.child("MultiPlayer").child("Players").child(name).child("gameList").addChildEventListener(new GameListListener(mpcRef));
+        ref.child(Constant.FIREBASE_MULTI_PLAYER).child("Players").child(name).child("gameList").addChildEventListener(new GameListListener(mpcRef));
     }
 }
 
 class fireBaseCreate implements Transaction.Handler{
-    boolean succes;
-    final String name;
+    private boolean succes;
+    private final String name;
     fireBaseCreate(final String name){
         this.name = name;
 }
@@ -62,7 +65,7 @@ class fireBaseCreate implements Transaction.Handler{
 }
 
 class NameGetter implements ChildEventListener {
-    final MultiplayerController mpcref;
+    private final MultiplayerController mpcref;
 
     public NameGetter(final MultiplayerController mpcref) {
         this.mpcref = mpcref;
@@ -97,7 +100,7 @@ class NameGetter implements ChildEventListener {
         // void
     }
 
-    protected static PlayerDTO getDTO(final DataSnapshot dataSnapshot) {
+    private static PlayerDTO getDTO(final DataSnapshot dataSnapshot) {
         final PlayerDTO dto = new PlayerDTO(dataSnapshot.getKey());
         dto.setScore(Integer.valueOf(dataSnapshot.child("score").getValue().toString()));
         if (dataSnapshot.hasChild("gameList"))
@@ -108,7 +111,7 @@ class NameGetter implements ChildEventListener {
 }
 
 class GameListListener implements ChildEventListener {
-    final MultiplayerController mpc;
+    private final MultiplayerController mpc;
 
     GameListListener(final MultiplayerController mpc) {
         this.mpc = mpc;

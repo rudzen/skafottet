@@ -3,18 +3,20 @@ package com.undyingideas.thor.skafottet.firebase.DTO;
 import java.util.ArrayList;
 
 /**
- * Created by theis on 05-01-2016.
+ * Created on 05-01-2016, 12:13.
+ * Project : skafottet
+ * @author theis
  */
 public class LobbyDTO {
 
-    ArrayList<LobbyPlayerStatus> playerList = new ArrayList<>();
+    private ArrayList<LobbyPlayerStatus> playerList = new ArrayList<>();
 
     public LobbyDTO(){
 
     }
 
     public void add(final LobbyPlayerStatus lps) {
-        this.playerList.add(lps);
+        playerList.add(lps);
     }
 
     public LobbyDTO(final ArrayList<LobbyPlayerStatus> playerList) {

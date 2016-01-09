@@ -5,9 +5,9 @@ package com.undyingideas.thor.skafottet;
  * Project : skafottet
  * @author Gump
  */
-public class PlayerScore {
-    String name;
-    int score;
+class PlayerScore {
+    private String name;
+    private int score;
 
     public PlayerScore(){
 

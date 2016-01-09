@@ -24,12 +24,6 @@ public class GameActivity extends AppCompatActivity implements
 
     private Fragment currentFragment;
 
-    /*
-     1 = single player
-     2 = multiplayer
-     */
-    private int gameMode;
-
     public static String getS_possibleWord() {
         return s_possibleWord;
     }
@@ -50,7 +44,7 @@ public class GameActivity extends AppCompatActivity implements
 
         if (getIntent() != null) {
             final Bundle bundle = getIntent().getExtras();
-            gameMode = bundle.getInt(Constant.KEY_MODE);
+            final int gameMode = bundle.getInt(Constant.KEY_MODE);
 
             if (gameMode == Constant.MODE_SINGLE_PLAYER) {
                 addFragment(HangmanGameFragment.newInstance(0, false, GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)));

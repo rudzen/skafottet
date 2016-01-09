@@ -46,7 +46,7 @@ public class PlayerDetailFragment extends Fragment {
             // to load content from a content provider.
             mItem = HighScoreContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
 
-            final Activity activity = this.getActivity();
+            final Activity activity = getActivity();
             final CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
                 appBarLayout.setTitle(mItem.content);

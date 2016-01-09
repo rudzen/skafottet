@@ -116,7 +116,7 @@ public class WordPickerFragment extends Fragment {
     /**
      * Responsible for updating the adapter when the word list is altered online.
      */
-    public class WordListUpdater implements Runnable {
+    private class WordListUpdater implements Runnable {
 
         @Override
         public void run() {

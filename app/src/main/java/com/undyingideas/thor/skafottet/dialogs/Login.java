@@ -3,7 +3,9 @@ package com.undyingideas.thor.skafottet.dialogs;
 import android.support.v4.app.DialogFragment;
 
 /**
- * Created by theis on 05-01-2016.
+ * Created on 05-01-2016, 12:13.
+ * Project : skafottet
+ * @author theis
  */
 public class Login extends DialogFragment {
  /*   public interface LoginResult{

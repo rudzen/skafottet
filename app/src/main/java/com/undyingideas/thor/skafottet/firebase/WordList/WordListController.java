@@ -14,7 +14,9 @@ import java.util.HashMap;
 
 
 /**
- * Created by Emil on 08-01-2016.
+ * Created on 08-01-2016, 12:13.
+ * Project : skafottet
+ * @author Emil
  */
 public class WordListController {
     private final Firebase firebase;
@@ -43,9 +45,9 @@ public class WordListController {
 }
 
 class FireBaseCreate implements Transaction.Handler{
-    boolean succes;
-    final ArrayList<String> wordList;
-    final String title;
+    private boolean succes;
+    private final ArrayList<String> wordList;
+    private final String title;
     FireBaseCreate(final String title, final ArrayList<String> wordList){
         this.wordList = wordList;
         this.title = title;
@@ -69,7 +71,7 @@ class FireBaseCreate implements Transaction.Handler{
 }
 
 class WordGetter implements ChildEventListener {
-    final WordListController wlcRef;
+    private final WordListController wlcRef;
     public WordGetter(final WordListController wlcRef) {
         this.wlcRef = wlcRef;
     }
@@ -100,7 +102,7 @@ class WordGetter implements ChildEventListener {
         // void
     }
 
-    protected static WordListDTO getDTO(final DataSnapshot dataSnapshot) {
+    private static WordListDTO getDTO(final DataSnapshot dataSnapshot) {
         final WordListDTO dto = new WordListDTO();
         for(final DataSnapshot s : dataSnapshot.getChildren()) dto.getWordList().add(s.getValue().toString());
 

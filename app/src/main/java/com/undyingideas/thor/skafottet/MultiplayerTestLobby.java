@@ -66,7 +66,7 @@ public class MultiplayerTestLobby extends AppCompatActivity implements Runnable 
         adapter.notifyDataSetChanged();
     }
 
-    private class OnMultiPlayerPlayerClick implements AdapterView.OnItemClickListener {
+    private static class OnMultiPlayerPlayerClick implements AdapterView.OnItemClickListener {
 
         @Override
         public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {

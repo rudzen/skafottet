@@ -30,10 +30,10 @@ import com.undyingideas.thor.skafottet.utility.GameUtility;
 public class WordTitlesFragment extends ListFragment {
 
     // True or False depending on if we are in horizontal or duel pane mode
-    boolean mDuelPane;
+    private boolean mDuelPane;
 
     // Currently selected item in the ListView
-    int mCurCheckPosition;
+    private int mCurCheckPosition;
 
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
@@ -78,7 +78,7 @@ public class WordTitlesFragment extends ListFragment {
     }
 
     // Shows the data
-    void showDetails(final int index) {
+    private void showDetails(final int index) {
 
         /* update last selected */
         mCurCheckPosition = index;

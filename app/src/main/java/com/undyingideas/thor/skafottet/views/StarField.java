@@ -23,8 +23,8 @@ import java.util.ArrayList;
 
 public class StarField extends View {
 
-    public static final float LOW_PASS_FILTER = 0.3f;
-    public static final int UPDATE_RATE = 1000 / 70;
+    private static final float LOW_PASS_FILTER = 0.3f;
+    private static final int UPDATE_RATE = 1000 / 70;
 
     private final ArrayList<Star2D> stars = new ArrayList<>(75);
     private Paint p;
@@ -62,10 +62,6 @@ public class StarField extends View {
 
     public StarField(final Context context, final AttributeSet attrs, final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    public int getStarCount() {
-        return stars.size();
     }
 
     private void addStar(final float x, final float y, final float speed) {
@@ -130,13 +126,6 @@ public class StarField extends View {
         gravity.y = y >= LOW_PASS_FILTER || y <= -LOW_PASS_FILTER ? y : 0f;
     }
 
-    public void removeStar() {
-        if (!stars.isEmpty()) {
-            stars.remove(0);
-            stars.trimToSize();
-        }
-    }
-
     @Override
     protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
@@ -150,15 +139,5 @@ public class StarField extends View {
 //            else
                 canvas.drawCircle(star.xy.x, star.xy.y, 3, p);
         }
-    }
-
-    public double getAvrSpeed() {
-        double as = 0;
-        for (final Star2D star : stars) as += star.getSpeedX();
-        return as / stars.size();
-    }
-
-    public void updateSpeed(final float max, final float increment) {
-        for (final Star2D star : stars) star.speedX = !star.fadeDirection ? star.speedX + increment : star.speedX - increment;
     }
 }

@@ -32,9 +32,7 @@ public class WordList implements Serializable {
     private LinkedList<WordItem> words = new LinkedList<>();
 
     /* the default list words */
-    public static final String DEFAULT_KEY = "Standard";
-    private final ArrayList<String> defaults = new ArrayList<>();
-
+    private static final String DEFAULT_KEY = "Standard";
 
     /* the current active list */
     private int currentList;
@@ -46,6 +44,7 @@ public class WordList implements Serializable {
      */
     public WordList() {
 
+        final ArrayList<String> defaults = new ArrayList<>();
         defaults.add("bil");
         defaults.add("computer");
         defaults.add("programmering");

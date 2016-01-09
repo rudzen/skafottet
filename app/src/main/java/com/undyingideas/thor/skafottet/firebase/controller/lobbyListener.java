@@ -7,10 +7,12 @@ import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
 
 /**
- * Created by Theis' on 07-01-2016.
+ * Created on 07-01-2016, 12:13.
+ * Project : skafottet
+ * @author Theis'
  */
 class LobbyListener implements ChildEventListener {
-    final MultiplayerController mpc;
+    private final MultiplayerController mpc;
 
     public LobbyListener(final MultiplayerController mpc) {
         this.mpc = mpc;
@@ -45,7 +47,7 @@ class LobbyListener implements ChildEventListener {
         // void
     }
 
-    protected static LobbyDTO getDTO(final DataSnapshot ds) {
+    private static LobbyDTO getDTO(final DataSnapshot ds) {
         final LobbyDTO dto = new LobbyDTO();
         for(final DataSnapshot s : ds.getChildren()) dto.add(s.getValue(LobbyPlayerStatus.class));
         return dto;

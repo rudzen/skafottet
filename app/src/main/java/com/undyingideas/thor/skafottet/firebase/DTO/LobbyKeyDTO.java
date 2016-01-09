@@ -1,11 +1,13 @@
 package com.undyingideas.thor.skafottet.firebase.DTO;
 
 /**
- * Created by theis on 05-01-2016.
+ * Created on 05-01-2016, 12:13.
+ * Project : skafottet
+ * @author theis
  */
-public class LobbyKeyDTO {
+class LobbyKeyDTO {
 
-    String key;
+    private String key;
 
     public LobbyKeyDTO() {
     }

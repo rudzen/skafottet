@@ -3,11 +3,13 @@ package com.undyingideas.thor.skafottet.firebase.WordList;
 import java.util.ArrayList;
 
 /**
- * Created by Emil on 08-01-2016.
+ * Created on 08-01-2016, 12:13.
+ * Project : skafottet
+ * @author Emil
  */
 public class WordListDTO  {
-    String title;
-    ArrayList<String> wordList = new ArrayList<>();
+    private String title;
+    private ArrayList<String> wordList = new ArrayList<>();
 
     public WordListDTO() {
     }

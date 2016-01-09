@@ -14,7 +14,7 @@ import android.graphics.PointF;
 
 @SuppressWarnings("ClassNamingConvention")
 class Star2D {
-    public static final int FADE_MULTIPLIER = 50;
+    private static final int FADE_MULTIPLIER = 50;
     public PointF xy;
     private float size;
     public float speedX;

@@ -67,7 +67,7 @@ public class WordItem implements Serializable {
         words.trimToSize();
     }
 
-    public boolean hasWord(final String word) {
+    private boolean hasWord(final String word) {
         return words.contains(word);
     }
 
@@ -87,7 +87,7 @@ public class WordItem implements Serializable {
         return words;
     }
 
-    public void setWords(final ArrayList<String> words) {
+    private void setWords(final ArrayList<String> words) {
         /* since we are using a final list, just add the new words manually */
         this.words.clear();
         this.words.addAll(words);

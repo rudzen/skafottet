@@ -28,7 +28,7 @@ import java.util.List;
  * Created by rudz on 09-11-2015.
  * @author rudz
  */
-public class HangmanWordsAdapter extends ArrayAdapter<String> {
+class HangmanWordsAdapter extends ArrayAdapter<String> {
 
     public HangmanWordsAdapter(final Context context, final List<String> values) {
         super(context, R.layout.hang_man_adapter_row_layout, values);

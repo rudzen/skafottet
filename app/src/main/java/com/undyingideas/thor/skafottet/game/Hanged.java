@@ -18,7 +18,7 @@ public class Hanged implements Parcelable {
 
     private ArrayList<String> possibleWords = new ArrayList<>();
     private ArrayList<String> usedLetters = new ArrayList<>();
-    private StringBuilder visibleWord;
+    private String visibleWord;
     private int numWrongLetters;
     private int numCorrectLettersLast;
     private boolean lastLetterCorrect;
@@ -84,18 +84,17 @@ public class Hanged implements Parcelable {
     }
 
     private void updateVisibleWord() {
-        visibleWord = new StringBuilder(theWord.length());
-        char letter;
+        visibleWord = "";
         for (int n = 0; n < theWord.length(); n++) {
-            letter = theWord.charAt(n);
-            visibleWord.append(usedLetters.contains(letter) ? letter : '*');
+            final String letter = theWord.substring(n, n + 1);
+            visibleWord += usedLetters.contains(letter) ? letter : "*";
         }
-        isGameWon = !visibleWord.toString().contains("*");
+        isGameWon = !visibleWord.contains("*");
     }
 
-    public void guessLetter(String letter) {
+    public void guessLetter(final String letter) {
         if (letter.length() != 1) return;
-        if (visibleWord.toString().contains(letter) || isGameWon || isGameLost) return;
+        if (visibleWord.contains(letter) || isGameWon || isGameLost) return;
         Log.d(TAG, "Der gættes på bogstavet: " + letter);
 
         usedLetters.add(letter);
@@ -115,7 +114,7 @@ public class Hanged implements Parcelable {
         logStatus();
     }
 
-    public void logStatus() {
+    private void logStatus() {
         Log.d(TAG, "---------------------");
         Log.d(TAG, "| ordet (skjult)    = " + theWord);
         Log.d(TAG, "| synligtOrd        = " + visibleWord);
@@ -160,13 +159,12 @@ public class Hanged implements Parcelable {
         this.usedLetters.addAll(usedLetters);
     }
 
-    public StringBuilder getVisibleWord() {
+    public String getVisibleWord() {
         return visibleWord;
     }
 
-    public void setVisibleWord(final StringBuilder visibleWord) {
-        this.visibleWord = new StringBuilder(visibleWord.length());
-        this.visibleWord.append(visibleWord);
+    public void setVisibleWord(final String visibleWord) {
+        this.visibleWord = visibleWord;
     }
 
     public int getNumWrongLetters() {
@@ -198,7 +196,7 @@ public class Hanged implements Parcelable {
     }
 
     public void setGameWon(final boolean gameWon) {
-        this.isGameWon = gameWon;
+        isGameWon = gameWon;
     }
 
     public boolean isGameLost() {
@@ -206,7 +204,7 @@ public class Hanged implements Parcelable {
     }
 
     public void setGameLost(final boolean gameLost) {
-        this.isGameLost = gameLost;
+        isGameLost = gameLost;
     }
 
     @Override
@@ -217,7 +215,7 @@ public class Hanged implements Parcelable {
         dest.writeString(theWord);
         dest.writeStringList(possibleWords);
         dest.writeStringList(usedLetters);
-        dest.writeSerializable(visibleWord);
+        dest.writeString(visibleWord);
         dest.writeInt(numWrongLetters);
         dest.writeInt(numCorrectLettersLast);
         dest.writeByte(lastLetterCorrect ? (byte) 1 : (byte) 0);
@@ -225,11 +223,11 @@ public class Hanged implements Parcelable {
         dest.writeByte(isGameLost ? (byte) 1 : (byte) 0);
     }
 
-    protected Hanged(final Parcel in) {
+    private Hanged(final Parcel in) {
         theWord = in.readString();
         possibleWords = in.createStringArrayList();
         usedLetters = in.createStringArrayList();
-        visibleWord = (StringBuilder) in.readSerializable();
+        visibleWord = in.readString();
         numWrongLetters = in.readInt();
         numCorrectLettersLast = in.readInt();
         lastLetterCorrect = in.readByte() != 0;

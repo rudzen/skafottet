@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +17,8 @@ import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
 import com.undyingideas.thor.skafottet.firebase.controller.MultiplayerController;
+import com.undyingideas.thor.skafottet.utility.Constant;
+import com.undyingideas.thor.skafottet.utility.WindowLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,9 +38,9 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
      * device.
      */
     private boolean mTwoPane;
-    Firebase myFirebaseRef;
-    MultiplayerController mpc;
-    View recyclerView;
+    private Firebase myFirebaseRef;
+    private MultiplayerController mpc;
+    private View recyclerView;
 
     private final ArrayList<PlayerDTO> players = new ArrayList<>();
 
@@ -50,24 +51,16 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
 
 
         Firebase.setAndroidContext(this);
-        myFirebaseRef = new Firebase("https://hangmandtu.firebaseio.com/");
+        myFirebaseRef = new Firebase(Constant.HANGMANDTU_FIREBASEIO);
 
         mpc = new MultiplayerController(myFirebaseRef, this);
-
-
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(new FloaterClickHandler());
 
         recyclerView = findViewById(R.id.player_list);
         assert recyclerView != null;
@@ -93,6 +86,13 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
         setupRecyclerView((RecyclerView) recyclerView, mpc.getHighScoreItems());
 
 
+    }
+
+    private static class FloaterClickHandler implements View.OnClickListener {
+        @Override
+        public void onClick(final View view) {
+            WindowLayout.showSnack("Replace with your own action", view, false);
+        }
     }
 
 

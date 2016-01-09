@@ -12,13 +12,13 @@ package com.undyingideas.thor.skafottet.highscore;
 /**
  * @author rudz
  */
-public class Player {
+final class Player {
 
     // idiotklasse til spillerpoint..
-    public static int pts;
+    private static int pts;
 
     /* used by the game status fragment */
-    public static final int DEF_START_SCORE = 0;
+    private static final int DEF_START_SCORE = 0;
 
     /* define the shifting values for scores on future difficulty settings */
     public static final int DIF_EASY_SHIFT_MULTIPLIER = 2;

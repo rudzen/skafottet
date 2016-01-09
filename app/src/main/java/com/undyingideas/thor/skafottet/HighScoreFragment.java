@@ -22,8 +22,8 @@ public class HighScoreFragment extends Fragment {
     private TextView title;
 
     //FIREBASE
-    Firebase myFirebaseRef;
-    HighScoreController pc;
+    private Firebase myFirebaseRef;
+    private HighScoreController pc;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {

@@ -11,7 +11,7 @@ package com.undyingideas.thor.skafottet.highscore;
 
 import java.util.Comparator;
 
-public class ScoreComparator implements Comparator<Score> {
+class ScoreComparator implements Comparator<Score> {
     @Override
     public int compare(final Score score1, final Score score2) {
         final int sc1 = score1.getScore();

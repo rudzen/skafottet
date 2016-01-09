@@ -15,6 +15,7 @@ import com.undyingideas.thor.skafottet.firebase.DTO.WordStatus;
 import com.undyingideas.thor.skafottet.firebase.WordList.WordListController;
 import com.undyingideas.thor.skafottet.firebase.WordList.WordListDTO;
 import com.undyingideas.thor.skafottet.firebase.controller.MultiplayerController;
+import com.undyingideas.thor.skafottet.utility.Constant;
 
 import java.util.ArrayList;
 
@@ -34,10 +35,10 @@ public class Instructions extends AppCompatActivity implements Runnable {
     private TextView title;
 
     //FIREBASE
-    Firebase myFirebaseRef;
+    private Firebase myFirebaseRef;
     HighScoreController pc;
-    ArrayList<PlayerScore> list;
-    ArrayList<String> wordListDog = new ArrayList<>();
+    private ArrayList<PlayerScore> list;
+    private ArrayList<String> wordListDog = new ArrayList<>();
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -48,7 +49,7 @@ public class Instructions extends AppCompatActivity implements Runnable {
       //  instructionDisplay.loadData(instructionText, "text/html; charset=UTF-8", null);
 
         Firebase.setAndroidContext(this);
-        myFirebaseRef = new Firebase("https://hangmandtu.firebaseio.com/");
+        myFirebaseRef = new Firebase(Constant.HANGMANDTU_FIREBASEIO);
         //limit = 10,
 
         list = new ArrayList<>();

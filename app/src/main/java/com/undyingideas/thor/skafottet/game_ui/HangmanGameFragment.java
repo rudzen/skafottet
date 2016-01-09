@@ -120,8 +120,8 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        Bundle outState1 = setBundleConfig();
+    public void onSaveInstanceState(final Bundle outState) {
+        final Bundle outState1 = setBundleConfig();
         super.onSaveInstanceState(outState1);
     }
 
@@ -229,7 +229,7 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
         updateScreen(true, true);
     }
 
-    void CheckGameType() {
+    private void CheckGameType() {
         if (hangedLogic != null && hangedLogic.isGameOver()) {
             hangedLogic.reset(4);
         } else {// for det tilfældes skyld at der er tale om et nyt spil
@@ -247,7 +247,7 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
     }
 
 
-    void guess(final String guess, final boolean isMultiButtonInterface) {
+    private void guess(final String guess, final boolean isMultiButtonInterface) {
         final Boolean isMultiBtn = isMultiButtonInterface;
 
         theGuess = guess;

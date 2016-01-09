@@ -20,12 +20,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 
-public class HighscoreManager {
+class HighscoreManager {
     private static final String TAG = "HighScoreLoc";
     private ArrayList<Score> scores;
     private static final String HIGHSCORE_FILE = "scores.dat";
 
-    private ObjectOutputStream outputStream = null;
+    private ObjectOutputStream outputStream;
 
     private final static int MAX = 10;
 
@@ -56,7 +56,7 @@ public class HighscoreManager {
         updateScoreFile(c);
     }
 
-    public void loadScoreFile(final Context c) {
+    private void loadScoreFile(final Context c) {
         try {
             final ObjectInputStream inputStream = new ObjectInputStream(c.openFileInput(HIGHSCORE_FILE));
             scores = (ArrayList<Score>) inputStream.readObject();
@@ -84,7 +84,7 @@ public class HighscoreManager {
         }
     }
 
-    public void updateScoreFile(final Context c) {
+    private void updateScoreFile(final Context c) {
         try {
             outputStream = new ObjectOutputStream(c.openFileOutput(HIGHSCORE_FILE, Context.MODE_PRIVATE));
             scores.trimToSize();

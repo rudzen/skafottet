@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 // TODO : Hele klassen er noget weird ass noget, skal erstattes af en mere moderne udgave.
 
-public class Galgelogik {
+class Galgelogik {
     private static final Pattern tagPattern = Pattern.compile("<.+?>");
     private ArrayList<String> muligeOrd = new ArrayList<>();
     private String ordet;
@@ -92,7 +92,7 @@ public class Galgelogik {
         nulstil();
     }
 
-    public void nulstil() {
+    private void nulstil() {
         brugteBogstaver.clear();
         antalForkerteBogstaver = 0;
         spilletErVundet = false;

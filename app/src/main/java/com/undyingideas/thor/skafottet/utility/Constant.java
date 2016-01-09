@@ -30,6 +30,11 @@ public final class Constant {
     public static final int MODE_ABOUT = 64;
 
     public static final String KEY_GAME_LOGIC = "log";
+    public static final String FIREBASE_MULTI_PLAYER = "MultiPlayer";
+    public static final String HANGMANDTU_FIREBASEIO = "https://hangmandtu.firebaseio.com/";
+
+
+    /* firebase constants */
 
 
 }

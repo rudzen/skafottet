@@ -8,12 +8,14 @@ import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
 import java.util.ArrayList;
 
 /**
- * Created by Gump on 08-01-2016.
+ * Created on 08-01-2016, 12:13.
+ * Project : skafottet
+ * @author Gump
  */
 public class HighScoreDTO implements Comparable {
 
-    PlayerDTO player;
-    ArrayList<LobbyPlayerStatus> lobbyList;
+    private PlayerDTO player;
+    private ArrayList<LobbyPlayerStatus> lobbyList;
 
 
     public HighScoreDTO(final PlayerDTO player) {

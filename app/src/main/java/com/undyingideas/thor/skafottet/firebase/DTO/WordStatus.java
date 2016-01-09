@@ -1,11 +1,13 @@
 package com.undyingideas.thor.skafottet.firebase.DTO;
 
 /**
- * Created by theis on 05-01-2016.
+ * Created on 05-01-2016, 12:13.
+ * Project : skafottet
+ * @author theis
  */
 public class WordStatus {
-    String wordID;
-    int score;
+    private String wordID;
+    private int score;
 
     public WordStatus(){}
 

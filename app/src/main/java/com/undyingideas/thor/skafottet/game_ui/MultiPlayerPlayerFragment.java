@@ -36,7 +36,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
     private static final String KEY_IS_ONLINE = "o";
     private static final String KEY_LAST_PLAYER_LIST = "lpl";
 
-    private boolean isOnline;
+    private boolean isOffline = true;
 
     private ListView listView;
     private ArrayList<PlayerDTO> players;
@@ -66,9 +66,9 @@ public class MultiPlayerPlayerFragment extends Fragment {
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            isOnline = getArguments().getBoolean(KEY_IS_ONLINE);
+            isOffline = !getArguments().getBoolean(KEY_IS_ONLINE);
         }
-        if (!isOnline) {
+        if (isOffline) {
             // read the last list used...
             try {
                 final ArrayList<PlayerDTO> ply = (ArrayList<PlayerDTO>) GameUtility.s_prefereces.getObject(KEY_LAST_PLAYER_LIST, ArrayList.class);
@@ -127,7 +127,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
         void startNewMultiplayerGame(final String opponentName, final String theWord);
     }
 
-    public void onButtonPressed(final int position) {
+    private void onButtonPressed(final int position) {
         if (mListener != null) mListener.onPlayerClicked(players.get(position).getName());
     }
 
@@ -152,12 +152,12 @@ public class MultiPlayerPlayerFragment extends Fragment {
     }
 
     public void setOnlineStatus(final boolean newStatus) {
-        if (!isOnline && newStatus) {
+        if (isOffline && newStatus) {
             // we got connection!
-            isOnline = true;
+            isOffline = false;
             updateList();
         } else {
-            isOnline = newStatus;
+            isOffline = !newStatus;
         }
     }
 

@@ -16,13 +16,15 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by theis on 06-01-2016.
+ * Created on 06-01-2016, 12:13.
+ * Project : skafottet
+ * @author theis
  */
 public class MultiplayerController {
     @Nullable
     public LobbyController lc;
     public PlayerController pc;
-    final Firebase ref;
+    private final Firebase ref;
     @Nullable
     public String name;
     private final Handler updateHandler;
@@ -51,7 +53,7 @@ public class MultiplayerController {
         } else return false;
     }
 
-    public void logout() {
+    private void logout() {
         if (name == null) return;
         name = null;
         lc = null;

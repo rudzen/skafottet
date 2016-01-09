@@ -3,13 +3,15 @@ package com.undyingideas.thor.skafottet.firebase.DTO;
 import java.util.ArrayList;
 
 /**
- * Created by theis on 05-01-2016.
+ * Created on 05-01-2016, 12:13.
+ * Project : skafottet
+ * @author theis
  */
 public class PlayerDTO {
 
-    String name;
-    int score;
-    ArrayList<String> gameList = new ArrayList<>();
+    private String name;
+    private int score;
+    private ArrayList<String> gameList = new ArrayList<>();
 
     public PlayerDTO(){
     }

@@ -12,15 +12,15 @@ import android.util.Log;
 import android.widget.EditText;
 
 /**
- * Created by Theis' on 07-01-2016.
+ * Created on 07-01-2016, 12:13.
+ * Project : skafottet
+ * @author Theis'
  */
 public class createUser extends DialogFragment {
     @Nullable
     private YesNoResultListener listener;
 
     public interface YesNoResultListener { void onDone(boolean result); }
-
-    public createUser() { }
 
     public static createUser newInstance(final String title, final String text, final String yesButton) {
         final createUser frag = new createUser();

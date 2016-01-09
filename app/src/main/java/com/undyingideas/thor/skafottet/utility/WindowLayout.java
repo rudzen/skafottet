@@ -28,7 +28,7 @@ import android.view.WindowManager;
  */
 public abstract class WindowLayout {
 
-    public static final Point screenDimension = new Point();
+    private static final Point screenDimension = new Point();
 
     public static void hideStatusBar(final Window w, final ActionBar ab) {
         if (Build.VERSION.SDK_INT >= 16) { //ye olde method

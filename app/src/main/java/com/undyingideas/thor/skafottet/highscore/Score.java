@@ -12,7 +12,7 @@ package com.undyingideas.thor.skafottet.highscore;
 import java.io.Serializable;
 import java.util.Comparator;
 
-public class Score implements Serializable, Comparator<Score> {
+class Score implements Serializable, Comparator<Score> {
     private static final long serialVersionUID = -7482559749006887621L;
     private final String name;
     private final int score, day, month, year;
@@ -37,15 +37,15 @@ public class Score implements Serializable, Comparator<Score> {
         return name;
     }
 
-    public int getDay() {
+    private int getDay() {
         return day;
     }
 
-    public int getMonth() {
+    private int getMonth() {
         return month;
     }
 
-    public int getYear() {
+    private int getYear() {
         return year;
     }
 

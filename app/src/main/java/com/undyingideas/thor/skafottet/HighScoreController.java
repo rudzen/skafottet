@@ -6,6 +6,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.undyingideas.thor.skafottet.utility.Constant;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,12 +18,12 @@ import java.util.Map;
  *
  * @author Gump
  */
-public class HighScoreController {
+class HighScoreController {
 
     final ArrayList<PlayerScore> players = new ArrayList<>();
-    Firebase ref;
-    int limit;
-    WebView theWebView;
+    private Firebase ref;
+    private int limit;
+    private WebView theWebView;
 
     public HighScoreController(final Firebase firebaseRef, final int limit, final ArrayList<PlayerScore> list, final WebView theWebView) {
         //Setting up reference to firebase.
@@ -31,7 +32,7 @@ public class HighScoreController {
         if (!players.isEmpty()) players.clear();
         players.addAll(list);
         this.theWebView = theWebView;
-        ref = new Firebase("https://hangmandtu.firebaseio.com/");
+        ref = new Firebase(Constant.HANGMANDTU_FIREBASEIO);
         //Query orders
 //        Query query = ref.orderByValue().limitToFirst(limit);
 //        query.addValueEventListener(new fireBaseValueEventListener());
@@ -60,7 +61,7 @@ public class HighScoreController {
     }
 
 
-    class FireBaseEventListener implements ValueEventListener {
+    private class FireBaseEventListener implements ValueEventListener {
 
         @Override
         public void onDataChange(final DataSnapshot snapshot) {
