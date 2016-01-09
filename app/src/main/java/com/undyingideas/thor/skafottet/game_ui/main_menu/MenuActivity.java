@@ -66,6 +66,9 @@ public class MenuActivity extends MenuActivityAbstract {
 
     private long newGameID = -1;
 
+    private View.OnClickListener buttonListener;
+
+
     private static final String TAG = "MenuActivity";
 
     @Override
@@ -73,9 +76,13 @@ public class MenuActivity extends MenuActivityAbstract {
         super.onCreate(savedInstanceState);
         // contentView is set in super class..
 
+        if (buttonListener == null) {
+            buttonListener = new MenuButtonClickHandler(this);
+        }
+
         title = (ImageView) findViewById(R.id.menu_title);
         title.setClickable(true);
-        title.setOnClickListener(new MenuButtonClickHandler(this, TITLE));
+        title.setOnClickListener(buttonListener);
 
         buttons[BUTTON_CONT_GAME] = (ImageView) findViewById(R.id.menu_cont_game);
         buttons[BUTTON_NEW_GAME] = (ImageView) findViewById(R.id.menu_new_game);
@@ -88,7 +95,7 @@ public class MenuActivity extends MenuActivityAbstract {
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].setClickable(true);
             //noinspection ObjectAllocationInLoop
-            buttons[i].setOnClickListener(new MenuButtonClickHandler(this, i));
+            buttons[i].setOnClickListener(buttonListener);
         }
     }
 
@@ -126,142 +133,8 @@ public class MenuActivity extends MenuActivityAbstract {
     }
 
     private void showAll() {
-
         YoYo.with(Techniques.FadeIn).duration(300).withListener(new EnterAnimatorHandler(this)).playOn(findViewById(R.id.menu_background));
-    }
-
-    @SuppressWarnings("AccessStaticViaInstance")
-    static class QuitDialogCallback implements MaterialDialog.SingleButtonCallback {
-
-        private final WeakReference<MenuActivity> menuActivityWeakReference;
-
-        public QuitDialogCallback(final MenuActivity menuActivity) {
-            menuActivityWeakReference = new WeakReference<>(menuActivity);
-        }
-
-        @Override
-        public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
-            final MenuActivity menuActivity = menuActivityWeakReference.get();
-            if (menuActivity != null) {
-                if (which == DialogAction.POSITIVE) {
-                    menuActivity.endMenu(FINISH, menuActivity.buttons[menuActivity.BUTTON_QUIT]);
-                } else {
-                    menuActivity.click_status = true;
-                    menuActivity.setMenuButtonsClickable(true);
-                }
-            }
-        }
-    }
-
-    private static class EnterAnimatorHandler implements Animator.AnimatorListener {
-
-        private final WeakReference<MenuActivity> menuActivityWeakReference;
-
-        public EnterAnimatorHandler(final MenuActivity menuActivity) {
-            menuActivityWeakReference = new WeakReference<>(menuActivity);
-        }
-
-        @Override
-        public void onAnimationStart(final Animator animation) {
-            final MenuActivity menuActivity = menuActivityWeakReference.get();
-            if (menuActivity != null) {
-                YoYo.with(Techniques.FadeInDown).duration(800).playOn(menuActivity.title);
-                if (menuActivity.buttons[BUTTON_CONT_GAME].getVisibility() == View.INVISIBLE) {
-                    YoYo.with(Techniques.BounceInUp).duration(900).playOn(menuActivity.buttons[1]);
-                } else {
-                    YoYo.with(Techniques.BounceInUp).duration(900).playOn(menuActivity.buttons[0]);
-                    YoYo.with(Techniques.BounceInLeft).duration(900).playOn(menuActivity.buttons[1]);
-                }
-                YoYo.with(Techniques.BounceInLeft).duration(800).playOn(menuActivity.buttons[2]);
-                YoYo.with(Techniques.BounceInLeft).duration(800).playOn(menuActivity.buttons[3]);
-                YoYo.with(Techniques.BounceInRight).duration(700).playOn(menuActivity.buttons[4]);
-                YoYo.with(Techniques.BounceInRight).duration(700).playOn(menuActivity.buttons[5]);
-                YoYo.with(Techniques.BounceInDown).duration(600).playOn(menuActivity.buttons[6]);
-
-                menuActivity.click_status = true;
-                menuActivity.setMenuButtonsClickable(true);
-            }
-        }
-
-        @Override
-        public void onAnimationEnd(final Animator animation) { }
-
-        @Override
-        public void onAnimationCancel(final Animator animation) { }
-
-        @Override
-        public void onAnimationRepeat(final Animator animation) { }
-    }
-
-    private static class ExitAnimatorHandler implements Animator.AnimatorListener {
-
-        private final WeakReference<MenuActivity> menuActivityWeakReference;
-        private final String methodToCall;
-
-        public ExitAnimatorHandler(final MenuActivity menuActivity, final String methodToCall) {
-            menuActivityWeakReference = new WeakReference<>(menuActivity);
-            this.methodToCall = methodToCall;
-        }
-
-        @Override
-        public void onAnimationStart(final Animator animation) { }
-
-        @Override
-        public void onAnimationEnd(final Animator animation) {
-            final MenuActivity menuActivity = menuActivityWeakReference.get();
-            if (menuActivity != null && methodToCall != null) {
-                menuActivity.callMethod(methodToCall);
-            }
-        }
-
-        @Override
-        public void onAnimationCancel(final Animator animation) { }
-
-        @Override
-        public void onAnimationRepeat(final Animator animation) { }
-    }
-
-    private static class MenuButtonClickHandler implements View.OnClickListener {
-
-        private final WeakReference<MenuActivity> menuActivityWeakReference;
-        @SuppressWarnings("NonConstantFieldWithUpperCaseName")
-        private final int BUTTON_VALUE;
-
-        public MenuButtonClickHandler(final MenuActivity menuActivity, final int buttonValue) {
-            menuActivityWeakReference = new WeakReference<>(menuActivity);
-            BUTTON_VALUE = buttonValue;
-        }
-
-        @Override
-        public void onClick(final View v) {
-            final MenuActivity menuActivity = menuActivityWeakReference.get();
-            if (menuActivity != null) {
-                menuActivity.button_clicked = BUTTON_VALUE;
-                if (BUTTON_VALUE == BUTTON_CONT_GAME || BUTTON_VALUE == BUTTON_WORD_LISTS) {
-                    new MaterialDialog.Builder(menuActivity)
-                            .content("Ikke implementeret!!!")
-                            .cancelable(true)
-                            .positiveText(R.string.dialog_yes)
-                            .title("STOP DA PRESS!!!")
-                            .show();
-                } else if (BUTTON_VALUE == BUTTON_MULTIPLAYER) {
-                    menuActivity.endMenu("showMultiplayer", menuActivity.buttons[BUTTON_VALUE]);
-                } else if (BUTTON_VALUE == BUTTON_NEW_GAME) {
-                    menuActivity.setMenuButtonsClickable(false);
-                    menuActivity.callMethod("showNewGame");
-                } else if (BUTTON_VALUE == BUTTON_HELP) {
-                    menuActivity.endMenu("showHelp", menuActivity.buttons[BUTTON_VALUE]);
-                } else if (BUTTON_VALUE == BUTTON_QUIT) {
-                    menuActivity.setMenuButtonsClickable(false);
-                    menuActivity.dialogQuit();
-                } else if (BUTTON_VALUE == TITLE) {
-                    // figure out some funky stuff here !!! :-)
-                    menuActivity.showAll();
-                } else if (BUTTON_VALUE == BUTTON_SETTINGS){
-                   menuActivity.showHighScore();
-                }
-            }
-        }
+        setMenuButtonsClickable(true);
     }
 
     private void endMenu(final String method_name, final ImageView clickedImageView) {
@@ -343,6 +216,29 @@ public class MenuActivity extends MenuActivityAbstract {
                 ;
     }
 
+    @SuppressWarnings("AccessStaticViaInstance")
+    static class QuitDialogCallback implements MaterialDialog.SingleButtonCallback {
+
+        private final WeakReference<MenuActivity> menuActivityWeakReference;
+
+        public QuitDialogCallback(final MenuActivity menuActivity) {
+            menuActivityWeakReference = new WeakReference<>(menuActivity);
+        }
+
+        @Override
+        public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+            final MenuActivity menuActivity = menuActivityWeakReference.get();
+            if (menuActivity != null) {
+                if (which == DialogAction.POSITIVE) {
+                    menuActivity.endMenu(FINISH, menuActivity.buttons[menuActivity.BUTTON_QUIT]);
+                } else {
+                    menuActivity.click_status = true;
+                    menuActivity.setMenuButtonsClickable(true);
+                }
+            }
+        }
+    }
+
     private static class OnNewGameItemClickListener implements AdapterView.OnItemClickListener {
 
         @Override
@@ -358,4 +254,120 @@ public class MenuActivity extends MenuActivityAbstract {
             }
         }
     }
+
+    // TODO : Recode
+    private static class MenuButtonClickHandler implements View.OnClickListener {
+
+        private final WeakReference<MenuActivity> menuActivityWeakReference;
+        @SuppressWarnings("NonConstantFieldWithUpperCaseName")
+
+        public MenuButtonClickHandler(final MenuActivity menuActivity) {
+            menuActivityWeakReference = new WeakReference<>(menuActivity);
+        }
+
+        @Override
+        public void onClick(final View v) {
+            final MenuActivity menuActivity = menuActivityWeakReference.get();
+            if (menuActivity != null) {
+                if (v == menuActivity.buttons[BUTTON_CONT_GAME] || v == menuActivity.buttons[BUTTON_WORD_LISTS]) {
+                    new MaterialDialog.Builder(menuActivity)
+                            .content("Ikke implementeret!!!")
+                            .cancelable(true)
+                            .positiveText(R.string.dialog_yes)
+                            .title("STOP DA PRESS!!!")
+                            .show();
+                } else if (v == menuActivity.buttons[BUTTON_MULTIPLAYER]) {
+                    menuActivity.endMenu("showMultiplayer", menuActivity.buttons[BUTTON_MULTIPLAYER]);
+                    menuActivity.button_clicked = BUTTON_MULTIPLAYER;
+                } else if (v == menuActivity.buttons[BUTTON_NEW_GAME]) {
+                    menuActivity.setMenuButtonsClickable(false);
+                    menuActivity.callMethod("showNewGame");
+                    menuActivity.button_clicked = BUTTON_NEW_GAME;
+                } else if (v == menuActivity.buttons[BUTTON_HELP]) {
+                    menuActivity.endMenu("showHelp", menuActivity.buttons[BUTTON_HELP]);
+                    menuActivity.button_clicked = BUTTON_HELP;
+                } else if (v == menuActivity.buttons[BUTTON_QUIT]) {
+                    menuActivity.setMenuButtonsClickable(false);
+                    menuActivity.dialogQuit();
+                    menuActivity.button_clicked = BUTTON_QUIT;
+                } else if (v == menuActivity.buttons[TITLE]) {
+                    // figure out some funky stuff here !!! :-)
+                    menuActivity.showAll();
+                    menuActivity.button_clicked = TITLE;
+                } else if (v == menuActivity.buttons[BUTTON_SETTINGS]){
+                    menuActivity.showHighScore();
+                    menuActivity.button_clicked = BUTTON_SETTINGS;
+                }
+            }
+        }
+    }
+
+    private static class EnterAnimatorHandler implements Animator.AnimatorListener {
+
+        private final WeakReference<MenuActivity> menuActivityWeakReference;
+
+        public EnterAnimatorHandler(final MenuActivity menuActivity) {
+            menuActivityWeakReference = new WeakReference<>(menuActivity);
+        }
+
+        @Override
+        public void onAnimationStart(final Animator animation) {
+            final MenuActivity menuActivity = menuActivityWeakReference.get();
+            if (menuActivity != null) {
+                YoYo.with(Techniques.FadeInDown).duration(800).playOn(menuActivity.title);
+                if (menuActivity.buttons[BUTTON_CONT_GAME].getVisibility() == View.INVISIBLE) {
+                    YoYo.with(Techniques.BounceInUp).duration(900).playOn(menuActivity.buttons[1]);
+                } else {
+                    YoYo.with(Techniques.BounceInUp).duration(900).playOn(menuActivity.buttons[0]);
+                    YoYo.with(Techniques.BounceInLeft).duration(900).playOn(menuActivity.buttons[1]);
+                }
+                YoYo.with(Techniques.BounceInLeft).duration(800).playOn(menuActivity.buttons[2]);
+                YoYo.with(Techniques.BounceInLeft).duration(800).playOn(menuActivity.buttons[3]);
+                YoYo.with(Techniques.BounceInRight).duration(700).playOn(menuActivity.buttons[4]);
+                YoYo.with(Techniques.BounceInRight).duration(700).playOn(menuActivity.buttons[5]);
+                YoYo.with(Techniques.BounceInDown).duration(600).playOn(menuActivity.buttons[6]);
+
+                menuActivity.click_status = true;
+                menuActivity.setMenuButtonsClickable(true);
+            }
+        }
+
+        @Override
+        public void onAnimationEnd(final Animator animation) { }
+
+        @Override
+        public void onAnimationCancel(final Animator animation) { }
+
+        @Override
+        public void onAnimationRepeat(final Animator animation) { }
+    }
+
+    private static class ExitAnimatorHandler implements Animator.AnimatorListener {
+
+        private final WeakReference<MenuActivity> menuActivityWeakReference;
+        private final String methodToCall;
+
+        public ExitAnimatorHandler(final MenuActivity menuActivity, final String methodToCall) {
+            menuActivityWeakReference = new WeakReference<>(menuActivity);
+            this.methodToCall = methodToCall;
+        }
+
+        @Override
+        public void onAnimationStart(final Animator animation) { }
+
+        @Override
+        public void onAnimationEnd(final Animator animation) {
+            final MenuActivity menuActivity = menuActivityWeakReference.get();
+            if (menuActivity != null && methodToCall != null) {
+                menuActivity.callMethod(methodToCall);
+            }
+        }
+
+        @Override
+        public void onAnimationCancel(final Animator animation) { }
+
+        @Override
+        public void onAnimationRepeat(final Animator animation) { }
+    }
+
 }
