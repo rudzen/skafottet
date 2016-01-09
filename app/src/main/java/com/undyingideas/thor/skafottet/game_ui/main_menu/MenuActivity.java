@@ -27,13 +27,16 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.nineoldandroids.animation.Animator;
 import com.undyingideas.thor.skafottet.Instructions;
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.game_ui.GameActivity;
 import com.undyingideas.thor.skafottet.utility.Constant;
+import com.undyingideas.thor.skafottet.utility.GameUtility;
 import com.undyingideas.thor.skafottet.utility.WindowLayout;
-import com.undyingideas.thor.skafottet.views.NewGameAdapter;
-import com.undyingideas.thor.skafottet.views.NewGameItem;
+import com.undyingideas.thor.skafottet.views.StartGameAdapter;
+import com.undyingideas.thor.skafottet.views.StartGameItem;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 /**
  * Very basic activity.
@@ -45,19 +48,18 @@ public class MenuActivity extends MenuActivityAbstract {
     private static final String FINISH = "finish";
     private static final int BACK_PRESSED_DELAY = 2000;
 
-    private static final int BUTTON_COUNT = 8;
+    private static final int BUTTON_COUNT = 7;
     private ImageView title;
     private final ImageView[] buttons = new ImageView[BUTTON_COUNT];
     private static final int TITLE = -1;
 
-    private static final int BUTTON_SINGLE_PLAYER = 0;
-    private static final int BUTTON_MULTI_PLAYER = 1;
-    private static final int BUTTON_HIGHSCORE = 2;
-    private static final int BUTTON_WORD_LISTS = 3;
-    private static final int BUTTON_SETTINGS = 4;
-    private static final int BUTTON_ABOUT = 5;
-    private static final int BUTTON_HELP = 6;
-    private static final int BUTTON_QUIT = 7;
+    private static final int BUTTON_PLAY = 0;
+    private static final int BUTTON_HIGHSCORE = 1;
+    private static final int BUTTON_WORD_LISTS = 2;
+    private static final int BUTTON_SETTINGS = 3;
+    private static final int BUTTON_ABOUT = 4;
+    private static final int BUTTON_HELP = 5;
+    private static final int BUTTON_QUIT = 6;
 
 
     private int button_clicked;
@@ -86,8 +88,7 @@ public class MenuActivity extends MenuActivityAbstract {
         title.setClickable(true);
         title.setOnClickListener(s_buttonListener);
 
-        buttons[BUTTON_SINGLE_PLAYER] = (ImageView) findViewById(R.id.menu_button_single_player);
-        buttons[BUTTON_MULTI_PLAYER] = (ImageView) findViewById(R.id.menu_button_multi_player);
+        buttons[BUTTON_PLAY] = (ImageView) findViewById(R.id.menu_button_play);
         buttons[BUTTON_HIGHSCORE] = (ImageView) findViewById(R.id.menu_button_highscore);
 
         buttons[BUTTON_WORD_LISTS] = (ImageView) findViewById(R.id.menu_button_word_lists);
@@ -130,7 +131,6 @@ public class MenuActivity extends MenuActivityAbstract {
         if (hasFocus) {
             WindowLayout.setImmersiveMode(getWindow());
         }
-
     }
 
     private void setMenuButtonClickable(final int index, final boolean value) {
@@ -187,33 +187,42 @@ public class MenuActivity extends MenuActivityAbstract {
         WindowLayout.showSnack("Ikke implementeret (endnu)!", title, true);
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "AccessStaticViaInstance"})
     private void showNewGame() {
         // TODO : If existing game exists, put them in the list, with NEW game as the very first.
-        // If no previous game is in progress, start a new game without showing this dialog.
 
+        final ArrayList<StartGameItem> startGameItem = new ArrayList<>(3);
 
-        final NewGameItem[] newGameItems = new NewGameItem[3];
+        // If no previous game is in progress, don't add it to list :-)
+        try {
+            GameUtility.s_prefereces.checkForNullKey(Constant.KEY_SAVE_GAME);
+            final SaveGame saveGame = (SaveGame) GameUtility.s_prefereces.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
+            startGameItem.add(
+                    new StartGameItem(0, "Fortsæt sidste spil", "Type : " + (saveGame.isMultiPlayer() ? "Multi" : "Single") + "player / Gæt : " + saveGame.getLogic().getVisibleWord() , GameUtility.imageRefs[saveGame.getLogic().getNumWrongLetters()]));
 
-        newGameItems[0] = new NewGameItem(0, "Wuhuu..", "Bare start spillet mester", R.drawable.forkert6);
-        newGameItems[1] = new NewGameItem(1, "Anden mulighed", "For hulvate dude!", R.drawable.forkert5);
-        newGameItems[2] = new NewGameItem(1, "Nothing here!...", "Starter også bare spillet !", R.drawable.forkert4);
+        } catch (final NullPointerException npe) {
+            // nothing happends here, it's just for not adding the option to continue a game.
+        }
 
-        final NewGameAdapter adapter = new NewGameAdapter(this, R.layout.new_game_list_row, newGameItems);
+        startGameItem.add(new StartGameItem(1, "Nyt singleplayer", "Tilfældigt ord.", GameUtility.imageRefs[0]));
+        startGameItem.add(new StartGameItem(2, "Nyt multiplayer", "Udfordring.", GameUtility.imageRefs[0]));
+        startGameItem.add(new StartGameItem(3, "Nyt multiplayer", "Tværfaglig udfordring" , GameUtility.imageRefs[0]));
+
+        final StartGameAdapter adapter = new StartGameAdapter(this, R.layout.new_game_list_row, startGameItem);
         final ListView listViewItems = new ListView(this);
         listViewItems.setAdapter(adapter);
-        listViewItems.setOnItemClickListener(new OnNewGameItemClickListener());
+        listViewItems.setOnItemClickListener(new OnStartGameItemClickListener());
 
         md = new MaterialDialog.Builder(this)
                 .customView(listViewItems, false)
-                .title("New Game")
+                .title("Start spil")
                 .show();
     }
 
     @SuppressWarnings("unused")
     private void startNewGame() {
         final Intent intent = new Intent(this, GameActivity.class);
-        intent.putExtra(Constant.KEY_MODE, Constant.MODE_SINGLE_PLAYER);
+        intent.putExtra(Constant.KEY_MODE, newGameID);
         sf.setRun(false);
         startActivity(intent);
     }
@@ -268,7 +277,7 @@ public class MenuActivity extends MenuActivityAbstract {
         }
     }
 
-    private static class OnNewGameItemClickListener implements AdapterView.OnItemClickListener {
+    private static class OnStartGameItemClickListener implements AdapterView.OnItemClickListener {
 
         @Override
         public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
@@ -278,7 +287,7 @@ public class MenuActivity extends MenuActivityAbstract {
                 Log.d("NG", String.valueOf(id));
                 ((MenuActivity) context).md.dismiss();
                 ((MenuActivity) context).newGameID = id;
-                ((MenuActivity) context).endMenu("startNewGame", ((MenuActivity) context).buttons[BUTTON_SINGLE_PLAYER]);
+                ((MenuActivity) context).endMenu("startNewGame", ((MenuActivity) context).buttons[BUTTON_PLAY]);
                 //((MenuActivity) context).startNewGame(id);
             }
         }
@@ -298,13 +307,10 @@ public class MenuActivity extends MenuActivityAbstract {
         public void onClick(final View v) {
             final MenuActivity menuActivity = menuActivityWeakReference.get();
             if (menuActivity != null) {
-                if (v == menuActivity.buttons[BUTTON_SINGLE_PLAYER]) {
+                if (v == menuActivity.buttons[BUTTON_PLAY]) {
                     menuActivity.setMenuButtonsClickable(false);
                     menuActivity.callMethod("showNewGame");
-                    menuActivity.button_clicked = BUTTON_SINGLE_PLAYER;
-                } else if (v == menuActivity.buttons[BUTTON_MULTI_PLAYER]) {
-                    menuActivity.endMenu("showMultiplayer", menuActivity.buttons[BUTTON_MULTI_PLAYER]);
-                    menuActivity.button_clicked = BUTTON_MULTI_PLAYER;
+                    menuActivity.button_clicked = BUTTON_PLAY;
                 } else if (v == menuActivity.buttons[BUTTON_HIGHSCORE]) {
                     menuActivity.endMenu("showHighScore", menuActivity.buttons[BUTTON_HIGHSCORE]);
                     menuActivity.button_clicked = BUTTON_HIGHSCORE;

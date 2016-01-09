@@ -60,13 +60,8 @@
         android:layout_below="@+id/menu_title">
 
         <ImageView
-            android:id="@+id/menu_button_single_player"
-            android:background="@drawable/button_single_player"
-            style="@style/menu_button_style"/>
-
-        <ImageView
-            android:id="@+id/menu_button_multi_player"
-            android:background="@drawable/button_multiplayer"
+            android:id="@+id/menu_button_play"
+            android:background="@drawable/button_play"
             style="@style/menu_button_style"/>
 
         <ImageView
@@ -76,7 +71,7 @@
 
         <ImageView
             android:id="@+id/menu_button_word_lists"
-            android:background="@drawable/button_word_lists"
+            android:background="@drawable/button_ordlister"
             style="@style/menu_button_style"/>
 
         <ImageView

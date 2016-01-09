@@ -48,9 +48,12 @@ public class GameActivity extends AppCompatActivity implements
         if (getIntent() != null) {
             final Bundle bundle = getIntent().getExtras();
             final int gameMode = bundle.getInt(Constant.KEY_MODE);
-            if (gameMode == Constant.MODE_SINGLE_PLAYER) {
+            if (gameMode == Constant.MODE_CONT_GAME) {
+                // throw in the game from the preferences
+                addFragment(HangmanGameFragment.newInstance((SaveGame) GameUtility.s_prefereces.getObject(Constant.KEY_SAVE_GAME, SaveGame.class)));
+            } else if (gameMode == Constant.MODE_SINGLE_PLAYER) {
                 addFragment(HangmanGameFragment.newInstance(new SaveGame(new Hanged(GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)), false, "Du")));
-            } else if (gameMode == Constant.MODE_MULTI_PLAYER) {
+            } else if (gameMode == Constant.MODE_MULTI_PLAYER || gameMode == Constant.MODE_MULTI_PLAYER_2) {
                 // just show the current player list
                 addFragment(MultiPlayerPlayerFragment.newInstance(true));
             } else if (gameMode == Constant.MODE_ABOUT) {

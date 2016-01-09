@@ -21,19 +21,21 @@ import android.widget.TextView;
 
 import com.undyingideas.thor.skafottet.R;
 
+import java.util.ArrayList;
+
 /**
  * Created on 27-12-2015, 09:59.<br>
  * Project : R-TicTacToe<br>
- * Adapter for showing the relevant information about new game selection.
+ * Adapter for showing the relevant information about game selection.
  * @author rudz
  */
-public class NewGameAdapter extends ArrayAdapter<NewGameItem> {
+public class StartGameAdapter extends ArrayAdapter<StartGameItem> {
 
     private final Context mContext;
     private final int layoutResourceId;
-    private final NewGameItem[] data;
+    private final ArrayList<StartGameItem> data;
 
-    public NewGameAdapter(final Context mContext, final int layoutResourceId, final NewGameItem[] data) {
+    public StartGameAdapter(final Context mContext, final int layoutResourceId, final ArrayList<StartGameItem> data) {
 
         super(mContext, layoutResourceId, data);
 
@@ -50,18 +52,18 @@ public class NewGameAdapter extends ArrayAdapter<NewGameItem> {
             view = inflater.inflate(layoutResourceId, parent, false);
         }
 
-        final NewGameItem newGameItem = data[position];
+        final StartGameItem startGameItem = data.get(position);
 
         final TextView textViewItem = (TextView) view.findViewById(R.id.new_game_item);
-        textViewItem.setText(newGameItem.itemName);
-        textViewItem.setTag(newGameItem.itemId);
+        textViewItem.setText(startGameItem.itemName);
+        textViewItem.setTag(startGameItem.itemId);
 
         final TextView textViewDesc = (TextView) view.findViewById(R.id.new_game_description);
-        textViewDesc.setText(newGameItem.description);
-        textViewDesc.setTag(newGameItem.itemId);
+        textViewDesc.setText(startGameItem.description);
+        textViewDesc.setTag(startGameItem.itemId);
 
         final ImageView icon = (ImageView) view.findViewById(R.id.new_game_icon);
-        icon.setImageResource(newGameItem.resourceIcon);
+        icon.setImageResource(startGameItem.resourceIcon);
 
         return view;
     }

@@ -18,7 +18,7 @@ import android.support.annotation.DrawableRes;
  *
  * @author rudz
  */
-public class NewGameItem {
+public class StartGameItem {
 
     public final int itemId;
     public final CharSequence itemName;
@@ -27,7 +27,7 @@ public class NewGameItem {
     final int resourceIcon;
 
     // constructor
-    public NewGameItem(final int itemId, final CharSequence itemName, final CharSequence description, final @DrawableRes int resourceIcon) {
+    public StartGameItem(final int itemId, final CharSequence itemName, final CharSequence description, final @DrawableRes int resourceIcon) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.description = description;

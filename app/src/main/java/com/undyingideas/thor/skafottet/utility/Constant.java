@@ -18,13 +18,15 @@ public final class Constant {
 
     /* game mode keys */
     public static final String KEY_MODE = "mode";
+    public static final int MODE_CONT_GAME = 0;
     public static final int MODE_SINGLE_PLAYER = 1;
     public static final int MODE_MULTI_PLAYER = 2;
+    public static final int MODE_MULTI_PLAYER_2 = 3;
     public static final int MODE_MULTI_PLAYER_LOBBY = 4;
-    public static final int MODE_MULtI_PLAYER_LOGIN = 8;
-    public static final int MODE_MULTI_PLAYER_WORD_SELECT = 16;
-    public static final int MODE_WORD_LIST = 32;
-    public static final int MODE_ABOUT = 64;
+    public static final int MODE_MULtI_PLAYER_LOGIN = 5;
+    public static final int MODE_MULTI_PLAYER_WORD_SELECT = 6;
+    public static final int MODE_WORD_LIST = 7;
+    public static final int MODE_ABOUT = 8;
 
     public static final String KEY_GAME_LOGIC = "log";
 
