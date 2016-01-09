@@ -78,4 +78,14 @@ public class PlayerDetailActivity extends AppCompatActivity {
             WindowLayout.showSnack("Challange sent!", view, false);
         }
     }
+
+    @Override
+    public void onWindowFocusChanged(final boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            WindowLayout.setImmersiveMode(getWindow());
+        }
+
+    }
+
 }

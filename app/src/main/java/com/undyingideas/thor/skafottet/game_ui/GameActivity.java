@@ -12,6 +12,7 @@ import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.dialogs.YesNo;
 import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
+import com.undyingideas.thor.skafottet.utility.WindowLayout;
 
 public class GameActivity extends AppCompatActivity implements
         YesNo.YesNoResultListener,
@@ -104,6 +105,15 @@ public class GameActivity extends AppCompatActivity implements
         } else {
             getFragmentManager().popBackStack();
         }
+    }
+
+    @Override
+    public void onWindowFocusChanged(final boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            WindowLayout.setImmersiveMode(getWindow());
+        }
+
     }
 
     @Override

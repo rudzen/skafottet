@@ -172,4 +172,14 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
             }
         }
     }
+
+    @Override
+    public void onWindowFocusChanged(final boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            WindowLayout.setImmersiveMode(getWindow());
+        }
+
+    }
+
 }

@@ -118,4 +118,13 @@ public class LoadingActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onWindowFocusChanged(final boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            WindowLayout.setImmersiveMode(getWindow());
+        }
+
+    }
+
 }

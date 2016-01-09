@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.dialogs.YesNo;
 import com.undyingideas.thor.skafottet.game_ui.wordlist.data.WordItem;
+import com.undyingideas.thor.skafottet.utility.WindowLayout;
 
 /**
  * WordFragmentLayout class.
@@ -99,4 +100,14 @@ public class WordFragmentLayout extends AppCompatActivity implements YesNo.YesNo
         setResult(RESULT_OK, returnIntent);
         finish();
     }
+
+    @Override
+    public void onWindowFocusChanged(final boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            WindowLayout.setImmersiveMode(getWindow());
+        }
+
+    }
+
 }
