@@ -72,7 +72,7 @@ public class MenuActivity extends MenuActivityAbstract {
     private int newGameID = -1;
     private int maxID; // quick hack for the dialog ID mess
 
-    private View.OnClickListener s_buttonListener;
+    private MenuButtonClickHandler s_buttonListener;
 
     private static final String TAG = "MenuActivity";
 
@@ -134,13 +134,6 @@ public class MenuActivity extends MenuActivityAbstract {
         if (hasFocus) {
             WindowLayout.setImmersiveMode(getWindow());
         }
-    }
-
-    private void setMenuButtonClickable(final int index, final boolean value) {
-        int trueIndex = index;
-        if (trueIndex < 0) trueIndex = 0;
-        else if (trueIndex > buttons.length - 1) trueIndex = buttons.length - 1;
-        buttons[trueIndex].setClickable(value);
     }
 
     private void setMenuButtonsClickable(final boolean value) {

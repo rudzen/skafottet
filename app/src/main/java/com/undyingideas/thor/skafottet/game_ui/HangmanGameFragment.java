@@ -28,7 +28,7 @@ import com.undyingideas.thor.skafottet.utility.WindowLayout;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class HangmanGameFragment extends Fragment implements View.OnClickListener {
+public class HangmanGameFragment extends Fragment {
 
     private final LinearLayout[] buttonRows = new LinearLayout[4];
 
@@ -44,6 +44,8 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
     private View sepKnown, sepStatus;
 
     private Animation sepAnimation;
+    private OnButtonClickListener onButtonClickListener;
+
 
 
     public static HangmanGameFragment newInstance(final SaveGame saveGame) {
@@ -72,7 +74,7 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
 
         noose = (ImageView) root.findViewById(R.id.imageView);
 
-        listOfButtons = new ArrayList<>();
+        listOfButtons = new ArrayList<>(28);
 
         buttonRows[0] = (LinearLayout) root.findViewById(R.id.linearLayout1);
         buttonRows[1] = (LinearLayout) root.findViewById(R.id.linearLayout2);
@@ -94,10 +96,7 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
         sepKnown.setAnimation(sepAnimation);
         sepStatus.setAnimation(sepAnimation);
 
-        //adding clickhandlers
-        for (final Button btn : listOfButtons) {
-            btn.setOnClickListener(this);
-        }
+        onButtonClickListener = new OnButtonClickListener(this);
 
         resetButtons();
 
@@ -144,6 +143,7 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
     public void onPause() {
         GameUtility.s_prefereces.putObject(Constant.KEY_SAVE_GAME, currentGame);
         shimmerWord.cancel();
+        shimmerStatus.cancel();
         sepKnown.setAnimation(null);
         sepStatus.setAnimation(null);
         super.onPause();
@@ -156,7 +156,12 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
             shimmerWord = new Shimmer();
             shimmerWord.setDuration(400);
         }
+        if (shimmerStatus == null) {
+            shimmerStatus = new Shimmer();
+            shimmerStatus.setDuration(800);
+        }
         shimmerWord.start(textViewWord);
+        shimmerStatus.start(textViewStatus);
         sepKnown.setAnimation(sepAnimation);
         sepStatus.setAnimation(sepAnimation);
     }
@@ -183,21 +188,12 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
         YoYo.with(Techniques.Flash).duration(400).playOn(buttonRows[3]);
         YoYo.with(Techniques.Landing).duration(400).playOn(noose);
 
-
         for (final Button button : listOfButtons) {
-            YoYo.with(Techniques.RollIn).duration(400).playOn(button);
+            YoYo.with(Techniques.Flash).duration(400).playOn(button);
             button.setVisibility(View.VISIBLE);
-            button.setOnClickListener(this);
+            button.setOnClickListener(onButtonClickListener);
         }
         listOfButtons.clear();
-    }
-
-    @Override
-    public void onClick(final View v) {
-        YoYo.with(Techniques.ZoomOutUp).duration(200).withListener(new OnButtonClickAnimatorListener(v)).playOn(v);
-        Log.d("buttons", "button clicked");
-        listOfButtons.add((Button) v);
-        guess(((Button) v).getText().toString());
     }
 
     private static ArrayList<Button> getChildren(final ViewGroup vg) {
@@ -205,6 +201,27 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
         for (int i = 0; i < vg.getChildCount(); i++) a.add((Button) vg.getChildAt(i));
         return a;
     }
+
+    private static class OnButtonClickListener implements View.OnClickListener {
+
+        private final WeakReference<HangmanGameFragment> hangmanGameFragmentWeakReference;
+
+        public OnButtonClickListener(final HangmanGameFragment hangmanGameFragment) {
+            hangmanGameFragmentWeakReference = new WeakReference<>(hangmanGameFragment);
+        }
+
+        @Override
+        public void onClick(final View v) {
+            final HangmanGameFragment hangmanGameFragment = hangmanGameFragmentWeakReference.get();
+            if (hangmanGameFragment != null) {
+                final Button button = (Button) v;
+                YoYo.with(Techniques.Flash).duration(200).withListener(new OnButtonClickAnimatorListener(v)).playOn(v);
+                hangmanGameFragment.listOfButtons.add(button);
+                hangmanGameFragment.guess(button.getText().toString());
+            }
+        }
+    }
+
 
     private static class OnButtonClickAnimatorListener implements Animator.AnimatorListener {
 

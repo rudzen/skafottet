@@ -10,7 +10,8 @@
               android:paddingRight="@dimen/activity_horizontal_margin"
               android:paddingTop="@dimen/activity_vertical_margin"
               tools:context=".game_ui.GameActivity"
-              android:weightSum="12">
+              android:weightSum="12"
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            />
+            android:layout_centerInParent="true"/>
     </RelativeLayout>
 
 
@@ -106,7 +107,6 @@
             android:layout_height="wrap_content"
             android:textColor="@color/selector"
             android:layout_gravity="center"
-            android:layout_weight="0.7"
             android:gravity="center"
             android:textSize="30sp"/>
 
@@ -129,7 +129,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="bottom"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/button1"
@@ -181,7 +182,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/button8"
@@ -232,7 +234,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/button15"
@@ -283,7 +286,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_gravity="bottom"
-        >
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/button22"

@@ -36,7 +36,6 @@ public class AboutFragment extends Fragment {
     private static final String SEP = System.lineSeparator();
     private static final String RUDY = "Rudy", ADAM = "Adam", THEIS = "Theis", THOR = "Thor";
 
-
     private static final String[] ROWS = {
             "Skafottet - et 3-ugers projekt, af Gruppe 23" + SEP +
                     "Gruppe medlemmer :" + SEP +
