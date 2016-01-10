@@ -342,7 +342,7 @@ public class MenuActivity extends MenuActivityAbstract {
                 } else if (v == menuActivity.title) {
                     // figure out some funky stuff here !!! :-)
                     menuActivity.showAll();
-                    menuActivity.button_clicked = TITLE;
+                    //menuActivity.button_clicked = TITLE;
                     buttonStates = true;
                 }
                 menuActivity.setMenuButtonsClickable(buttonStates);
@@ -399,7 +399,9 @@ public class MenuActivity extends MenuActivityAbstract {
         public void onAnimationStart(final Animator animation) {
             final MenuActivity menuActivity = menuActivityWeakReference.get();
             if (menuActivity != null) {
-                menuActivity.buttons[menuActivity.button_clicked].setColorFilter(null);
+                if (menuActivity.button_clicked >= 0 && menuActivity.button_clicked < menuActivity.buttons.length) {
+                    menuActivity.buttons[menuActivity.button_clicked].setColorFilter(null);
+                }
             }
         }
 

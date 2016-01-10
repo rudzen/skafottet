@@ -59,8 +59,7 @@
         android:layout_below="@+id/menu_title"
         android:layout_alignParentStart="false"
         android:layout_centerInParent="true"
-        android:layout_marginLeft="75dp"
-        android:layout_marginRight="75dp">
+        >
 
         <ImageView
             android:id="@+id/menu_button_play"
