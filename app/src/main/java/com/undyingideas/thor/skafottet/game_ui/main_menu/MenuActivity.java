@@ -11,6 +11,7 @@
 package com.undyingideas.thor.skafottet.game_ui.main_menu;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -215,6 +216,8 @@ public class MenuActivity extends MenuActivityAbstract {
         md = new MaterialDialog.Builder(this)
                 .customView(listViewItems, false)
                 .backgroundColor(Color.BLACK)
+                .cancelable(true)
+                .cancelListener(new NewGameCancelListener())
                 .title("Start spil")
                 .show();
     }
@@ -415,4 +418,11 @@ public class MenuActivity extends MenuActivityAbstract {
         public void onAnimationRepeat(final Animator animation) { }
     }
 
+    private class NewGameCancelListener implements DialogInterface.OnCancelListener {
+        @Override
+        public void onCancel(final DialogInterface dialog) {
+            dialog.dismiss();
+            setMenuButtonsClickable(true);
+        }
+    }
 }

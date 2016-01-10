@@ -129,15 +129,9 @@ public class StarField extends View {
     @Override
     protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
-        //canvas.drawColor(Color.TRANSPARENT);
         for (final Star2D star : stars) {
             p.setAlpha(star.fade);
-//            if (gravity.y > 5 || gravity.y < -5)
-//                canvas.drawLine(star.xy.x, star.xy.y, star.xy.x + gravity.x, star.xy.y + gravity.y + gravity.x, p);
-//            else if (gravity.x > 5 || gravity.x < -5)
-//                canvas.drawLine(star.xy.x, star.xy.y, star.xy.x + gravity.x, star.xy.y - gravity.y + gravity.x, p);
-//            else
-                canvas.drawCircle(star.xy.x, star.xy.y, 3, p);
+            canvas.drawCircle(star.xy.x, star.xy.y, 3, p);
         }
     }
 }
