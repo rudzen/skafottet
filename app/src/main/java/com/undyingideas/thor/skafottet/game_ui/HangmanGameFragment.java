@@ -128,6 +128,9 @@ public class HangmanGameFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(final Bundle outState) {
+        // save to prefs, we don't know if we come back ever! :-)
+        GameUtility.s_prefereces.putObject(Constant.KEY_SAVE_GAME, currentGame);
+
         outState.putParcelable(Constant.KEY_SAVE_GAME, currentGame);
         super.onSaveInstanceState(outState);
     }
@@ -141,7 +144,6 @@ public class HangmanGameFragment extends Fragment {
 
     @Override
     public void onPause() {
-        GameUtility.s_prefereces.putObject(Constant.KEY_SAVE_GAME, currentGame);
         shimmerWord.cancel();
         shimmerStatus.cancel();
         sepKnown.setAnimation(null);
@@ -177,6 +179,8 @@ public class HangmanGameFragment extends Fragment {
             if (bundle.containsKey(Constant.KEY_SAVE_GAME)) {
                 // restore complete game state!!
                 currentGame = bundle.getParcelable(Constant.KEY_SAVE_GAME);
+                // and save the game!
+                GameUtility.s_prefereces.putObject(Constant.KEY_SAVE_GAME, currentGame);
             }
         }
     }
@@ -221,7 +225,6 @@ public class HangmanGameFragment extends Fragment {
             }
         }
     }
-
 
     private static class OnButtonClickAnimatorListener implements Animator.AnimatorListener {
 

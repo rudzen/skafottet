@@ -61,7 +61,6 @@ public class MenuActivity extends MenuActivityAbstract {
     private static final int BUTTON_HELP = 5;
     private static final int BUTTON_QUIT = 6;
 
-
     private int button_clicked;
 
     private long backPressed;
@@ -97,7 +96,6 @@ public class MenuActivity extends MenuActivityAbstract {
         buttons[BUTTON_ABOUT] = (ImageView) findViewById(R.id.menu_button_about);
         buttons[BUTTON_HELP] = (ImageView) findViewById(R.id.menu_button_help);
         buttons[BUTTON_QUIT] = (ImageView) findViewById(R.id.menu_button_quit);
-
     }
 
     @Override
@@ -201,25 +199,25 @@ public class MenuActivity extends MenuActivityAbstract {
                 maxID++;
             }
         } catch (final NullPointerException npe) {
-            // nothing happends here, it's just for not adding the option to continue a game.
+            // nothing happends here, its just for not adding the option to continue a game.
+        } finally {
+            startGameItem.add(new StartGameItem(1, "Nyt singleplayer", "Tilfældigt ord.", GameUtility.imageRefs[0]));
+            startGameItem.add(new StartGameItem(2, getString(R.string.menu_new_multi_player_game), "Udfordring.", GameUtility.imageRefs[0]));
+            startGameItem.add(new StartGameItem(3, getString(R.string.menu_new_multi_player_game), "Tværfaglig udfordring" , GameUtility.imageRefs[0]));
+
+            final StartGameAdapter adapter = new StartGameAdapter(this, R.layout.new_game_list_row, startGameItem);
+            final ListView listViewItems = new ListView(this);
+            listViewItems.setAdapter(adapter);
+            listViewItems.setOnItemClickListener(new OnStartGameItemClickListener());
+
+            md = new MaterialDialog.Builder(this)
+                    .customView(listViewItems, false)
+                    .backgroundColor(Color.BLACK)
+                    .cancelable(true)
+                    .cancelListener(new NewGameCancelListener())
+                    .title("Start spil")
+                    .show();
         }
-
-        startGameItem.add(new StartGameItem(1, "Nyt singleplayer", "Tilfældigt ord.", GameUtility.imageRefs[0]));
-        startGameItem.add(new StartGameItem(2, getString(R.string.menu_new_multi_player_game), "Udfordring.", GameUtility.imageRefs[0]));
-        startGameItem.add(new StartGameItem(3, getString(R.string.menu_new_multi_player_game), "Tværfaglig udfordring" , GameUtility.imageRefs[0]));
-
-        final StartGameAdapter adapter = new StartGameAdapter(this, R.layout.new_game_list_row, startGameItem);
-        final ListView listViewItems = new ListView(this);
-        listViewItems.setAdapter(adapter);
-        listViewItems.setOnItemClickListener(new OnStartGameItemClickListener());
-
-        md = new MaterialDialog.Builder(this)
-                .customView(listViewItems, false)
-                .backgroundColor(Color.BLACK)
-                .cancelable(true)
-                .cancelListener(new NewGameCancelListener())
-                .title("Start spil")
-                .show();
     }
 
     @SuppressWarnings("unused")
