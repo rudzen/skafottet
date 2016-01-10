@@ -20,5 +20,7 @@
     <string name="title_player_list">High Score</string>
     <string name="title_player_detail">Player Detail</string>
     <string name="menu_new_multi_player_game">Nyt multiplayer</string>
+    <string name="game_lost">Du er død!</string>
+    <string name="game_won">Du undslap galgen!</string>
 
 </resources>

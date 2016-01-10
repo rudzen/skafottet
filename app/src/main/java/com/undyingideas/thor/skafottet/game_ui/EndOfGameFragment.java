@@ -18,6 +18,7 @@ import com.romainpiel.shimmer.ShimmerTextView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.utility.Constant;
+import com.undyingideas.thor.skafottet.utility.GameUtility;
 
 import java.lang.ref.WeakReference;
 
@@ -47,6 +48,11 @@ public class EndOfGameFragment extends Fragment {
     @Nullable
     private OnEndGameButtonClickListenerInterface mListener;
 
+    /**
+     * Constructs a new EndOfGameFragment.
+     * @param saveGame The savegame from game which was just finished.
+     * @return The fragment
+     */
     public static EndOfGameFragment newInstance(final SaveGame saveGame) {
         final EndOfGameFragment endOfGameFragment = new EndOfGameFragment();
         final Bundle args = new Bundle();
@@ -111,6 +117,8 @@ public class EndOfGameFragment extends Fragment {
 
     @SuppressWarnings("ConstantConditions")
     private void displayResults(final Bundle gameData) throws NullPointerException {
+        /* Reads the savegame and set up the views according to it's content. */
+
         endGame = gameData.getParcelable(Constant.KEY_SAVE_GAME);
 
         // if this is null, we are screwed...
@@ -120,12 +128,26 @@ public class EndOfGameFragment extends Fragment {
 
         Log.d(TAG, "SaveGame was loaded OK.");
 
-        if (endGame.getLogic().isGameLost()) {
-            imageViewResult.setImageResource(R.drawable.reaper);
-            textViewTop.setText("Du er død!");
+        /* write an invalid save game to prefs */
+        GameUtility.s_prefereces.putObject(Constant.KEY_SAVE_GAME, new SaveGame(null, false, null));
+
+        /* set the correct response depending on the game just played */
+        if (!endGame.isMultiPlayer()) {
+            if (endGame.getLogic().isGameLost()) {
+                imageViewResult.setImageResource(R.drawable.reaper);
+                textViewTop.setText(R.string.game_lost);
+            } else {
+                imageViewResult.setImageResource(R.drawable.trophy);
+                textViewTop.setText(R.string.game_won);
+            }
         } else {
-            imageViewResult.setImageResource(R.drawable.trophy);
-            textViewTop.setText("Du undslap galgen!");
+            if (endGame.getLogic().isGameLost()) {
+                imageViewResult.setImageResource(R.drawable.reaper);
+                textViewTop.setText("Du er blever henrettet af " + endGame.getNames()[1]);
+            } else {
+                imageViewResult.setImageResource(R.drawable.trophy);
+                textViewTop.setText("Du undslap galgen! - Triumf over " + endGame.getNames()[1]);
+            }
         }
         YoYo.with(Techniques.ZoomInDown).duration(700).playOn(imageViewResult);
         YoYo.with(Techniques.ZoomInDown).duration(700).playOn(textViewTop);

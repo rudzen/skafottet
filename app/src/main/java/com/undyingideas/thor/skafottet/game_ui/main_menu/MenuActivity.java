@@ -196,7 +196,7 @@ public class MenuActivity extends MenuActivityAbstract {
             // If previous game is found, add it to list :-)
             GameUtility.s_prefereces.checkForNullKey(Constant.KEY_SAVE_GAME);
             final SaveGame saveGame = (SaveGame) GameUtility.s_prefereces.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
-            if (saveGame != null && !saveGame.getLogic().isGameOver()) {
+            if (saveGame != null && saveGame.getLogic() != null && !saveGame.getLogic().isGameOver()) {
                 startGameItem.add(new StartGameItem(0, "Fortsæt sidste spil", "Type : " + (saveGame.isMultiPlayer() ? "Multi" : "Single") + "player / Gæt : " + saveGame.getLogic().getVisibleWord(), GameUtility.imageRefs[saveGame.getLogic().getNumWrongLetters()]));
                 maxID++;
             }
