@@ -24,11 +24,6 @@ import static com.undyingideas.thor.skafottet.utility.TinyDB.checkForNullKey;
 public class HelpFragment extends Fragment {
 
     @Override
-    public void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View fragmentView = inflater.inflate(R.layout.fragment_help, container, false);
         final WebView wv = (WebView) fragmentView.findViewById(R.id.wv);

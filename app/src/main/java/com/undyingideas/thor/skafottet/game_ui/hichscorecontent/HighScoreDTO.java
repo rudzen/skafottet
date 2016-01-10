@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class HighScoreDTO implements Comparable {
 
     private PlayerDTO player;
-    private ArrayList<LobbyPlayerStatus> lobbyList;
+    private final ArrayList<LobbyPlayerStatus> lobbyList;
 
 
     public HighScoreDTO(final PlayerDTO player) {

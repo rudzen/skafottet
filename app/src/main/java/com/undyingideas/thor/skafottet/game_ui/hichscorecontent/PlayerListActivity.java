@@ -109,6 +109,7 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
         public ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
             final View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.player_list_content, parent, false);
+            //noinspection ReturnOfInnerClass
             return new ViewHolder(view);
         }
 

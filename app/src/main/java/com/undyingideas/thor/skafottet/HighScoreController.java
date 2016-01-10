@@ -22,8 +22,8 @@ class HighScoreController {
 
     final ArrayList<PlayerScore> players = new ArrayList<>();
     private Firebase ref;
-    private int limit;
-    private WebView theWebView;
+    private final int limit;
+    private final WebView theWebView;
 
     public HighScoreController(final Firebase firebaseRef, final int limit, final ArrayList<PlayerScore> list, final WebView theWebView) {
         //Setting up reference to firebase.

@@ -39,17 +39,12 @@ public class WordTitlesFragment extends ListFragment {
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-//        ArrayAdapter<String> lvAdapter = new WordListAdapter(getActivity(), GameUtility.s_wordList);
         final ArrayAdapter<String> lvAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_activated_1, GameUtility.s_wordList.getWordTitleList());
 
-        // Connect the ListView to our data
         setListAdapter(lvAdapter);
 
-        // Check if the FrameLayout with the id details exists
         final View detailsFrame = getActivity().findViewById(R.id.word_details);
 
-        // Set mDuelPane based on whether you are in the horizontal layout
-        // Check if the detailsFrame exists and if it is visible
         mDuelPane = detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE;
 
         mCurCheckPosition = savedInstanceState != null ? savedInstanceState.getInt("curChoice", 0) : GameUtility.s_wordList.getIndexByTitle(GameUtility.s_wordList.getCurrentWordListTitle());
@@ -59,8 +54,6 @@ public class WordTitlesFragment extends ListFragment {
             // CHOICE_MODE_MULTIPLE allows multiple
             // CHOICE_MODE_NONE is the default and the item won't be highlighted in this case'
             getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
-            // Send the item selected to showDetails so the right item info is shown
             showDetails(mCurCheckPosition);
         }
     }
@@ -71,13 +64,11 @@ public class WordTitlesFragment extends ListFragment {
         outState.putInt("curChoice", mCurCheckPosition);
     }
 
-    // When a list item is clicked we want to change the info
     @Override
     public void onListItemClick(final ListView l, final View v, final int position, final long id) {
         showDetails(position);
     }
 
-    // Shows the data
     private void showDetails(final int index) {
 
         /* update last selected */
@@ -89,32 +80,19 @@ public class WordTitlesFragment extends ListFragment {
             /* highlight the selected item */
             getListView().setItemChecked(index, true);
 
-            // Create an object that represents the current FrameLayout that we will put the data in
             WordDetailsFragment details = (WordDetailsFragment) getFragmentManager().findFragmentById(R.id.word_details);
 
-            // When a DetailsFragment is created by calling newInstance the index for the data
-            // it is supposed to show is passed to it. If that index hasn't been assigned we must
-            // assign it in the if block
             if (details == null || details.getShownIndex() != index) {
-
-                // Make the details fragment and give it the currently selected hero index
                 details = WordDetailsFragment.newInstance(index);
-
-                // Start Fragment transactions
                 final android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
-
-                // Replace any other Fragment with our new Details Fragment with the right data
                 ft.replace(R.id.word_details, details);
-
-                // TRANSIT_FRAGMENT_FADE calls for the Fragment to fade away
-                //ft.setTransition(android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 ft.commit();
             }
 
         } else {
             final Intent intent = new Intent();
             intent.setClass(getActivity(), WordDetailsActivity.class);
-            intent.putExtra("index", index);
+            intent.putExtra(WordDetailsFragment.KEY_INDEX, index);
             startActivity(intent);
 //            getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
         }

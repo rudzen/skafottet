@@ -6,9 +6,6 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.MutableData;
-import com.firebase.client.Transaction;
-import com.undyingideas.thor.skafottet.game_ui.wordlist.data.WordList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +28,7 @@ public class WordListController {
     }
 
     public ArrayList<WordListDTO> getArray(){
-        return new ArrayList<WordListDTO>(wordList.values());
+        return new ArrayList<>(wordList.values());
     }
 
     public void addList(final WordListDTO wordListDTO) {

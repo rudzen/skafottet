@@ -10,7 +10,10 @@
 package com.undyingideas.thor.skafottet.game_ui.wordlist;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,9 +21,13 @@ import android.view.InflateException;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game_ui.wordlist.data.WordItem;
 import com.undyingideas.thor.skafottet.utility.WindowLayout;
+
+import java.lang.ref.WeakReference;
 
 /**
  * WordFragmentLayout class.
@@ -34,7 +41,7 @@ public class WordFragmentLayout extends AppCompatActivity implements AddWordList
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.showOverflowMenu();
-        toolbar.setNavigationIcon(R.mipmap.ic_launcher);
+        toolbar.setLogo(R.mipmap.ic_launcher);
 
         try {
             //noinspection ConstantConditions
@@ -60,10 +67,18 @@ public class WordFragmentLayout extends AppCompatActivity implements AddWordList
         final int id = item.getItemId();
         if (id == R.id.action_word_list_add) {
             /* show Yes/No dialog here! */
-            // TODO : Implement MaterialDialog
-//            final DialogFragment yn = YesNo.newInstance("Tilføj", "Vil du tilføje en ordliste?", getString(R.string.dialog_yes), getString(R.string.dialog_no));
-//            yn.show(getSupportFragmentManager(), "YNDialog");
-
+            new MaterialDialog.Builder(this)
+                    .content("Vil du tilføje en ordliste?")
+                    .cancelable(true)
+                    .onAny(new OnYesNoResponseDialog(this))
+                    .positiveText(R.string.dialog_yes)
+                    .negativeText(R.string.dialog_no)
+                    .title("Tilføj Ordliste")
+                    .backgroundColor(Color.BLACK)
+                    .contentColor(getResources().getColor(R.color.colorAccent))
+                    .buttonRippleColor(getResources().getColor(R.color.colorPrimaryDark))
+                    .show()
+            ;
             return true;
         } else if (id == android.R.id.home) {
             finish();
@@ -77,14 +92,25 @@ public class WordFragmentLayout extends AppCompatActivity implements AddWordList
         super.finish();
     }
 
-//    @Override
-//    public void onDone(final boolean result) {
-//        if (result) {
-//            /* generate edittext dialog and show it */
-//            final DialogFragment add = AddWordListDialog.newInstance("Indtast information", "Ok", "Afbryd", true);
-//            add.show(getSupportFragmentManager(), "ADDialog");
-//        }
-//    }
+    private static class OnYesNoResponseDialog implements MaterialDialog.SingleButtonCallback {
+
+        private final WeakReference<WordFragmentLayout> wordFragmentLayoutWeakReference;
+
+        public OnYesNoResponseDialog(final WordFragmentLayout wordFragmentLayout) {
+            wordFragmentLayoutWeakReference = new WeakReference<>(wordFragmentLayout);
+        }
+
+        @Override
+        public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+            final WordFragmentLayout wordFragmentLayout = wordFragmentLayoutWeakReference.get();
+            if (wordFragmentLayout != null) {
+                if (which == DialogAction.POSITIVE) {
+                    final DialogFragment add = AddWordListDialog.newInstance("Indtast information", "Ok", "Afbryd", true);
+                    add.show(wordFragmentLayout.getSupportFragmentManager(), "ADDialog");
+                }
+            }
+        }
+    }
 
     @Override
     public void onFinishAddWordListDialog(final String title, final String url, final boolean startDownload) {

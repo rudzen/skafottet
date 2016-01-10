@@ -30,18 +30,20 @@ import java.lang.ref.WeakReference;
  */
 public class WordDetailsFragment extends Fragment {
 
+    protected static final String KEY_INDEX = "index";
+
     /* create insance of the fragment with the correct data in bundle */
     @SuppressWarnings("StandardVariableNames")
     public static WordDetailsFragment newInstance(final int index) {
         final WordDetailsFragment f = new WordDetailsFragment();
         final Bundle args = new Bundle();
-        args.putInt("index", index);
+        args.putInt(KEY_INDEX, index);
         f.setArguments(args);
         return f;
     }
 
     public int getShownIndex() {
-        return getArguments().getInt("index", 0);
+        return getArguments().getInt(KEY_INDEX, 0);
     }
 
     // LayoutInflator puts the Fragment on the screen

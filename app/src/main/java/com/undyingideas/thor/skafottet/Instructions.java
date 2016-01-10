@@ -38,7 +38,7 @@ public class Instructions extends AppCompatActivity implements Runnable {
     private Firebase myFirebaseRef;
     HighScoreController pc;
     private ArrayList<PlayerScore> list;
-    private ArrayList<String> wordListDog = new ArrayList<>();
+    private final ArrayList<String> wordListDog = new ArrayList<>();
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -80,7 +80,9 @@ public class Instructions extends AppCompatActivity implements Runnable {
         ar2.add(lps);
         ar2.add(lps2);
 
-        mpc.lc.createLobby(new LobbyDTO(ar2));
+        if (mpc.lc != null) {
+            mpc.lc.createLobby(new LobbyDTO(ar2));
+        }
 
 //      pc.createHighScore(player);
 

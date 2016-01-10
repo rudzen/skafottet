@@ -9,12 +9,14 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 
+// TODO : Replace with async task class made for this !
+
 /**
  * Created by Thor on 08-11-2015.
  * This class still uses a lot of danish, will be corrected at some other time
  * todo clean language
  */
-public class WordCollector {
+public final class WordCollector {
     private static ArrayList<String> s_muligeOrd;
 
     private static ArrayList<String> samlOrd(final String url) throws Exception {
@@ -61,7 +63,6 @@ public class WordCollector {
         s_muligeOrd.addAll(new HashSet<>(Arrays.asList(data.split(" "))));
 
         System.out.println("s_muligeOrd = " + s_muligeOrd);
-
     }
 
     private static void hentOrdFra(final String url) throws Exception {

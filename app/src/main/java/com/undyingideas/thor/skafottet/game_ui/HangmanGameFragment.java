@@ -158,7 +158,7 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
         }
         shimmerWord.start(textViewWord);
         sepKnown.setAnimation(sepAnimation);
-        sepKnown.setAnimation(sepAnimation);
+        sepStatus.setAnimation(sepAnimation);
     }
 
     private void applySaveGameStatus() {

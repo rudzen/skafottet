@@ -18,7 +18,8 @@ public class GameActivity extends AppCompatActivity implements
         MultiPlayerPlayerFragment.OnMultiPlayerPlayerFragmentInteractionListener,
         EndOfGameFragment.OnEndGameButtonClickListenerInterface
 {
-    
+
+    private static final String TAG = "GameActivity";
     private static String s_possibleWord;
     private Fragment currentFragment;
 
@@ -38,7 +39,10 @@ public class GameActivity extends AppCompatActivity implements
 
         final Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(tb);
-        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            tb.setLogo(R.mipmap.ic_launcher);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         if (getIntent() != null) {
             final Bundle bundle = getIntent().getExtras();
@@ -98,12 +102,12 @@ public class GameActivity extends AppCompatActivity implements
 
     @Override
     public void onPlayerClicked(final String playerName) {
-        Log.d("GameActivity", playerName + " clicked.");
+        Log.d(TAG, playerName + " clicked.");
     }
 
     @Override
     public void startNewMultiplayerGame(final String opponentName, final String theWord) {
-        Log.d("GameActivity", "Wan't to start new game against : " + opponentName + " with word : " + theWord);
+        Log.d(TAG, "Want to start new game against : " + opponentName + " with word : " + theWord);
         replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new Hanged(theWord), true, "Du", opponentName)));
     }
 

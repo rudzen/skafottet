@@ -30,6 +30,7 @@ import com.nineoldandroids.animation.Animator;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.game_ui.GameActivity;
+import com.undyingideas.thor.skafottet.game_ui.wordlist.WordDetailsActivity;
 import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 import com.undyingideas.thor.skafottet.utility.WindowLayout;
@@ -110,11 +111,6 @@ public class MenuActivity extends MenuActivityAbstract {
         showAll();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
     @SuppressWarnings("AssignmentToNull")
     @Override
     protected void onDestroy() {
@@ -190,6 +186,11 @@ public class MenuActivity extends MenuActivityAbstract {
     @SuppressWarnings("unused")
     private void showSettings() {
         WindowLayout.showSnack("Ikke implementeret (endnu)!", title, true);
+    }
+
+    @SuppressWarnings("unused")
+    private void showWordList() {
+        startActivity(new Intent(this, WordDetailsActivity.class));
     }
 
     @SuppressWarnings({"unused", "AccessStaticViaInstance"})
