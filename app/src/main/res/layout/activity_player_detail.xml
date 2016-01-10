@@ -22,7 +22,7 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar"
-            android:background="#fc3c01">
+            android:background="@color/colorPrimary">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/detail_toolbar"
