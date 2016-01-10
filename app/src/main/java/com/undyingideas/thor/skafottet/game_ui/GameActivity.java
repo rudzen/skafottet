@@ -72,7 +72,7 @@ public class GameActivity extends AppCompatActivity implements
 
     private void addFragment(final Fragment fragment) {
         currentFragment = fragment;
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_content, fragment).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_content, fragment).commit();
     }
 
     private void replaceFragment(final Fragment fragment) {

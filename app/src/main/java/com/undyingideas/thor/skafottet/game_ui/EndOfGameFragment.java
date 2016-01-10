@@ -116,7 +116,7 @@ public class EndOfGameFragment extends Fragment {
 
         Log.d(TAG, "SaveGame was loaded OK.");
 
-        if (endGame.getLogic().isGameOver()) {
+        if (endGame.getLogic().isGameLost()) {
             imageViewResult.setImageResource(R.drawable.reaper);
             textViewTop.setText("Du er død!");
         } else {
