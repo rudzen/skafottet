@@ -31,7 +31,6 @@ import com.nineoldandroids.animation.Animator;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.game_ui.GameActivity;
-import com.undyingideas.thor.skafottet.game_ui.wordlist.WordDetailsActivity;
 import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 import com.undyingideas.thor.skafottet.utility.WindowLayout;
@@ -73,7 +72,7 @@ public class MenuActivity extends MenuActivityAbstract {
     private int newGameID = -1;
     private int maxID; // quick hack for the dialog ID mess
 
-    private MenuButtonClickHandler s_buttonListener;
+    private View.OnClickListener s_buttonListener;
 
     private static final String TAG = "MenuActivity";
 
@@ -99,16 +98,12 @@ public class MenuActivity extends MenuActivityAbstract {
         buttons[BUTTON_HELP] = (ImageView) findViewById(R.id.menu_button_help);
         buttons[BUTTON_QUIT] = (ImageView) findViewById(R.id.menu_button_quit);
 
-        for (final ImageView button : buttons) {
-            button.setClickable(true);
-            button.setOnClickListener(s_buttonListener);
-        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        WindowLayout.hideStatusBar(getWindow(), null);
+//        WindowLayout.hideStatusBar(getWindow(), null);
         showAll();
     }
 
@@ -143,7 +138,11 @@ public class MenuActivity extends MenuActivityAbstract {
 
     private void showAll() {
         YoYo.with(Techniques.FadeIn).duration(300).withListener(new EnterAnimatorHandler(this)).playOn(findViewById(R.id.menu_background));
-        setMenuButtonsClickable(true);
+        for (final ImageView button : buttons) {
+            button.setClickable(true);
+            button.setOnClickListener(s_buttonListener);
+        }
+//        setMenuButtonsClickable(true);
     }
 
     private void endMenu(final String method_name, final ImageView clickedImageView) {
@@ -179,12 +178,13 @@ public class MenuActivity extends MenuActivityAbstract {
 
     @SuppressWarnings("unused")
     private void showSettings() {
-        WindowLayout.showSnack("Ikke implementeret (endnu)!", title, true);
+        notReady();
     }
 
     @SuppressWarnings("unused")
     private void showWordList() {
-        startActivity(new Intent(this, WordDetailsActivity.class));
+        notReady();
+//        startActivity(new Intent(this, WordDetailsActivity.class));
     }
 
     @SuppressWarnings({"unused", "AccessStaticViaInstance"})
@@ -425,4 +425,15 @@ public class MenuActivity extends MenuActivityAbstract {
             setMenuButtonsClickable(true);
         }
     }
+
+    private void notReady() {
+        new MaterialDialog.Builder(this)
+                .backgroundColor(Color.BLACK)
+                .title("Ikke klar endnu")
+                .content("Ikke implementeret!")
+                .positiveText("Ok")
+                .show();
+        showAll();
+    }
+
 }

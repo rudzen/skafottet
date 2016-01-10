@@ -11,14 +11,12 @@
 
 <RelativeLayout android:id="@+id/menu_background"
                 xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="@drawable/gallow"
-                android:backgroundTint="@color/colorPrimaryDark"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:focusableInTouchMode="false"
                 android:orientation="vertical"
-                android:backgroundTintMode="multiply"
-    >
+                android:background="@drawable/reaper"
+                android:clickable="false">
 
     <com.undyingideas.thor.skafottet.views.StarField
         android:id="@+id/sf"
