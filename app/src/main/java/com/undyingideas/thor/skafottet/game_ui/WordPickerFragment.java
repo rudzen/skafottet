@@ -1,7 +1,6 @@
 package com.undyingideas.thor.skafottet.game_ui;
 
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.dialogs.YesNo;
 import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
 
@@ -106,9 +104,9 @@ public class WordPickerFragment extends Fragment {
             if (wordPickerFragment != null) {
                 // TODO : Rudz, recode
                 GameActivity.setS_possibleWord(wordPickerFragment.wordList.get(position));
-                final DialogFragment nf = YesNo.newInstance("Skal ordet være?", wordPickerFragment.wordList.get(position), "Ja", "Nej");
-                Log.d("lol", "clicked");
-                nf.show(wordPickerFragment.getFragmentManager(), "newAcceptDialog");
+//                final DialogFragment nf = YesNo.newInstance("Skal ordet være?", wordPickerFragment.wordList.get(position), "Ja", "Nej");
+//                Log.d("lol", "clicked");
+//                nf.show(wordPickerFragment.getFragmentManager(), "newAcceptDialog");
             }
         }
     }

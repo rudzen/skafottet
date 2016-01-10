@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.Window;
 
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.dialogs.YesNo;
 import com.undyingideas.thor.skafottet.game.Hanged;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.utility.Constant;
@@ -16,7 +15,6 @@ import com.undyingideas.thor.skafottet.utility.GameUtility;
 import com.undyingideas.thor.skafottet.utility.WindowLayout;
 
 public class GameActivity extends AppCompatActivity implements
-        YesNo.YesNoResultListener,
         MultiPlayerPlayerFragment.OnMultiPlayerPlayerFragmentInteractionListener,
         EndOfGameFragment.OnEndGameButtonClickListenerInterface
 {
@@ -61,7 +59,6 @@ public class GameActivity extends AppCompatActivity implements
         }
     }
 
-
     @Override
     public void onWindowFocusChanged(final boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -80,22 +77,22 @@ public class GameActivity extends AppCompatActivity implements
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content, fragment).addToBackStack(null).commit();
     }
 
-    @Override
-    public void onDone(final boolean result) {
-        if(result){
-            Log.d("wordPicker", "WordAccepted");
-            final HangmanGameFragment startGame = new HangmanGameFragment();
-            final Bundle data = new Bundle();
-            data.putBoolean(GameUtility.KEY_IS_HOT_SEAT, true);
-            data.putString("theWord", s_possibleWord);
-            startGame.setArguments(data);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_content, startGame)
-                    .addToBackStack(null)
-                    .commit();
-        }
-        else Log.d("wordPicer", "wordDenied");
-    }
+//    @Override
+//    public void onDone(final boolean result) {
+//        if(result){
+//            Log.d("wordPicker", "WordAccepted");
+//            final HangmanGameFragment startGame = new HangmanGameFragment();
+//            final Bundle data = new Bundle();
+//            data.putBoolean(GameUtility.KEY_IS_HOT_SEAT, true);
+//            data.putString("theWord", s_possibleWord);
+//            startGame.setArguments(data);
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.fragment_content, startGame)
+//                    .addToBackStack(null)
+//                    .commit();
+//        }
+//        else Log.d("wordPicer", "wordDenied");
+//    }
 
     @Override
     public void onPlayerClicked(final String playerName) {

@@ -90,8 +90,12 @@ public class EndOfGameFragment extends Fragment {
             Log.d(TAG, "ClickListener initiated");
         }
 
-        buttonNewGame.setOnClickListener(endGameClickListener);
-        buttonMenu.setOnClickListener(endGameClickListener);
+        if (buttonNewGame != null) {
+            buttonNewGame.setOnClickListener(endGameClickListener);
+        }
+        if (buttonMenu != null) {
+            buttonMenu.setOnClickListener(endGameClickListener);
+        }
 
         displayResults(getArguments());
 

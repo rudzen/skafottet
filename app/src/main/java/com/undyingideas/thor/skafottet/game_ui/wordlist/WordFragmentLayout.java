@@ -11,7 +11,6 @@ package com.undyingideas.thor.skafottet.game_ui.wordlist;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -20,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.dialogs.YesNo;
 import com.undyingideas.thor.skafottet.game_ui.wordlist.data.WordItem;
 import com.undyingideas.thor.skafottet.utility.WindowLayout;
 
@@ -28,7 +26,7 @@ import com.undyingideas.thor.skafottet.utility.WindowLayout;
  * WordFragmentLayout class.
  * @author rudz
  */
-public class WordFragmentLayout extends AppCompatActivity implements YesNo.YesNoResultListener, AddWordListDialog.AddWordListListener {
+public class WordFragmentLayout extends AppCompatActivity implements AddWordListDialog.AddWordListListener {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,8 +60,10 @@ public class WordFragmentLayout extends AppCompatActivity implements YesNo.YesNo
         final int id = item.getItemId();
         if (id == R.id.action_word_list_add) {
             /* show Yes/No dialog here! */
-            final DialogFragment yn = YesNo.newInstance("Tilføj", "Vil du tilføje en ordliste?", getString(R.string.dialog_yes), getString(R.string.dialog_no));
-            yn.show(getSupportFragmentManager(), "YNDialog");
+            // TODO : Implement MaterialDialog
+//            final DialogFragment yn = YesNo.newInstance("Tilføj", "Vil du tilføje en ordliste?", getString(R.string.dialog_yes), getString(R.string.dialog_no));
+//            yn.show(getSupportFragmentManager(), "YNDialog");
+
             return true;
         } else if (id == android.R.id.home) {
             finish();
@@ -75,17 +75,16 @@ public class WordFragmentLayout extends AppCompatActivity implements YesNo.YesNo
     @Override
     public void finish() {
         super.finish();
-//        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
-    @Override
-    public void onDone(final boolean result) {
-        if (result) {
-            /* generate edittext dialog and show it */
-            final DialogFragment add = AddWordListDialog.newInstance("Indtast information", "Ok", "Afbryd", true);
-            add.show(getSupportFragmentManager(), "ADDialog");
-        }
-    }
+//    @Override
+//    public void onDone(final boolean result) {
+//        if (result) {
+//            /* generate edittext dialog and show it */
+//            final DialogFragment add = AddWordListDialog.newInstance("Indtast information", "Ok", "Afbryd", true);
+//            add.show(getSupportFragmentManager(), "ADDialog");
+//        }
+//    }
 
     @Override
     public void onFinishAddWordListDialog(final String title, final String url, final boolean startDownload) {
