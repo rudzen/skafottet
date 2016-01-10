@@ -35,6 +35,7 @@ public class MultiplayerController {
     public MultiplayerController(final Firebase ref, final Runnable playerUpdater) {
         this.ref = ref;
         pc = new PlayerController(this, ref);
+        lc = new LobbyController(this,ref);
         wlc = new WordListController(ref);
         Log.d("firebaseMulti", "hej");
         updateHandler = new Handler();
