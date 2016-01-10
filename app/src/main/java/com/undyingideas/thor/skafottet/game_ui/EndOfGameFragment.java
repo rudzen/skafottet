@@ -4,15 +4,16 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.nineoldandroids.animation.Animator;
 import com.romainpiel.shimmer.Shimmer;
-import com.romainpiel.shimmer.ShimmerButton;
+import com.romainpiel.shimmer.ShimmerTextView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.utility.Constant;
@@ -29,14 +30,13 @@ public class EndOfGameFragment extends Fragment {
 
     private static final String TAG = "EndGameFragment";
 
-    private ImageView imageViewResult;
-    private TextView textViewTop;
-    private ShimmerButton buttonNewGame, buttonMenu;
-    private Shimmer shimmerNewGame, shimmerMenu;
+    private ImageView imageViewResult, buttonNewGame, buttonMenu;
+    private ShimmerTextView textViewTop;
 
     private SaveGame endGame;
 
-    private EndGameClickListener endGameClickListener;
+    private Shimmer shimmerTop;
+    private static EndGameClickListener endGameClickListener;
 
     @Nullable
     private OnEndGameButtonClickListenerInterface mListener;
@@ -74,10 +74,17 @@ public class EndOfGameFragment extends Fragment {
         final View root = inflater.inflate(R.layout.fragment_end_game, container, false);
 
         imageViewResult = (ImageView) root.findViewById(R.id.end_game_image_view);
-        textViewTop = (TextView) root.findViewById(R.id.end_game_text_view_top);
+        textViewTop = (ShimmerTextView) root.findViewById(R.id.end_game_text_view_top);
 
-        buttonNewGame = (ShimmerButton) root.findViewById(R.id.end_game_button_new_game);
-        buttonMenu = (ShimmerButton) root.findViewById(R.id.end_game_button_menu);
+        buttonNewGame = (ImageView) root.findViewById(R.id.end_game_button_new_game);
+        buttonMenu = (ImageView) root.findViewById(R.id.end_game_button_main_menu);
+
+        if (endGameClickListener == null) {
+            endGameClickListener = new EndGameClickListener(this);
+        }
+
+        buttonNewGame.setOnClickListener(endGameClickListener);
+        buttonMenu.setOnClickListener(endGameClickListener);
 
         displayResults(getArguments());
 
@@ -86,17 +93,13 @@ public class EndOfGameFragment extends Fragment {
 
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
-        shimmerMenu = new Shimmer();
-        shimmerNewGame = new Shimmer();
-
-        shimmerMenu.setStartDelay(300);
-        shimmerMenu.setDuration(400);
-        shimmerNewGame.setDuration(400);
-
-        shimmerMenu.start(buttonMenu);
-        shimmerNewGame.start(buttonNewGame);
-
+        shimmerTop = new Shimmer();
+        shimmerTop.setDuration(800);
+        shimmerTop.setRepeatCount(0);
+//        shimmerTop.setStartDelay(500);
+        shimmerTop.start(textViewTop);
     }
+
     private void displayResults(final Bundle gameData) throws IllegalArgumentException {
         endGame = gameData.getParcelable(Constant.KEY_SAVE_GAME);
 
@@ -114,8 +117,6 @@ public class EndOfGameFragment extends Fragment {
         }
     }
 
-
-
     private static class EndGameClickListener implements View.OnClickListener {
 
         private final WeakReference<EndOfGameFragment> endOfGameFragmentWeakReference;
@@ -128,11 +129,46 @@ public class EndOfGameFragment extends Fragment {
         public void onClick(final View v) {
             final EndOfGameFragment endOfGameFragment = endOfGameFragmentWeakReference.get();
             if (endOfGameFragment != null) {
-                Log.d(TAG, "going to start Screen");
-                //noinspection ConstantConditions
-                endOfGameFragment.mListener.onEndGameButtonClicked(false);
+                YoYo.with(Techniques.ZoomOut).duration(300).playOn(endOfGameFragment.imageViewResult);
+                YoYo.with(Techniques.ZoomOut).duration(400).playOn(endOfGameFragment.textViewTop);
+                if (v == endOfGameFragment.buttonMenu) {
+                    YoYo.with(Techniques.FadeOut).duration(300).playOn(endOfGameFragment.buttonNewGame);
+                } else {
+                    YoYo.with(Techniques.FadeOut).duration(300).playOn(endOfGameFragment.buttonMenu);
+                }
+                YoYo.with(Techniques.RotateOut).duration(400).withListener(new ExitAnimatorHandler(endOfGameFragment, (ImageView) v)).playOn(v);
             }
         }
     }
+
+    private static class ExitAnimatorHandler implements Animator.AnimatorListener {
+
+        private final WeakReference<EndOfGameFragment> endOfGameFragmentWeakReference;
+        private final ImageView clickedImageView;
+
+        public ExitAnimatorHandler(final EndOfGameFragment endOfGameFragment, final ImageView clickedImageView) {
+            endOfGameFragmentWeakReference = new WeakReference<>(endOfGameFragment);
+            this.clickedImageView = clickedImageView;
+        }
+
+        @Override
+        public void onAnimationStart(final Animator animation) { }
+
+        @SuppressWarnings("ConstantConditions")
+        @Override
+        public void onAnimationEnd(final Animator animation) {
+            final EndOfGameFragment endOfGameFragment = endOfGameFragmentWeakReference.get();
+            if (endOfGameFragment != null) {
+                endOfGameFragment.mListener.onEndGameButtonClicked(clickedImageView == endOfGameFragment.buttonNewGame);
+            }
+        }
+
+        @Override
+        public void onAnimationCancel(final Animator animation) { }
+
+        @Override
+        public void onAnimationRepeat(final Animator animation) { }
+    }
+
 
 }

@@ -19,7 +19,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_weight="5"/>
 
-    <TextView
+    <com.romainpiel.shimmer.ShimmerTextView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -34,19 +34,24 @@
         android:layout_weight="1"
         >
 
-        <com.romainpiel.shimmer.ShimmerButton
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Nyt Spil"
+        <ImageView
+            style="@style/menu_button_style"
             android:id="@+id/end_game_button_new_game"
-            android:layout_weight="1"
-            />
+            android:layout_height="50dp"
+            android:background="@drawable/button_new_game"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp">
+        </ImageView>
 
-        <com.romainpiel.shimmer.ShimmerButton
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Gå til Menu"
-            android:id="@+id/end_game_button_menu"
-            android:layout_weight="1"/>
+        <ImageView
+            style="@style/menu_button_style"
+            android:id="@+id/end_game_button_main_menu"
+            android:layout_height="50dp"
+            android:background="@drawable/button_main_menu"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp">
+        </ImageView>
+
+
     </LinearLayout>
 </LinearLayout>

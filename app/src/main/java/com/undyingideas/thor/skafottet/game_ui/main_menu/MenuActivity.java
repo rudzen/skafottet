@@ -152,8 +152,10 @@ public class MenuActivity extends MenuActivityAbstract {
 
     private void endMenu(final String method_name, final ImageView clickedImageView) {
         if (click_status) {
+            clickedImageView.setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
             click_status = false;
             for (final ImageView iv : buttons) if (iv != clickedImageView) YoYo.with(Techniques.FadeOut).duration(100).playOn(iv);
+            clickedImageView.setColorFilter(null);
             YoYo.with(Techniques.RotateOut).duration(500).withListener(new ExitAnimatorHandler(this, method_name)).playOn(clickedImageView);
         }
     }
@@ -316,41 +318,35 @@ public class MenuActivity extends MenuActivityAbstract {
         public void onClick(final View v) {
             final MenuActivity menuActivity = menuActivityWeakReference.get();
             if (menuActivity != null) {
-                ((ImageView) v).setColorFilter(R.color.colorPrimaryDark, PorterDuff.Mode.MULTIPLY);
+                boolean buttonStates = false;
                 if (v == menuActivity.buttons[BUTTON_PLAY]) {
-                    menuActivity.setMenuButtonsClickable(false);
                     menuActivity.callMethod("showNewGame");
                     menuActivity.button_clicked = BUTTON_PLAY;
                 } else if (v == menuActivity.buttons[BUTTON_HIGHSCORE]) {
-                    menuActivity.setMenuButtonsClickable(false);
                     menuActivity.endMenu("showHighScore", menuActivity.buttons[BUTTON_HIGHSCORE]);
                     menuActivity.button_clicked = BUTTON_HIGHSCORE;
                 } else if (v == menuActivity.buttons[BUTTON_WORD_LISTS]) {
-                    menuActivity.setMenuButtonsClickable(false);
                     menuActivity.endMenu("showWordList", menuActivity.buttons[BUTTON_WORD_LISTS]);
                     menuActivity.button_clicked = BUTTON_WORD_LISTS;
                 } else if (v == menuActivity.buttons[BUTTON_ABOUT]) {
-                    menuActivity.setMenuButtonsClickable(false);
                     menuActivity.endMenu("showAbout", menuActivity.buttons[BUTTON_ABOUT]);
                     menuActivity.button_clicked = BUTTON_ABOUT;
                 } else if (v == menuActivity.buttons[BUTTON_HELP]) {
-                    menuActivity.setMenuButtonsClickable(false);
                     menuActivity.endMenu("showHelp", menuActivity.buttons[BUTTON_HELP]);
                     menuActivity.button_clicked = BUTTON_HELP;
                 } else if (v == menuActivity.buttons[BUTTON_QUIT]) {
-                    menuActivity.setMenuButtonsClickable(false);
                     menuActivity.dialogQuit();
                     menuActivity.button_clicked = BUTTON_QUIT;
                 } else if (v == menuActivity.buttons[BUTTON_SETTINGS]) {
-                    menuActivity.setMenuButtonsClickable(false);
                     menuActivity.endMenu("showSettings", menuActivity.buttons[BUTTON_SETTINGS]);
                     menuActivity.button_clicked = BUTTON_SETTINGS;
                 } else if (v == menuActivity.title) {
                     // figure out some funky stuff here !!! :-)
                     menuActivity.showAll();
                     menuActivity.button_clicked = TITLE;
+                    buttonStates = true;
                 }
-                ((ImageView) v).setColorFilter(null);
+                menuActivity.setMenuButtonsClickable(buttonStates);
             }
         }
     }

@@ -22,8 +22,8 @@
 
     <com.undyingideas.thor.skafottet.views.StarField
         android:id="@+id/sf"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
@@ -33,14 +33,16 @@
 
     <ImageView
         android:id="@+id/menu_title"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/title_text"
         android:clickable="true"
         android:contentDescription="The title image"
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/menu_image_logo"
-        android:layout_alignEnd="@+id/menu_image_logo"/>
+        android:layout_alignEnd="@+id/menu_image_logo"
+        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"/>
 
     <ImageView
         android:id="@+id/menu_image_logo"
@@ -56,13 +58,17 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="15dp"
-        android:layout_below="@+id/menu_title">
+        android:layout_below="@+id/menu_title"
+        android:layout_alignParentStart="false"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="75dp"
+        android:layout_marginRight="75dp">
 
         <ImageView
             android:id="@+id/menu_button_play"
             android:background="@drawable/button_play"
-            style="@style/menu_button_style"/>
+            style="@style/menu_button_style"
+            android:layout_marginTop="100dp"/>
 
         <ImageView
             android:id="@+id/menu_button_highscore"
@@ -92,7 +98,8 @@
         <ImageView
             android:id="@+id/menu_button_quit"
             android:background="@drawable/button_end"
-            style="@style/menu_button_style"/>
+            style="@style/menu_button_style"
+            android:layout_marginBottom="100dp"/>
 
     </LinearLayout>
 
