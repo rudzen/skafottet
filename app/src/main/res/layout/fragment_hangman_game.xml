@@ -29,20 +29,19 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:padding="3dp"
         android:id="@+id/linearLayoutStatus"
         android:layout_weight="1">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:id="@+id/textViewStatus"
             android:textStyle="bold|italic"
             android:text="Spilstatus"
             android:textSize="10sp"
             android:layout_marginTop="3dp"
-            android:layout_weight="0.4"
             android:alpha="100"/>
 
         <View
@@ -55,10 +54,9 @@
         <com.romainpiel.shimmer.ShimmerTextView
             android:id="@+id/hangman_game_status"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:textColor="@color/selector"
             android:layout_gravity="center"
-            android:layout_weight="0.6"
             android:gravity="center"
             android:textSize="30sp"/>
 
@@ -80,20 +78,19 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:padding="3dp"
         android:id="@+id/linearLayoutKnownWords"
         android:layout_weight="1">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:id="@+id/textView"
             android:textStyle="bold|italic"
             android:text="Kendte bogstaver"
             android:textSize="10sp"
             android:layout_marginTop="3dp"
-            android:layout_weight="0.4"
             android:alpha="100"/>
 
         <View
@@ -106,10 +103,10 @@
         <com.romainpiel.shimmer.ShimmerTextView
             android:id="@+id/hangman_game_known_letters"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:textColor="@color/selector"
             android:layout_gravity="center"
-            android:layout_weight="0.6"
+            android:layout_weight="0.7"
             android:gravity="center"
             android:textSize="30sp"/>
 
@@ -131,8 +128,8 @@
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        android:layout_weight="1">
 
         <Button
             android:id="@+id/button1"

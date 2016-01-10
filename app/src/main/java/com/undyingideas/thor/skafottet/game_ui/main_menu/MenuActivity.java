@@ -116,11 +116,18 @@ public class MenuActivity extends MenuActivityAbstract {
         super.onStop();
     }
 
+    @SuppressWarnings("AssignmentToNull")
+    @Override
+    protected void onDestroy() {
+        for (int i = 0; i < buttons.length; i++) buttons[i] = null;
+        super.onDestroy();
+    }
+
     @Override
     public void onBackPressed() {
         if (backPressed + BACK_PRESSED_DELAY > System.currentTimeMillis()) {
             YoYo.with(Techniques.ZoomOut).duration(300).playOn(findViewById(R.id.menu_background));
-            sf.setRun(false);
+            if (sf != null) sf.setRun(false);
             super.onBackPressed();
         } else WindowLayout.showSnack("Tryk tilbage igen for at smutte.", findViewById(R.id.menu_background), false);
         backPressed = System.currentTimeMillis();
@@ -155,7 +162,6 @@ public class MenuActivity extends MenuActivityAbstract {
             clickedImageView.setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
             click_status = false;
             for (final ImageView iv : buttons) if (iv != clickedImageView) YoYo.with(Techniques.FadeOut).duration(100).playOn(iv);
-            clickedImageView.setColorFilter(null);
             YoYo.with(Techniques.RotateOut).duration(500).withListener(new ExitAnimatorHandler(this, method_name)).playOn(clickedImageView);
         }
     }
@@ -167,7 +173,7 @@ public class MenuActivity extends MenuActivityAbstract {
 
     @SuppressWarnings("unused")
     private void showHelp() {
-        sf.setRun(false);
+        if (sf != null) sf.setRun(false);
         startActivity(new Intent(this, Instructions.class));
 
     }
@@ -218,6 +224,7 @@ public class MenuActivity extends MenuActivityAbstract {
 
         md = new MaterialDialog.Builder(this)
                 .customView(listViewItems, false)
+                .backgroundColor(Color.BLACK)
                 .title("Start spil")
                 .show();
     }
@@ -230,7 +237,7 @@ public class MenuActivity extends MenuActivityAbstract {
         }
         Log.d(TAG, "Game mode started : " + newGameID);
         intent.putExtra(Constant.KEY_MODE, newGameID);
-        sf.setRun(false);
+        if (sf != null) sf.setRun(false);
         startActivity(intent);
     }
 
@@ -252,18 +259,17 @@ public class MenuActivity extends MenuActivityAbstract {
     @SuppressWarnings("deprecation")
     private void dialogQuit() {
         new MaterialDialog.Builder(this)
-                .content("Afslut svinet? KYYYYLING!?")
+                .content("Ønsker du virkelig af forlade spillet?")
                 .cancelable(true)
                 .onAny(new QuitDialogCallback(this))
                 .positiveText(R.string.dialog_yes)
                 .negativeText(R.string.dialog_no)
-                .title("Quitos los Gamos...")
-                .backgroundColor(getResources().getColor(R.color.colorAccent))
-                .contentColor(Color.BLACK)
-                .buttonRippleColorRes(R.color.selector)
+                .title("Afslutningen er nær...")
+                .backgroundColor(Color.BLACK)
+                .contentColor(getResources().getColor(R.color.colorAccent))
+                .buttonRippleColor(getResources().getColor(R.color.colorPrimaryDark))
                 .show()
         ;
-//        .buttonRippleColor(Color.BLACK)
     }
 
     @SuppressWarnings("AccessStaticViaInstance")
@@ -397,7 +403,12 @@ public class MenuActivity extends MenuActivityAbstract {
         }
 
         @Override
-        public void onAnimationStart(final Animator animation) { }
+        public void onAnimationStart(final Animator animation) {
+            final MenuActivity menuActivity = menuActivityWeakReference.get();
+            if (menuActivity != null) {
+                menuActivity.buttons[menuActivity.button_clicked].setColorFilter(null);
+            }
+        }
 
         @Override
         public void onAnimationEnd(final Animator animation) {

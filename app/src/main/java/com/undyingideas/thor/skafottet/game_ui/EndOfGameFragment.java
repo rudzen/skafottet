@@ -105,6 +105,7 @@ public class EndOfGameFragment extends Fragment {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void displayResults(final Bundle gameData) throws NullPointerException {
         endGame = gameData.getParcelable(Constant.KEY_SAVE_GAME);
 

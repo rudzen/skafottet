@@ -96,4 +96,9 @@ public class AboutFragment extends Fragment {
         return sv;
     }
 
+    @Override
+    public void onDestroy() {
+        tv = null;
+        super.onDestroy();
+    }
 }

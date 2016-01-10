@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,6 +41,10 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
 
     private Vibrator vibrator;
     private Shimmer shimmerWord, shimmerStatus;
+    private View sepKnown, sepStatus;
+
+    private Animation sepAnimation;
+
 
     public static HangmanGameFragment newInstance(final SaveGame saveGame) {
         final HangmanGameFragment hangmanGameFragment = new HangmanGameFragment();
@@ -79,6 +85,14 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
 
         textViewWord = (ShimmerTextView) root.findViewById(R.id.hangman_game_known_letters);
         textViewStatus = (ShimmerTextView) root.findViewById(R.id.hangman_game_status);
+
+        sepKnown = root.findViewById(R.id.sepKnown);
+        sepStatus = root.findViewById(R.id.sepStatus);
+
+        sepAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_repeat_backwards);
+
+        sepKnown.setAnimation(sepAnimation);
+        sepStatus.setAnimation(sepAnimation);
 
         //adding clickhandlers
         for (final Button btn : listOfButtons) {
@@ -128,8 +142,10 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onPause() {
-        shimmerWord.cancel();
         GameUtility.s_prefereces.putObject(Constant.KEY_SAVE_GAME, currentGame);
+        shimmerWord.cancel();
+        sepKnown.setAnimation(null);
+        sepStatus.setAnimation(null);
         super.onPause();
     }
 
@@ -141,6 +157,8 @@ public class HangmanGameFragment extends Fragment implements View.OnClickListene
             shimmerWord.setDuration(400);
         }
         shimmerWord.start(textViewWord);
+        sepKnown.setAnimation(sepAnimation);
+        sepKnown.setAnimation(sepAnimation);
     }
 
     private void applySaveGameStatus() {

@@ -1,9 +1,10 @@
 Spil :
 - Selve spillet skal justeres så der tages højde for blodpøl og eventuel delay for visning af EndGameFragment
 - Spilstatus i selve spillet har ingen funktionalitet endnu
+- SaveGame skal nok udvides (ikke specielt vildt)
 
 Layout :
-- EndGameFragment mangler.
+- EndGameFragment mangler stadig arbejde.
 
 Ren Kode :
 - EndGameFragment mangler.

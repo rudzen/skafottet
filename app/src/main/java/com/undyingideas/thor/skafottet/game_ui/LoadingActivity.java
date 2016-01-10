@@ -100,11 +100,12 @@ public class LoadingActivity extends AppCompatActivity {
             if (possibleWords != null && loadingActivity != null) { // med seler og livrem
                 s_prefereces.putListString(GameUtility.KEY_MULIGE_ORD, possibleWords);
                 final Intent intent = new Intent(loadingActivity, MenuActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);// Fjerner loadscreen fra stacken
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                loadingActivity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 loadingActivity.startActivity(intent);
                 try {
                     TinyDB.checkForNullKey(Constant.KEY_PREF_POSSIBLE_WORDS);
-                    Log.d("cache", "contains " + s_prefereces.getObject(Constant.KEY_PREF_POSSIBLE_WORDS, HashSet.class)); //checkForNullKey(); s_prefereces.contains("possibleWords"));
+                    Log.d("cache", "contains " + s_prefereces.getObject(Constant.KEY_PREF_POSSIBLE_WORDS, HashSet.class));
                 } catch (final NullPointerException e) {
                     // nada here atm.
                 }

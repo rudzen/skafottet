@@ -11,7 +11,6 @@
 package com.undyingideas.thor.skafottet.game_ui.main_menu;
 
 import android.graphics.Color;
-import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
@@ -20,9 +19,9 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Display;
 
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.views.StarField;
 
 import java.lang.ref.WeakReference;
@@ -38,6 +37,7 @@ import java.lang.ref.WeakReference;
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
 public abstract class MenuActivityAbstract extends AppCompatActivity {
 
+    @Nullable
     StarField sf; // needs to be protected, as menu act should be able to pause the damn thing.
     private Handler starhandler;
     private UpdateStarfield updateStarfield;
@@ -45,6 +45,7 @@ public abstract class MenuActivityAbstract extends AppCompatActivity {
     /* sensor stuff */
     @Nullable
     private SensorManager mSensorManager;
+    @Nullable
     private Sensor mSensor;
     private MenuSensorEventListener sensorListener;
 
@@ -61,10 +62,7 @@ public abstract class MenuActivityAbstract extends AppCompatActivity {
         /* begin configuration for starfield and sensor */
         sf = (StarField) findViewById(R.id.sf);
 
-        final Display display = getWindowManager().getDefaultDisplay();
-        final Point size = new Point();
-        display.getSize(size);
-        sf.init(size.x, size.y, Color.RED);
+        sf.init(WindowLayout.screenDimension.x, WindowLayout.screenDimension.y, Color.RED);
 
         updateStarfield = new UpdateStarfield(this);
 
@@ -81,16 +79,29 @@ public abstract class MenuActivityAbstract extends AppCompatActivity {
         if (mSensor != null && mSensorManager != null) mSensorManager.registerListener(sensorListener, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
         if (starhandler != null) starhandler.removeCallbacksAndMessages(null);
         else starhandler = new Handler();
-        sf.setRun(true);
+        if (sf == null) {
+            sf = (StarField) findViewById(R.id.sf);
+            sf.init(WindowLayout.screenDimension.x, WindowLayout.screenDimension.y, Color.RED);
+        } else {
+            sf.setRun(true);
+        }
         starhandler.post(updateStarfield);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        sf.setRun(false);
+        if (sf != null) sf.setRun(false);
         starhandler.removeCallbacksAndMessages(null);
         if (mSensor != null && mSensorManager != null) mSensorManager.unregisterListener(sensorListener, mSensor);
+    }
+
+    @Override
+    protected void onDestroy() {
+        sf = null;
+        mSensor = null;
+        mSensorManager = null;
+        super.onDestroy();
     }
 
     private void registerSensor() {
@@ -98,22 +109,21 @@ public abstract class MenuActivityAbstract extends AppCompatActivity {
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
         if (mSensor != null) {
             sensorListener = new MenuSensorEventListener(this);
-            mSensorManager.registerListener(sensorListener, mSensor, SensorManager.SENSOR_DELAY_GAME);
+            mSensorManager.registerListener(sensorListener, mSensor, SensorManager.SENSOR_DELAY_UI);
             Log.i(TAG, "TYPE_GRAVITY sensor registered");
         } else {
             Log.e(TAG, "TYPE_GRAVITY sensor NOT registered");
             mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             if (mSensor != null) {
                 sensorListener = new MenuSensorEventListener(this);
-                mSensorManager.registerListener(sensorListener, mSensor, SensorManager.SENSOR_DELAY_GAME);
+                mSensorManager.registerListener(sensorListener, mSensor, SensorManager.SENSOR_DELAY_UI);
                 Log.i(TAG, "TYPE_ACCELEROMETER sensor registered");
             } else {
                 mSensorManager = null;
-                Log.e(TAG, "TYPE_GRAVITY sensor NOT registered");
+                Log.e(TAG, "TYPE_ACCELEROMETER sensor NOT registered");
             }
         }
     }
-
 
     private static class UpdateStarfield implements Runnable {
         private final WeakReference<MenuActivityAbstract> menuActivityAbstractWeakReference;
@@ -126,7 +136,7 @@ public abstract class MenuActivityAbstract extends AppCompatActivity {
         @Override
         public void run() {
             final MenuActivityAbstract menuActivityAbstract = menuActivityAbstractWeakReference.get();
-            if (menuActivityAbstract != null) {
+            if (menuActivityAbstract != null && menuActivityAbstract.sf != null) {
                 menuActivityAbstract.sf.invalidate();
                 menuActivityAbstract.starhandler.postDelayed(menuActivityAbstract.updateStarfield, FPS);
             }
@@ -144,7 +154,7 @@ public abstract class MenuActivityAbstract extends AppCompatActivity {
         @Override
         public void onSensorChanged(final SensorEvent event) {
             final MenuActivityAbstract menuActivityAbstract = menuActivityAbstractWeakReference.get();
-            if (menuActivityAbstract != null) {
+            if (menuActivityAbstract != null && menuActivityAbstract.sf != null) {
                 menuActivityAbstract.sf.setGravity(event.values[0], event.values[1]);
 //                Log.d("GRAV", "Starfield gravity updated to x: " + event.values[0] + ", y: " + event.values[1]);
             }

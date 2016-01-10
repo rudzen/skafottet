@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.Window;
 
 import com.undyingideas.thor.skafottet.R;
@@ -23,8 +22,6 @@ public class GameActivity extends AppCompatActivity implements
 {
     
     private static String s_possibleWord;
-
-
     private Fragment currentFragment;
 
     public static String getS_possibleWord() {
@@ -64,14 +61,24 @@ public class GameActivity extends AppCompatActivity implements
         }
     }
 
+
+    @Override
+    public void onWindowFocusChanged(final boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            WindowLayout.setImmersiveMode(getWindow());
+        }
+    }
+
     private void addFragment(final Fragment fragment) {
+        currentFragment = fragment;
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_content, fragment).addToBackStack(null).commit();
     }
 
     private void replaceFragment(final Fragment fragment) {
+        currentFragment = fragment;
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content, fragment).addToBackStack(null).commit();
     }
-
 
     @Override
     public void onDone(final boolean result) {
@@ -84,40 +91,10 @@ public class GameActivity extends AppCompatActivity implements
             startGame.setArguments(data);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_content, startGame)
-                        .addToBackStack(null)
-                            .commit();
+                    .addToBackStack(null)
+                    .commit();
         }
         else Log.d("wordPicer", "wordDenied");
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(final MenuItem item){
-        if (item.getItemId() == android.R.id.home){
-            //onBackPressed();
-            Log.d("main", "button pressed");
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed(){
-        final int count = getFragmentManager().getBackStackEntryCount();
-
-        if (count == 0) {
-            super.onBackPressed();
-            //additional code
-        } else {
-            getFragmentManager().popBackStack();
-        }
-    }
-
-    @Override
-    public void onWindowFocusChanged(final boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            WindowLayout.setImmersiveMode(getWindow());
-        }
-
     }
 
     @Override
