@@ -17,8 +17,8 @@
     <string name="error_field_required">Dette felt er påkrævet</string>
     <string name="permission_rationale">"Kontakt tilladelse er påkrævet for at gafle email addressefærdiggørelse."</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="title_player_list">High Score</string>
     <string name="title_player_detail">Player Detail</string>
     <string name="menu_new_multi_player_game">Nyt multiplayer</string>
+
 </resources>

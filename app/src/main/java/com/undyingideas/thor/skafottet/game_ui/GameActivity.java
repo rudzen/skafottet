@@ -53,6 +53,8 @@ public class GameActivity extends AppCompatActivity implements
                 addFragment(MultiPlayerPlayerFragment.newInstance(true));
             } else if (gameMode == Constant.MODE_ABOUT) {
                 addFragment(new AboutFragment());
+            } else if (gameMode == Constant.MODE_HELP) {
+                addFragment(new HelpFragment());
             }
         } else {
             addFragment(HangmanGameFragment.newInstance(new SaveGame(new Hanged(GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)), false, "Du")));

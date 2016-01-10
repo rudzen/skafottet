@@ -27,8 +27,10 @@ public final class Constant {
     public static final int MODE_MULTI_PLAYER_WORD_SELECT = 6;
     public static final int MODE_WORD_LIST = 7;
     public static final int MODE_ABOUT = 8;
+    public static final int MODE_HELP = 9;
 
     public static final String KEY_GAME_LOGIC = "log";
+    public static final String KEY_PREF_HELP = "hlp";
 
     /* firebase constants */
     public static final String FIREBASE_MULTI_PLAYER = "MultiPlayer";

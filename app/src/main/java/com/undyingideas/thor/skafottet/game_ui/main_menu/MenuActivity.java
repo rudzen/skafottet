@@ -27,7 +27,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.nineoldandroids.animation.Animator;
-import com.undyingideas.thor.skafottet.Instructions;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.game_ui.GameActivity;
@@ -174,8 +173,7 @@ public class MenuActivity extends MenuActivityAbstract {
     @SuppressWarnings("unused")
     private void showHelp() {
         if (sf != null) sf.setRun(false);
-        startActivity(new Intent(this, Instructions.class));
-
+        startActivity(new Intent(this, GameActivity.class).putExtra(Constant.KEY_MODE, Constant.MODE_HELP));
     }
 
     @SuppressWarnings("unused")
@@ -186,9 +184,7 @@ public class MenuActivity extends MenuActivityAbstract {
 
     @SuppressWarnings("unused")
     private void showAbout() {
-        final Intent intent = new Intent(this, GameActivity.class);
-        intent.putExtra(Constant.KEY_MODE, Constant.MODE_ABOUT);
-        startActivity(intent);
+        startActivity(new Intent(this, GameActivity.class).putExtra(Constant.KEY_MODE, Constant.MODE_ABOUT));
     }
 
     @SuppressWarnings("unused")
