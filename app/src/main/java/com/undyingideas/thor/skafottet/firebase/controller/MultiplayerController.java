@@ -8,6 +8,7 @@ import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
+import com.undyingideas.thor.skafottet.firebase.WordList.WordListController;
 import com.undyingideas.thor.skafottet.game_ui.hichscorecontent.HighScoreContent;
 import com.undyingideas.thor.skafottet.game_ui.hichscorecontent.HighScoreDTO;
 
@@ -24,6 +25,7 @@ public class MultiplayerController {
     @Nullable
     public LobbyController lc;
     public PlayerController pc;
+    public WordListController wlc;
     private final Firebase ref;
     @Nullable
     public String name;
@@ -33,6 +35,8 @@ public class MultiplayerController {
     public MultiplayerController(final Firebase ref, final Runnable playerUpdater) {
         this.ref = ref;
         pc = new PlayerController(this, ref);
+        wlc = new WordListController(ref);
+        Log.d("firebaseMulti", "hej");
         updateHandler = new Handler();
         this.playerUpdater = playerUpdater;
     }

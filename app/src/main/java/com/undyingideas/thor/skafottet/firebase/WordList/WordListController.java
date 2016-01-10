@@ -8,6 +8,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.MutableData;
 import com.firebase.client.Transaction;
+import com.undyingideas.thor.skafottet.game_ui.wordlist.data.WordList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,54 +20,27 @@ import java.util.HashMap;
  * @author Emil
  */
 public class WordListController {
+
     private final Firebase firebase;
     public HashMap<String, WordListDTO> wordList = new HashMap<>();
 
-
-
-
     public WordListController(final Firebase firebase){
         this.firebase=firebase;
-        this.firebase.child("WordList").addChildEventListener(new WordGetter(this));
-
+        this.firebase.child("Wordlist").addChildEventListener(new WordGetter(this));
+        Log.d("firebasewlc", firebase.toString());
     }
+
+    public ArrayList<WordListDTO> getArray(){
+        return new ArrayList<WordListDTO>(wordList.values());
+    }
+
     public void addList(final WordListDTO wordListDTO) {
 
-        final ArrayList<String> words = wordListDTO.getWordList();
         final String title = wordListDTO.getTitle();
-        Log.d("emil", "addlist started " + words.size());
-        for(final String s : words){
-            Log.d("emil", s);
-            final Firebase wordRef = firebase.child("Wordlist").child(title);
-            final FireBaseCreate h = new FireBaseCreate(title , words);
-            wordRef.push().setValue(s);
+        final Firebase listRef = firebase.child("Wordlist").child(title);
+        for(final String s : wordListDTO.getWordList()) {
+            listRef.child(s).setValue(s);
         }
-    }
-}
-
-class FireBaseCreate implements Transaction.Handler{
-    private boolean succes;
-    private final ArrayList<String> wordList;
-    private final String title;
-    FireBaseCreate(final String title, final ArrayList<String> wordList){
-        this.wordList = wordList;
-        this.title = title;
-    }
-
-    @Override
-    public Transaction.Result doTransaction(final MutableData mutableData) {
-        if (mutableData.getValue() == null) {
-            mutableData.setValue(new WordListDTO(title,wordList));
-            return Transaction.success(mutableData);
-        } else {
-            return Transaction.abort();
-        }
-    }
-
-    @Override
-    public void onComplete(final FirebaseError firebaseError, final boolean b, final DataSnapshot dataSnapshot) {
-        succes = b;
-        Log.d("firebase", "succes = " + b);
     }
 }
 
@@ -79,18 +53,18 @@ class WordGetter implements ChildEventListener {
     @Override
     public void onChildAdded(final DataSnapshot dataSnapshot, final String s) {
         wlcRef.wordList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
-        Log.d("emil", dataSnapshot.toString());
-        }
+    }
 
     @Override
     public void onChildChanged(final DataSnapshot dataSnapshot, final String s) {
-        Log.d("firebaseError", "childchangede"+dataSnapshot.toString());
-        }
+        wlcRef.wordList.remove(s);
+        wlcRef.wordList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
+    }
 
     @Override
     public void onChildRemoved(final DataSnapshot dataSnapshot) {
-
-        }
+        wlcRef.wordList.remove(dataSnapshot.getKey());
+    }
 
     @Override
     public void onChildMoved(final DataSnapshot dataSnapshot, final String s) {
@@ -99,18 +73,12 @@ class WordGetter implements ChildEventListener {
 
     @Override
     public void onCancelled(final FirebaseError firebaseError) {
-        // void
+        Log.e("firebaseerror", firebaseError.getDetails());
     }
 
     private static WordListDTO getDTO(final DataSnapshot dataSnapshot) {
         final WordListDTO dto = new WordListDTO();
         for(final DataSnapshot s : dataSnapshot.getChildren()) dto.getWordList().add(s.getValue().toString());
-
-        //dto.setScore(Integer.valueOf(dataSnapshot.child("score").getValue().toString()));
-        //if (dataSnapshot.hasChild("gameList"))
-          //  for(DataSnapshot ds : dataSnapshot.child("gameList").getChildren())
-            //    dto.getGameList().add(ds.getValue().toString());
-        //Log.d("firebase dto", dto.getName() + " " + dto.getScore());
         return dto;
     }
 }
