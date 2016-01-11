@@ -151,7 +151,7 @@ public class MenuActivity extends MenuActivityAbstract{
     }
 
     private void showAll() {
-        YoYo.with(Techniques.FadeIn).duration(300).withListener(new EnterAnimatorHandler(this)).playOn(findViewById(R.id.menu_background));
+        YoYo.with(Techniques.FadeIn).duration(1000).withListener(new EnterAnimatorHandler(this)).playOn(title);
         for (final ImageView button : buttons) {
             button.setClickable(true);
             button.setOnClickListener(s_buttonListener);
@@ -409,14 +409,18 @@ public class MenuActivity extends MenuActivityAbstract{
         public void onAnimationStart(final Animator animation) {
             final MenuActivity menuActivity = menuActivityWeakReference.get();
             if (menuActivity != null) {
-                YoYo.with(Techniques.FadeInDown).duration(800).playOn(menuActivity.title);
-                YoYo.with(Techniques.BounceInUp).duration(900).playOn(menuActivity.buttons[0]);
-                YoYo.with(Techniques.BounceInLeft).duration(900).playOn(menuActivity.buttons[1]);
-                YoYo.with(Techniques.BounceInLeft).duration(800).playOn(menuActivity.buttons[2]);
-                YoYo.with(Techniques.BounceInLeft).duration(800).playOn(menuActivity.buttons[3]);
-                YoYo.with(Techniques.BounceInRight).duration(700).playOn(menuActivity.buttons[4]);
-                YoYo.with(Techniques.BounceInRight).duration(700).playOn(menuActivity.buttons[5]);
-                YoYo.with(Techniques.BounceInDown).duration(600).playOn(menuActivity.buttons[6]);
+                for (int i = 0; i < menuActivity.buttons.length; i++) {
+                    YoYo.with(Techniques.Flash).duration(1000 - i * 100).playOn(menuActivity.buttons[i]);
+                }
+//                YoYo.with(Techniques.Flash).duration(800).playOn(menuActivity.title);
+//                YoYo.with(Techniques.Flash).duration(900).playOn(menuActivity.buttons[0]);
+//                YoYo.with(Techniques.Flash).duration(900).playOn(menuActivity.buttons[1]);
+//                YoYo.with(Techniques.Flash).duration(800).playOn(menuActivity.buttons[2]);
+//                YoYo.with(Techniques.Flash).duration(800).playOn(menuActivity.buttons[3]);
+//                YoYo.with(Techniques.Flash).duration(700).playOn(menuActivity.buttons[4]);
+//                YoYo.with(Techniques.Flash).duration(700).playOn(menuActivity.buttons[5]);
+//                YoYo.with(Techniques.Flash).duration(600).playOn(menuActivity.buttons[6]);
+//                YoYo.with(Techniques.Flash).duration(600).playOn(menuActivity.buttons[7]);
                 menuActivity.click_status = true;
                 menuActivity.setMenuButtonsClickable(true);
             }

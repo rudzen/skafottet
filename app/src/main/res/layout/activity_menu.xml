@@ -44,72 +44,60 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:weightSum="1">
+        android:layout_height="wrap_content"
+        >
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="378dp"
-            android:layout_below="@+id/menu_title"
-            android:layout_alignParentStart="false"
-            android:layout_centerInParent="true"
-            android:layout_weight="1.01"
-            >
+        <ImageView
+            android:id="@+id/menu_button_play"
+            android:background="@drawable/button_play"
+            style="@style/menu_button_style"
+            android:layout_marginTop="125dp"
+            />
 
-            <ImageView
-                android:id="@+id/menu_button_play"
-                android:background="@drawable/button_play"
-                style="@style/menu_button_style"
-                android:layout_marginTop="125dp"
-                />
+        <ImageView
+            android:id="@+id/menu_button_highscore"
+            android:background="@drawable/button_highscore"
+            style="@style/menu_button_style"
+            />
 
-            <ImageView
-                android:id="@+id/menu_button_highscore"
-                android:background="@drawable/button_highscore"
-                style="@style/menu_button_style"
-                />
+        <ImageView
+            android:id="@+id/menu_button_word_lists"
+            android:background="@drawable/button_ordlister"
+            style="@style/menu_button_style"
+            />
 
-            <ImageView
-                android:id="@+id/menu_button_word_lists"
-                android:background="@drawable/button_ordlister"
-                style="@style/menu_button_style"
-                />
+        <ImageView
+            android:id="@+id/menu_button_settings"
+            android:background="@drawable/button_settings"
+            style="@style/menu_button_style"/>
 
-            <ImageView
-                android:id="@+id/menu_button_settings"
-                android:background="@drawable/button_settings"
-                style="@style/menu_button_style"/>
+        <ImageView
+            android:id="@+id/menu_button_about"
+            android:background="@drawable/button_about"
+            style="@style/menu_button_style"/>
 
-            <ImageView
-                android:id="@+id/menu_button_about"
-                android:background="@drawable/button_about"
-                style="@style/menu_button_style"/>
+        <ImageView
+            android:id="@+id/menu_button_help"
+            android:background="@drawable/button_help"
+            style="@style/menu_button_style"
+            />
 
-            <ImageView
-                android:id="@+id/menu_button_help"
-                android:background="@drawable/button_help"
-                style="@style/menu_button_style"
-                />
+        <ImageView
+            style="@style/menu_button_style"
+            android:id="@+id/menu_button_login_out"
+            android:background="@drawable/button_login"
+            />
 
-            <ImageView
-                style="@style/menu_button_style"
-                android:id="@+id/menu_button_login_out"
-                android:background="@drawable/button_login"
-                />
-
-            <ImageView
-                android:id="@+id/menu_button_quit"
-                android:background="@drawable/button_end"
-                style="@style/menu_button_style"
-                android:layout_marginBottom="75dp"/>
-
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/menu_button_quit"
+            android:background="@drawable/button_end"
+            style="@style/menu_button_style"
+            android:layout_marginBottom="75dp"/>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="47dp"
+            android:layout_height="wrap_content"
             android:weightSum="1"
             android:clickable="true"
             android:background="?selectableItemBackground"

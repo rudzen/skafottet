@@ -110,6 +110,7 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
         super.onWindowFocusChanged(hasFocus);
         if (sf != null) {
             // this SHOULD fix idiotic apps like facebook messenger messing with my starfield!
+            // it also stops the animation when a dialog is showing (which is quite okay!)
             sf.setRun(hasFocus);
         }
     }
