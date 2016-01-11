@@ -151,6 +151,7 @@ public class MenuActivity extends MenuActivityAbstract{
     }
 
     private void showAll() {
+        buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(loginButtons[GameUtility.mpc.name == null ? 0 : 1]));
         YoYo.with(Techniques.FadeIn).duration(1000).withListener(new EnterAnimatorHandler(this)).playOn(title);
         for (final ImageView button : buttons) {
             button.setClickable(true);
@@ -207,30 +208,32 @@ public class MenuActivity extends MenuActivityAbstract{
 
     @SuppressWarnings({"unused", "AccessStaticViaInstance"})
     private void showNewGame() {
-        final ArrayList<StartGameItem> startGameItem = new ArrayList<>(3);
+        final ArrayList<StartGameItem> startGameItems = new ArrayList<>(3);
         maxID = 3;
+
+        StartGameItem startGameItem;
 
         try {
             // If previous game is found, add it to list :-)
             GameUtility.s_prefereces.checkForNullKey(Constant.KEY_SAVE_GAME);
             final SaveGame saveGame = (SaveGame) GameUtility.s_prefereces.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
             if (saveGame != null && saveGame.getLogic() != null && !saveGame.getLogic().isGameOver()) {
-                startGameItem.add(new StartGameItem(0, "Fortsæt sidste spil", "Type : " + (saveGame.isMultiPlayer() ? "Multi" : "Single") + "player / Gæt : " + saveGame.getLogic().getVisibleWord(), GameUtility.imageRefs[saveGame.getLogic().getNumWrongLetters()]));
+                startGameItems.add(new StartGameItem(Constant.MODE_CONT_GAME, "Fortsæt sidste spil", "Type : " + (saveGame.isMultiPlayer() ? "Multi" : "Single") + "player / Gæt : " + saveGame.getLogic().getVisibleWord(), GameUtility.imageRefs[saveGame.getLogic().getNumWrongLetters()]));
                 maxID++;
             }
         } catch (final NullPointerException npe) {
             // nothing happends here, its just for not adding the option to continue a game.
         } finally {
-            startGameItem.add(new StartGameItem(1, "Nyt singleplayer", "Tilfældigt ord.", GameUtility.imageRefs[0]));
+            startGameItems.add(new StartGameItem(Constant.MODE_SINGLE_PLAYER, "Nyt singleplayer", "Tilfældigt ord.", GameUtility.imageRefs[0]));
             if(GameUtility.mpc.name != null) {
-                startGameItem.add(new StartGameItem(2, getString(R.string.menu_new_multi_player_game), "Udfordring.", GameUtility.imageRefs[0]));
-                startGameItem.add(new StartGameItem(3, getString(R.string.menu_new_multi_player_game), "Tværfaglig udfordring", GameUtility.imageRefs[0]));
-            } else {
-                maxID--;
-                startGameItem.add(new StartGameItem(2, "Login", "woot", GameUtility.imageRefs[0]));
+                startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER, getString(R.string.menu_new_multi_player_game), "Udfordring.", GameUtility.imageRefs[0]));
+                startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_2, getString(R.string.menu_new_multi_player_game), "Tværfaglig udfordring", GameUtility.imageRefs[0]));
+//            } else {
+//                maxID--;
+//                startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_LOGIN, "Login", "woot", GameUtility.imageRefs[0]));
             }
 
-            final StartGameAdapter adapter = new StartGameAdapter(this, R.layout.new_game_list_row, startGameItem);
+            final StartGameAdapter adapter = new StartGameAdapter(this, R.layout.new_game_list_row, startGameItems);
             final ListView listViewItems = new ListView(this);
             listViewItems.setAdapter(adapter);
             listViewItems.setOnItemClickListener(new OnStartGameItemClickListener());
@@ -247,17 +250,12 @@ public class MenuActivity extends MenuActivityAbstract{
 
     @SuppressWarnings("unused")
     private void startNewGame() {
-        if (GameUtility.mpc.name == null && newGameID == maxID-1){
-            loginLayout.callOnClick();
-        } else {
-            final Intent intent = new Intent(this, GameActivity.class);
-            if (maxID == 3) {
-                newGameID++;
-            }
-            Log.d(TAG, "Game mode started : " + newGameID);
-            intent.putExtra(Constant.KEY_MODE, newGameID);
+        if (newGameID != Constant.MODE_MULTI_PLAYER_LOGIN) {
+            final Intent intent = new Intent(this, GameActivity.class).putExtra(Constant.KEY_MODE, newGameID);
             if (sf != null) sf.setRun(false);
             startActivity(intent);
+        } else {
+            showLogin();
         }
     }
 
@@ -295,16 +293,15 @@ public class MenuActivity extends MenuActivityAbstract{
     @Override
     public void onFinishLoginDialog(final String title, final String pass) {
         if (title != null && pass != null) {
-            //
+            buttons[BUTTON_LOGIN_OUT].setTag(true);
         }
         buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(GameUtility.mpc.name == null ? loginButtons[0] : loginButtons[1]));
-//        showAll();
+        showAll();
     }
 
     @Override
     public void onCancel() {
         buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(GameUtility.mpc.name == null ? loginButtons[0] : loginButtons[1]));
-
         showAll();
     }
 
@@ -333,15 +330,17 @@ public class MenuActivity extends MenuActivityAbstract{
 
     private static class OnStartGameItemClickListener implements AdapterView.OnItemClickListener {
 
+        private static final String TAG = "NewGame";
+
         @Override
         public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-            final WeakReference<Context> contextWeakReference = new WeakReference<>(view.getContext());
-            final Context context = contextWeakReference.get();
-            if (context != null) {
-                Log.d("NG", String.valueOf(position));
-                ((MenuActivity) context).md.dismiss();
-                ((MenuActivity) context).newGameID = (int) id;
-                ((MenuActivity) context).endMenu("startNewGame", ((MenuActivity) context).buttons[BUTTON_PLAY]);
+            final Context context = view.getContext();
+            if (context instanceof MenuActivity) {
+                final MenuActivity menuActivity = (MenuActivity) context;
+                menuActivity.md.dismiss();
+                Log.d(TAG, "New game mode selected : " + view.getTag());
+                menuActivity.newGameID = (int) view.getTag();
+                menuActivity.endMenu("startNewGame", menuActivity.buttons[BUTTON_PLAY]);
             }
         }
     }
@@ -409,18 +408,15 @@ public class MenuActivity extends MenuActivityAbstract{
         public void onAnimationStart(final Animator animation) {
             final MenuActivity menuActivity = menuActivityWeakReference.get();
             if (menuActivity != null) {
-                for (int i = 0; i < menuActivity.buttons.length; i++) {
-                    YoYo.with(Techniques.Flash).duration(1000 - i * 100).playOn(menuActivity.buttons[i]);
-                }
-//                YoYo.with(Techniques.Flash).duration(800).playOn(menuActivity.title);
-//                YoYo.with(Techniques.Flash).duration(900).playOn(menuActivity.buttons[0]);
-//                YoYo.with(Techniques.Flash).duration(900).playOn(menuActivity.buttons[1]);
-//                YoYo.with(Techniques.Flash).duration(800).playOn(menuActivity.buttons[2]);
-//                YoYo.with(Techniques.Flash).duration(800).playOn(menuActivity.buttons[3]);
-//                YoYo.with(Techniques.Flash).duration(700).playOn(menuActivity.buttons[4]);
-//                YoYo.with(Techniques.Flash).duration(700).playOn(menuActivity.buttons[5]);
-//                YoYo.with(Techniques.Flash).duration(600).playOn(menuActivity.buttons[6]);
-//                YoYo.with(Techniques.Flash).duration(600).playOn(menuActivity.buttons[7]);
+                YoYo.with(Techniques.Pulse).duration(800).playOn(menuActivity.title);
+                YoYo.with(Techniques.RotateInDownLeft).duration(900).playOn(menuActivity.buttons[0]);
+                YoYo.with(Techniques.RotateIn).duration(900).playOn(menuActivity.buttons[1]);
+                YoYo.with(Techniques.RotateInUpRight).duration(800).playOn(menuActivity.buttons[2]);
+                YoYo.with(Techniques.RotateInUpRight).duration(800).playOn(menuActivity.buttons[3]);
+                YoYo.with(Techniques.RotateInUpLeft).duration(700).playOn(menuActivity.buttons[4]);
+                YoYo.with(Techniques.RotateInUpLeft).duration(700).playOn(menuActivity.buttons[5]);
+                YoYo.with(Techniques.RotateInDownRight).duration(600).playOn(menuActivity.buttons[6]);
+                YoYo.with(Techniques.RotateInDownRight).duration(600).playOn(menuActivity.buttons[7]);
                 menuActivity.click_status = true;
                 menuActivity.setMenuButtonsClickable(true);
             }

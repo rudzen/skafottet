@@ -26,18 +26,19 @@ import java.util.ArrayList;
 /**
  * Created on 27-12-2015, 09:59.<br>
  * Adapter for showing the relevant information about game selection.
+ * Tweaked to support custom tag for item selection based on current availble game modes.
  * @author rudz
  */
 public class StartGameAdapter extends ArrayAdapter<StartGameItem> {
 
-    private final Context mContext;
+    private final Context context;
     private final int layoutResourceId;
     private final ArrayList<StartGameItem> data;
 
-    public StartGameAdapter(final Context mContext, final int layoutResourceId, final ArrayList<StartGameItem> data) {
-        super(mContext, layoutResourceId, data);
+    public StartGameAdapter(final Context context, final int layoutResourceId, final ArrayList<StartGameItem> data) {
+        super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
-        this.mContext = mContext;
+        this.context = context;
         this.data = data;
     }
 
@@ -47,29 +48,22 @@ public class StartGameAdapter extends ArrayAdapter<StartGameItem> {
         public static ImageView s_icon;
     }
 
-
     @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
     @Override
     public View getView(final int position, final View convertView, final ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            final LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+            final LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             view = inflater.inflate(layoutResourceId, parent, false);
             ViewHolder.s_textViewItem = (TextView) view.findViewById(R.id.new_game_item);
             ViewHolder.s_textViewDesc = (TextView) view.findViewById(R.id.new_game_description);
             ViewHolder.s_icon = (ImageView) view.findViewById(R.id.new_game_icon);
         }
-
         final StartGameItem startGameItem = data.get(position);
-
         ViewHolder.s_textViewItem.setText(startGameItem.itemName);
-        ViewHolder.s_textViewItem.setTag(startGameItem.itemId);
-
         ViewHolder.s_textViewDesc.setText(startGameItem.description);
-        ViewHolder.s_textViewDesc.setTag(startGameItem.itemId);
-
         ViewHolder.s_icon.setImageResource(startGameItem.resourceIcon);
-
+        view.setTag(startGameItem.itemId);
         return view;
     }
 

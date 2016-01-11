@@ -1,5 +1,7 @@
 package com.undyingideas.thor.skafottet.fragments.dialogs;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
@@ -23,6 +25,9 @@ import java.lang.ref.WeakReference;
  * @author theis
  */
 public class Login extends DialogFragment {
+
+    private LoginListener activity;
+
     public interface LoginListener {
         void onFinishLoginDialog(String title, String pass);
         void onCancel();
@@ -58,13 +63,26 @@ public class Login extends DialogFragment {
         public static Button s_btnOk, s_btnCancel;
     }
 
+    @Override
+    public void onAttach(final Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof LoginListener) {
+            this.activity = (LoginListener) activity;
+        } else {
+            throw new ClassCastException("HUUUUHUUUU... remember the interface!");
+        }
+    }
+
     @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.dialogfragment_login, container);
 
         getDialog().setTitle(getArguments().getString("title"));
-        getDialog().setCancelable(getArguments().getBoolean("cancelable"));
+//        getDialog().setCancelable(getArguments().getBoolean("cancelable"));
+        getDialog().setCancelable(true);
+        getDialog().setCanceledOnTouchOutside(true);
+        getDialog().setOnCancelListener(new LoginOnCancelListener());
 
         ViewHolder.s_name = (EditText) view.findViewById(R.id.loginName);
         ViewHolder.s_pass = (EditText) view.findViewById(R.id.LoginPass);
@@ -75,15 +93,8 @@ public class Login extends DialogFragment {
         ViewHolder.s_name.setOnKeyListener(handler);
         ViewHolder.s_pass.setOnKeyListener(handler);
 
-
         ViewHolder.s_btnOk.setOnClickListener(new OnResultClick(this, true));
         ViewHolder.s_btnCancel.setOnClickListener(new OnResultClick(this, false));
-        view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(final View v, final boolean hasFocus) {
-                if (!hasFocus) ((LoginListener) getActivity()).onCancel();
-            }
-        });
 
         ViewHolder.s_btnOk.setText(getArguments().getString("okButton"));
         ViewHolder.s_btnCancel.setText(getArguments().getString("cancelButton"));
@@ -96,7 +107,6 @@ public class Login extends DialogFragment {
 
     @SuppressWarnings({"AssignmentToNull", "AssignmentToStaticFieldFromInstanceMethod"})
     private void postResult() {
-        final LoginListener activity = (LoginListener) getActivity();
 
         /* grab what we need from the views */
         final String title = ViewHolder.s_name.getText().toString();
@@ -161,6 +171,13 @@ public class Login extends DialogFragment {
                 Log.d("AddDialog", "NEJDA");
                 getActivity().getSupportFragmentManager().beginTransaction().remove(df).commit();
             }
+        }
+    }
+
+    private class LoginOnCancelListener implements DialogInterface.OnCancelListener {
+        @Override
+        public void onCancel(final DialogInterface dialog) {
+            activity.onCancel();
         }
     }
 }

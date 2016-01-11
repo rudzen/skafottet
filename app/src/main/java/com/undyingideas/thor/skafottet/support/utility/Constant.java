@@ -23,7 +23,7 @@ public final class Constant {
     public static final int MODE_MULTI_PLAYER = 2;
     public static final int MODE_MULTI_PLAYER_2 = 3;
     public static final int MODE_MULTI_PLAYER_LOBBY = 4;
-    public static final int MODE_MULtI_PLAYER_LOGIN = 5;
+    public static final int MODE_MULTI_PLAYER_LOGIN = 5;
     public static final int MODE_MULTI_PLAYER_WORD_SELECT = 6;
     public static final int MODE_WORD_LIST = 7;
     public static final int MODE_ABOUT = 8;
