@@ -9,7 +9,9 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.support.annotation.DrawableRes;
 
+import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.firebase.controller.MultiplayerController;
 import com.undyingideas.thor.skafottet.game_ui.wordlist.data.WordList;
 
 /**
@@ -20,7 +22,9 @@ import com.undyingideas.thor.skafottet.game_ui.wordlist.data.WordList;
  */
 public abstract class GameUtility {
 
-    public static final String KEY_IS_HOT_SEAT = "isHotSeat";
+    public static MultiplayerController mpc;
+    public static Firebase fb;
+
     public static final String KEY_MULIGE_ORD = "muligeOrd";
 
     @SuppressWarnings("StaticVariableOfConcreteClass")

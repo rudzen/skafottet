@@ -13,11 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.firebase.DTO.PlayerDTO;
 import com.undyingideas.thor.skafottet.firebase.controller.MultiplayerController;
-import com.undyingideas.thor.skafottet.utility.Constant;
+import com.undyingideas.thor.skafottet.utility.GameUtility;
 import com.undyingideas.thor.skafottet.utility.WindowLayout;
 
 import java.util.ArrayList;
@@ -38,8 +37,8 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
      * device.
      */
     private boolean mTwoPane;
-    private Firebase myFirebaseRef;
-    private MultiplayerController mpc;
+//    private Firebase myFirebaseRef;
+//    private MultiplayerController mpc;
     private View recyclerView;
 
     private final ArrayList<PlayerDTO> players = new ArrayList<>();
@@ -49,11 +48,11 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_list);
 
+//        Firebase.setAndroidContext(this);
+//        myFirebaseRef = new Firebase(Constant.HANGMANDTU_FIREBASEIO);
 
-        Firebase.setAndroidContext(this);
-        myFirebaseRef = new Firebase(Constant.HANGMANDTU_FIREBASEIO);
-
-        mpc = new MultiplayerController(myFirebaseRef, this);
+        GameUtility.mpc = new MultiplayerController(GameUtility.fb, this);
+//        mpc = new MultiplayerController(myFirebaseRef, this);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -83,7 +82,7 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
     @Override
     public void run() {
 
-        setupRecyclerView((RecyclerView) recyclerView, mpc.getHighScoreItems());
+        setupRecyclerView((RecyclerView) recyclerView, GameUtility.mpc.getHighScoreItems());
 
 
     }

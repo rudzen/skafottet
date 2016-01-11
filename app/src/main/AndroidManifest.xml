@@ -31,18 +31,11 @@
             android:name=".game_ui.wordlist.WordFragmentLayout"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".Instructions"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".game_ui.GameActivity"
             android:parentActivityName=".game_ui.LoadingActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity android:name=".game_ui.main_menu.MenuActivity"/>
-        <activity
-            android:name=".MultiplayerTestLobby"
-            android:label="Test lobby"
-            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".game_ui.hichscorecontent.PlayerListActivity"
             android:label="@string/title_player_list"

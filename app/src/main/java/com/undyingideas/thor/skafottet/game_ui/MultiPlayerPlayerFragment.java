@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.firebase.DTO.LobbyPlayerStatus;
@@ -41,7 +40,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
     private ListView listView;
     private ArrayList<PlayerDTO> players;
     private final ArrayList<LobbyDTO> lobbys = new ArrayList<>();
-    private MultiplayerController multiplayerController;
+//    private MultiplayerController multiplayerController;
     private MultiplayerPlayersAdapter playerAdapter;
     private MultiplayerLobbyAdapter lobbyAdapter;
     private Runnable updater;
@@ -147,8 +146,10 @@ public class MultiPlayerPlayerFragment extends Fragment {
 
         configureAdapter();
 
-        Firebase.setAndroidContext(getActivity());
-        multiplayerController = new MultiplayerController(new Firebase("https://hangmandtu.firebaseio.com"), updater);
+//        Firebase.setAndroidContext(getActivity());
+//        multiplayerController = new MultiplayerController(new Firebase("https://hangmandtu.firebaseio.com"), updater);
+
+        GameUtility.mpc = new MultiplayerController(GameUtility.fb, updater);
     }
 
     public void setOnlineStatus(final boolean newStatus) {
@@ -177,11 +178,11 @@ public class MultiPlayerPlayerFragment extends Fragment {
                 // do stuff!!!
                 multiPlayerPlayerFragment.onButtonPressed(position);
                 Log.d("firebaselogin", "login");
-                if(multiPlayerPlayerFragment.multiplayerController.name == null)
-                    multiPlayerPlayerFragment.multiplayerController.login(multiPlayerPlayerFragment.players.get(position).getName());
+                if(GameUtility.mpc.name == null)
+                    GameUtility.mpc.login(multiPlayerPlayerFragment.players.get(position).getName());
                 else {
                     for (final LobbyPlayerStatus lobbyPlayerStatus : multiPlayerPlayerFragment.lobbys.get(position).getPlayerList())
-                        if (lobbyPlayerStatus.getName().equals(multiPlayerPlayerFragment.multiplayerController.name))
+                        if (lobbyPlayerStatus.getName().equals(GameUtility.mpc.name))
                             for(final WordStatus wordStatus : lobbyPlayerStatus.getWordList()) {
                                 if (wordStatus.getScore() == -1) {
                                     Log.d("firebaseopengame", wordStatus.getWordID());
@@ -206,20 +207,20 @@ public class MultiPlayerPlayerFragment extends Fragment {
     private class UpdateList implements Runnable {
         @Override
         public void run() {
-            if (multiplayerController.name == null) {
+            if (GameUtility.mpc.name == null) {
                 playerAdapter = new MultiplayerPlayersAdapter(getContext(), R.layout.multiplayer_player_list_row, players);
                 listView.setAdapter(playerAdapter);
                 players.clear();
-                players.addAll(multiplayerController.pc.playerList.values());
+                players.addAll(GameUtility.mpc.pc.playerList.values());
                 playerAdapter.notifyDataSetChanged();
                 if (players != null) {
                     GameUtility.s_prefereces.putObject(KEY_LAST_PLAYER_LIST, players);
                 }
             } else {
                 lobbys.clear();
-                lobbys.addAll(multiplayerController.lc.lobbyList.values());
-                Log.d("firebase", lobbys.size() + "  " + multiplayerController.lc.lobbyList.size());
-                lobbyAdapter = new MultiplayerLobbyAdapter(multiplayerController.name, getContext(), R.layout.multiplayer_player_list_row, lobbys);
+                lobbys.addAll(GameUtility.mpc.lc.lobbyList.values());
+                Log.d("firebase", lobbys.size() + "  " + GameUtility.mpc.lc.lobbyList.size());
+                lobbyAdapter = new MultiplayerLobbyAdapter(GameUtility.mpc.name, getContext(), R.layout.multiplayer_player_list_row, lobbys);
                 listView.setAdapter(lobbyAdapter);
                 lobbyAdapter.notifyDataSetChanged();
             }

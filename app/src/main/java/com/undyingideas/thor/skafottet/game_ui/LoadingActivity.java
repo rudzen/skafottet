@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game_ui.main_menu.MenuActivity;
 import com.undyingideas.thor.skafottet.utility.Constant;
@@ -61,16 +62,20 @@ public class LoadingActivity extends AppCompatActivity {
             }
         }
 
+        @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
         @Override
         protected ArrayList<String> doInBackground(final Void... params) {
             final LoadingActivity loadingActivity = loadingScreenWeakReference.get();
             if (loadingActivity != null) {
+                Firebase.setAndroidContext(loadingActivity.getApplicationContext());
+                GameUtility.fb = new Firebase(Constant.HANGMANDTU_FIREBASEIO);
+
                 /* This is the first code executed, thus some configuration of the application takes place.. */
                 setDefaultFont(loadingActivity.getApplicationContext(), "DEFAULT", Constant.DEF_FONT);
                 setDefaultFont(loadingActivity.getApplicationContext(), "MONOSPACE", Constant.DEF_FONT);
                 setDefaultFont(loadingActivity.getApplicationContext(), "SERIF", Constant.DEF_FONT);
                 setDefaultFont(loadingActivity.getApplicationContext(), "SANS_SERIF", Constant.DEF_FONT);
-                //noinspection AssignmentToStaticFieldFromInstanceMethod
+
                 s_prefereces = new TinyDB(loadingActivity.getApplicationContext());
 
                 /* begin loading wordlist */

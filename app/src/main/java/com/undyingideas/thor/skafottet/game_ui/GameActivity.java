@@ -1,7 +1,5 @@
 package com.undyingideas.thor.skafottet.game_ui;
 
-import android.app.ActionBar;
-import android.app.SearchManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.undyingideas.thor.skafottet.R;
@@ -26,6 +25,8 @@ public class GameActivity extends AppCompatActivity implements
     private static final String TAG = "GameActivity";
     private static String s_possibleWord;
     private Fragment currentFragment;
+
+    private ProgressBar topProgressBar;
 
     public TextView t;
     public static String getS_possibleWord() {
@@ -52,6 +53,9 @@ public class GameActivity extends AppCompatActivity implements
             t.setOnClickListener(new LoginClick());
             tb.addView(t);
         }
+
+        topProgressBar = (ProgressBar) findViewById(R.id.topProgressBar);
+        topProgressBar.setVisibility(View.INVISIBLE);
 
         if (getIntent() != null) {
             final Bundle bundle = getIntent().getExtras();
