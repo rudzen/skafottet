@@ -55,7 +55,7 @@ public class WordPickerFragment extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        final View rot = inflater.inflate(R.layout.activity_ord_vaelger, container, false);
+        final View rot = inflater.inflate(R.layout.fragment_word_picker, container, false);
 
         wordList = new ArrayList<>();
 
