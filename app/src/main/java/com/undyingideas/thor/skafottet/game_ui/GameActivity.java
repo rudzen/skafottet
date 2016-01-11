@@ -19,7 +19,8 @@ import com.undyingideas.thor.skafottet.utility.WindowLayout;
 
 public class GameActivity extends AppCompatActivity implements
         MultiPlayerPlayerFragment.OnMultiPlayerPlayerFragmentInteractionListener,
-        EndOfGameFragment.OnEndGameButtonClickListenerInterface
+        EndOfGameFragment.OnEndGameButtonClickListenerInterface,
+        ProgressBarInterface
 {
 
     private static final String TAG = "GameActivity";
@@ -133,12 +134,18 @@ public class GameActivity extends AppCompatActivity implements
             finish();
         }
     }
-}
-
-class LoginClick implements View.OnClickListener {
 
     @Override
-    public void onClick(View v) {
-        Log.d("THeis", "hello");
+    public void setProgressBar(final boolean visible) {
+        topProgressBar.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    private class LoginClick implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            Log.d("THeis", "hello");
+        }
     }
 }
+

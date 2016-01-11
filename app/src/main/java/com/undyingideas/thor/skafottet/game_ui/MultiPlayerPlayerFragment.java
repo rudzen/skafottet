@@ -47,6 +47,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
 
     @Nullable
     private OnMultiPlayerPlayerFragmentInteractionListener mListener;
+    private ProgressBarInterface setProgressListener;
 
     /**
      * Use this method to create a new instance of * this fragment using the provided parameters.
@@ -103,12 +104,18 @@ public class MultiPlayerPlayerFragment extends Fragment {
         } else {
             throw new RuntimeException(context.toString() + " must implement OnMultiPlayerPlayerFragmentInteractionListener");
         }
+        if (context instanceof ProgressBarInterface) {
+            setProgressListener = (ProgressBarInterface) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement ProgressBarInterface");
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        setProgressListener = null;
     }
 
     /**
@@ -149,6 +156,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
 //        Firebase.setAndroidContext(getActivity());
 //        multiplayerController = new MultiplayerController(new Firebase("https://hangmandtu.firebaseio.com"), updater);
 
+        setProgressListener.setProgressBar(true);
         GameUtility.mpc = new MultiplayerController(GameUtility.fb, updater);
     }
 
@@ -224,6 +232,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
                 listView.setAdapter(lobbyAdapter);
                 lobbyAdapter.notifyDataSetChanged();
             }
+            setProgressListener.setProgressBar(false);
         }
     }
 
