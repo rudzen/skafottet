@@ -51,7 +51,7 @@ public class MenuActivity extends MenuActivityAbstract{
     private static final String FINISH = "finish";
     private static final int BACK_PRESSED_DELAY = 2000;
 
-    private static final int BUTTON_COUNT = 7;
+    private static final int BUTTON_COUNT = 8;
     private ImageView title;
     private final ImageView[] buttons = new ImageView[BUTTON_COUNT];
     private LinearLayout loginLayout;
@@ -63,7 +63,8 @@ public class MenuActivity extends MenuActivityAbstract{
     private static final int BUTTON_SETTINGS = 3;
     private static final int BUTTON_ABOUT = 4;
     private static final int BUTTON_HELP = 5;
-    private static final int BUTTON_QUIT = 6;
+    private static final int BUTTON_LOGIN_OUT = 6;
+    private static final int BUTTON_QUIT = 7;
 
     private int button_clicked;
 
@@ -79,6 +80,9 @@ public class MenuActivity extends MenuActivityAbstract{
 
     private static final String TAG = "MenuActivity";
 
+    private final int[] loginButtons = new int[2];
+
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +91,10 @@ public class MenuActivity extends MenuActivityAbstract{
         if (s_buttonListener == null) {
             s_buttonListener = new MenuButtonClickHandler(this);
         }
+
+        // just cauze it's possible... BRO!
+        loginButtons[0] = R.drawable.button_login;
+        loginButtons[1] = R.drawable.button_logout;
 
         loginLayout = (LinearLayout) findViewById(R.id.LoginLayout);
         loginLayout.setOnClickListener(new LoginClickListener());
@@ -102,6 +110,7 @@ public class MenuActivity extends MenuActivityAbstract{
         buttons[BUTTON_SETTINGS] = (ImageView) findViewById(R.id.menu_button_settings);
         buttons[BUTTON_ABOUT] = (ImageView) findViewById(R.id.menu_button_about);
         buttons[BUTTON_HELP] = (ImageView) findViewById(R.id.menu_button_help);
+        buttons[BUTTON_LOGIN_OUT] = (ImageView) findViewById(R.id.menu_button_login_out);
         buttons[BUTTON_QUIT] = (ImageView) findViewById(R.id.menu_button_quit);
     }
 
@@ -125,7 +134,7 @@ public class MenuActivity extends MenuActivityAbstract{
             YoYo.with(Techniques.ZoomOut).duration(300).playOn(findViewById(R.id.menu_background));
             if (sf != null) sf.setRun(false);
             super.onBackPressed();
-        } else WindowLayout.showSnack("Tryk tilbage igen for at smutte.", findViewById(R.id.menu_background), false);
+        } else WindowLayout.showSnack("Tryk tilbage igen for at flygte i rædsel.", findViewById(R.id.menu_background), false);
         backPressed = System.currentTimeMillis();
     }
 
@@ -147,7 +156,6 @@ public class MenuActivity extends MenuActivityAbstract{
             button.setClickable(true);
             button.setOnClickListener(s_buttonListener);
         }
-//        setMenuButtonsClickable(true);
     }
 
     private void endMenu(final String method_name, final ImageView clickedImageView) {
@@ -190,6 +198,11 @@ public class MenuActivity extends MenuActivityAbstract{
     private void showWordList() {
         notReady();
 //        startActivity(new Intent(this, WordDetailsActivity.class));
+    }
+
+    @SuppressWarnings("unused")
+    private void showLogin() {
+        Login.newInstance("Login", "OK", "Cancel", true).show(getSupportFragmentManager(), "Login");
     }
 
     @SuppressWarnings({"unused", "AccessStaticViaInstance"})
@@ -281,11 +294,17 @@ public class MenuActivity extends MenuActivityAbstract{
 
     @Override
     public void onFinishLoginDialog(final String title, final String pass) {
-        showAll();
+        if (title != null && pass != null) {
+            //
+        }
+        buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(GameUtility.mpc.name == null ? loginButtons[0] : loginButtons[1]));
+//        showAll();
     }
 
     @Override
     public void onCancel() {
+        buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(GameUtility.mpc.name == null ? loginButtons[0] : loginButtons[1]));
+
         showAll();
     }
 
@@ -345,6 +364,10 @@ public class MenuActivity extends MenuActivityAbstract{
                 if (v == menuActivity.buttons[BUTTON_PLAY]) {
                     menuActivity.callMethod("showNewGame");
                     menuActivity.button_clicked = BUTTON_PLAY;
+                } else if (v == menuActivity.buttons[BUTTON_LOGIN_OUT]) {
+                    menuActivity.button_clicked = BUTTON_LOGIN_OUT;
+                    buttonStates = true; // or else we disable the buttons!
+                    menuActivity.callMethod("showLogin"); // don't want to end menu with this one!
                 } else if (v == menuActivity.buttons[BUTTON_HIGHSCORE]) {
                     menuActivity.endMenu("showHighScore", menuActivity.buttons[BUTTON_HIGHSCORE]);
                     menuActivity.button_clicked = BUTTON_HIGHSCORE;

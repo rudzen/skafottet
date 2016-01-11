@@ -105,6 +105,14 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
         super.onDestroy();
     }
 
+    @Override
+    public void onWindowFocusChanged(final boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (sf != null) {
+            // this SHOULD fix idiotic apps like facebook messenger messing with my starfield!
+            sf.setRun(hasFocus);
+        }
+    }
 
     private void registerSensor() {
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);

@@ -1,6 +1,5 @@
 package com.undyingideas.thor.skafottet.fragments.dialogs;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
@@ -140,14 +139,6 @@ public class Login extends DialogFragment {
             return event.getAction() == KeyEvent.ACTION_DOWN
                     && (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER)
                     && addWordListDialog.isValid();
-        }
-    }
-
-    private class OnCancel implements DialogInterface.OnCancelListener{
-
-        @Override
-        public void onCancel(final DialogInterface dialog) {
-
         }
     }
 
