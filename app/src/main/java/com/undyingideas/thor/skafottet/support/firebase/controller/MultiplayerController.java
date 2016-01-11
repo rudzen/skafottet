@@ -42,21 +42,23 @@ public class MultiplayerController {
         this.playerUpdater = playerUpdater;
     }
 
-    public MultiplayerController(Firebase fb) {
-        this.ref = fb;
+    public MultiplayerController(final Firebase fb) {
+        ref = fb;
         pc = new PlayerController(this, ref);
         lc = new LobbyController(this,ref);
         wlc = new WordListController(ref);
     }
 
-    public void setRunnable(Runnable r) {
+    public void setRunnable(final Runnable r) {
         if(updateHandler == null) updateHandler = new Handler();
         playerUpdater = r;
         update();
     }
 
     public void createLobby(final LobbyDTO dto) {
-        lc.createLobby(dto);
+        if (lc != null) {
+            lc.createLobby(dto);
+        }
     }
 
     public boolean login(final String name) {
@@ -97,7 +99,9 @@ public class MultiplayerController {
         players.addAll(pc.playerList.values());
         playerLobbys.clear();
 
-        playerLobbys.addAll(lc.lobbyList.values());
+        if (lc != null) {
+            playerLobbys.addAll(lc.lobbyList.values());
+        }
         //We look inside all lobbys
         //Then inside all lobbys we look at all players
         //If the player match with the lobby being looked at we add the score and word from the lobby.

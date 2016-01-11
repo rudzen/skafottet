@@ -14,8 +14,6 @@ import android.app.ActionBar;
 import android.graphics.Point;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -45,11 +43,6 @@ public abstract class WindowLayout {
 
     public static void showSnack(final CharSequence text, final View v, final boolean brief) {
         Snackbar.make(v, text, brief ? Snackbar.LENGTH_SHORT : Snackbar.LENGTH_LONG).setAction("Action", null).show();
-    }
-
-    public static void setScreenDimension(final AppCompatActivity appCompatActivity) {
-        final Display display = appCompatActivity.getWindowManager().getDefaultDisplay();
-        display.getSize(screenDimension);
     }
 
     public static void setImmersiveMode(final Window w) {

@@ -121,7 +121,9 @@ class GameListListener implements ChildEventListener {
 
     @Override
     public void onChildAdded(final DataSnapshot dataSnapshot, final String s) {
-        mpc.lc.addLobbyListener(dataSnapshot.getValue().toString());
+        if (mpc.lc != null) {
+            mpc.lc.addLobbyListener(dataSnapshot.getValue().toString());
+        }
     }
 
     @Override

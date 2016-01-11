@@ -48,7 +48,7 @@ public class Login extends DialogFragment {
         if (ViewHolder.s_pass == null || ViewHolder.s_name == null) return false;
         final String pass = ViewHolder.s_pass.getText().toString();
         final boolean validStuff = !ViewHolder.s_name.getText().toString().isEmpty() && !pass.isEmpty();
-        Log.d("Login", ""+GameUtility.mpc.login(ViewHolder.s_name.getText().toString()));
+        Log.d("Login", String.valueOf(GameUtility.mpc.login(ViewHolder.s_name.getText().toString())));
         if (validStuff) return true;
         Toast.makeText(getActivity(), "Forkert indtastede informationer.", Toast.LENGTH_SHORT).show();
         return false;
@@ -81,7 +81,7 @@ public class Login extends DialogFragment {
         ViewHolder.s_btnCancel.setOnClickListener(new OnResultClick(this, false));
         view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
+            public void onFocusChange(final View v, final boolean hasFocus) {
                 if (!hasFocus) ((LoginListener) getActivity()).onCancel();
             }
         });
@@ -146,7 +146,7 @@ public class Login extends DialogFragment {
     private class OnCancel implements DialogInterface.OnCancelListener{
 
         @Override
-        public void onCancel(DialogInterface dialog) {
+        public void onCancel(final DialogInterface dialog) {
 
         }
     }

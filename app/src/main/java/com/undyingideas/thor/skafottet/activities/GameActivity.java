@@ -149,20 +149,19 @@ public class GameActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onFinishLoginDialog(String title, String pass) {
+    public void onFinishLoginDialog(final String title, final String pass) {
         Log.d("Login", title + pass);
 
     }
 
     @Override
     public void onCancel() {
-        ;
     }
 
     private class LoginClick implements View.OnClickListener {
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
             Login.newInstance("Login", "OK", "Cancel", true).show(getSupportFragmentManager(), "Login");
         }
     }

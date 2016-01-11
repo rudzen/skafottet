@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Display;
 
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.R;
@@ -123,9 +124,14 @@ public class LoadingActivity extends AppCompatActivity {
     public void onWindowFocusChanged(final boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
-            WindowLayout.setScreenDimension(this);
+            setScreenDimension(this);
             WindowLayout.setImmersiveMode(getWindow());
         }
-
     }
+
+    private static void setScreenDimension(final AppCompatActivity appCompatActivity) {
+        final Display display = appCompatActivity.getWindowManager().getDefaultDisplay();
+        display.getSize(WindowLayout.screenDimension);
+    }
+
 }

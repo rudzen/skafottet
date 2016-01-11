@@ -280,7 +280,7 @@ public class MenuActivity extends MenuActivityAbstract{
     }
 
     @Override
-    public void onFinishLoginDialog(String title, String pass) {
+    public void onFinishLoginDialog(final String title, final String pass) {
         showAll();
     }
 
@@ -446,7 +446,7 @@ public class MenuActivity extends MenuActivityAbstract{
 
     private class LoginClickListener implements View.OnClickListener {
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
             Login.newInstance("Login", "OK", "Cancel", true).show(getSupportFragmentManager(), "Login");
 
         }

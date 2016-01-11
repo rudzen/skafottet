@@ -30,7 +30,6 @@ public final class StringHelper {
     //Pattern.compile(regLowerCase + "|[A-ZÆØÅ]{" + Integer.toString(WORD_LENGTH) + ",}");
     public final static Pattern patHTML = Pattern.compile("(?i)<[^>]*>");
     public static final String VALID_URL = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
-    private static Pattern patLoad = setWordLength(regLowerCase, 4);
     public static Pattern patJS = Pattern.compile(regJavaScript);
 
 
@@ -122,7 +121,7 @@ public final class StringHelper {
 
     public static void setPatterns() {
         /* configure pattern for loading of list, this is necessary as it might have changed! */
-        patLoad = setWordLength(regLowerCase, 3);
+        Pattern patLoad = setWordLength(regLowerCase, 3);
     }
 
 }

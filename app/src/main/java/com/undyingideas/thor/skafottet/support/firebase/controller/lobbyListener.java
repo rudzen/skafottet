@@ -20,14 +20,18 @@ class LobbyListener implements ChildEventListener {
 
     @Override
     public void onChildAdded(final DataSnapshot dataSnapshot, final String s) {
-        mpc.lc.lobbyList.put(dataSnapshot.getRef().getParent().getKey(), getDTO(dataSnapshot));
+        if (mpc.lc != null) {
+            mpc.lc.lobbyList.put(dataSnapshot.getRef().getParent().getKey(), getDTO(dataSnapshot));
+        }
         mpc.lobbyUpdate();
     }
 
     @Override
     public void onChildChanged(final DataSnapshot dataSnapshot, final String s) {
-        mpc.lc.lobbyList.remove(dataSnapshot.getRef().getParent().getKey());
-        mpc.lc.lobbyList.put(dataSnapshot.getRef().getParent().getKey(), getDTO(dataSnapshot));
+        if (mpc.lc != null) {
+            mpc.lc.lobbyList.remove(dataSnapshot.getRef().getParent().getKey());
+            mpc.lc.lobbyList.put(dataSnapshot.getRef().getParent().getKey(), getDTO(dataSnapshot));
+        }
         mpc.lobbyUpdate();
     }
 

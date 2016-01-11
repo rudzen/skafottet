@@ -37,7 +37,7 @@ public class PlayerDTO {
         this.name = name;
         this.score = score;
         this.gameList = gameList;
-        this.password = "1";
+        password = "1";
     }
 
     public String getName() {
@@ -68,7 +68,7 @@ public class PlayerDTO {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 }
