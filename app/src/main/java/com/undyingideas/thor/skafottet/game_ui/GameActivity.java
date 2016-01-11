@@ -1,11 +1,15 @@
 package com.undyingideas.thor.skafottet.game_ui;
 
+import android.app.ActionBar;
+import android.app.SearchManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.widget.TextView;
 
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game.Hanged;
@@ -23,6 +27,7 @@ public class GameActivity extends AppCompatActivity implements
     private static String s_possibleWord;
     private Fragment currentFragment;
 
+    public TextView t;
     public static String getS_possibleWord() {
         return s_possibleWord;
     }
@@ -42,6 +47,10 @@ public class GameActivity extends AppCompatActivity implements
         if (getSupportActionBar() != null) {
             tb.setLogo(R.mipmap.ic_launcher);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            t = new TextView(this);
+            t.setText("      login");
+            t.setOnClickListener(new LoginClick());
+            tb.addView(t);
         }
 
         if (getIntent() != null) {
@@ -119,5 +128,13 @@ public class GameActivity extends AppCompatActivity implements
         } else {
             finish();
         }
+    }
+}
+
+class LoginClick implements View.OnClickListener {
+
+    @Override
+    public void onClick(View v) {
+        Log.d("THeis", "hello");
     }
 }
