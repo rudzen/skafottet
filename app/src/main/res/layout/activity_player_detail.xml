@@ -33,6 +33,15 @@
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:id="@+id/player_list_top_progress_bar"
+            android:indeterminate="true"
+            android:visibility="invisible"
+            android:background="@android:color/black"/>
+
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView

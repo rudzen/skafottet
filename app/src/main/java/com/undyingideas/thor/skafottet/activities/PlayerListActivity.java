@@ -11,10 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.fragments.PlayerDetailFragment;
+import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.PlayerDTO;
 import com.undyingideas.thor.skafottet.support.highscore.online.HighScoreContent;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
@@ -31,16 +33,16 @@ import java.util.List;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class PlayerListActivity extends AppCompatActivity implements Runnable {
+public class PlayerListActivity extends AppCompatActivity implements Runnable, ProgressBarInterface {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
     private boolean mTwoPane;
-//    private Firebase myFirebaseRef;
-//    private MultiplayerController mpc;
     private View recyclerView;
+    private ProgressBar topProgressBar;
+
 
     private final ArrayList<PlayerDTO> players = new ArrayList<>();
 
@@ -54,14 +56,18 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
 
         GameUtility.mpc.setRunnable(this);
 //        mpc = new MultiplayerController(myFirebaseRef, this);
-        GameUtility.mpc.pc.createPlayer("Thor","Kuss3");
+        GameUtility.mpc.pc.createPlayer("Thor", "Kuss3");
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
+        if (getSupportActionBar() != null) getSupportActionBar().setHomeButtonEnabled(true);
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new FloaterClickHandler());
+
+        topProgressBar = (ProgressBar) findViewById(R.id.player_list_top_progress_bar);
+
 
         recyclerView = findViewById(R.id.player_list);
         assert recyclerView != null;
@@ -69,10 +75,6 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
         //setupRecyclerView((RecyclerView) recyclerView);
 
         if (findViewById(R.id.player_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
             mTwoPane = true;
         }
     }
@@ -80,13 +82,16 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
     private void setupRecyclerView(@NonNull final RecyclerView recyclerView, final List<HighScoreContent.HighScoreItem> items) {
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(items));
     }
+
     //This method is called on update
     @Override
     public void run() {
-
         setupRecyclerView((RecyclerView) recyclerView, GameUtility.mpc.getHighScoreItems());
+    }
 
-
+    @Override
+    public void setProgressBar(final boolean visible) {
+        topProgressBar.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
     }
 
     private static class FloaterClickHandler implements View.OnClickListener {
@@ -97,8 +102,7 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
     }
 
 
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<HighScoreContent.HighScoreItem> mValues;
 
@@ -108,8 +112,7 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
 
         @Override
         public ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-            final View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.player_list_content, parent, false);
+            final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.player_list_content, parent, false);
             //noinspection ReturnOfInnerClass
             return new ViewHolder(view);
         }
@@ -119,7 +122,6 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
             holder.mItem = mValues.get(position);
             holder.mIdView.setText(mValues.get(position).id);
             holder.mContentView.setText(mValues.get(position).content);
-
             holder.mView.setOnClickListener(new MyOnClickListener(holder));
         }
 
@@ -161,9 +163,7 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
                     arguments.putString(PlayerDetailFragment.ARG_ITEM_ID, holder.mItem.id);
                     final PlayerDetailFragment fragment = new PlayerDetailFragment();
                     fragment.setArguments(arguments);
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.player_detail_container, fragment)
-                            .commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.player_detail_container, fragment).commit();
                 } else {
                     final Context context = v.getContext();
                     final Intent intent = new Intent(context, PlayerDetailActivity.class);

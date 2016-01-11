@@ -66,7 +66,6 @@ public class WordDetailsActivity extends AppCompatActivity {
         if (hasFocus) {
             WindowLayout.setImmersiveMode(getWindow());
         }
-
     }
 
 }
