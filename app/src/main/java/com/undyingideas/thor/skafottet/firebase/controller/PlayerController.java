@@ -30,9 +30,9 @@ public class PlayerController {
         this.ref.child(Constant.FIREBASE_MULTI_PLAYER).child("Players").addChildEventListener(new NameGetter(mpcRef));
     }
 
-    public void createPlayer(final String name) {
+    public void createPlayer(final String name, final String password) {
         final Firebase playersRef = ref.child(Constant.FIREBASE_MULTI_PLAYER).child("Players").child(name);
-        final fireBaseCreate h = new fireBaseCreate(name);
+        final fireBaseCreate h = new fireBaseCreate(name,password);
         playersRef.runTransaction(h);
     }
 
@@ -44,14 +44,16 @@ public class PlayerController {
 class fireBaseCreate implements Transaction.Handler{
     private boolean succes;
     private final String name;
-    fireBaseCreate(final String name){
+    private final String password;
+    fireBaseCreate(final String name, final String password){
+        this.password = password;
         this.name = name;
 }
 
     @Override
     public Transaction.Result doTransaction(final MutableData mutableData) {
         if (mutableData.getValue() == null) {
-            mutableData.setValue(new PlayerDTO(name));
+            mutableData.setValue(new PlayerDTO(name,password));
             return Transaction.success(mutableData);
         } else {
             return Transaction.abort();

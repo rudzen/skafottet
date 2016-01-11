@@ -53,6 +53,7 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
 
         GameUtility.mpc = new MultiplayerController(GameUtility.fb, this);
 //        mpc = new MultiplayerController(myFirebaseRef, this);
+        GameUtility.mpc.pc.createPlayer("Thor","Kuss3");
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
