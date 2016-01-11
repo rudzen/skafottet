@@ -19,8 +19,10 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.dialogs.Login;
 import com.undyingideas.thor.skafottet.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.views.StarField;
 
@@ -35,7 +37,7 @@ import java.lang.ref.WeakReference;
  * @author rudz
  */
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
-public abstract class MenuActivityAbstract extends AppCompatActivity {
+public abstract class MenuActivityAbstract extends AppCompatActivity implements Login.LoginListener{
 
     @Nullable
     StarField sf; // needs to be protected, as menu act should be able to pause the damn thing.
@@ -103,6 +105,7 @@ public abstract class MenuActivityAbstract extends AppCompatActivity {
         mSensorManager = null;
         super.onDestroy();
     }
+
 
     private void registerSensor() {
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);

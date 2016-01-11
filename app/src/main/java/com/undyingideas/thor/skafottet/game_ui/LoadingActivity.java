@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.firebase.controller.MultiplayerController;
 import com.undyingideas.thor.skafottet.game_ui.main_menu.MenuActivity;
 import com.undyingideas.thor.skafottet.utility.Constant;
 import com.undyingideas.thor.skafottet.utility.GameUtility;
@@ -69,6 +70,7 @@ public class LoadingActivity extends AppCompatActivity {
             if (loadingActivity != null) {
                 Firebase.setAndroidContext(loadingActivity.getApplicationContext());
                 GameUtility.fb = new Firebase(Constant.HANGMANDTU_FIREBASEIO);
+                GameUtility.mpc = new MultiplayerController(GameUtility.fb);
 
                 /* This is the first code executed, thus some configuration of the application takes place.. */
                 setDefaultFont(loadingActivity.getApplicationContext(), "DEFAULT", Constant.DEF_FONT);

@@ -29,8 +29,8 @@ public class MultiplayerController {
     private final Firebase ref;
     @Nullable
     public String name;
-    private final Handler updateHandler;
-    private final Runnable playerUpdater;
+    private Handler updateHandler;
+    private Runnable playerUpdater;
 
     public MultiplayerController(final Firebase ref, final Runnable playerUpdater) {
         this.ref = ref;
@@ -40,6 +40,18 @@ public class MultiplayerController {
         Log.d("firebaseMulti", "hej");
         updateHandler = new Handler();
         this.playerUpdater = playerUpdater;
+    }
+
+    public MultiplayerController(Firebase fb) {
+        this.ref = fb;
+        pc = new PlayerController(this, ref);
+        lc = new LobbyController(this,ref);
+        wlc = new WordListController(ref);
+    }
+
+    public void setRunnable(Runnable r) {
+        if(updateHandler == null) updateHandler = new Handler();
+        playerUpdater = r;
     }
 
     public void createLobby(final LobbyDTO dto) {
@@ -65,11 +77,13 @@ public class MultiplayerController {
     }
 
     public void update() {
-        updateHandler.post(playerUpdater);
+        if (updateHandler != null )
+            updateHandler.post(playerUpdater);
     }
 
     public void lobbyUpdate() {
-        updateHandler.post(playerUpdater);
+        if (updateHandler != null )
+            updateHandler.post(playerUpdater);
     }
 
     public List<HighScoreContent.HighScoreItem> getHighScoreItems() {

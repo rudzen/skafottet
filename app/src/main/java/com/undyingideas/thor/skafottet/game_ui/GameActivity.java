@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.dialogs.Login;
 import com.undyingideas.thor.skafottet.game.Hanged;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.utility.Constant;
@@ -20,7 +21,8 @@ import com.undyingideas.thor.skafottet.utility.WindowLayout;
 public class GameActivity extends AppCompatActivity implements
         MultiPlayerPlayerFragment.OnMultiPlayerPlayerFragmentInteractionListener,
         EndOfGameFragment.OnEndGameButtonClickListenerInterface,
-        ProgressBarInterface
+        ProgressBarInterface,
+        Login.LoginListener
 {
 
     private static final String TAG = "GameActivity";
@@ -140,11 +142,22 @@ public class GameActivity extends AppCompatActivity implements
         topProgressBar.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
     }
 
+    @Override
+    public void onFinishLoginDialog(String title, String pass) {
+        Log.d("Login", title + pass);
+
+    }
+
+    @Override
+    public void onCancel() {
+        ;
+    }
+
     private class LoginClick implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
-            Log.d("THeis", "hello");
+            Login.newInstance("Login", "OK", "Cancel", true).show(getSupportFragmentManager(), "Login");
         }
     }
 }

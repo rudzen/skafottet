@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -29,6 +30,7 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.nineoldandroids.animation.Animator;
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.dialogs.Login;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.game_ui.GameActivity;
 import com.undyingideas.thor.skafottet.utility.Constant;
@@ -43,7 +45,7 @@ import java.util.ArrayList;
  *
  * @author rudz
  */
-public class MenuActivity extends MenuActivityAbstract {
+public class MenuActivity extends MenuActivityAbstract{
 
     private static final String FINISH = "finish";
     private static final int BACK_PRESSED_DELAY = 2000;
@@ -51,6 +53,7 @@ public class MenuActivity extends MenuActivityAbstract {
     private static final int BUTTON_COUNT = 7;
     private ImageView title;
     private final ImageView[] buttons = new ImageView[BUTTON_COUNT];
+    private LinearLayout loginLayout;
     private static final int TITLE = -1;
 
     private static final int BUTTON_PLAY = 0;
@@ -83,6 +86,9 @@ public class MenuActivity extends MenuActivityAbstract {
         if (s_buttonListener == null) {
             s_buttonListener = new MenuButtonClickHandler(this);
         }
+
+        loginLayout = (LinearLayout) findViewById(R.id.LoginLayout);
+        loginLayout.setOnClickListener(new LoginClickListener());
 
         title = (ImageView) findViewById(R.id.menu_title);
         title.setClickable(true);
@@ -202,8 +208,13 @@ public class MenuActivity extends MenuActivityAbstract {
             // nothing happends here, its just for not adding the option to continue a game.
         } finally {
             startGameItem.add(new StartGameItem(1, "Nyt singleplayer", "Tilfældigt ord.", GameUtility.imageRefs[0]));
-            startGameItem.add(new StartGameItem(2, getString(R.string.menu_new_multi_player_game), "Udfordring.", GameUtility.imageRefs[0]));
-            startGameItem.add(new StartGameItem(3, getString(R.string.menu_new_multi_player_game), "Tværfaglig udfordring" , GameUtility.imageRefs[0]));
+            if(GameUtility.mpc.name != null) {
+                startGameItem.add(new StartGameItem(2, getString(R.string.menu_new_multi_player_game), "Udfordring.", GameUtility.imageRefs[0]));
+                startGameItem.add(new StartGameItem(3, getString(R.string.menu_new_multi_player_game), "Tværfaglig udfordring", GameUtility.imageRefs[0]));
+            } else {
+                maxID--;
+                startGameItem.add(new StartGameItem(2, "Login", "woot", GameUtility.imageRefs[0]));
+            }
 
             final StartGameAdapter adapter = new StartGameAdapter(this, R.layout.new_game_list_row, startGameItem);
             final ListView listViewItems = new ListView(this);
@@ -222,14 +233,18 @@ public class MenuActivity extends MenuActivityAbstract {
 
     @SuppressWarnings("unused")
     private void startNewGame() {
-        final Intent intent = new Intent(this, GameActivity.class);
-        if (maxID == 3) {
-            newGameID++;
+        if (GameUtility.mpc.name == null && newGameID == maxID-1){
+            loginLayout.callOnClick();
+        } else {
+            final Intent intent = new Intent(this, GameActivity.class);
+            if (maxID == 3) {
+                newGameID++;
+            }
+            Log.d(TAG, "Game mode started : " + newGameID);
+            intent.putExtra(Constant.KEY_MODE, newGameID);
+            if (sf != null) sf.setRun(false);
+            startActivity(intent);
         }
-        Log.d(TAG, "Game mode started : " + newGameID);
-        intent.putExtra(Constant.KEY_MODE, newGameID);
-        if (sf != null) sf.setRun(false);
-        startActivity(intent);
     }
 
     private void callMethod(final String method_name) {
@@ -261,6 +276,16 @@ public class MenuActivity extends MenuActivityAbstract {
                 .buttonRippleColor(getResources().getColor(R.color.colorPrimaryDark))
                 .show()
         ;
+    }
+
+    @Override
+    public void onFinishLoginDialog(String title, String pass) {
+        showAll();
+    }
+
+    @Override
+    public void onCancel() {
+        showAll();
     }
 
     @SuppressWarnings("AccessStaticViaInstance")
@@ -416,6 +441,14 @@ public class MenuActivity extends MenuActivityAbstract {
 
         @Override
         public void onAnimationRepeat(final Animator animation) { }
+    }
+
+    private class LoginClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Login.newInstance("Login", "OK", "Cancel", true).show(getSupportFragmentManager(), "Login");
+
+        }
     }
 
     private class NewGameCancelListener implements DialogInterface.OnCancelListener {

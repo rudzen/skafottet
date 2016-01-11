@@ -36,67 +36,99 @@
         android:background="@drawable/title_text"
         android:clickable="true"
         android:contentDescription="The title image"
-        android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/menu_image_logo"
         android:layout_alignEnd="@+id/menu_image_logo"
-        android:layout_marginTop="5dp"
-        android:layout_centerHorizontal="true"/>
-
-    <ImageView
-        android:id="@+id/menu_image_logo"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:contentDescription="Logo"
-        android:background="@drawable/game_end_lost"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_centerHorizontal="true" />
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/menu_title"
-        android:layout_alignParentStart="false"
-        android:layout_centerInParent="true"
-        >
+        android:weightSum="1">
 
-        <ImageView
-            android:id="@+id/menu_button_play"
-            android:background="@drawable/button_play"
-            style="@style/menu_button_style"
-            android:layout_marginTop="100dp"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="378dp"
+            android:layout_below="@+id/menu_title"
+            android:layout_alignParentStart="false"
+            android:layout_centerInParent="true"
+            android:layout_weight="1.01">
 
-        <ImageView
-            android:id="@+id/menu_button_highscore"
-            android:background="@drawable/button_highscore"
-            style="@style/menu_button_style"/>
+            <ImageView
+                android:id="@+id/menu_button_play"
+                android:background="@drawable/button_play"
+                style="@style/menu_button_style"
+                android:layout_marginTop="100dp"/>
 
-        <ImageView
-            android:id="@+id/menu_button_word_lists"
-            android:background="@drawable/button_ordlister"
-            style="@style/menu_button_style"/>
+            <ImageView
+                android:id="@+id/menu_button_highscore"
+                android:background="@drawable/button_highscore"
+                style="@style/menu_button_style"/>
 
-        <ImageView
-            android:id="@+id/menu_button_settings"
-            android:background="@drawable/button_settings"
-            style="@style/menu_button_style"/>
+            <ImageView
+                android:id="@+id/menu_button_word_lists"
+                android:background="@drawable/button_ordlister"
+                style="@style/menu_button_style"/>
 
-        <ImageView
-            android:id="@+id/menu_button_about"
-            android:background="@drawable/button_about"
-            style="@style/menu_button_style"/>
+            <ImageView
+                android:id="@+id/menu_button_settings"
+                android:background="@drawable/button_settings"
+                style="@style/menu_button_style"/>
 
-        <ImageView
-            android:id="@+id/menu_button_help"
-            android:background="@drawable/button_help"
-            style="@style/menu_button_style"/>
+            <ImageView
+                android:id="@+id/menu_button_about"
+                android:background="@drawable/button_about"
+                style="@style/menu_button_style"/>
 
-        <ImageView
-            android:id="@+id/menu_button_quit"
-            android:background="@drawable/button_end"
-            style="@style/menu_button_style"
-            android:layout_marginBottom="100dp"/>
+            <ImageView
+                android:id="@+id/menu_button_help"
+                android:background="@drawable/button_help"
+                style="@style/menu_button_style"/>
+
+            <ImageView
+                android:id="@+id/menu_button_quit"
+                android:background="@drawable/button_end"
+                style="@style/menu_button_style"
+                android:layout_marginBottom="100dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:weightSum="1"
+            android:clickable="true"
+            android:background="?selectableItemBackground"
+            android:id="@+id/LoginLayout">
+
+            <ImageView
+                android:id="@+id/menu_image_logo"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:contentDescription="Logo"
+                android:background="@drawable/game_end_lost"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:clickable="false" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="login"
+                android:id="@+id/loginText"
+                android:capitalize="words"
+                android:clickable="false"
+                android:textIsSelectable="false"
+                android:layout_gravity="center"
+                android:layout_marginTop="4dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginRight="20dp" />
+        </LinearLayout>
 
     </LinearLayout>
 
