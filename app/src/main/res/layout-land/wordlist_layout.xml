@@ -24,7 +24,7 @@
 
         <fragment
             android:id="@+id/word_titles"
-            class="com.undyingideas.thor.skafottet.game_ui.wordlist.WordTitlesFragment"
+            class="com.undyingideas.thor.skafottet.fragments.WordTitlesFragment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"/>

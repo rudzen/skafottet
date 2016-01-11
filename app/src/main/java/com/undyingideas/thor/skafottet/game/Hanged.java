@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
-import com.undyingideas.thor.skafottet.utility.StringHelper;
+import com.undyingideas.thor.skafottet.support.utility.StringHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;

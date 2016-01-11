@@ -9,5 +9,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".game_ui.hichscorecontent.PlayerListActivity"
+    tools:context=".activities.PlayerListActivity"
     tools:listitem="@layout/player_list_content" />

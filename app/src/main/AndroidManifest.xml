@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".game_ui.LoadingActivity"
+            android:name=".activities.LoadingActivity"
             android:noHistory="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -25,29 +25,29 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".game_ui.wordlist.WordDetailsActivity"
+            android:name=".activities.WordDetailsActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".game_ui.wordlist.WordFragmentLayout"
+            android:name=".activities.WordFragmentLayout"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".game_ui.GameActivity"
-            android:parentActivityName=".game_ui.LoadingActivity"
+            android:name=".activities.GameActivity"
+            android:parentActivityName=".activities.LoadingActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden"/>
-        <activity android:name=".game_ui.main_menu.MenuActivity"/>
+        <activity android:name=".activities.MenuActivity"/>
         <activity
-            android:name=".game_ui.hichscorecontent.PlayerListActivity"
+            android:name=".activities.PlayerListActivity"
             android:label="@string/title_player_list"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".game_ui.hichscorecontent.PlayerDetailActivity"
+            android:name=".activities.PlayerDetailActivity"
             android:label="@string/title_player_detail"
-            android:parentActivityName=".game_ui.hichscorecontent.PlayerListActivity"
+            android:parentActivityName=".activities.PlayerListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".game_ui.hichscorecontent.PlayerListActivity"/>
+                android:value=".activities.PlayerListActivity"/>
         </activity>
     </application>
 
