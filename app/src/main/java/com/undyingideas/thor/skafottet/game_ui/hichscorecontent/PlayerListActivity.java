@@ -51,7 +51,7 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
 //        Firebase.setAndroidContext(this);
 //        myFirebaseRef = new Firebase(Constant.HANGMANDTU_FIREBASEIO);
 
-        GameUtility.mpc = new MultiplayerController(GameUtility.fb, this);
+        GameUtility.mpc.setRunnable(this);
 //        mpc = new MultiplayerController(myFirebaseRef, this);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

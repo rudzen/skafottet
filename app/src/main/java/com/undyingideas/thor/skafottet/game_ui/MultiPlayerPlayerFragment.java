@@ -157,7 +157,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
 //        multiplayerController = new MultiplayerController(new Firebase("https://hangmandtu.firebaseio.com"), updater);
 
         setProgressListener.setProgressBar(true);
-        GameUtility.mpc = new MultiplayerController(GameUtility.fb, updater);
+        GameUtility.mpc.setRunnable(updater);
     }
 
     public void setOnlineStatus(final boolean newStatus) {
