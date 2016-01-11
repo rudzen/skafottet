@@ -47,4 +47,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.5'
     compile 'android.lib.verticalmarqueetextview:VerticalMarqueeTextView:+'
     compile 'com.romainpiel.shimmer:library:1.4.0@aar'
+    compile 'asia.ivity.android:marqueeview:1.1.5'
 }

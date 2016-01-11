@@ -1,6 +1,7 @@
 package com.undyingideas.thor.skafottet.activities;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +25,8 @@ import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
+import asia.ivity.android.marqueeview.MarqueeView;
+
 public class GameActivity extends AppCompatActivity implements
         MultiPlayerPlayerFragment.OnMultiPlayerPlayerFragmentInteractionListener,
         EndOfGameFragment.OnEndGameButtonClickListenerInterface,
@@ -37,7 +40,11 @@ public class GameActivity extends AppCompatActivity implements
 
     private ProgressBar topProgressBar;
 
-    public TextView t;
+    private MarqueeView mv;
+    private TextView tv;
+    private Handler handler;
+    private Runnable mvReset;
+
     public static String getS_possibleWord() {
         return s_possibleWord;
     }
@@ -57,11 +64,31 @@ public class GameActivity extends AppCompatActivity implements
         if (getSupportActionBar() != null) {
             tb.setLogo(R.mipmap.ic_launcher);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            t = new TextView(this);
-            t.setText("      login");
-            t.setOnClickListener(new LoginClick());
-            tb.addView(t);
+
+//            mv = new MarqueeView(this);
+//            tv = new TextView(this);
+//
+//            mv.setMinimumWidth(50);
+//            tv.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//            tv.setGravity(Gravity.RIGHT);
+//            mv.setPauseBetweenAnimations(500);
+//
+//            tv.setText(GameUtility.mpc.name == null ? "Du er ikke logget ind, log ind for at hænge andre." : "Du er logget ind som " + GameUtility.mpc.name);
+//            mv.addView(tv);
+//            tb.addView(mv);
         }
+
+        /* configure the custom marquee view linked with a textview */
+        mvReset = new startMarquee();
+        handler = new Handler();
+
+        mv = (MarqueeView) findViewById(R.id.game_marqueeView);
+        tv = (TextView) findViewById(R.id.game_text_view_marq);
+        tv.setText(GameUtility.mpc.name == null ? "Du er ikke logget ind, log ind for at hænge andre." : "Du er logget ind som " + GameUtility.mpc.name);
+        mv.setPauseBetweenAnimations(500);
+        mv.setSpeed(10);
+        handler.postDelayed(mvReset, 500);
+
 
         topProgressBar = (ProgressBar) findViewById(R.id.topProgressBar);
         topProgressBar.setVisibility(View.INVISIBLE);
@@ -103,6 +130,13 @@ public class GameActivity extends AppCompatActivity implements
     private void replaceFragment(final Fragment fragment) {
         currentFragment = fragment;
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content, fragment).addToBackStack(null).commit();
+    }
+
+    private class startMarquee implements Runnable {
+        @Override
+        public void run() {
+            mv.startMarquee();
+        }
     }
 
 //    @Override
