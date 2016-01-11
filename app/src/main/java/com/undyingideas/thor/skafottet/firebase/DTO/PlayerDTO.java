@@ -11,19 +11,33 @@ public class PlayerDTO {
 
     private String name;
     private int score;
+    private String password;
     private ArrayList<String> gameList = new ArrayList<>();
 
     public PlayerDTO(){
     }
 
     public PlayerDTO(final String name) {
-        this(name, 0, new ArrayList<String>());
+        this(name, 0, new ArrayList<String>(),null);
     }
 
-    public PlayerDTO(final String name, final int score, final ArrayList<String> gameList) {
+
+    public PlayerDTO(final String name, final String password) {
+        this(name, 0, new ArrayList<String>(),password);
+    }
+
+    public PlayerDTO(final String name, final int score, final ArrayList<String> gameList, final String password) {
         this.name = name;
         this.score = score;
         this.gameList = gameList;
+        this.password = password;
+    }
+
+    public PlayerDTO(final String name, final int score, final ArrayList<String> gameList){
+        this.name = name;
+        this.score = score;
+        this.gameList = gameList;
+        this.password = "1";
     }
 
     public String getName() {
@@ -48,5 +62,13 @@ public class PlayerDTO {
 
     public void setGameList(final ArrayList<String> gameList) {
         this.gameList = gameList;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
