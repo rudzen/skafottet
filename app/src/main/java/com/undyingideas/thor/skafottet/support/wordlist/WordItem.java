@@ -12,6 +12,7 @@ package com.undyingideas.thor.skafottet.support.wordlist;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -19,7 +20,9 @@ import java.util.ArrayList;
  *
  * @author rudz
  */
-public class WordItem implements Parcelable {
+public class WordItem implements Parcelable, Serializable {
+
+    private static final long serialVersionUID = 4;
 
     private String title;
     private String url;
@@ -30,7 +33,11 @@ public class WordItem implements Parcelable {
     /* arraylist because android likes that */
     private ArrayList<String> words = new ArrayList<>();
 
+    /* for the serialization */
+    public WordItem() { }
+
     public WordItem(final String title, final String url, final boolean dlNow) {
+        this();
         this.title = title;
         this.url = url;
         this.dlNow = dlNow;
@@ -59,12 +66,12 @@ public class WordItem implements Parcelable {
         words.trimToSize();
     }
 
-    private boolean hasWord(final String word) {
+    public boolean hasWord(final String word) {
         return words.contains(word);
     }
 
     public String getWord(final int index) {
-        if (words.size() < index) return "";
+        if (words.size() < index) return null;
         return words.get(index);
     }
 

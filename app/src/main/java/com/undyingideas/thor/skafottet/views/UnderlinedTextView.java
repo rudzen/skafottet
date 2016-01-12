@@ -28,11 +28,11 @@ public class UnderlinedTextView extends TextView {
 
     public UnderlinedTextView(final Context context, final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
-        init(context, attrs);
+        init(context);
     }
 
-    private void init(final Context context, final AttributeSet attrs) {
-        mUnderlineHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFATULT_DPI, getResources().getDisplayMetrics());
+    private void init(final Context context) {
+        mUnderlineHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFATULT_DPI, context.getResources().getDisplayMetrics());
     }
 
     @Override

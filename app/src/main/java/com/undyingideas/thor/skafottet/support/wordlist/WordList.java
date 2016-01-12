@@ -9,34 +9,34 @@
 
 package com.undyingideas.thor.skafottet.support.wordlist;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 /**
  * WorldList container class.
  * Created by rudz on 09-11-2015.
  */
-public class WordList implements Serializable {
+@SuppressWarnings("ClassWithTooManyMethods")
+public class WordList implements Parcelable, Serializable {
 
-    // TODO : Clean up, too many methods
+    // TODO : Link with firebase
 
-    private static final long serialVersionUID = 14324;
+    private static final long serialVersionUID = 3;
     private static final Pattern httpKill = Pattern.compile("http://");
 
     /* the word item list */
-    private LinkedList<WordItem> words = new LinkedList<>();
+    private ArrayList<WordItem> words = new ArrayList<>();
 
     /* the default list words */
     private static final String DEFAULT_KEY = "Standard";
 
     /* the current active list */
     private int currentList;
-
-
 
     /**
      * Instantiates a new Word list.
@@ -52,7 +52,7 @@ public class WordList implements Serializable {
         defaults.add("skovsnegl");
         defaults.add("solsort");
 
-        words.addFirst(new WordItem(DEFAULT_KEY, DEFAULT_KEY, defaults));
+        words.add(new WordItem(DEFAULT_KEY, DEFAULT_KEY, defaults));
 
         currentList = 0;
 
@@ -60,9 +60,9 @@ public class WordList implements Serializable {
         /* DEMONSTRATION MODE -> */
         /*************************/
 
-        words.addLast(new WordItem("DR.dk", "http://dr.dk"));
-        words.addLast(new WordItem("Politiken.dk", "http://politiken.dk"));
-        words.addLast(new WordItem("Meyers Indledning", "http://meyersfremmedordbog.dk/om-ordbogen-indledning"));
+        words.add(new WordItem("DR.dk", "http://dr.dk"));
+        words.add(new WordItem("Politiken.dk", "http://politiken.dk"));
+        words.add(new WordItem("Meyers Indledning", "http://meyersfremmedordbog.dk/om-ordbogen-indledning"));
 
         /*************************/
         /* <- DEMONSTRATION MODE */
@@ -200,8 +200,8 @@ public class WordList implements Serializable {
     public int setCurrentListByURL(final String url) {
         int i = 0;
         for (final WordItem wi : words) {
-            Log.d("WordList", "Søger efter : " + url);
-            Log.d("WordList", "Fandt       : " + wi.getUrl());
+            Log.d("setCurrentListByURL", "Leder efter : " + url);
+            Log.d("setCurrentListByURL", "Fandt       : " + wi.getUrl());
             if (wi.getUrl().equals(url)) {
                 currentList = i;
                 return i;
@@ -227,29 +227,15 @@ public class WordList implements Serializable {
      */
     public boolean addWordList(final String title, final String url) {
         String theTitle = title;
-        Log.d("addWordList", "Forsøger at tilføje");
+        Log.d("addWordList", "Forsøger at tilføje :");
         Log.d("addWordList", "title : " + theTitle);
         Log.d("addWordList", "url   : " + url);
 
         if (url != null && url.isEmpty()) return false;
         if (theTitle != null && theTitle.isEmpty()) theTitle = httpKill.matcher(url).replaceAll("");
 
-        words.addLast(new WordItem(theTitle, url));
+        words.add(new WordItem(theTitle, url));
         return true;
-
-//        boolean alreadyExists = false;
-//        for (WordItem wi : words) {
-//            if (wi.exists(title, url)) {
-//                alreadyExists = true;
-//                break;
-//            }
-//        }
-//        if (!alreadyExists) {
-//            if (list == null || list.isEmpty()) words.addLast(new WordItem(title, url));
-//            else words.addLast(new WordItem(title, url, list));
-//            return true;
-//        }
-//        return false;
     }
 
     public void addWordToList(final String word, final String listUrl) {
@@ -267,12 +253,12 @@ public class WordList implements Serializable {
             for (final WordItem wi : words)
                 if (wordItem.equals(wi)) for (final String s : wordItem.getWords()) wi.addWord(s);
         } else {
-            words.addLast(wordItem);
+            words.add(wordItem);
         }
     }
 
     public boolean addWordListDirect(final WordItem wordItem) {
-        words.addLast(new WordItem(wordItem.getTitle(), wordItem.getUrl()));
+        words.add(new WordItem(wordItem.getTitle(), wordItem.getUrl()));
         return true;
     }
 
@@ -352,14 +338,40 @@ public class WordList implements Serializable {
         return ret;
     }
 
-    public void setWords(final LinkedList<WordItem> words) {
-        this.words = words;
+    public void setWords(final ArrayList<WordItem> words) {
+        if (this.words == null) {
+            this.words = new ArrayList<>();
+        } else {
+            this.words.clear();
+        }
+        this.words.addAll(words);
     }
 
-    public LinkedList<WordItem> getWords() {
+    public ArrayList<WordItem> getWords() {
         return words;
     }
 
+    @Override
+    public int describeContents() { return 0; }
 
+    @Override
+    public void writeToParcel(final Parcel dest, final int flags) {
+        dest.writeTypedList(words);
+        dest.writeInt(currentList);
+    }
 
+    protected WordList(final Parcel in) {
+        words = in.createTypedArrayList(WordItem.CREATOR);
+        currentList = in.readInt();
+    }
+
+    public static final Creator<WordList> CREATOR = new WordListCreator();
+
+    private static class WordListCreator implements Creator<WordList> {
+        @Override
+        public WordList createFromParcel(final Parcel source) {return new WordList(source);}
+
+        @Override
+        public WordList[] newArray(final int size) {return new WordList[size];}
+    }
 }
