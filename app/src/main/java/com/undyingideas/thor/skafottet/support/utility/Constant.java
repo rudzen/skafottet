@@ -8,8 +8,8 @@ package com.undyingideas.thor.skafottet.support.utility;
  */
 public final class Constant {
 
-    public static final String DEF_FONT = "Roboto-Medium.ttf";
-
+    public static final String FONT_BOLD = "fonts/Roboto-Bold.ttf";
+    public static final String FONT_LIGHT = "fonts/Roboto-Light.ttf";
 
     /* preferences keys */
     public static final String KEY_PREF_POSSIBLE_WORDS = "possibleWords";

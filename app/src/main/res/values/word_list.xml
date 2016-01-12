@@ -1,11 +1,15 @@
 <resources>
 
+    <string name="word_list_title">"Ordlister</string>
+    <string name="word_list_drawer_open">Skuffe åben</string>
+    <string name="word_list_drawer_close">Skuffe lukket</string>
+
+
+
     <string name="restore">Restore</string>
     <string name="update">Update</string>
     <string name="clear">Clear</string>
     <string name="empty">Empty Adapter</string>
-    <string name="drawer_open">Drawer Open</string>
-    <string name="drawer_close">Drawer Close</string>
     <string name="options">OPTIONS</string>
     <string name="actions">ACTIONS</string>
     <string name="restore_list">Restore list</string>

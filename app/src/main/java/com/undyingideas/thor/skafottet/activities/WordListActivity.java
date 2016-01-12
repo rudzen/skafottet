@@ -7,8 +7,10 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -72,6 +74,12 @@ public class WordListActivity extends AppCompatActivity implements
     private View.OnClickListener buttonListener;
     private CompoundButton.OnCheckedChangeListener checkBoxListener;
 
+    @Override
+    public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+//        FontUtils.setRobotoFont(this, getWindow().getDecorView());
+        super.onPostCreate(savedInstanceState, persistentState);
+    }
+
     @SuppressLint("InflateParams")
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -81,7 +89,7 @@ public class WordListActivity extends AppCompatActivity implements
         buttonListener = new ButtonClickListener();
         checkBoxListener = new CheckBoxOnCheckedChangeListener();
 
-        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_layout);
+        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.word_list_refresh_layout);
         refreshLayout.setOnRefreshListener(new SwipeOnRefreshListener());
 
         mAdapter = new WordListAdapter(this);
@@ -93,29 +101,24 @@ public class WordListActivity extends AppCompatActivity implements
         stickyList.setOnStickyHeaderOffsetChangedListener(this);
         stickyList.addHeaderView(getLayoutInflater().inflate(R.layout.word_list_header, null));
         stickyList.addFooterView(getLayoutInflater().inflate(R.layout.word_list_footer, null));
-        stickyList.setEmptyView(findViewById(R.id.empty));
+        stickyList.setEmptyView(findViewById(R.id.word_list_empty));
         stickyList.setDrawingListUnderStickyHeader(true);
         stickyList.setAreHeadersSticky(true);
         stickyList.setAdapter(mAdapter);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.word_list_title));
+        toolbar.setSubtitle("<nuværende liste>"); // vil blive sat dynamisk ved klik på liste og ved opstart!
+        toolbar.setCollapsible(false);
+        toolbar.setLogo(R.mipmap.ic_launcher);
+        toolbar.setLogoDescription("Applikations logo");
+        toolbar.setNavigationContentDescription("Home icon");
+
         setSupportActionBar(toolbar);
 
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.word_item_drawer_layout);
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
-
-//        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close);
-
-
-//        mDrawerToggle = new ActionBarDrawerToggle (
-//                this,                  /* host Activity */
-//                mDrawerLayout,         /* DrawerLayout object */
-//                R.drawable.trophy,  /* nav drawer icon to replace 'Up' caret */
-//                R.string.drawer_open,  /* "open drawer" description */
-//                R.string.drawer_close  /* "close drawer" description */
-//        );
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.word_list_drawer_open, R.string.word_list_drawer_close);
 
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -143,7 +146,7 @@ public class WordListActivity extends AppCompatActivity implements
         fastScrollCheckBox = (CheckBox) findViewById(R.id.fast_scroll_checkBox);
         fastScrollCheckBox.setOnCheckedChangeListener(checkBoxListener);
 
-        stickyList.setStickyHeaderTopOffset(-20);
+        stickyList.setStickyHeaderTopOffset(0);
     }
 
     @Override
@@ -170,6 +173,15 @@ public class WordListActivity extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -284,14 +296,14 @@ public class WordListActivity extends AppCompatActivity implements
         /* the recieved input from the dual-edittext dialog fragment */
         /* this function is only triggered if the user input was valid */
 
-        // TODO : Re-code word item class to be Parcel!
-
         Log.d("AddListFinished", "Title : " + title);
-        Log.d("AddListFinished", "URL   : "  + url);
-        Log.d("AddListFinished", "Title : "  + startDownload);
+        Log.d("AddListFinished", "URL   : " + url);
+        Log.d("AddListFinished", "Title : " + startDownload);
         final Intent returnIntent = new Intent();
         returnIntent.setType("new_word_item");
-        returnIntent.putExtra("result", new WordItem(title, url, startDownload));
+        final Bundle bundle = new Bundle();
+        bundle.putParcelable("result",new WordItem(title, url, startDownload));
+        returnIntent.putExtra ("result", bundle);
         setResult(RESULT_OK, returnIntent);
         finish();
     }
@@ -300,7 +312,10 @@ public class WordListActivity extends AppCompatActivity implements
 //    public boolean onOptionsItemSelected(final MenuItem item) {
 //        /* TESTING */
 //        final int id = item.getItemId();
-//        if (id == R.id.action_word_list_add) {
+//        if (id == android.R.id.home) {
+//
+//            return true;
+//        } else if (id == R.id.action_word_list_add) {
 //            /* show Yes/No dialog here! */
 //            new MaterialDialog.Builder(this)
 //                    .content("Vil du tilføje en ordliste?")

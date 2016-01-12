@@ -73,10 +73,10 @@ public class LoadingActivity extends AppCompatActivity {
                 GameUtility.mpc = new MultiplayerController(GameUtility.fb);
 
                 /* This is the first code executed, thus some configuration of the application takes place.. */
-                setDefaultFont(loadingActivity.getApplicationContext(), "DEFAULT", Constant.DEF_FONT);
-                setDefaultFont(loadingActivity.getApplicationContext(), "MONOSPACE", Constant.DEF_FONT);
-                setDefaultFont(loadingActivity.getApplicationContext(), "SERIF", Constant.DEF_FONT);
-                setDefaultFont(loadingActivity.getApplicationContext(), "SANS_SERIF", Constant.DEF_FONT);
+                setDefaultFont(loadingActivity.getApplicationContext(), "DEFAULT", Constant.FONT_BOLD);
+                setDefaultFont(loadingActivity.getApplicationContext(), "MONOSPACE", Constant.FONT_BOLD);
+                setDefaultFont(loadingActivity.getApplicationContext(), "SERIF", Constant.FONT_LIGHT);
+                setDefaultFont(loadingActivity.getApplicationContext(), "SANS_SERIF", Constant.FONT_BOLD);
 
                 s_prefereces = new TinyDB(loadingActivity.getApplicationContext());
 

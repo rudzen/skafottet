@@ -22,6 +22,7 @@
             android:id="@+id/game_marqueeView"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             >
 
             <TextView
@@ -31,6 +32,7 @@
                 android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do."
                 android:singleLine="true"
                 android:ellipsize="end"
+                android:visibility="gone"
                 tools:ignore="HardcodedText"/>
         </asia.ivity.android.marqueeview.MarqueeView>
 
@@ -40,7 +42,7 @@
             android:layout_height="5dp"
             android:id="@+id/topProgressBar"
             android:indeterminate="true"
-            android:visibility="visible"
+            android:visibility="gone"
             android:background="@android:color/black"/>
 
     </android.support.design.widget.AppBarLayout>
