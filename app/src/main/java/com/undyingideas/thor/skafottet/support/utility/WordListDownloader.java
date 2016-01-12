@@ -1,10 +1,12 @@
 package com.undyingideas.thor.skafottet.support.utility;
 
+import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.undyingideas.thor.skafottet.activities.WordListActivity;
 import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
 
 import java.io.BufferedReader;
@@ -30,19 +32,21 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, ArrayList<
     private static final Pattern removeSpaces = Pattern.compile("  ");
     private static final Pattern removeNonDK = Pattern.compile("[^a-zæøå]");
     private static final Pattern removeTags = Pattern.compile("<.+?>");
-    private final WeakReference<WordListActivity> wordListActivityWeakReference;
-    private final WordItem wordItem;
+    private final WeakReference<AppCompatActivity> appCompatActivityWeakReference;
+    private final ArrayList<String> words = new ArrayList<>(100);
+    private final String title, url;
     private MaterialDialog pd;
 
-    public WordListDownloader(final WordListActivity wordListActivity, final WordItem wordItem) {
-        wordListActivityWeakReference = new WeakReference<>(wordListActivity);
-        this.wordItem = wordItem;
+    public WordListDownloader(final AppCompatActivity appCompatActivity, final WordItem wordItem) {
+        appCompatActivityWeakReference = new WeakReference<>(appCompatActivity);
+        title = wordItem.getTitle();
+        url = wordItem.getUrl();
     }
 
     private String downloadURL() throws IOException {
         final StringBuilder sb = new StringBuilder(500);
         int count = 1;
-        try (final BufferedReader br = new BufferedReader(new InputStreamReader(new URL(wordItem.getUrl()).openStream()))) {
+        try (final BufferedReader br = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
             String line = br.readLine();
             while (line != null) {
                 if (count++ % 50 == 0) {
@@ -50,7 +54,7 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, ArrayList<
                     count = 1;
                 }
                 if (line.length() > 4) {
-                    sb.append(line).append("\n");
+                    sb.append(line).append('\n');
                 }
                 line = br.readLine();
             }
@@ -66,34 +70,33 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, ArrayList<
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        final WordListActivity wordListActivity = wordListActivityWeakReference.get();
-        if (wordListActivity != null) {
-            pd = new MaterialDialog.Builder(wordListActivity)
-                    .title("Indhenter " + wordItem.getTitle())
+        final AppCompatActivity appCompatActivity = appCompatActivityWeakReference.get();
+        if (appCompatActivity != null) {
+            pd = new MaterialDialog.Builder(appCompatActivity)
+                    .title("Indhenter " + title)
                     .content("Vent...")
                     .progress(true, 0)
+                    .progressIndeterminateStyle(true)
+                    .negativeText("Afbryd")
+                    .cancelListener(new DownloaderOnCancelListener())
                     .show();
-//            pd = new ProgressDialog(wordListActivity);
-//            pd.setIndeterminate(true);
-//            pd.show();
         }
     }
 
     @Override
     protected ArrayList<String> doInBackground(final Void... params) {
-        final WordListActivity wordListActivity = wordListActivityWeakReference.get();
-        if (wordListActivity != null) {
-            int count;
-            publishProgress("Henter fra\n" + wordItem.getUrl(), "Henter ordliste.");
-            final ArrayList<String> words = new ArrayList<>(100);
+        final AppCompatActivity appCompatActivity = appCompatActivityWeakReference.get();
+        if (appCompatActivity != null) {
+            publishProgress("Henter fra\n" + url, "Henter ordliste.");
             try {
                 final HashSet<String> dude = new HashSet<>();
                 final StringTokenizer stringTokenizer = new StringTokenizer(downloadURL(), "\n");
-                count = stringTokenizer.countTokens();
+                int count = stringTokenizer.countTokens();
                 while (stringTokenizer.hasMoreTokens()) {
                     words.add(stringTokenizer.nextToken());
-                    if (words.size() % 25 == 0) {
+                    if (count % 25 == 0) {
                         publishProgress(words.get(words.size() - 1), "Gemmer liste. " + Integer.toString(words.size()) + " / " + Integer.toString(count));
+                        count = stringTokenizer.countTokens();
                     }
                 }
                 publishProgress("Fjerner duplanter og sorterer.");
@@ -112,7 +115,7 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, ArrayList<
 
     @Override
     protected void onPostExecute(final ArrayList<String> strings) {
-        GameUtility.s_wordList.addWordListDirect(new WordItem(wordItem.getTitle(), wordItem.getUrl(), strings));
+        GameUtility.s_wordList.addWordListDirect(new WordItem(title, url, strings));
         Log.d("Downloader", strings.toString());
         if (pd != null && pd.isShowing()) {
             pd.dismiss();
@@ -125,21 +128,29 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, ArrayList<
         pd.setMessage(values[0]);
         if (values.length >= 2) {
             pd.setTitle(values[1]);
-//            if (values.length == 3) {
-//                pd.setProgress(Integer.valueOf(values[2].toString()));
-//            }
         }
         super.onProgressUpdate(values);
     }
 
     @Override
     protected void onCancelled(final ArrayList<String> strings) {
+        if (strings.size() > 1) GameUtility.s_wordList.addWordListDirect(new WordItem(title, url, strings));
+        onCancelled();
         super.onCancelled(strings);
     }
 
     @Override
     protected void onCancelled() {
+        final AppCompatActivity appCompatActivity = appCompatActivityWeakReference.get();
+        if (appCompatActivity != null && pd != null && pd.isShowing()) pd.dismiss();
+        Toast.makeText(appCompatActivity, "Download afbrudt.", Toast.LENGTH_SHORT).show();
         super.onCancelled();
     }
 
+    private class DownloaderOnCancelListener implements DialogInterface.OnCancelListener {
+        @Override
+        public void onCancel(final DialogInterface dialog) {
+            onCancelled(words);
+        }
+    }
 }

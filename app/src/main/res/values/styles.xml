@@ -7,6 +7,36 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:colorBackground">@color/background_material_light</item>
+
+        <!-- Material Dialog styling -->
+        <item name="md_dark_theme">false</item>
+        <item name="md_background_color">@color/colorPrimary</item>
+        <item name="md_icon">@drawable/icon
+            <attr name="md_icon_max_size" format="dimension" />
+            <attr name="md_icon_limit_icon_to_default_size" format="boolean" />
+        </item>
+        <item name="md_title_color">@android:color/white</item>
+        <item name="md_content_color">@android:color/white</item>
+        <item name="md_link_color">@android:color/black</item>
+        <item name="md_positive_color">@android:color/white</item>
+        <item name="md_neutral_color">@android:color/white</item>
+        <item name="md_negative_color">#eeeeee</item>
+        <item name="md_widget_color">@android:color/white</item>
+        <item name="md_item_color">@android:color/white</item>
+        <item name="md_divider_color">@android:color/black</item>
+        <item name="md_btn_ripple_color">#000000</item>
+        <item name="md_list_selector">@drawable/md_selector_dark</item>
+        <item name="md_btn_stacked_selector">@drawable/md_selector</item>
+        <item name="md_btn_positive_selector">@drawable/md_selector</item>
+        <item name="md_btn_neutral_selector">@drawable/md_selector</item>
+        <item name="md_btn_negative_selector">@drawable/md_selector</item>
+        <item name="md_title_gravity">start</item>
+        <item name="md_content_gravity">start</item>
+        <item name="md_items_gravity">start</item>
+        <item name="md_buttons_gravity">start</item>
+        <item name="md_btnstacked_gravity">end</item>
+        <item name="md_medium_font">Roboto-Bold.ttf</item>
+        <item name="md_regular_font">Roboto-Light.ttf</item>
     </style>
 
     <style name="background">
@@ -42,6 +72,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:background">@color/colorAccent</item>
+        <item name="android:selectableItemBackground">?selectableItemBackground</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
@@ -49,6 +80,7 @@
         <item name="android:padding">5dp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@android:color/white</item>
+        <item name="android:selectableItemBackground">?selectableItemBackground</item>
         <item name="android:textSize">14sp</item>
     </style>
 

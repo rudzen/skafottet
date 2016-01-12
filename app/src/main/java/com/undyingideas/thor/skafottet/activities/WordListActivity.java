@@ -5,11 +5,9 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -32,7 +30,6 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.WordListAdapter;
-import com.undyingideas.thor.skafottet.fragments.dialogs.AddWordListDialog;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.StringHelper;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
@@ -53,8 +50,8 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 public class WordListActivity extends AppCompatActivity implements
         AdapterView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener,
         StickyListHeadersListView.OnStickyHeaderOffsetChangedListener,
-        StickyListHeadersListView.OnStickyHeaderChangedListener,
-        AddWordListDialog.AddWordListListener {
+        StickyListHeadersListView.OnStickyHeaderChangedListener
+        {
 
     private static boolean fadeHeader = true;
 
@@ -81,12 +78,6 @@ public class WordListActivity extends AppCompatActivity implements
     private CompoundButton.OnCheckedChangeListener checkBoxListener;
 
     private MaterialDialog md; // for add list
-
-    @Override
-    public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-//        FontUtils.setRobotoFont(this, getWindow().getDecorView());
-        super.onPostCreate(savedInstanceState, persistentState);
-    }
 
     @SuppressLint("InflateParams")
     @Override
@@ -196,12 +187,8 @@ public class WordListActivity extends AppCompatActivity implements
                     .positiveText(R.string.dialog_yes)
                     .negativeText(R.string.dialog_no)
                     .title("Tilføj Ordliste")
-                    .backgroundColor(Color.BLACK)
-                    .contentColor(getResources().getColor(R.color.colorAccent))
-                    .buttonRippleColor(getResources().getColor(R.color.colorPrimaryDark))
                     .show()
             ;
-
             return true;
         } else {
             return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
@@ -300,7 +287,6 @@ public class WordListActivity extends AppCompatActivity implements
         }
     }
 
-
     /**
      * Listener for adding list dialog !
      */
@@ -340,8 +326,6 @@ public class WordListActivity extends AppCompatActivity implements
                             wordListActivity.onFinishAddWordListDialog(title, url, downloadNow.isChecked());
                         }
                     }
-//                    final DialogFragment add = AddWordListDialog.newInstance("Indtast information", "Ok", "Afbryd", true);
-//                    add.show(wordListActivity.getSupportFragmentManager(), "ADDialog");
                 }
                 dialog.dismiss();
                 wordListActivity.onWindowFocusChanged(true);
@@ -364,7 +348,6 @@ public class WordListActivity extends AppCompatActivity implements
                 if (which == DialogAction.POSITIVE) {
                     wordListActivity.md = new MaterialDialog.Builder(wordListActivity)
                             .customView(R.layout.dialog_add_wordlist, false)
-                            .backgroundColor(Color.BLACK)
                             .positiveText("Ok")
                             .negativeText("Afbryd")
                             .onAny(new OnAddWordResponseCallback(wordListActivity))
@@ -375,9 +358,7 @@ public class WordListActivity extends AppCompatActivity implements
         }
     }
 
-
-    @Override
-    public void onFinishAddWordListDialog(final String title, final String url, final boolean startDownload) {
+    private void onFinishAddWordListDialog(final String title, final String url, final boolean startDownload) {
         /* the recieved input from the dual-edittext dialog fragment */
         /* this function is only triggered if the user input was valid */
 
@@ -388,56 +369,15 @@ public class WordListActivity extends AppCompatActivity implements
         Log.d("AddListFinished", "URL   : " + url);
         Log.d("AddListFinished", "Title : " + startDownload);
 
-
         // this is where the list is initiated to be downloaded...
         final WordItem wordItem = new WordItem(title, url, startDownload);
 
         if (startDownload) {
-            WordListDownloader wordListDownloader = new WordListDownloader(this, wordItem);
-            wordListDownloader.execute();
+            new WordListDownloader(this, wordItem).execute();
         } else {
             GameUtility.s_wordList.addWordListDirect(wordItem);
         }
-
-        Log.d("AddListFinished", "Title : " + title);
-        Log.d("AddListFinished", "URL   : " + url);
-        Log.d("AddListFinished", "Title : " + startDownload);
-//        final Intent returnIntent = new Intent();
-//        returnIntent.setType("new_word_item");
-//        final Bundle bundle = new Bundle();
-//        bundle.putParcelable("result", new WordItem(title, url, startDownload));
-//        returnIntent.putExtra("result", bundle);
-//        setResult(RESULT_OK, returnIntent);
-//        finish();
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(final MenuItem item) {
-//        /* TESTING */
-//        final int id = item.getItemId();
-//        if (id == android.R.id.home) {
-//
-//            return true;
-//        } else if (id == R.id.action_word_list_add) {
-//            /* show Yes/No dialog here! */
-//            new MaterialDialog.Builder(this)
-//                    .content("Vil du tilføje en ordliste?")
-//                    .cancelable(true)
-//                    .onAny(new OnAddWordResponseCallback(this))
-//                    .positiveText(R.string.dialog_yes)
-//                    .negativeText(R.string.dialog_no)
-//                    .title("Tilføj Ordliste")
-//                    .backgroundColor(Color.BLACK)
-//                    .contentColor(getResources().getColor(R.color.colorAccent))
-//                    .buttonRippleColor(getResources().getColor(R.color.colorPrimaryDark))
-//                    .show()
-//            ;
-//            return true;
-//        } else if (id == android.R.id.home) {
-//            finish();
-//            return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
 }
