@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.fragments.AboutFragment;
+import com.undyingideas.thor.skafottet.fragments.CreateLobbyFragment;
 import com.undyingideas.thor.skafottet.fragments.EndOfGameFragment;
 import com.undyingideas.thor.skafottet.fragments.HangmanGameFragment;
 import com.undyingideas.thor.skafottet.fragments.HelpFragment;
@@ -30,7 +31,8 @@ public class GameActivity extends AppCompatActivity implements
         MultiPlayerPlayerFragment.OnMultiPlayerPlayerFragmentInteractionListener,
         EndOfGameFragment.OnEndGameButtonClickListenerInterface,
         ProgressBarInterface,
-        Login.LoginListener
+        Login.LoginListener,
+        CreateLobbyFragment.OnCreateLobbyFragmentInteractionListener
 {
 
     private static final String TAG = "GameActivity";
@@ -100,9 +102,12 @@ public class GameActivity extends AppCompatActivity implements
                 addFragment(HangmanGameFragment.newInstance((SaveGame) GameUtility.s_prefereces.getObject(Constant.KEY_SAVE_GAME, SaveGame.class)));
             } else if (gameMode == Constant.MODE_SINGLE_PLAYER) {
                 addFragment(HangmanGameFragment.newInstance(new SaveGame(new Hanged(GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)), false, "Du")));
-            } else if (gameMode == Constant.MODE_MULTI_PLAYER || gameMode == Constant.MODE_MULTI_PLAYER_2) {
+            } else if (gameMode == Constant.MODE_MULTI_PLAYER) {
+                Log.d("theis", "mode = " + gameMode);
                 // just show the current player list
                 addFragment(MultiPlayerPlayerFragment.newInstance(true));
+            } else if (gameMode == Constant.MODE_MULTI_PLAYER_2) {
+                addFragment(CreateLobbyFragment.newInstance(true));
             } else if (gameMode == Constant.MODE_ABOUT) {
                 addFragment(new AboutFragment());
             } else if (gameMode == Constant.MODE_HELP) {
