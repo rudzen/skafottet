@@ -23,30 +23,37 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
 public class WordListAdapter extends BaseAdapter implements StickyListHeadersAdapter, SectionIndexer, ProgressBarInterface {
 
-    protected static final String[] STRINGS = new String[0];
     protected static final int[] INTS = new int[0];
     protected static final Character[] CHARACTERS = new Character[0];
-    private final Context mContext;
-    private String[] mCountries;
+//    private final Context mContext;
+    private ArrayList<String> mItems;
     private int[] mSectionIndices;
     private Character[] mSectionLetters;
     private LayoutInflater mInflater;
 
+    public WordListAdapter(final Context mContext, final ArrayList<String> mItems) {
+//        this.mContext = mContext;
+        mInflater = LayoutInflater.from(mContext);
+        this.mItems = mItems;
+        mSectionIndices = getSectionIndices();
+        mSectionLetters = getSectionLetters();
+    }
+
     public WordListAdapter(Context context) {
-        mContext = context;
+//        mContext = context;
         mInflater = LayoutInflater.from(context);
-        mCountries = context.getResources().getStringArray(R.array.countries);
+//        mItems = context.getResources().getStringArray(R.array.countries);
         mSectionIndices = getSectionIndices();
         mSectionLetters = getSectionLetters();
     }
 
     private int[] getSectionIndices() {
         final ArrayList<Integer> sectionIndices = new ArrayList<>();
-        char lastFirstChar = mCountries[0].charAt(0);
+        char lastFirstChar = mItems.get(0).charAt(0);
         sectionIndices.add(0);
-        for (int i = 1; i < mCountries.length; i++) {
-            if (mCountries[i].charAt(0) != lastFirstChar) {
-                lastFirstChar = mCountries[i].charAt(0);
+        for (int i = 1; i < mItems.size(); i++) {
+            if (mItems.get(i).charAt(0) != lastFirstChar) {
+                lastFirstChar = mItems.get(i).charAt(0);
                 sectionIndices.add(i);
             }
         }
@@ -60,19 +67,19 @@ public class WordListAdapter extends BaseAdapter implements StickyListHeadersAda
     private Character[] getSectionLetters() {
         final Character[] letters = new Character[mSectionIndices.length];
         for (int i = 0; i < mSectionIndices.length; i++) {
-            letters[i] = mCountries[mSectionIndices[i]].charAt(0);
+            letters[i] = mItems.get(mSectionIndices[i]).charAt(0);
         }
         return letters;
     }
 
     @Override
     public int getCount() {
-        return mCountries.length;
+        return mItems.size();
     }
 
     @Override
     public Object getItem(final int position) {
-        return mCountries[position];
+        return mItems.get(position);
     }
 
     @Override
@@ -93,7 +100,7 @@ public class WordListAdapter extends BaseAdapter implements StickyListHeadersAda
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.text.setText(mCountries[position]);
+        holder.text.setText(mItems.get(position));
 
         return convertView;
     }
@@ -112,7 +119,7 @@ public class WordListAdapter extends BaseAdapter implements StickyListHeadersAda
         }
 
         // set header text as first char in name
-        holder.text.setText(mCountries[position].subSequence(0, 1));
+        holder.text.setText(mItems.get(position).subSequence(0, 1));
 
         return convertView;
     }
@@ -125,7 +132,7 @@ public class WordListAdapter extends BaseAdapter implements StickyListHeadersAda
     public long getHeaderId(final int position) {
         // return the first character of the country as ID because this is what
         // headers are based upon
-        return mCountries[position].subSequence(0, 1).charAt(0);
+        return mItems.get(position).subSequence(0, 1).charAt(0);
     }
 
     @Override
@@ -158,14 +165,19 @@ public class WordListAdapter extends BaseAdapter implements StickyListHeadersAda
     }
 
     public void clear() {
-        mCountries = STRINGS;
+        mItems.clear();
         mSectionIndices = INTS;
         mSectionLetters = CHARACTERS;
         notifyDataSetChanged();
     }
 
-    public void restore() {
-        mCountries = mContext.getResources().getStringArray(R.array.countries);
+    public void restore(final ArrayList<String> list) {
+        if (mItems == null) {
+            mItems = new ArrayList<>();
+        } else if (!mItems.isEmpty()) {
+            mItems.clear();
+        }
+        mItems.addAll(list);
         mSectionIndices = getSectionIndices();
         mSectionLetters = getSectionLetters();
         notifyDataSetChanged();

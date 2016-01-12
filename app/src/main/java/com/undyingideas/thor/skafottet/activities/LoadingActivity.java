@@ -16,14 +16,12 @@ import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.TinyDB;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
-import com.undyingideas.thor.skafottet.support.utility.WordCollector;
+import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_prefereces;
 
@@ -84,39 +82,18 @@ public class LoadingActivity extends AppCompatActivity {
 
                 /* begin loading wordlist */
                 final ArrayList<String> muligeOrd = new ArrayList<>();
-                final HashSet<String> data = new HashSet<>();
 
                 try {
                     s_prefereces.checkForNullValue(Constant.KEY_PREF_POSSIBLE_WORDS);
-                    //noinspection unchecked
-                    muligeOrd.addAll((HashSet<String>) s_prefereces.getObject(Constant.KEY_PREF_POSSIBLE_WORDS, HashSet.class));
-                    if (muligeOrd.size() <= 1) muligeOrd.add(0, "hej"); // LOLZ
-                } catch (final NullPointerException npe) {
-                    try {
-                        muligeOrd.addAll(WordCollector.samlOrd());
-                        Collections.sort(muligeOrd);
-                    } catch (final IOException e) {
-                        muligeOrd.add(0, "hejsa"); // LOLZ
-                        e.printStackTrace();
-                    }
-                    data.addAll(muligeOrd);
-                    Log.d(TAG, "length:" + data.size());
-                    s_prefereces.putObject(Constant.KEY_PREF_POSSIBLE_WORDS, data);
+                    muligeOrd.addAll(s_prefereces.getListString(Constant.KEY_PREF_POSSIBLE_WORDS));
+                    Log.d("cache", "contains " +  muligeOrd.size());
+                } catch (final NullPointerException e) {
+                    // nada in prefs.. copy them from resources.
+                    // this is to facilitate future updates where it might be important to read from prefs first...
+                    Collections.addAll(muligeOrd, loadingActivity.getResources().getStringArray(R.array.countries));
+                    // copy them to prefs.. :)
+                    s_prefereces.putListString(Constant.KEY_PREF_POSSIBLE_WORDS, muligeOrd);
                 }
-
-
-//                try {
-//                    muligeOrd.addAll(WordCollector.samlOrd());
-//                    Collections.sort(muligeOrd);
-//                    data.addAll(muligeOrd);
-//                    Log.d(TAG, "length:" + data.size());
-//                    s_prefereces.putObject(Constant.KEY_PREF_POSSIBLE_WORDS, data);
-//                } catch (final Exception e) {
-//                    //noinspection unchecked
-//                    muligeOrd.addAll((HashSet<String>) s_prefereces.getObject(Constant.KEY_PREF_POSSIBLE_WORDS, HashSet.class));
-//                    if (muligeOrd.size() <= 1) muligeOrd.add(0, "hej"); // LOLZ
-//                }
-                Log.d(TAG, "dataLength:" + muligeOrd.size());
                 return muligeOrd;
             }
             return null;
@@ -127,17 +104,16 @@ public class LoadingActivity extends AppCompatActivity {
             super.onPostExecute(possibleWords);
             final LoadingActivity loadingActivity = loadingScreenWeakReference.get();
             if (possibleWords != null && loadingActivity != null) { // med seler og livrem
-                s_prefereces.putListString(GameUtility.KEY_MULIGE_ORD, possibleWords);
+                if (!possibleWords.isEmpty()) {
+                    s_prefereces.putListString(Constant.KEY_PREF_POSSIBLE_WORDS, possibleWords);
+
+                    // just temporary for testing..
+                    GameUtility.s_wordList.addWordListDirect(new WordItem("Lande", "Lokal", possibleWords), true);
+                }
                 final Intent intent = new Intent(loadingActivity, MenuActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 loadingActivity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 loadingActivity.startActivity(intent);
-                try {
-                    TinyDB.checkForNullKey(Constant.KEY_PREF_POSSIBLE_WORDS);
-                    Log.d("cache", "contains " + s_prefereces.getObject(Constant.KEY_PREF_POSSIBLE_WORDS, HashSet.class));
-                } catch (final NullPointerException e) {
-                    // nada here atm.
-                }
             }
         }
     }

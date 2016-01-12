@@ -59,6 +59,7 @@ public class WordListActivity extends AppCompatActivity implements
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
 
+
     private StickyListHeadersListView stickyList;
     private SwipeRefreshLayout refreshLayout;
 
@@ -91,7 +92,7 @@ public class WordListActivity extends AppCompatActivity implements
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.word_list_refresh_layout);
         refreshLayout.setOnRefreshListener(new SwipeOnRefreshListener());
 
-        mAdapter = new WordListAdapter(this);
+        mAdapter = new WordListAdapter(this, GameUtility.s_wordList.getCurrentActiveList());
 
         stickyList = (StickyListHeadersListView) findViewById(R.id.list);
         stickyList.setOnItemClickListener(this);
@@ -234,7 +235,7 @@ public class WordListActivity extends AppCompatActivity implements
         public void onClick(final View view) {
             switch (view.getId()) {
                 case R.id.restore_button:
-                    mAdapter.restore();
+                    mAdapter.restore(GameUtility.s_wordList.getCurrentActiveList());
                     break;
                 case R.id.update_button:
                     mAdapter.notifyDataSetChanged();

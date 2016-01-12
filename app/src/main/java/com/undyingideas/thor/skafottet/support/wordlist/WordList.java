@@ -11,6 +11,7 @@ package com.undyingideas.thor.skafottet.support.wordlist;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.Serializable;
@@ -225,16 +226,14 @@ public class WordList implements Parcelable, Serializable {
      *         the url
      * @return the boolean
      */
-    public boolean addWordList(final String title, final String url) {
+    public boolean addWordList(@NonNull final String title, @NonNull final String url) {
         String theTitle = title;
         Log.d("addWordList", "Forsøger at tilføje :");
         Log.d("addWordList", "title : " + theTitle);
         Log.d("addWordList", "url   : " + url);
 
-        if (url != null && url.isEmpty()) return false;
-        if (theTitle != null && theTitle.isEmpty()) theTitle = httpKill.matcher(url).replaceAll("");
-
-        words.add(new WordItem(theTitle, url));
+        if (url.isEmpty()) return false;
+        words.add(new WordItem(title.isEmpty() ? httpKill.matcher(url).replaceAll("") : title, url));
         return true;
     }
 
@@ -247,19 +246,20 @@ public class WordList implements Parcelable, Serializable {
         }
     }
 
-
     public void appendWordList(final WordItem wordItem) {
         if (words.contains(wordItem)) {
             for (final WordItem wi : words)
-                if (wordItem.equals(wi)) for (final String s : wordItem.getWords()) wi.addWord(s);
+                if (wordItem.equals(wi)) {
+                    for (final String s : wordItem.getWords()) wi.addWord(s);
+                }
         } else {
             words.add(wordItem);
         }
     }
 
-    public boolean addWordListDirect(final WordItem wordItem) {
-        words.add(new WordItem(wordItem.getTitle(), wordItem.getUrl()));
-        return true;
+    public void addWordListDirect(final WordItem wordItem, final boolean setAsActive) {
+        words.add(new WordItem(wordItem.getTitle(), wordItem.getUrl(), wordItem.getWords()));
+        if (setAsActive) currentList = words.size() - 1;
     }
 
     /**
