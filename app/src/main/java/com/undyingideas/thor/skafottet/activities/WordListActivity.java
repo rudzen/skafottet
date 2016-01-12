@@ -108,7 +108,7 @@ public class WordListActivity extends AppCompatActivity implements
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.word_list_title));
-        toolbar.setSubtitle("<nuværende liste>"); // vil blive sat dynamisk ved klik på liste og ved opstart!
+        toolbar.setSubtitle("Antal Lister : " + GameUtility.s_wordList.getWordListCount()); // "<nuværende liste>"); // vil blive sat dynamisk ved klik på liste og ved opstart!
         toolbar.setCollapsible(false);
         toolbar.setLogo(R.mipmap.ic_launcher);
         toolbar.setLogoDescription("Applikations logo");
@@ -376,7 +376,7 @@ public class WordListActivity extends AppCompatActivity implements
         if (startDownload) {
             new WordListDownloader(this, wordItem).execute();
         } else {
-            GameUtility.s_wordList.addWordListDirect(wordItem);
+            GameUtility.s_wordList.addWordListDirect(wordItem, true);
         }
     }
 
