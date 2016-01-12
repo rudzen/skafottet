@@ -117,14 +117,14 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="login"
                 android:id="@+id/loginText"
-                android:capitalize="words"
                 android:clickable="false"
                 android:textIsSelectable="false"
                 android:layout_gravity="center"
                 android:layout_marginTop="4dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginBottom="4dp"
-                android:layout_marginRight="20dp" />
+                android:layout_marginRight="20dp"
+                android:contextClickable="true" />
         </LinearLayout>
 
     </LinearLayout>
