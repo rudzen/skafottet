@@ -12,6 +12,7 @@ package com.undyingideas.thor.skafottet.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,8 +56,8 @@ public class WordTitleListAdapter extends ArrayAdapter<WordItem> {
         if (view == null) {
             final LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             view = inflater.inflate(layoutResourceId, parent, false);
-            ViewHolder.s_textViewItemTitle = (TextView) view.findViewById(R.id.new_game_item);
-            ViewHolder.s_textViewDesc = (TextView) view.findViewById(R.id.new_game_description);
+            ViewHolder.s_textViewItemTitle = (TextView) view.findViewById(R.id.word_title_item_title);
+            ViewHolder.s_textViewDesc = (TextView) view.findViewById(R.id.word_title_item_desc);
 //            ViewHolder.s_icon = (ImageView) view.findViewById(R.id.new_game_icon);
         }
         final WordItem wordItem = data.get(position);

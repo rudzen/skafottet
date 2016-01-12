@@ -15,11 +15,17 @@ import android.widget.ListView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.MultiplayerLobbyAdapter;
 import com.undyingideas.thor.skafottet.adapters.MultiplayerPlayersAdapter;
+import com.undyingideas.thor.skafottet.adapters.WordListAdapter;
+import com.undyingideas.thor.skafottet.adapters.WordTitleListAdapter;
 import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyDTO;
+import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.PlayerDTO;
+import com.undyingideas.thor.skafottet.support.firebase.DTO.WordStatus;
+import com.undyingideas.thor.skafottet.support.firebase.WordList.WordListDTO;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
+import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -30,12 +36,16 @@ import java.util.ArrayList;
 public class CreateLobbyFragment extends Fragment {
     private static final String KEY_IS_ONLINE = "o";
     private static final String KEY_LAST_PLAYER_LIST = "lpl";
+    @Nullable
+    private static String opponentName;
 
     private boolean isOffline = true;
 
     private ListView listView;
     private final ArrayList<PlayerDTO> players = new ArrayList<>();
+    private final ArrayList<WordItem> wordList = new ArrayList<>();
     private MultiplayerPlayersAdapter playerAdapter;
+    private WordTitleListAdapter wordTitleAdapter;
     private Runnable updater;
 
     @Nullable
@@ -106,6 +116,7 @@ public class CreateLobbyFragment extends Fragment {
         super.onDetach();
         mListener = null;
         setProgressListener = null;
+        opponentName = null;
     }
 
     /**
@@ -124,7 +135,9 @@ public class CreateLobbyFragment extends Fragment {
     }
 
     private void onButtonPressed(final int position) {
-        if (mListener != null) mListener.onPlayerClicked(players.get(position).getName());
+        if (mListener != null)
+            if (opponentName == null )mListener.onPlayerClicked(players.get(position).getName());
+            else mListener.onPlayerClicked(wordList.get(position).getTitle());
     }
 
     private void configureAdapter() {
@@ -172,12 +185,30 @@ public class CreateLobbyFragment extends Fragment {
                 createLobbyFragment.onButtonPressed(position);
                 if(GameUtility.mpc.name == null) {
                     //GameUtility.mpc.login(multiPlayerPlayerFragment.players.get(position).getName());
+                } else if (opponentName != null) {
+                    WordItem item = createLobbyFragment.wordList.get(position);
+                    Log.d("createlobbyfragment", opponentName + " wordlist size = " + item.getWords().size() + " random ord " + item.getWords().get(getRandom(item.getWords().size())));
+                    String w = item.getWords().get(getRandom(item.getWords().size()));
+                    WordStatus ws = new WordStatus(w, -1);
+                    ArrayList<WordStatus> a = new ArrayList<>(); a.add(ws);
+                    LobbyPlayerStatus lps1 = new LobbyPlayerStatus(); lps1.setName(opponentName); lps1.setWordList(a);
+                    LobbyPlayerStatus lps2 = new LobbyPlayerStatus(); lps2.setName(GameUtility.mpc.name); lps2.setWordList(a);
+                    LobbyDTO dto = new LobbyDTO();
+                    dto.add(lps1); dto.add(lps2);
+                    GameUtility.mpc.createLobby(dto);
                 } else {
-
+                    opponentName = createLobbyFragment.players.get(position).getName();
+                    GameUtility.mpc.update();
                 }
             }
         }
+
+        private int getRandom(int size) {
+            return (int) ( 4 + Math.random()*4*size ) % size;
+        }
     }
+
+
 
     private static class FloatListener implements View.OnClickListener {
         @Override
@@ -189,14 +220,22 @@ public class CreateLobbyFragment extends Fragment {
     private class UpdateList implements Runnable {
         @Override
         public void run() {
+            wordList.clear();
+            wordList.addAll(GameUtility.mpc.wlc.wordList.values());
+            Log.d("UpdateList", wordList.toString() + "  " +wordList.size());
+            players.clear();
+            players.addAll(GameUtility.mpc.pc.playerList.values());
             if (GameUtility.mpc.name == null) {
                 // ups not logged in
                 Log.e("CreateLobbyFragment", "not logged in error");
+            } else if (opponentName != null) {
+                wordTitleAdapter = new WordTitleListAdapter(getContext(), R.layout.word_list_nav_drawer_list, wordList);
+                listView.setAdapter(wordTitleAdapter);
+                wordTitleAdapter.notifyDataSetChanged();
             } else {
                 playerAdapter = new MultiplayerPlayersAdapter(getContext(), R.layout.multiplayer_player_list_row, players);
                 listView.setAdapter(playerAdapter);
-                players.clear();
-                players.addAll(GameUtility.mpc.pc.playerList.values());
+
                 players.remove(GameUtility.mpc.pc.playerList.get(GameUtility.mpc.name)); // remove logged in player TODO rewrite
                 playerAdapter.notifyDataSetChanged();
                 GameUtility.s_prefereces.putObject(KEY_LAST_PLAYER_LIST, players);
