@@ -1,5 +1,8 @@
 package com.undyingideas.thor.skafottet.support.firebase.DTO;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created on 10-01-2016, 15:30.
  * Project : skafottet
@@ -7,7 +10,7 @@ package com.undyingideas.thor.skafottet.support.firebase.DTO;
  * @author rudz
  */
 @SuppressWarnings("StringBufferField")
-public class HelpDTO {
+public class HelpDTO implements Parcelable {
 
     private StringBuilder helpData;
 
@@ -56,6 +59,21 @@ public class HelpDTO {
         helpData = newData;
     }
 
+    @Override
+    public int describeContents() { return 0; }
 
+    @Override
+    public void writeToParcel(final Parcel dest, final int flags) {dest.writeSerializable(helpData);}
 
+    protected HelpDTO(final Parcel in) {helpData = (StringBuilder) in.readSerializable();}
+
+    public static final Creator<HelpDTO> CREATOR = new HelpDTOCreator();
+
+    private static class HelpDTOCreator implements Creator<HelpDTO> {
+        @Override
+        public HelpDTO createFromParcel(final Parcel source) {return new HelpDTO(source);}
+
+        @Override
+        public HelpDTO[] newArray(final int size) {return new HelpDTO[size];}
+    }
 }

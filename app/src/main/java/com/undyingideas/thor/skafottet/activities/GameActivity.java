@@ -194,6 +194,7 @@ public class GameActivity extends AppCompatActivity implements
 
     @Override
     public void onCancel() {
+
     }
 
     private class LoginClick implements View.OnClickListener {
