@@ -12,6 +12,7 @@ package com.undyingideas.thor.skafottet.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,7 @@ public class WordTitleListAdapter extends ArrayAdapter<WordItem> {
 //            ViewHolder.s_icon = (ImageView) view.findViewById(R.id.new_game_icon);
         }
         final WordItem wordItem = data.get(position);
+        Log.d("theis", ViewHolder.class.toString() + " " + wordItem.toString());
         ViewHolder.s_textViewItemTitle.setText(wordItem.getTitle());
         ViewHolder.s_textViewDesc.setText(wordItem.getUrl());
 //        ViewHolder.s_icon.setImageResource(wordItem.);

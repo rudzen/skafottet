@@ -6,6 +6,7 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +20,7 @@ import java.util.HashMap;
 public class WordListController {
 
     private final Firebase firebase;
-    public HashMap<String, WordListDTO> wordList = new HashMap<>();
+    public HashMap<String, WordItem> wordList = new HashMap<>();
 
     public WordListController(final Firebase firebase){
         this.firebase=firebase;
@@ -27,15 +28,15 @@ public class WordListController {
         Log.d("firebasewlc", firebase.toString());
     }
 
-    public ArrayList<WordListDTO> getArray(){
+    public ArrayList<WordItem> getArray(){
         return new ArrayList<>(wordList.values());
     }
 
-    public void addList(final WordListDTO wordListDTO) {
+    public void addList(final WordItem wordItem) {
 
-        final String title = wordListDTO.getTitle();
+        final String title = wordItem.getTitle();
         final Firebase listRef = firebase.child("Wordlist").child(title);
-        for(final String s : wordListDTO.getWordList()) {
+        for(final String s : wordItem.getWords()) {
             listRef.child(s).setValue(s);
         }
     }
@@ -49,6 +50,7 @@ class WordGetter implements ChildEventListener {
 
     @Override
     public void onChildAdded(final DataSnapshot dataSnapshot, final String s) {
+        Log.d("UpdateList", "firebase" + dataSnapshot.getKey());
         wlcRef.wordList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
     }
 
@@ -73,9 +75,10 @@ class WordGetter implements ChildEventListener {
         Log.e("firebaseerror", firebaseError.getDetails());
     }
 
-    private static WordListDTO getDTO(final DataSnapshot dataSnapshot) {
-        final WordListDTO dto = new WordListDTO();
-        for(final DataSnapshot s : dataSnapshot.getChildren()) dto.getWordList().add(s.getValue().toString());
+    private static WordItem getDTO(final DataSnapshot dataSnapshot) {
+        final WordItem dto = new WordItem();
+        dto.setTitle(dataSnapshot.getKey());
+        for(final DataSnapshot s : dataSnapshot.getChildren()) dto.addWord(s.getValue().toString());
         return dto;
     }
 }
