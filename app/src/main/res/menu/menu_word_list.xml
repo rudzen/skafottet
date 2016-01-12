@@ -2,10 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
     >
-    <item android:id="@+id/action_word_list_add"
-          android:title="Tilføj ordlist"
-          android:orderInCategory="0"
-          app:showAsAction="ifRoom"
-          android:icon="@android:drawable/ic_menu_add"
+
+    <item
+        android:id="@+id/action_word_list_add"
+        android:icon="@android:drawable/ic_menu_add"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="0"
+        android:title="Tilføj ordlist"
         />
 </menu>

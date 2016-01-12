@@ -82,9 +82,9 @@ public class AddWordListDialog extends DialogFragment {
 
         ViewHolder.s_editTitle = (EditText) view.findViewById(R.id.dialog_add_word_list_edit_title);
         ViewHolder.s_editURL = (EditText) view.findViewById(R.id.dialog_add_word_list_edit_url);
-        ViewHolder.s_btnOk = (Button) view.findViewById(R.id.btn_dialog_add_wordlist_ok);
-        ViewHolder.s_btnCancel = (Button) view.findViewById(R.id.btn_dialog_add_wordlist_cancel);
-        ViewHolder.s_chkDLnow = (CheckBox) view.findViewById(R.id.chk_dialog_add_wordlist_download);
+//        ViewHolder.s_btnOk = (Button) view.findViewById(R.id.btn_dialog_add_wordlist_ok);
+//        ViewHolder.s_btnCancel = (Button) view.findViewById(R.id.btn_dialog_add_wordlist_cancel);
+        ViewHolder.s_chkDLnow = (CheckBox) view.findViewById(R.id.dialog_add_word_list_chk_download);
 
         final EditTextClickHandler handler = new EditTextClickHandler(this);
         ViewHolder.s_editTitle.setOnKeyListener(handler);

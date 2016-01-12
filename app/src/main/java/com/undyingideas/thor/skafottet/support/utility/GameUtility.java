@@ -28,7 +28,7 @@ public abstract class GameUtility {
     public static final String KEY_MULIGE_ORD = "muligeOrd";
 
     @SuppressWarnings("StaticVariableOfConcreteClass")
-    public static WordList s_wordList;
+    public static WordList s_wordList = new WordList();
 
     @SuppressWarnings("StaticVariableOfConcreteClass")
     public static TinyDB s_prefereces;

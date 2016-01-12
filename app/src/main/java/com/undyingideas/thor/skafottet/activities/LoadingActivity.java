@@ -18,6 +18,7 @@ import com.undyingideas.thor.skafottet.support.utility.TinyDB;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.support.utility.WordCollector;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class LoadingActivity extends AppCompatActivity {
         new LoadWords(this).execute();
     }
 
+    @SuppressWarnings("AccessStaticViaInstance")
     private static class LoadWords extends AsyncTask<Void, Integer, ArrayList<String>> {
 
         private final WeakReference<LoadingActivity> loadingScreenWeakReference;
@@ -83,17 +85,37 @@ public class LoadingActivity extends AppCompatActivity {
                 /* begin loading wordlist */
                 final ArrayList<String> muligeOrd = new ArrayList<>();
                 final HashSet<String> data = new HashSet<>();
+
                 try {
-                    muligeOrd.addAll(WordCollector.samlOrd());
-                    Collections.sort(muligeOrd);
-                    data.addAll(muligeOrd);
-                    Log.d(TAG, "length:" + data.size());
-                    s_prefereces.putObject(Constant.KEY_PREF_POSSIBLE_WORDS, data);
-                } catch (final Exception e) {
+                    s_prefereces.checkForNullValue(Constant.KEY_PREF_POSSIBLE_WORDS);
                     //noinspection unchecked
                     muligeOrd.addAll((HashSet<String>) s_prefereces.getObject(Constant.KEY_PREF_POSSIBLE_WORDS, HashSet.class));
                     if (muligeOrd.size() <= 1) muligeOrd.add(0, "hej"); // LOLZ
+                } catch (final NullPointerException npe) {
+                    try {
+                        muligeOrd.addAll(WordCollector.samlOrd());
+                        Collections.sort(muligeOrd);
+                    } catch (final IOException e) {
+                        muligeOrd.add(0, "hejsa"); // LOLZ
+                        e.printStackTrace();
+                    }
+                    data.addAll(muligeOrd);
+                    Log.d(TAG, "length:" + data.size());
+                    s_prefereces.putObject(Constant.KEY_PREF_POSSIBLE_WORDS, data);
                 }
+
+
+//                try {
+//                    muligeOrd.addAll(WordCollector.samlOrd());
+//                    Collections.sort(muligeOrd);
+//                    data.addAll(muligeOrd);
+//                    Log.d(TAG, "length:" + data.size());
+//                    s_prefereces.putObject(Constant.KEY_PREF_POSSIBLE_WORDS, data);
+//                } catch (final Exception e) {
+//                    //noinspection unchecked
+//                    muligeOrd.addAll((HashSet<String>) s_prefereces.getObject(Constant.KEY_PREF_POSSIBLE_WORDS, HashSet.class));
+//                    if (muligeOrd.size() <= 1) muligeOrd.add(0, "hej"); // LOLZ
+//                }
                 Log.d(TAG, "dataLength:" + muligeOrd.size());
                 return muligeOrd;
             }

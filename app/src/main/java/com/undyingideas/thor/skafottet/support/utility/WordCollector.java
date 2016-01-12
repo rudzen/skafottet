@@ -19,10 +19,10 @@ import java.util.LinkedList;
 public final class WordCollector {
     private static ArrayList<String> s_muligeOrd;
 
-    private static ArrayList<String> samlOrd(final String url) throws Exception {
+    private static ArrayList<String> samlOrd(final String url) throws IOException {
         s_muligeOrd = new ArrayList<>();
         if (url == null) {
-            hentOrdFra("http://dr.dk");
+            hentOrdFra("http://rudz.dk");
         } else {
             hentOrdFra(url);
         }
@@ -41,7 +41,7 @@ public final class WordCollector {
     }
 
     @Deprecated
-    private static void hentOrdFraMoths() throws Exception {
+    private static void hentOrdFraMoths() throws IOException {
         String data = hentUrl("http://mothsordbog.dk/godt-prefs-igen");
         System.out.println("data = " + data);
         data = data.replaceAll("<.+?>", " ").toLowerCase().replaceAll("[^a-zæøå]", " ");
@@ -53,7 +53,7 @@ public final class WordCollector {
     }
 
     @Deprecated
-    private static void hentOrdFraDr() throws Exception {
+    private static void hentOrdFraDr() throws IOException {
         String data = hentUrl("http://dr.dk");
         System.out.println("data = " + data);
 
@@ -65,7 +65,7 @@ public final class WordCollector {
         System.out.println("s_muligeOrd = " + s_muligeOrd);
     }
 
-    private static void hentOrdFra(final String url) throws Exception {
+    private static void hentOrdFra(final String url) throws IOException {
         String data = hentUrl(url);
         data = data.replaceAll("<.+?>", " ").toLowerCase().replaceAll("[^a-zæøå]", " ");
         s_muligeOrd.clear();
@@ -75,7 +75,7 @@ public final class WordCollector {
         s_muligeOrd.addAll(new HashSet<>(list));
     }
 
-    public static ArrayList<String> samlOrd() throws Exception {
+    public static ArrayList<String> samlOrd() throws IOException {
         return samlOrd(null);
     }
 }
