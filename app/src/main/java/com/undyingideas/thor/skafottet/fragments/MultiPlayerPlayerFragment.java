@@ -38,6 +38,7 @@ public class MultiPlayerPlayerFragment extends Fragment {
     private boolean isOffline = true;
 
     private ListView listView;
+    @Deprecated
     private ArrayList<PlayerDTO> players;
     private final ArrayList<LobbyDTO> lobbys = new ArrayList<>();
 //    private MultiplayerController multiplayerController;

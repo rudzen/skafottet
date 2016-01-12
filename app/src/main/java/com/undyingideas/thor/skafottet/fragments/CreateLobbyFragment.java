@@ -196,6 +196,7 @@ public class CreateLobbyFragment extends Fragment {
                     LobbyDTO dto = new LobbyDTO();
                     dto.add(lps1); dto.add(lps2);
                     GameUtility.mpc.createLobby(dto);
+
                 } else {
                     opponentName = createLobbyFragment.players.get(position).getName();
                     GameUtility.mpc.update();
