@@ -9,7 +9,9 @@
 
 package com.undyingideas.thor.skafottet.support.wordlist;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
 /**
@@ -17,33 +19,21 @@ import java.util.ArrayList;
  *
  * @author rudz
  */
-public class WordItem implements Serializable {
-
-    private static final long serialVersionUID = 5789789;
+public class WordItem implements Parcelable {
 
     private String title;
     private String url;
-
-    /* not used yet */
-    //private Bitmap icon;
 
     /* used when user is creating list */
     private boolean dlNow;
 
     /* arraylist because android likes that */
-    private final ArrayList<String> words = new ArrayList<>();
+    private ArrayList<String> words = new ArrayList<>();
 
     public WordItem(final String title, final String url, final boolean dlNow) {
         this.title = title;
         this.url = url;
         this.dlNow = dlNow;
-    }
-
-    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
-    @Override
-    public boolean equals(final Object o) {
-        final WordItem other = (WordItem) o;
-        return title.equals(other.title) && url.equals(other.url);
     }
 
     public WordItem(final String title, final String url, final ArrayList<String> list) {
@@ -54,6 +44,8 @@ public class WordItem implements Serializable {
     public WordItem(final String title, final String url) {
         this(title, url, false);
     }
+
+    /* -------------- Helper Methods  -------------- */
 
     public void addWord(final String word) {
         if (!hasWord(word)) {
@@ -88,7 +80,6 @@ public class WordItem implements Serializable {
     }
 
     private void setWords(final ArrayList<String> words) {
-        /* since we are using a final list, just add the new words manually */
         this.words.clear();
         this.words.addAll(words);
         this.words.trimToSize();
@@ -116,5 +107,54 @@ public class WordItem implements Serializable {
 
     public void setDlNow(final boolean dlNow) {
         this.dlNow = dlNow;
+    }
+
+    /* -------------- Overrides -------------- */
+
+    @Override
+    public String toString() {
+        return "WordItem{" +
+                "title='" + title + '\'' +
+                ", url='" + url + '\'' +
+                ", dlNow=" + dlNow +
+                ", words=" + words +
+                '}';
+    }
+
+    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
+    @Override
+    public boolean equals(final Object o) {
+        final WordItem other = (WordItem) o;
+        return title.equals(other.title) && url.equals(other.url);
+    }
+
+    /* -------------- Parcel methods & classes -------------- */
+
+    @Override
+    public int describeContents() { return 0; }
+
+    @Override
+    public void writeToParcel(final Parcel dest, final int flags) {
+        dest.writeString(title);
+        dest.writeString(url);
+        dest.writeByte(dlNow ? (byte) 1 : (byte) 0);
+        dest.writeStringList(words);
+    }
+
+    protected WordItem(final Parcel in) {
+        title = in.readString();
+        url = in.readString();
+        dlNow = in.readByte() != 0;
+        words = in.createStringArrayList();
+    }
+
+    public static final Creator<WordItem> CREATOR = new WordItemCreator();
+
+    private static class WordItemCreator implements Creator<WordItem> {
+        @Override
+        public WordItem createFromParcel(final Parcel source) {return new WordItem(source);}
+
+        @Override
+        public WordItem[] newArray(final int size) {return new WordItem[size];}
     }
 }
