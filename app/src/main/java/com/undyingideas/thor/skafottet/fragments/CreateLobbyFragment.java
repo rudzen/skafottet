@@ -36,6 +36,7 @@ import java.util.ArrayList;
 public class CreateLobbyFragment extends Fragment {
     private static final String KEY_IS_ONLINE = "o";
     private static final String KEY_LAST_PLAYER_LIST = "lpl";
+    @Nullable
     private static String opponentName;
 
     private boolean isOffline = true;
@@ -115,6 +116,7 @@ public class CreateLobbyFragment extends Fragment {
         super.onDetach();
         mListener = null;
         setProgressListener = null;
+        opponentName = null;
     }
 
     /**
