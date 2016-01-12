@@ -197,8 +197,8 @@ public class MenuActivity extends MenuActivityAbstract{
 
     @SuppressWarnings("unused")
     private void showWordList() {
-        notReady();
-//        startActivity(new Intent(this, WordDetailsActivity.class));
+//        notReady();
+        startActivity(new Intent(this, WordListActivity.class));
     }
 
     @SuppressWarnings("unused")
@@ -361,35 +361,51 @@ public class MenuActivity extends MenuActivityAbstract{
             if (menuActivity != null) {
                 boolean buttonStates = false;
                 if (v == menuActivity.buttons[BUTTON_PLAY]) {
+
                     menuActivity.callMethod("showNewGame");
                     menuActivity.button_clicked = BUTTON_PLAY;
+
                 } else if (v == menuActivity.buttons[BUTTON_LOGIN_OUT]) {
+
                     menuActivity.button_clicked = BUTTON_LOGIN_OUT;
                     buttonStates = true; // or else we disable the buttons!
                     menuActivity.callMethod("showLogin"); // don't want to end menu with this one!
+
                 } else if (v == menuActivity.buttons[BUTTON_HIGHSCORE]) {
+
                     menuActivity.endMenu("showHighScore", menuActivity.buttons[BUTTON_HIGHSCORE]);
                     menuActivity.button_clicked = BUTTON_HIGHSCORE;
+
                 } else if (v == menuActivity.buttons[BUTTON_WORD_LISTS]) {
+
                     menuActivity.endMenu("showWordList", menuActivity.buttons[BUTTON_WORD_LISTS]);
                     menuActivity.button_clicked = BUTTON_WORD_LISTS;
+
                 } else if (v == menuActivity.buttons[BUTTON_ABOUT]) {
+
                     menuActivity.endMenu("showAbout", menuActivity.buttons[BUTTON_ABOUT]);
                     menuActivity.button_clicked = BUTTON_ABOUT;
+
                 } else if (v == menuActivity.buttons[BUTTON_HELP]) {
+
                     menuActivity.endMenu("showHelp", menuActivity.buttons[BUTTON_HELP]);
                     menuActivity.button_clicked = BUTTON_HELP;
+
                 } else if (v == menuActivity.buttons[BUTTON_QUIT]) {
+
                     menuActivity.dialogQuit();
                     menuActivity.button_clicked = BUTTON_QUIT;
+
                 } else if (v == menuActivity.buttons[BUTTON_SETTINGS]) {
+
                     menuActivity.endMenu("showSettings", menuActivity.buttons[BUTTON_SETTINGS]);
                     menuActivity.button_clicked = BUTTON_SETTINGS;
+
                 } else if (v == menuActivity.title) {
-                    // figure out some funky stuff here !!! :-)
+
                     menuActivity.showAll();
-                    //menuActivity.button_clicked = TITLE;
                     buttonStates = true;
+
                 }
                 menuActivity.setMenuButtonsClickable(buttonStates);
             }

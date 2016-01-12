@@ -9,8 +9,8 @@
 
 package com.undyingideas.thor.skafottet.adapters;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,18 +19,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
 import com.undyingideas.thor.skafottet.support.wordlist.WordList;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Custom adapter to force using custom layout.
  * Created by rudz on 09-11-2015.
  * @author rudz
  */
-public class HangmanWordsAdapter extends ArrayAdapter<String> {
+public class HangmanWordsAdapter extends ArrayAdapter<WordItem> {
 
-    public HangmanWordsAdapter(final Context context, final List<String> values) {
+    public HangmanWordsAdapter(final Context context, final ArrayList<WordItem> values) {
         super(context, R.layout.hang_man_adapter_row_layout, values);
     }
 
@@ -39,49 +40,38 @@ public class HangmanWordsAdapter extends ArrayAdapter<String> {
     }
 
     static class ViewHolder {
-        public TextView text;
-        public ImageView img;
+        public static TextView text;
+        public static ImageView img;
     }
 
-    @SuppressLint("InflateParams")
     @Override
     public View getView(final int position, final View convertView, final ViewGroup parent) {
-        View rowView = convertView;
+        View root = convertView;
         // reuse views
-        if (rowView == null) {
+        if (root == null) {
             final LayoutInflater inflater = LayoutInflater.from(getContext());
-            rowView = inflater.inflate(R.layout.hang_man_adapter_row_layout, null);
+            root = inflater.inflate(R.layout.hang_man_adapter_row_layout, null);
             // configure view holder
-            final ViewHolder viewHolder = new ViewHolder();
-            viewHolder.text = (TextView) rowView.findViewById(R.id.adapter_text_view);
-            viewHolder.img = (ImageView) rowView.findViewById(R.id.adapter_image_view);
-            rowView.setTag(viewHolder);
+            ViewHolder.text = (TextView) root.findViewById(R.id.adapter_text_view);
+            ViewHolder.img = (ImageView) root.findViewById(R.id.adapter_image_view);
         }
 
-        final ViewHolder holder = (ViewHolder) rowView.getTag();
-        final String s = getItem(position);
-        holder.text.setText(s);
-        holder.img.setImageResource(R.mipmap.ic_launcher);
+        final ViewHolder holder = (ViewHolder) root.getTag();
 
-        return rowView;
+        final WordItem s = getItem(position);
+//        holder.text.setText(s);
+//        holder.img.setImageResource(R.mipmap.ic_launcher);
+
+
+
+        return root;
     }
 
-    /* old code */
-//    @Override
-//    public View getView(int position, View convertView, ViewGroup parent) {
-//
-//        LayoutInflater theInflater = LayoutInflater.from(getContext());
-//
-//        @SuppressLint("ViewHolder") View theView = theInflater.inflate(R.layout.adapter_row_layout, parent, false);
-//
-//        String itemName = getItem(position);
-//        TextView theTextView = (TextView) theView.findViewById(R.id.adapter_text_view);
-//        theTextView.setText(itemName);
-//
-//        ImageView theImageView = (ImageView) theView.findViewById(R.id.adapter_image_view);
-//        theImageView.setImageResource(R.drawable.rudztheme_btn_radio_off_holo_dark);
-//
-//        return theView;
-//    }
+    private Bitmap createIcon(final String letter) {
+        return null;
+    }
+
+
+
 
 }

@@ -25,10 +25,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.WordDetailsActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.WordFragmentLayout"
+            android:name=".activities.WordListActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.GameActivity"

@@ -1,0 +1,139 @@
+<android.support.v4.widget.DrawerLayout
+    android:id="@+id/drawer_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/toolbar">
+
+        </include>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/refresh_layout"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent">
+
+                <se.emilsjolander.stickylistheaders.StickyListHeadersListView
+                    android:id="@+id/list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:drawSelectorOnTop="true"
+                    android:fastScrollEnabled="true"
+                    android:overScrollMode="never"
+                    android:padding="16dp"
+                    android:scrollbarStyle="outsideOverlay"/>
+
+            </android.support.v4.widget.SwipeRefreshLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/empty"
+            android:textSize="30sp"
+            android:visibility="gone"/>
+
+    </FrameLayout>
+
+    <ScrollView
+        android:id="@+id/left_drawer"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@android:color/white"
+        android:clickable="true"
+        android:padding="5dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.undyingideas.thor.skafottet.views.UnderlinedTextView
+                style="@style/word_list_section_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|left"
+                android:text="@string/actions"
+                android:textStyle="bold"/>
+
+            <Button
+                android:id="@+id/open_expandable_list_button"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="left|center_vertical"
+                android:text="@string/open_expandable_list"/>
+
+            <Button
+                android:id="@+id/restore_button"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="left|center_vertical"
+                android:text="@string/restore_list"/>
+
+            <Button
+                android:id="@+id/update_button"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="left|center_vertical"
+                android:text="@string/update_list"/>
+
+            <Button
+                android:id="@+id/clear_button"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="left|center_vertical"
+                android:text="@string/clear_list"/>
+
+            <com.undyingideas.thor.skafottet.views.UnderlinedTextView
+                style="@style/word_list_section_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|left"
+                android:text="@string/options"
+                android:textStyle="bold"/>
+
+            <CheckBox
+                android:id="@+id/sticky_checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/sticky_header"/>
+
+            <CheckBox
+                android:id="@+id/fade_checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/fade_header"/>
+
+            <CheckBox
+                android:id="@+id/draw_behind_checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/draw_behind_header"/>
+
+            <CheckBox
+                android:id="@+id/fast_scroll_checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/fast_scroll"/>
+        </LinearLayout>
+    </ScrollView>
+</android.support.v4.widget.DrawerLayout>

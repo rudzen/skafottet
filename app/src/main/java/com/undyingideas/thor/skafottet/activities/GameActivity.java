@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -55,9 +54,9 @@ public class GameActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
-        requestWindowFeature(Window.FEATURE_ACTION_BAR);
+//        requestWindowFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment_main);
+        setContentView(R.layout.activity_game);
 
         final Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(tb);
