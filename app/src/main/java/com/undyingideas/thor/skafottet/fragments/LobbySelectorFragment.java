@@ -231,11 +231,17 @@ public class LobbySelectorFragment extends Fragment {
         boolean b;
         for(LobbyDTO dto : dtoList) {
             b = false;
-            for(LobbyPlayerStatus status : dto.getPlayerList()){
-                if (status.getScore() == -1 && status.getName().equals(name))
-                {b = true; break; }
+            try {
+                for (LobbyPlayerStatus status : dto.getPlayerList()) {
+                    if (status.getScore() == -1 && status.getName().equals(name)) {
+                        b = true;
+                        break;
+                    }
+                }
+                if (b) lobbys.add(dto);
+            } catch (NullPointerException e) {
+                Log.e("NullPointer", e.toString());
             }
-            if(b) lobbys.add(dto);
         }
 
     }
