@@ -22,6 +22,15 @@
     <string name="menu_new_multi_player_game">Nyt multiplayer</string>
     <string name="game_lost">Du er død!</string>
     <string name="game_won">Du undslap galgen!</string>
+
+    <!-- WordList -->
+    <string name="word_lists_predefined">Indbyggede Lister</string>
+    <string name="word_lists_selfdefined">Ekstra Lister</string>
+
+    <!-- LoadingActivity -->
+    <string name="loading_text">Forbereder Galgen!</string>
+
+    <!-- content description for accesability -->
     <string name="contentDescriptionMenuTitle">The title image</string>
     <string name="contentDescriptionMenuButtonPlay">Play button</string>
     <string name="contentDescriptionMenuHighscore">Highscore button</string>
@@ -32,7 +41,6 @@
     <string name="contentDescriptionMenuLogInOut">Login/out button</string>
     <string name="contentDescriptionMenuQuit">Quit button</string>
     <string name="contentDescriptionLoadingImage">Splash screen image</string>
-    <string name="loading_text">Forbereder Galgen!</string>
     <string name="contentDescriptionEndResultImage">Result image</string>
     <string name="contentDescriptionEndMainMenuButton">End main menu button</string>
     <string name="contentDescriptionEndNewGameButton">End new game button</string>

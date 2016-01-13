@@ -70,7 +70,7 @@ public class WordPickerFragment extends Fragment {
         if (!listAltered) {
             // read the default list!
             //noinspection unchecked
-            wordList.addAll((HashSet<String>) GameUtility.s_prefereces.getObject(Constant.KEY_PREF_POSSIBLE_WORDS, HashSet.class));
+            wordList.addAll((HashSet<String>) GameUtility.s_prefereces.getObject(Constant.KEY_WORDS_LOCAL, HashSet.class));
         }
 
         Log.d(TAG, "isMultiPlayer : " + isMultiPlayer);

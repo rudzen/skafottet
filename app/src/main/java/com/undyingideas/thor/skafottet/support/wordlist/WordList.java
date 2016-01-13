@@ -16,6 +16,7 @@ import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
@@ -45,13 +46,15 @@ public class WordList implements Parcelable, Serializable {
     public WordList() {
 
         final ArrayList<String> defaults = new ArrayList<>();
-        defaults.add("bil");
         defaults.add("computer");
         defaults.add("programmering");
         defaults.add("motorvej");
         defaults.add("gangsti");
         defaults.add("skovsnegl");
         defaults.add("solsort");
+        defaults.add("fjernsyn");
+        defaults.add("fiskehjul");
+        defaults.add("adamsæble");
 
         words.add(new WordItem(DEFAULT_KEY, DEFAULT_KEY, defaults));
 
@@ -73,7 +76,6 @@ public class WordList implements Parcelable, Serializable {
 
     /**
      * Gets word list count.
-     *
      * @return the word list count
      */
     public int getWordListCount() {
@@ -95,7 +97,6 @@ public class WordList implements Parcelable, Serializable {
 
     /**
      * Gets list by index.
-     *
      * @param index
      *         the index
      * @return the list by index
@@ -118,7 +119,6 @@ public class WordList implements Parcelable, Serializable {
 
     /**
      * Gets title by index.
-     *
      * @param index
      *         the index
      * @return the title by index
@@ -126,7 +126,6 @@ public class WordList implements Parcelable, Serializable {
     public String getTitleByIndex(final int index) {
         return words.get(index).getTitle();
     }
-
 
     public int getIndexByTitle(final String title) {
         int i = 0;
@@ -139,7 +138,6 @@ public class WordList implements Parcelable, Serializable {
 
     /**
      * Gets current word list title.
-     *
      * @return the current word list title
      */
     public String getCurrentWordListTitle() {
@@ -148,7 +146,6 @@ public class WordList implements Parcelable, Serializable {
 
     /**
      * Gets word list by title.
-     *
      * @param title
      *         the title
      * @return the word list by title
@@ -160,7 +157,6 @@ public class WordList implements Parcelable, Serializable {
 
     /**
      * Gets word list by url.
-     *
      * @param url
      *         the url
      * @return the word list by url
@@ -179,10 +175,8 @@ public class WordList implements Parcelable, Serializable {
         return null;
     }
 
-
     /**
      * Sets current list.
-     *
      * @param currentList
      *         the list index
      */
@@ -190,10 +184,8 @@ public class WordList implements Parcelable, Serializable {
         this.currentList = currentList;
     }
 
-
     /**
      * Sets current list by url.
-     *
      * @param url
      *         the url
      * @return List number which was set to if suceeded, otherwise -1
@@ -221,7 +213,6 @@ public class WordList implements Parcelable, Serializable {
 
     /**
      * Add word list boolean.
-     *
      * @param url
      *         the url
      * @return the boolean
@@ -235,6 +226,15 @@ public class WordList implements Parcelable, Serializable {
         if (url.isEmpty()) return false;
         words.add(new WordItem(title.isEmpty() ? httpKill.matcher(url).replaceAll("") : title, url));
         return true;
+    }
+
+    public boolean addWordList(@NonNull final String title, @NonNull final String url, @NonNull final ArrayList<String> words) {
+        for (final WordItem wordItem : this.words) {
+            if (Objects.equals(wordItem.getTitle(), title) && Objects.equals(wordItem.getUrl(), url)) {
+                return false;
+            }
+        }
+        return this.words.add(new WordItem(title, url, words));
     }
 
     public void addWordToList(final String word, final String listUrl) {
@@ -257,14 +257,13 @@ public class WordList implements Parcelable, Serializable {
         }
     }
 
-    public void addWordListDirect(final WordItem wordItem, final boolean setAsActive) {
+    public void addWordListDirect(final WordItem wordItem) {
         words.add(new WordItem(wordItem.getTitle(), wordItem.getUrl(), wordItem.getWords()));
-        if (setAsActive) currentList = words.size() - 1;
+        currentList = words.size() - 1;
     }
 
     /**
      * Append word list boolean.
-     *
      * @param title
      *         the key
      * @param list
@@ -286,7 +285,6 @@ public class WordList implements Parcelable, Serializable {
 
     /**
      * Delete list by title boolean.
-     *
      * @param title
      *         the title
      * @return 0 if deleted, otherwise -1
@@ -303,7 +301,6 @@ public class WordList implements Parcelable, Serializable {
 
     /**
      * Delete list by index boolean.
-     *
      * @param index
      *         the index
      * @return the index removed, otherwise -1
@@ -321,7 +318,6 @@ public class WordList implements Parcelable, Serializable {
 
     /**
      * Gets key list.
-     *
      * @return the key list
      */
     public ArrayList<String> getWordTitleList() {
@@ -339,17 +335,17 @@ public class WordList implements Parcelable, Serializable {
     }
 
     public void setWords(final ArrayList<WordItem> words) {
-        if (this.words == null) {
-            this.words = new ArrayList<>();
-        } else {
-            this.words.clear();
-        }
-        this.words.addAll(words);
+        this.words = words;
     }
 
     public ArrayList<WordItem> getWords() {
         return words;
     }
+
+
+
+
+
 
     @Override
     public int describeContents() { return 0; }

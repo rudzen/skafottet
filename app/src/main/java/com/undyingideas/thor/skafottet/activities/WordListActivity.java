@@ -3,7 +3,6 @@ package com.undyingideas.thor.skafottet.activities;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,16 +19,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.WordListAdapter;
+import com.undyingideas.thor.skafottet.adapters.WordTitleListAdapter;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.StringHelper;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
@@ -62,31 +61,18 @@ public class WordListActivity extends AppCompatActivity implements
     private StickyListHeadersListView stickyList;
     private SwipeRefreshLayout refreshLayout;
 
-    private Button restoreButton;
-    private Button updateButton;
-    private Button clearButton;
-
-    private CheckBox stickyCheckBox;
-    private CheckBox fadeCheckBox;
-    private CheckBox drawBehindCheckBox;
-    private CheckBox fastScrollCheckBox;
-    private Button openExpandableListButton;
-
     private Toolbar toolbar;
 
-    private View.OnClickListener buttonListener;
-    private CompoundButton.OnCheckedChangeListener checkBoxListener;
-
     private MaterialDialog md; // for add list
+
+    private ListView listBuildIn, listCustom;
+    private WordTitleListAdapter adapterBuildIn, adapterCustom;
 
     @SuppressLint("InflateParams")
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acticity_word_list);
-
-        buttonListener = new ButtonClickListener();
-        checkBoxListener = new CheckBoxOnCheckedChangeListener();
 
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.word_list_refresh_layout);
         refreshLayout.setOnRefreshListener(new SwipeOnRefreshListener());
@@ -127,23 +113,19 @@ public class WordListActivity extends AppCompatActivity implements
             getSupportActionBar().setHomeButtonEnabled(true);
         }
 
-        restoreButton = (Button) findViewById(R.id.restore_button);
-        restoreButton.setOnClickListener(buttonListener);
-        openExpandableListButton = (Button) findViewById(R.id.open_expandable_list_button);
-        openExpandableListButton.setOnClickListener(buttonListener);
-        updateButton = (Button) findViewById(R.id.update_button);
-        updateButton.setOnClickListener(buttonListener);
-        clearButton = (Button) findViewById(R.id.clear_button);
-        clearButton.setOnClickListener(buttonListener);
+        /* configure the side bar lists */
+        listBuildIn = (ListView) mDrawerLayout.findViewById(R.id.nav_drawer_build_in_lists);
+        listCustom = (ListView) mDrawerLayout.findViewById(R.id.nav_drawer_custom_lists);
 
-        stickyCheckBox = (CheckBox) findViewById(R.id.sticky_checkBox);
-        stickyCheckBox.setOnCheckedChangeListener(checkBoxListener);
-        fadeCheckBox = (CheckBox) findViewById(R.id.fade_checkBox);
-        fadeCheckBox.setOnCheckedChangeListener(checkBoxListener);
-        drawBehindCheckBox = (CheckBox) findViewById(R.id.draw_behind_checkBox);
-        drawBehindCheckBox.setOnCheckedChangeListener(checkBoxListener);
-        fastScrollCheckBox = (CheckBox) findViewById(R.id.fast_scroll_checkBox);
-        fastScrollCheckBox.setOnCheckedChangeListener(checkBoxListener);
+        /* configure the adapters for the side bar lists */
+        adapterBuildIn = new WordTitleListAdapter(this, R.layout.word_list_nav_drawer_list, GameUtility.s_wordList.getWords());
+        adapterCustom = new WordTitleListAdapter(this, R.layout.word_list_nav_drawer_list, GameUtility.s_wordList.getWords());
+
+        listBuildIn.setAdapter(adapterBuildIn);
+        listCustom.setAdapter(adapterCustom);
+
+        listBuildIn.setOnItemClickListener(new ListBuildInTitleClickListener());
+        listCustom.setOnItemClickListener(new ListBuildInTitleClickListener());
 
         stickyList.setStickyHeaderTopOffset(0);
     }
@@ -218,9 +200,9 @@ public class WordListActivity extends AppCompatActivity implements
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onStickyHeaderOffsetChanged(final StickyListHeadersListView l, final View header, final int offset) {
         //noinspection PointlessBooleanExpression,ConstantConditions
-        if (fadeHeader && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            header.setAlpha(1 - offset / (float) header.getMeasuredHeight());
-        }
+//        if (fadeHeader && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        header.setAlpha(1 - offset / (float) header.getMeasuredHeight());
+//        }
     }
 
     @Override
@@ -232,48 +214,10 @@ public class WordListActivity extends AppCompatActivity implements
         mAdapter.restore(GameUtility.s_wordList.getCurrentActiveList());
     }
 
-
-    private class ButtonClickListener implements View.OnClickListener {
+    private class ListBuildInTitleClickListener implements ListView.OnItemClickListener {
         @Override
-        public void onClick(final View view) {
-            switch (view.getId()) {
-                case R.id.restore_button:
-                    mAdapter.restore(GameUtility.s_wordList.getCurrentActiveList());
-                    break;
-                case R.id.update_button:
-                    mAdapter.notifyDataSetChanged();
-                    break;
-                case R.id.clear_button:
-                    mAdapter.clear();
-                    break;
-                case R.id.open_expandable_list_button:
-                    final Intent intent = new Intent(WordListActivity.this, MenuActivity.class);
-                    startActivity(intent);
-                    break;
-            }
-        }
-    }
-
-    private class CheckBoxOnCheckedChangeListener implements CompoundButton.OnCheckedChangeListener {
-
-        @Override
-        public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
-            switch (buttonView.getId()) {
-                case R.id.sticky_checkBox:
-                    stickyList.setAreHeadersSticky(isChecked);
-                    break;
-                case R.id.fade_checkBox:
-                    //noinspection AssignmentToStaticFieldFromInstanceMethod
-                    fadeHeader = isChecked;
-                    break;
-                case R.id.draw_behind_checkBox:
-                    stickyList.setDrawingListUnderStickyHeader(isChecked);
-                    break;
-                case R.id.fast_scroll_checkBox:
-                    stickyList.setFastScrollEnabled(isChecked);
-                    stickyList.setFastScrollAlwaysVisible(isChecked);
-                    break;
-            }
+        public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+            Toast.makeText(getApplicationContext(), "List title clicked : " + view.getTag(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -379,9 +323,7 @@ public class WordListActivity extends AppCompatActivity implements
         if (startDownload) {
             new WordListDownloader(this, wordItem).execute();
         } else {
-            GameUtility.s_wordList.addWordListDirect(wordItem, true);
+            GameUtility.s_wordList.addWordListDirect(wordItem);
         }
     }
-
-
 }

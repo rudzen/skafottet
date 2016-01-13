@@ -12,7 +12,8 @@ public final class Constant {
     public static final String FONT_LIGHT = "fonts/Roboto-Light.ttf";
 
     /* preferences keys */
-    public static final String KEY_PREF_POSSIBLE_WORDS = "possibleWords";
+    public static final String KEY_WORDS_LOCAL = "lcw";
+    public static final String KEY_WORDS_FIREBASE = "fbw";
 
     /* instance keys */
 

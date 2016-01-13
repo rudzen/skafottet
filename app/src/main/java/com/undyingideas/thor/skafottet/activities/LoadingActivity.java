@@ -78,21 +78,23 @@ public class LoadingActivity extends AppCompatActivity {
                 setDefaultFont(loadingActivity.getApplicationContext(), "SERIF", Constant.FONT_LIGHT);
                 setDefaultFont(loadingActivity.getApplicationContext(), "SANS_SERIF", Constant.FONT_BOLD);
 
-                s_prefereces = new TinyDB(loadingActivity.getApplicationContext());
+                if (s_prefereces == null) {
+                    s_prefereces = new TinyDB(loadingActivity.getApplicationContext());
+                }
 
                 /* begin loading wordlist */
                 final ArrayList<String> muligeOrd = new ArrayList<>();
 
                 try {
-                    s_prefereces.checkForNullValue(Constant.KEY_PREF_POSSIBLE_WORDS);
-                    muligeOrd.addAll(s_prefereces.getListString(Constant.KEY_PREF_POSSIBLE_WORDS));
+                    s_prefereces.checkForNullValue(Constant.KEY_WORDS_LOCAL);
+                    muligeOrd.addAll(s_prefereces.getListString(Constant.KEY_WORDS_LOCAL));
                     Log.d("cache", "contains " +  muligeOrd.size());
                 } catch (final NullPointerException e) {
                     // nada in prefs.. copy them from resources.
                     // this is to facilitate future updates where it might be important to read from prefs first...
                     Collections.addAll(muligeOrd, loadingActivity.getResources().getStringArray(R.array.countries));
                     // copy them to prefs.. :)
-                    s_prefereces.putListString(Constant.KEY_PREF_POSSIBLE_WORDS, muligeOrd);
+                    s_prefereces.putListString(Constant.KEY_WORDS_LOCAL, muligeOrd);
                 }
                 return muligeOrd;
             }
@@ -105,10 +107,10 @@ public class LoadingActivity extends AppCompatActivity {
             final LoadingActivity loadingActivity = loadingScreenWeakReference.get();
             if (possibleWords != null && loadingActivity != null) { // med seler og livrem
                 if (!possibleWords.isEmpty()) {
-                    s_prefereces.putListString(Constant.KEY_PREF_POSSIBLE_WORDS, possibleWords);
+                    s_prefereces.putListString(Constant.KEY_WORDS_LOCAL, possibleWords);
 
                     // just temporary for testing..
-                    GameUtility.s_wordList.addWordListDirect(new WordItem("Lande", "Lokal", possibleWords), true);
+                    GameUtility.s_wordList.addWordListDirect(new WordItem("Lande", "Lokal", possibleWords));
                 }
                 final Intent intent = new Intent(loadingActivity, MenuActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

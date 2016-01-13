@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 /**
  * Created by rudz on 19-11-2015.
- *
  * @author rudz
  */
 public class WordItem implements Parcelable, Serializable {
@@ -45,7 +44,9 @@ public class WordItem implements Parcelable, Serializable {
 
     public WordItem(final String title, final String url, final ArrayList<String> list) {
         this(title, url, false);
-        if (list != null) setWords(list);
+        if (list != null) {
+            words = list;
+        }
     }
 
     public WordItem(final String title, final String url) {
@@ -54,16 +55,12 @@ public class WordItem implements Parcelable, Serializable {
 
     /* -------------- Helper Methods  -------------- */
 
-    public void addWord(final String word) {
-        if (!hasWord(word)) {
-            words.add(word);
-            words.trimToSize();
-        }
+    public boolean addWord(final String word) {
+        return !words.contains(word) && words.add(word);
     }
 
-    public void removeWord(final String word) {
-        words.remove(word);
-        words.trimToSize();
+    public boolean removeWord(final String word) {
+        return words.remove(word);
     }
 
     public boolean hasWord(final String word) {
@@ -71,7 +68,6 @@ public class WordItem implements Parcelable, Serializable {
     }
 
     public String getWord(final int index) {
-        if (words.size() < index) return null;
         return words.get(index);
     }
 
@@ -87,9 +83,7 @@ public class WordItem implements Parcelable, Serializable {
     }
 
     private void setWords(final ArrayList<String> words) {
-        this.words.clear();
-        this.words.addAll(words);
-        this.words.trimToSize();
+        this.words = words;
     }
 
     public String getTitle() {

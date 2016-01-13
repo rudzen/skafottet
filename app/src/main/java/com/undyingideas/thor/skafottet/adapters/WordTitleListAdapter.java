@@ -12,7 +12,6 @@ package com.undyingideas.thor.skafottet.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +45,6 @@ public class WordTitleListAdapter extends ArrayAdapter<WordItem> {
     private static final class ViewHolder {
         public static TextView s_textViewItemTitle;
         public static TextView s_textViewDesc;
-//        public static ImageView s_icon;
     }
 
     @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
@@ -58,13 +56,11 @@ public class WordTitleListAdapter extends ArrayAdapter<WordItem> {
             view = inflater.inflate(layoutResourceId, parent, false);
             ViewHolder.s_textViewItemTitle = (TextView) view.findViewById(R.id.word_title_item_title);
             ViewHolder.s_textViewDesc = (TextView) view.findViewById(R.id.word_title_item_desc);
-//            ViewHolder.s_icon = (ImageView) view.findViewById(R.id.new_game_icon);
         }
         final WordItem wordItem = data.get(position);
         ViewHolder.s_textViewItemTitle.setText(wordItem.getTitle());
         ViewHolder.s_textViewDesc.setText(wordItem.getUrl());
-//        ViewHolder.s_icon.setImageResource(wordItem.);
-        view.setTag(wordItem.hashCode());
+        view.setTag(position); // tag the bastard
         return view;
     }
 

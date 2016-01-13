@@ -6,6 +6,8 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.undyingideas.thor.skafottet.support.utility.Constant;
+import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
 
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ import java.util.HashMap;
 public class WordListController {
 
     private final Firebase firebase;
-    public HashMap<String, WordItem> wordList = new HashMap<>();
+    public static HashMap<String, WordItem> wordList = new HashMap<>();
 
     public WordListController(final Firebase firebase){
         this.firebase=firebase;
@@ -40,47 +42,57 @@ public class WordListController {
             listRef.child(s).setValue(s);
         }
     }
+
+    public static void saveList() {
+        GameUtility.s_prefereces.putObject(Constant.KEY_WORDS_FIREBASE, wordList);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void loadList() {
+        wordList = (HashMap<String, WordItem>) GameUtility.s_prefereces.getObject(Constant.KEY_WORDS_FIREBASE, HashMap.class);
+    }
+
+    class WordGetter implements ChildEventListener {
+        private final WordListController wlcRef;
+        public WordGetter(final WordListController wlcRef) {
+            this.wlcRef = wlcRef;
+        }
+
+        @Override
+        public void onChildAdded(final DataSnapshot dataSnapshot, final String s) {
+            Log.d("UpdateList", "firebase" + dataSnapshot.getKey());
+            wordList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
+        }
+
+        @Override
+        public void onChildChanged(final DataSnapshot dataSnapshot, final String s) {
+            wordList.remove(s);
+            wordList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
+        }
+
+        @Override
+        public void onChildRemoved(final DataSnapshot dataSnapshot) {
+            wordList.remove(dataSnapshot.getKey());
+        }
+
+        @Override
+        public void onChildMoved(final DataSnapshot dataSnapshot, final String s) {
+            // void
+        }
+
+        @Override
+        public void onCancelled(final FirebaseError firebaseError) {
+            Log.e("firebaseerror", firebaseError.getDetails());
+        }
+
+        private WordItem getDTO(final DataSnapshot dataSnapshot) {
+            final WordItem dto = new WordItem(dataSnapshot.getKey(), null);
+            for(final DataSnapshot s : dataSnapshot.getChildren()) dto.addWord(s.getValue().toString());
+            return dto;
+        }
+    }
 }
 
-class WordGetter implements ChildEventListener {
-    private final WordListController wlcRef;
-    public WordGetter(final WordListController wlcRef) {
-        this.wlcRef = wlcRef;
-    }
 
-    @Override
-    public void onChildAdded(final DataSnapshot dataSnapshot, final String s) {
-        Log.d("UpdateList", "firebase" + dataSnapshot.getKey());
-        wlcRef.wordList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
-    }
-
-    @Override
-    public void onChildChanged(final DataSnapshot dataSnapshot, final String s) {
-        wlcRef.wordList.remove(s);
-        wlcRef.wordList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
-    }
-
-    @Override
-    public void onChildRemoved(final DataSnapshot dataSnapshot) {
-        wlcRef.wordList.remove(dataSnapshot.getKey());
-    }
-
-    @Override
-    public void onChildMoved(final DataSnapshot dataSnapshot, final String s) {
-        // void
-    }
-
-    @Override
-    public void onCancelled(final FirebaseError firebaseError) {
-        Log.e("firebaseerror", firebaseError.getDetails());
-    }
-
-    private static WordItem getDTO(final DataSnapshot dataSnapshot) {
-        final WordItem dto = new WordItem();
-        dto.setTitle(dataSnapshot.getKey());
-        for(final DataSnapshot s : dataSnapshot.getChildren()) dto.addWord(s.getValue().toString());
-        return dto;
-    }
-}
 
 
