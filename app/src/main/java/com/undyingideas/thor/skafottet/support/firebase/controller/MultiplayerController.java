@@ -121,7 +121,7 @@ public class MultiplayerController {
                 //I get the correct lobby status in the lobby with the key
                 //Make sure not to get null into loop
                 if (!lc.lobbyList.isEmpty()) {
-                    for (final LobbyPlayerStatus status : lc.lobbyList.get(gamekey).getPlayerList()) {
+                    for (final LobbyPlayerStatus status : lc.lobbyList.get(gamekey).getPlayerList().values()) {
                         //I then look at all playerStatus in the lobby and compare it with the name im looking for.
                         if (status.getName().equals(player.getName())) {
                             gameStatus.add(status);
