@@ -17,15 +17,15 @@ import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.TinyDB;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
+import com.undyingideas.thor.skafottet.support.wordlist.WordController;
 import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_prefereces;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.wordController;
 
 /**
  * preliminary screen and process, that makes sure that the game is ready to start, by downloading
@@ -43,7 +43,7 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     @SuppressWarnings("AccessStaticViaInstance")
-    private static class LoadWords extends AsyncTask<Void, Integer, ArrayList<String>> {
+    private static class LoadWords extends AsyncTask<Void, Integer, Boolean> {
 
         private final WeakReference<LoadingActivity> loadingScreenWeakReference;
 
@@ -65,9 +65,9 @@ public class LoadingActivity extends AppCompatActivity {
             }
         }
 
-        @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
+        @SuppressWarnings({"AssignmentToStaticFieldFromInstanceMethod", "unchecked"})
         @Override
-        protected ArrayList<String> doInBackground(final Void... params) {
+        protected Boolean doInBackground(final Void... params) {
             final LoadingActivity loadingActivity = loadingScreenWeakReference.get();
             if (loadingActivity != null) {
                 Firebase.setAndroidContext(loadingActivity.getApplicationContext());
@@ -84,44 +84,41 @@ public class LoadingActivity extends AppCompatActivity {
                     s_prefereces = new TinyDB(loadingActivity.getApplicationContext());
                 }
 
-                /* begin loading wordlist */
-                final ArrayList<String> muligeOrd = new ArrayList<>();
+
+                /* begin loading wordlist
+                * 1) Check if any existing word list exist in preferences.
+                * 2) If so, load the list and continue to next list loading.
+                * 3) If not, reset the list to default build in list.
+                */
 
                 try {
                     s_prefereces.checkForNullValue(Constant.KEY_WORDS_LOCAL);
-                    muligeOrd.addAll(s_prefereces.getListString(Constant.KEY_WORDS_LOCAL));
-                    Log.d("cache", "contains " +  muligeOrd.size());
-                } catch (final NullPointerException e) {
-                    // nada in prefs.. copy them from resources.
-                    // this is to facilitate future updates where it might be important to read from prefs first...
-                    Collections.addAll(muligeOrd, loadingActivity.getResources().getStringArray(R.array.countries));
-                    // copy them to prefs.. :)
-                    s_prefereces.putListString(Constant.KEY_WORDS_LOCAL, muligeOrd);
+                    wordController = (WordController) s_prefereces.getObject(Constant.KEY_WORDS_LOCAL, WordController.class);
+                } catch (final NullPointerException npe) {
+                    Log.e(TAG, npe.getMessage());
+                    Log.d(TAG, "Unable to load any local word list from preferences.");
+                    wordController = new WordController(loadingActivity.getResources().getStringArray(R.array.countries));
+                    s_prefereces.putObject(Constant.KEY_WORDS_LOCAL, wordController);
                 }
 
+                /* repeating above for firebase list, except that we can't retrieve any list before connection is up. */
                 try {
                     s_prefereces.checkForNullValue(Constant.KEY_WORDS_FIREBASE);
                     WordListController.wordList = (HashMap<String, WordItem>) s_prefereces.getObject(Constant.KEY_WORDS_FIREBASE, HashMap.class);
                 } catch (final NullPointerException npe) {
-                    Log.d(TAG, "Failed to load previously saved FireBase wordlist");
                     Log.e(TAG, npe.getMessage());
+                    Log.d(TAG, "Unable to load any remote cached word lists from preferences, log in to update.");
                 }
-                return muligeOrd;
+                return true;
             }
             return null;
         }
 
         @Override
-        protected void onPostExecute(final ArrayList<String> possibleWords) {
-            super.onPostExecute(possibleWords);
+        protected void onPostExecute(final Boolean result) {
+            super.onPostExecute(result);
             final LoadingActivity loadingActivity = loadingScreenWeakReference.get();
-            if (possibleWords != null && loadingActivity != null) { // med seler og livrem
-                if (!possibleWords.isEmpty()) {
-                    s_prefereces.putListString(Constant.KEY_WORDS_LOCAL, possibleWords);
-
-                    // just temporary for testing..
-                    GameUtility.s_wordList.addWordListDirect(new WordItem("Lande", "Lokal", possibleWords));
-                }
+            if (loadingActivity != null) {
                 final Intent intent = new Intent(loadingActivity, MenuActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 loadingActivity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -143,5 +140,4 @@ public class LoadingActivity extends AppCompatActivity {
         final Display display = appCompatActivity.getWindowManager().getDefaultDisplay();
         display.getSize(WindowLayout.screenDimension);
     }
-
 }

@@ -12,7 +12,7 @@ public final class Constant {
     public static final String FONT_LIGHT = "fonts/Roboto-Light.ttf";
 
     /* preferences keys */
-    public static final String KEY_WORDS_LIST_LOCAL = "kwll";
+    public static final String KEY_WORDS_IS_LIST_LOCAL = "kwll";
     public static final String KEY_WORDS_LIST_FIREBASE_KEY = "kwlfbk";
     public static final String KEY_WORDS_LIST_LOCAL_INDEX = "kwlli";
     public static final String KEY_WORDS_LOCAL = "lcw";

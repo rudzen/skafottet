@@ -12,8 +12,8 @@ import android.support.annotation.DrawableRes;
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.support.firebase.controller.MultiplayerController;
+import com.undyingideas.thor.skafottet.support.wordlist.WordController;
 import com.undyingideas.thor.skafottet.support.wordlist.WordList;
-import com.undyingideas.thor.skafottet.support.wordlist.Words;
 
 /**
  * Created on 04-01-2016, 18:47.
@@ -34,7 +34,7 @@ public abstract class GameUtility {
     @SuppressWarnings("StaticVariableOfConcreteClass")
     public static TinyDB s_prefereces;
 
-    public static Words words = new Words();
+    public static WordController wordController = new WordController();
 
     public static @DrawableRes
     final int[] imageRefs = new int[8];

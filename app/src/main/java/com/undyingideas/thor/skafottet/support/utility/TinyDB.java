@@ -609,7 +609,7 @@ public class TinyDB {
      *         SharedPreferences key
      */
     public static void checkForNullKey(final String key) {
-        if (key == null) throw new NullPointerException();
+        if (key == null) throw new NullPointerException("Key : " + key + " does not exist in preferences");
     }
 
     /**
@@ -619,6 +619,6 @@ public class TinyDB {
      *         SharedPreferences key
      */
     public static void checkForNullValue(final String value) {
-        if (value == null) throw new NullPointerException();
+        if (value == null) throw new NullPointerException("Value : " + value + " does not exist in preferences");
     }
 }

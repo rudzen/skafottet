@@ -40,7 +40,7 @@ public class Hanged21 implements Parcelable {
         numCorrectLettersLast = 0;
         isGameLost = false;
         isGameWon = false;
-        theWord = GameUtility.words.getRandomWord();
+        theWord = GameUtility.wordController.getRandomWord();
         updateVisibleWord();
     }
 
