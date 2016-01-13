@@ -84,7 +84,7 @@ public class LoadingActivity extends AppCompatActivity {
                     s_prefereces = new TinyDB(loadingActivity.getApplicationContext());
                 }
 
-//                s_prefereces.clear();
+                s_prefereces.clear();
 
                 /* begin loading wordlist
                 * 1) Check if any existing word list exist in preferences.

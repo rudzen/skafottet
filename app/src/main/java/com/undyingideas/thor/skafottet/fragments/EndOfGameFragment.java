@@ -2,6 +2,7 @@ package com.undyingideas.thor.skafottet.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -21,6 +23,8 @@ import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 
 import java.lang.ref.WeakReference;
+
+import asia.ivity.android.marqueeview.MarqueeView;
 
 // TODO : Add information about multiplayer game and what word that was played.
 
@@ -44,6 +48,12 @@ public class EndOfGameFragment extends Fragment {
     @Nullable
     private Shimmer shimmerTop;
     private EndGameClickListener endGameClickListener;
+
+    private TextView textViewLower;
+    private MarqueeView marqueeViewLower;
+
+    private Handler handler;
+    private Runnable startMarquee;
 
     @Nullable
     private OnEndGameButtonClickListenerInterface mListener;
@@ -103,6 +113,16 @@ public class EndOfGameFragment extends Fragment {
             buttonMenu.setOnClickListener(endGameClickListener);
         }
 
+        textViewLower = (TextView) root.findViewById(R.id.end_game_lower_status_text_view);
+        marqueeViewLower = (MarqueeView) root.findViewById(R.id.end_game_lower_status_marquee_view);
+
+        marqueeViewLower.setPauseBetweenAnimations(500);
+        marqueeViewLower.setSpeed(10);
+
+        startMarquee = new startMarquee();
+        handler = new Handler();
+
+
         displayResults(getArguments());
 
         return root;
@@ -131,28 +151,42 @@ public class EndOfGameFragment extends Fragment {
         /* write an invalid save game to prefs */
         GameUtility.s_prefereces.putObject(Constant.KEY_SAVE_GAME, new SaveGame(null, false, null));
 
+
+
+        final CharSequence lowerText;
+
+
+        // WARNING .. NEEDS TO BE CLEANED UP!
+
         /* set the correct response depending on the game just played */
         if (!endGame.isMultiPlayer()) {
             if (endGame.getLogic().isGameLost()) {
                 imageViewResult.setImageResource(R.drawable.reaper);
+                lowerText = "Ordet var" + endGame.getLogic().getTheWord() + ". Dine gæt var : " + endGame.getLogic().getUsedLetters();
                 textViewTop.setText(R.string.game_lost);
             } else {
                 imageViewResult.setImageResource(R.drawable.trophy);
                 textViewTop.setText(R.string.game_won);
+                lowerText = "Ordet var" + endGame.getLogic().getTheWord() + ". Dine gæt var : " + endGame.getLogic().getUsedLetters() + " og du gættede forkert " + endGame.getLogic().getNumWrongLetters() + " gange. tsktsk.";
             }
         } else {
             GameUtility.mpc.lc.updateLobby(endGame.getNames()[1], GameUtility.mpc.name, endGame.getLogic().getNumWrongLetters());
             if (endGame.getLogic().isGameLost()) {
                 imageViewResult.setImageResource(R.drawable.reaper);
                 textViewTop.setText("Du er blever henrettet af " + endGame.getNames()[1]);
-                for(String s: endGame.getNames()) Log.d("Endgame", s);
+                lowerText = "Ordet du tabte udfordringen fra " + endGame.getNames()[1] + " var " + endGame.getLogic().getTheWord();
+                for(final String s: endGame.getNames()) Log.d("Endgame", s);
             } else {
                 imageViewResult.setImageResource(R.drawable.trophy);
                 textViewTop.setText("Du undslap galgen! - Triumf over " + endGame.getNames()[1]);
+                lowerText = "Du gættede ordet " + endGame.getLogic().getTheWord() + ", derved har du undgået at blive klynget op af " + endGame.getNames()[1];
             }
         }
+        textViewLower.setText(lowerText);
+        handler.postDelayed(startMarquee, 500);
         YoYo.with(Techniques.ZoomInDown).duration(700).playOn(imageViewResult);
-        YoYo.with(Techniques.ZoomInDown).duration(700).playOn(textViewTop);
+        YoYo.with(Techniques.ZoomInUp).duration(700).playOn(textViewTop);
+        YoYo.with(Techniques.SlideInLeft).duration(700).playOn(textViewLower);
     }
 
     @Override
@@ -260,5 +294,11 @@ public class EndOfGameFragment extends Fragment {
         public void onAnimationRepeat(final Animator animation) { }
     }
 
+    private class startMarquee implements Runnable {
+        @Override
+        public void run() {
+            marqueeViewLower.startMarquee();
+        }
+    }
 
 }

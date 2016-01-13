@@ -2,6 +2,7 @@ package com.undyingideas.thor.skafottet.game;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
@@ -9,6 +10,7 @@ import com.undyingideas.thor.skafottet.support.utility.StringHelper;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("unused")
 public class HangedMan implements Parcelable {
 
     private String theWord;
@@ -27,8 +29,8 @@ public class HangedMan implements Parcelable {
         reset();
     }
 
-    public HangedMan(final String theWord) {
-        this.theWord = theWord;
+    public HangedMan(@NonNull final String theWord) {
+        this.theWord = theWord.toLowerCase();
         reset();
     }
 
@@ -42,20 +44,19 @@ public class HangedMan implements Parcelable {
         numCorrectLettersLast = 0;
         isGameLost = false;
         isGameWon = false;
-        if (theWord == null) theWord = GameUtility.s_wordController.getRandomWord();
-        updateVisibleWord();
+        if (theWord == null) theWord = GameUtility.s_wordController.getRandomWord().toLowerCase();
+        visibleWord = updateVisibleWord(new StringBuilder(theWord.length())).toString();
     }
 
-    private void updateVisibleWord() {
-        visibleWord = "";
+    private StringBuilder updateVisibleWord(@NonNull final StringBuilder stringBuilder) {
         for (int n = 0; n < theWord.length(); n++) {
             final String letter = theWord.substring(n, n + 1);
-            visibleWord += usedLetters.contains(letter) ? letter : "*";
+            stringBuilder.append(usedLetters.contains(letter) ? letter : '*');
         }
-        isGameWon = !visibleWord.contains("*");
+        return stringBuilder;
     }
 
-    public void guessLetter(final String letter) {
+    public void guessLetter(@NonNull final String letter) {
         if (letter.length() != 1) return;
         if (visibleWord.contains(letter) || isGameWon || isGameLost) return;
         Log.d(TAG, "Der gættes på bogstavet: " + letter);
@@ -73,7 +74,8 @@ public class HangedMan implements Parcelable {
             Log.d(TAG, "Bogstavet var ikke korrekt : " + letter);
             if (++numWrongLetters > 6) isGameLost = true;
         }
-        updateVisibleWord();
+        visibleWord = updateVisibleWord(new StringBuilder(theWord.length())).toString();
+        isGameWon = !visibleWord.contains("*");
         logStatus();
     }
 
@@ -93,7 +95,7 @@ public class HangedMan implements Parcelable {
         return theWord;
     }
 
-    public void setTheWord(final String theWord) {
+    public void setTheWord(@NonNull final String theWord) {
         this.theWord = theWord;
     }
 
@@ -101,7 +103,7 @@ public class HangedMan implements Parcelable {
         return usedLetters;
     }
 
-    public void setUsedLetters(final ArrayList<String> usedLetters) {
+    public void setUsedLetters(@NonNull final ArrayList<String> usedLetters) {
         this.usedLetters.clear();
         this.usedLetters.addAll(usedLetters);
     }

@@ -12,7 +12,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -45,8 +44,6 @@ public class HangmanGameFragment extends Fragment {
 
     private Animation sepAnimation;
     private OnButtonClickListener onButtonClickListener;
-
-
 
     public static HangmanGameFragment newInstance(final SaveGame saveGame) {
         final HangmanGameFragment hangmanGameFragment = new HangmanGameFragment();
@@ -170,6 +167,11 @@ public class HangmanGameFragment extends Fragment {
 
     private void applySaveGameStatus() {
         textViewWord.setText(currentGame.getLogic().getVisibleWord());
+        if (currentGame.isMultiPlayer()) {
+            textViewStatus.setText("Modstander : " + currentGame.getNames()[1]);
+        } else {
+            textViewStatus.setText("Du kæmper for føden");
+        }
         resetButtons();
         noose.setImageBitmap(GameUtility.invert(getContext(), currentGame.getLogic().getNumWrongLetters()));
     }
@@ -219,7 +221,7 @@ public class HangmanGameFragment extends Fragment {
             final HangmanGameFragment hangmanGameFragment = hangmanGameFragmentWeakReference.get();
             if (hangmanGameFragment != null) {
                 final Button button = (Button) v;
-                YoYo.with(Techniques.Flash).duration(200).withListener(new OnButtonClickAnimatorListener(v)).playOn(v);
+                YoYo.with(Techniques.Flash).duration(100).withListener(new OnButtonClickAnimatorListener(v)).playOn(v);
                 hangmanGameFragment.listOfButtons.add(button);
                 hangmanGameFragment.guess(button.getText().toString());
             }
