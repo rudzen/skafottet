@@ -73,7 +73,7 @@ public class MultiplayerLobbyAdapter extends ArrayAdapter<LobbyDTO> {
         StringBuilder sb = new StringBuilder(100);
 
 //        String names = "";
-        for (final LobbyPlayerStatus lobbyPlayerStatus : dto.getPlayerList().values() ){
+        for (final LobbyPlayerStatus lobbyPlayerStatus : dto.getPlayerList() ){
             if (!lobbyPlayerStatus.getName().equals(activePlayer))
                 sb.append(lobbyPlayerStatus.getName()).append(" , ");
 //                names += lobbyPlayerStatus.getName() + " , ";
@@ -85,7 +85,7 @@ public class MultiplayerLobbyAdapter extends ArrayAdapter<LobbyDTO> {
         viewHolder.textViewName.setText(sb.toString());
 
         sb = new StringBuilder(100);
-        for (final LobbyPlayerStatus status: dto.getPlayerList().values()) {
+        for (final LobbyPlayerStatus status: dto.getPlayerList()) {
             sb.append(status.getScore()).append(" , ");
         }
         if (sb.length() > 3) {

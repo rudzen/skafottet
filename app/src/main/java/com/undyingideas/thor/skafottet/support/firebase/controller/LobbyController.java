@@ -32,12 +32,12 @@ public class LobbyController {
         final Firebase newPostRef = lobbyRef.push();
 
         newPostRef.child("word").setValue(lobbyDTO.getWord());
-        for(LobbyPlayerStatus status: lobbyDTO.getPlayerList().values())
+        for(LobbyPlayerStatus status: lobbyDTO.getPlayerList())
                 newPostRef.child(status.getName()).setValue(status.getScore());
 
         // Add lobby id to players lobby list
         final String postId = newPostRef.getKey();
-        for(final LobbyPlayerStatus s : lobbyDTO.getPlayerList().values()) {
+        for(final LobbyPlayerStatus s : lobbyDTO.getPlayerList()) {
             ref.child("Players").child(s.getName()).child("gameList").push().setValue(postId);
         }
     }
