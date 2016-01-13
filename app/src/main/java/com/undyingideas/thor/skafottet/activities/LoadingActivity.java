@@ -11,6 +11,7 @@ import android.view.Display;
 
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.support.firebase.WordList.WordListController;
 import com.undyingideas.thor.skafottet.support.firebase.controller.MultiplayerController;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
@@ -22,6 +23,7 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_prefereces;
 
@@ -95,6 +97,14 @@ public class LoadingActivity extends AppCompatActivity {
                     Collections.addAll(muligeOrd, loadingActivity.getResources().getStringArray(R.array.countries));
                     // copy them to prefs.. :)
                     s_prefereces.putListString(Constant.KEY_WORDS_LOCAL, muligeOrd);
+                }
+
+                try {
+                    s_prefereces.checkForNullValue(Constant.KEY_WORDS_FIREBASE);
+                    WordListController.wordList = (HashMap<String, WordItem>) s_prefereces.getObject(Constant.KEY_WORDS_FIREBASE, HashMap.class);
+                } catch (final NullPointerException npe) {
+                    Log.d(TAG, "Failed to load previously saved FireBase wordlist");
+                    Log.e(TAG, npe.getMessage());
                 }
                 return muligeOrd;
             }

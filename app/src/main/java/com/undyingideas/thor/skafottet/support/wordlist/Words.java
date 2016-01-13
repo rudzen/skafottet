@@ -2,8 +2,11 @@ package com.undyingideas.thor.skafottet.support.wordlist;
 
 import android.support.annotation.NonNull;
 
+import com.undyingideas.thor.skafottet.support.firebase.WordList.WordListController;
+
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -17,6 +20,11 @@ public final class Words {
     private ArrayList<WordItem> localWords;
 
     private int currentLocalList;
+    private boolean isLocal;
+    private int indexLocale;
+    private String indexRemote;
+    private Random random;
+
 
     public Words() {
         localWords = new ArrayList<>();
@@ -39,7 +47,15 @@ public final class Words {
         addLocalWordList(title, url, daList);
     }
 
-
+    // hacked together...
+    public String getRandomWord() {
+        random = new Random(System.currentTimeMillis());
+        if (isLocal) {
+            return localWords.get(indexLocale).getWords().get(random.nextInt(localWords.get(indexLocale).getWordListSize()));
+        } else {
+            return WordListController.wordList.get(indexRemote).getWords().get(random.nextInt(WordListController.wordList.get(indexRemote).getWordListSize()));
+       }
+    }
 
 
 

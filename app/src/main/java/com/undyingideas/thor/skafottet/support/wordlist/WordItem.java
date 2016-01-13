@@ -76,6 +76,10 @@ public class WordItem implements Parcelable, Serializable {
         return this.title.equals(title) && this.url.equals(url);
     }
 
+    public int getWordListSize() {
+        return words.size();
+    }
+
     /* -------------- Getters & Setters -------------- */
 
     public ArrayList<String> getWords() {
