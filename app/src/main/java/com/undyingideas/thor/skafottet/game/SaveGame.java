@@ -11,21 +11,21 @@ import android.os.Parcelable;
  */
 public class SaveGame implements Parcelable {
 
-    private Hanged logic;
+    private HangedMan logic;
     private boolean multiPlayer;
     private String[] names;
 
     public SaveGame() { }
 
-    public SaveGame(final Hanged logic, final boolean multiPlayer, final String ... names) {
+    public SaveGame(final HangedMan logic, final boolean multiPlayer, final String ... names) {
         this.logic = logic;
         this.multiPlayer = multiPlayer;
         this.names = names;
     }
 
-    public Hanged getLogic() { return logic; }
+    public HangedMan getLogic() { return logic; }
 
-    public void setLogic(final Hanged logic) { this.logic = logic; }
+    public void setLogic(final HangedMan logic) { this.logic = logic; }
 
     public boolean isMultiPlayer() { return multiPlayer; }
 
@@ -46,7 +46,7 @@ public class SaveGame implements Parcelable {
     }
 
     protected SaveGame(final Parcel in) {
-        logic = in.readParcelable(Hanged.class.getClassLoader());
+        logic = in.readParcelable(HangedMan.class.getClassLoader());
         multiPlayer = in.readByte() != 0;
         names = in.createStringArray();
     }

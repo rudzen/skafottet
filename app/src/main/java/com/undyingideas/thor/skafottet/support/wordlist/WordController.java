@@ -3,6 +3,7 @@ package com.undyingideas.thor.skafottet.support.wordlist;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.undyingideas.thor.skafottet.support.firebase.WordList.WordListController;
 
@@ -20,34 +21,45 @@ import java.util.Set;
  */
 public final class WordController implements Serializable, Parcelable {
 
+    private static final long serialVersionUID = 321;
     private ArrayList<WordItem> localWords;
-
     private int currentLocalList;
     private boolean isLocal;
     private int indexLocale;
     private String indexRemote;
     private Random random;
 
-
-    public WordController() {
-        localWords = new ArrayList<>();
-        currentLocalList = 0;
-    }
+    public WordController() { }
 
     public WordController(final ArrayList<String> defaultList) {
-        this();
+        reset();
         localWords.add(new WordItem("Lande", "Lokal", defaultList));
     }
 
     public WordController(final String[] defaultList) {
-        this();
+        reset();
         localWords.add(new WordItem("Lande", "Lokal", defaultList));
+    }
+
+    private void reset() {
+        localWords = new ArrayList<>();
+        currentLocalList = 0;
+        isLocal = true;
     }
 
     public ArrayList<String> getLocalWordList(final int index) {
         final ArrayList<String> returnList = new ArrayList<>();
         returnList.addAll(localWords.get(index).getWords());
         return returnList;
+    }
+
+    public ArrayList<String> getCurrentList() {
+        Log.d("WordController", String.valueOf(isLocal));
+        if (isLocal) {
+            return localWords.get(currentLocalList).getWords();
+        } else {
+            return WordListController.wordList.get(indexRemote).getWords();
+        }
     }
 
     public void addLocalWordList(final String title, final String url, final ArrayList<String> theList) {
@@ -58,6 +70,10 @@ public final class WordController implements Serializable, Parcelable {
         final ArrayList<String> daList = new ArrayList<>();
         daList.addAll(theList);
         addLocalWordList(title, url, daList);
+    }
+
+    public void addLocalWordList(final String title, final String url) {
+        addLocalWordList(title, url, new ArrayList<String>());
     }
 
     // hacked together...
@@ -77,6 +93,10 @@ public final class WordController implements Serializable, Parcelable {
             if (Objects.equals(wordItem.getTitle(), newWordItem.getTitle())) return false;
         }
         return true;
+    }
+
+    public int getListCount() {
+        return localWords.size() + WordListController.wordList.size();
     }
 
     /* getters and setters */

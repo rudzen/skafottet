@@ -25,7 +25,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_prefereces;
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.wordController;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_wordController;
 
 /**
  * preliminary screen and process, that makes sure that the game is ready to start, by downloading
@@ -71,8 +71,8 @@ public class LoadingActivity extends AppCompatActivity {
             final LoadingActivity loadingActivity = loadingScreenWeakReference.get();
             if (loadingActivity != null) {
                 Firebase.setAndroidContext(loadingActivity.getApplicationContext());
-                GameUtility.fb = new Firebase(Constant.HANGMANDTU_FIREBASEIO);
-                GameUtility.mpc = new MultiplayerController(GameUtility.fb);
+                GameUtility.firebase = new Firebase(Constant.HANGMANDTU_FIREBASEIO);
+                GameUtility.mpc = new MultiplayerController(GameUtility.firebase);
 
                 /* This is the first code executed, thus some configuration of the application takes place.. */
                 setDefaultFont(loadingActivity.getApplicationContext(), "DEFAULT", Constant.FONT_BOLD);
@@ -84,6 +84,7 @@ public class LoadingActivity extends AppCompatActivity {
                     s_prefereces = new TinyDB(loadingActivity.getApplicationContext());
                 }
 
+//                s_prefereces.clear();
 
                 /* begin loading wordlist
                 * 1) Check if any existing word list exist in preferences.
@@ -93,22 +94,37 @@ public class LoadingActivity extends AppCompatActivity {
 
                 try {
                     s_prefereces.checkForNullValue(Constant.KEY_WORDS_LOCAL);
-                    wordController = (WordController) s_prefereces.getObject(Constant.KEY_WORDS_LOCAL, WordController.class);
+//                    s_wordController.setLocalWords((ArrayList<WordItem>) s_prefereces.getObject(Constant.KEY_WORDS_LOCAL, ArrayList.class);
+                    s_wordController = (WordController) s_prefereces.getObject(Constant.KEY_WORDS_LOCAL, WordController.class);
                 } catch (final NullPointerException npe) {
-                    Log.e(TAG, npe.getMessage());
                     Log.d(TAG, "Unable to load any local word list from preferences.");
-                    wordController = new WordController(loadingActivity.getResources().getStringArray(R.array.countries));
-                    s_prefereces.putObject(Constant.KEY_WORDS_LOCAL, wordController);
+//                    ArrayList<WordItem> tmpList = new ArrayList<>();
+                    s_wordController = new WordController(loadingActivity.getResources().getStringArray(R.array.countries));
+//                    tmpList.add(new WordItem("Lande", "Lokal", loadingActivity.getResources().getStringArray(R.array.countries)));
+                    s_prefereces.putObject(Constant.KEY_WORDS_LOCAL, s_wordController.getLocalWords());
                 }
+
+                Log.d(TAG, String.valueOf(s_wordController.isLocal()));
+
+                s_wordController.setCurrentLocalList(s_prefereces.getInt(Constant.KEY_WORDS_LIST_LOCAL_INDEX, 0));
+                s_wordController.setIsLocal(s_prefereces.getBoolean(Constant.KEY_WORDS_IS_LIST_LOCAL));
+                s_wordController.setIndexRemote(s_prefereces.getString(Constant.KEY_WORDS_LIST_FIREBASE_KEY));
+
+                Log.d(TAG, s_wordController.toString());
 
                 /* repeating above for firebase list, except that we can't retrieve any list before connection is up. */
                 try {
                     s_prefereces.checkForNullValue(Constant.KEY_WORDS_FIREBASE);
                     WordListController.wordList = (HashMap<String, WordItem>) s_prefereces.getObject(Constant.KEY_WORDS_FIREBASE, HashMap.class);
                 } catch (final NullPointerException npe) {
-                    Log.e(TAG, npe.getMessage());
                     Log.d(TAG, "Unable to load any remote cached word lists from preferences, log in to update.");
+                    if (!s_wordController.isLocal()) {
+                        s_wordController.setIsLocal(true);
+                        s_wordController.setCurrentLocalList(0);
+                    }
                 }
+
+
                 return true;
             }
             return null;

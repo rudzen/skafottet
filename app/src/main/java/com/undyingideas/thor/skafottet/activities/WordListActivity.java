@@ -45,15 +45,14 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 /**
  * Created on 12-01-2016, 07:24.
  * Project : skafottet
- *
+ * This activity is responsible for a couple of things.
+ * First off, the lists can be viewed.
  * @author rudz
  */
 public class WordListActivity extends AppCompatActivity implements
         AdapterView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener,
         StickyListHeadersListView.OnStickyHeaderOffsetChangedListener,
         StickyListHeadersListView.OnStickyHeaderChangedListener {
-
-    private static boolean fadeHeader = true;
 
     private WordListAdapter mAdapter;
     private DrawerLayout mDrawerLayout;
@@ -77,10 +76,12 @@ public class WordListActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acticity_word_list);
 
+        /* long arsed onCreate, but unfortunatly it's the min. req code */
+
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.word_list_refresh_layout);
         refreshLayout.setOnRefreshListener(new SwipeOnRefreshListener());
 
-        mAdapter = new WordListAdapter(this, GameUtility.s_wordList.getCurrentActiveList());
+        mAdapter = new WordListAdapter(this, GameUtility.s_wordController.getCurrentList());
 
         stickyList = (StickyListHeadersListView) findViewById(R.id.list);
         stickyList.setOnItemClickListener(this);
@@ -96,7 +97,7 @@ public class WordListActivity extends AppCompatActivity implements
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.word_list_title));
-        toolbar.setSubtitle("Antal Lister : " + GameUtility.s_wordList.getWordListCount()); // "<nuværende liste>"); // vil blive sat dynamisk ved klik på liste og ved opstart!
+        toolbar.setSubtitle("Antal Lister : " + GameUtility.s_wordController.getListCount()); // "<nuværende liste>"); // vil blive sat dynamisk ved klik på liste og ved opstart!
         toolbar.setCollapsible(false);
         toolbar.setLogo(R.mipmap.ic_launcher);
         toolbar.setLogoDescription("Applikations logo");
@@ -121,7 +122,7 @@ public class WordListActivity extends AppCompatActivity implements
         listLocal = (ListView) mDrawerLayout.findViewById(R.id.nav_drawer_custom_lists);
 
         /* configure the adapters for the side bar lists */
-        adapterLocal = new WordTitleListAdapter(this, R.layout.word_list_nav_drawer_list, GameUtility.s_wordList.getWords());
+        adapterLocal = new WordTitleListAdapter(this, R.layout.word_list_nav_drawer_list, GameUtility.s_wordController.getLocalWords());
         adapterFirebase = new WordTitleListFirebaseAdapter(this, R.layout.word_list_nav_drawer_list, WordListController.getKeyList());
 
         listFireBase.setAdapter(adapterLocal);
@@ -214,7 +215,7 @@ public class WordListActivity extends AppCompatActivity implements
     }
 
     public void refreshList() {
-        mAdapter.restore(GameUtility.s_wordList.getCurrentActiveList());
+        mAdapter.restore(GameUtility.s_wordController.getCurrentList());
     }
 
     private class ListBuildInTitleClickListener implements ListView.OnItemClickListener {
@@ -326,7 +327,7 @@ public class WordListActivity extends AppCompatActivity implements
         if (startDownload) {
             new WordListDownloader(this, wordItem).execute();
         } else {
-            GameUtility.s_wordList.addWordListDirect(wordItem);
+            GameUtility.s_wordController.addLocalWordList(title, url);
         }
     }
 }
