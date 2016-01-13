@@ -209,7 +209,6 @@ public class MenuActivity extends MenuActivityAbstract{
     @SuppressWarnings({"unused", "AccessStaticViaInstance"})
     private void showNewGame() {
         final ArrayList<StartGameItem> startGameItems = new ArrayList<>(3);
-        maxID = 3;
 
         StartGameItem startGameItem;
 
@@ -219,7 +218,6 @@ public class MenuActivity extends MenuActivityAbstract{
             final SaveGame saveGame = (SaveGame) GameUtility.s_prefereces.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
             if (saveGame != null && saveGame.getLogic() != null && !saveGame.getLogic().isGameOver()) {
                 startGameItems.add(new StartGameItem(Constant.MODE_CONT_GAME, "Fortsæt sidste spil", "Type : " + (saveGame.isMultiPlayer() ? "Multi" : "Single") + "player / Gæt : " + saveGame.getLogic().getVisibleWord(), GameUtility.imageRefs[saveGame.getLogic().getNumWrongLetters()]));
-                maxID++;
             }
         } catch (final NullPointerException npe) {
             // nothing happends here, its just for not adding the option to continue a game.
@@ -228,9 +226,7 @@ public class MenuActivity extends MenuActivityAbstract{
             if(GameUtility.mpc.name != null) {
                 startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER, getString(R.string.menu_new_multi_player_game), "Udfordring.", GameUtility.imageRefs[0]));
                 startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_2, getString(R.string.menu_new_multi_player_game), "Tværfaglig udfordring", GameUtility.imageRefs[0]));
-//            } else {
-//                maxID--;
-//                startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_LOGIN, "Login", "woot", GameUtility.imageRefs[0]));
+                startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_LOBBY, "Se spil lobbyer", "Ikke for sarte sjæle", GameUtility.imageRefs[0]));
             }
 
             final StartGameAdapter adapter = new StartGameAdapter(this, R.layout.new_game_list_row, startGameItems);

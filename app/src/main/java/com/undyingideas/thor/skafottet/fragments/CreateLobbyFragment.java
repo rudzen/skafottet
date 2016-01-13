@@ -13,16 +13,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.adapters.MultiplayerLobbyAdapter;
 import com.undyingideas.thor.skafottet.adapters.MultiplayerPlayersAdapter;
-import com.undyingideas.thor.skafottet.adapters.WordListAdapter;
 import com.undyingideas.thor.skafottet.adapters.WordTitleListAdapter;
 import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.PlayerDTO;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.WordStatus;
-import com.undyingideas.thor.skafottet.support.firebase.WordList.WordListDTO;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.support.wordlist.WordItem;

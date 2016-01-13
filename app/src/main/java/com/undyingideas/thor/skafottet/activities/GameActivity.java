@@ -65,18 +65,6 @@ public class GameActivity extends AppCompatActivity implements
         if (getSupportActionBar() != null) {
             tb.setLogo(R.mipmap.ic_launcher);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-//            mv = new MarqueeView(this);
-//            tv = new TextView(this);
-//
-//            mv.setMinimumWidth(50);
-//            tv.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-//            tv.setGravity(Gravity.RIGHT);
-//            mv.setPauseBetweenAnimations(500);
-//
-//            tv.setText(GameUtility.mpc.name == null ? "Du er ikke logget ind, log ind for at hænge andre." : "Du er logget ind som " + GameUtility.mpc.name);
-//            mv.addView(tv);
-//            tb.addView(mv);
         }
 
         /* configure the custom marquee view linked with a textview */
@@ -102,11 +90,11 @@ public class GameActivity extends AppCompatActivity implements
                 addFragment(HangmanGameFragment.newInstance((SaveGame) GameUtility.s_prefereces.getObject(Constant.KEY_SAVE_GAME, SaveGame.class)));
             } else if (gameMode == Constant.MODE_SINGLE_PLAYER) {
                 addFragment(HangmanGameFragment.newInstance(new SaveGame(new Hanged(GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)), false, "Du")));
-            } else if (gameMode == Constant.MODE_MULTI_PLAYER) {
+            } else if (gameMode == Constant.MODE_MULTI_PLAYER || gameMode == Constant.MODE_MULTI_PLAYER_2) {
                 Log.d("theis", "mode = " + gameMode);
                 // just show the current player list
                 addFragment(MultiPlayerPlayerFragment.newInstance(true));
-            } else if (gameMode == Constant.MODE_MULTI_PLAYER_2) {
+            } else if (gameMode == Constant.MODE_MULTI_PLAYER_LOBBY) {
                 addFragment(CreateLobbyFragment.newInstance(true));
             } else if (gameMode == Constant.MODE_ABOUT) {
                 addFragment(new AboutFragment());
@@ -142,23 +130,6 @@ public class GameActivity extends AppCompatActivity implements
             mv.startMarquee();
         }
     }
-
-//    @Override
-//    public void onDone(final boolean result) {
-//        if(result){
-//            Log.d("wordPicker", "WordAccepted");
-//            final HangmanGameFragment startGame = new HangmanGameFragment();
-//            final Bundle data = new Bundle();
-//            data.putBoolean(GameUtility.KEY_IS_HOT_SEAT, true);
-//            data.putString("theWord", s_possibleWord);
-//            startGame.setArguments(data);
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.fragment_content, startGame)
-//                    .addToBackStack(null)
-//                    .commit();
-//        }
-//        else Log.d("wordPicer", "wordDenied");
-//    }
 
     @Override
     public void onPlayerClicked(final String playerName) {
