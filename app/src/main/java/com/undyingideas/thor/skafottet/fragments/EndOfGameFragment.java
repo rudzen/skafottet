@@ -141,10 +141,11 @@ public class EndOfGameFragment extends Fragment {
                 textViewTop.setText(R.string.game_won);
             }
         } else {
-            GameUtility.mpc.lc.updateLobby(endGame.getNames()[1], endGame.getNames()[0], endGame.getLogic().getNumWrongLetters());
+            GameUtility.mpc.lc.updateLobby(endGame.getNames()[1], GameUtility.mpc.name, endGame.getLogic().getNumWrongLetters());
             if (endGame.getLogic().isGameLost()) {
                 imageViewResult.setImageResource(R.drawable.reaper);
                 textViewTop.setText("Du er blever henrettet af " + endGame.getNames()[1]);
+                for(String s: endGame.getNames()) Log.d("Endgame", s);
             } else {
                 imageViewResult.setImageResource(R.drawable.trophy);
                 textViewTop.setText("Du undslap galgen! - Triumf over " + endGame.getNames()[1]);

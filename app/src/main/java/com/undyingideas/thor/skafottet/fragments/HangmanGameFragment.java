@@ -116,7 +116,7 @@ public class HangmanGameFragment extends Fragment {
         if (currentGame.isMultiPlayer()) {
             WindowLayout.showSnack("Modstander: " + currentGame.getNames()[1], textViewWord, true);
         }
-        Toast.makeText(getContext(), currentGame.getLogic().getTheWord(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), currentGame.getLogic().getTheWord(), Toast.LENGTH_SHORT).show();
 
         shimmerWord = new Shimmer();
         shimmerWord.start(textViewWord);

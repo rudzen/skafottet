@@ -104,7 +104,7 @@ public class LoadingActivity extends AppCompatActivity {
                     WordListController.wordList = (HashMap<String, WordItem>) s_prefereces.getObject(Constant.KEY_WORDS_FIREBASE, HashMap.class);
                 } catch (final NullPointerException npe) {
                     Log.d(TAG, "Failed to load previously saved FireBase wordlist");
-                    Log.e(TAG, npe.getMessage());
+                    Log.e(TAG, npe.toString());
                 }
                 return muligeOrd;
             }

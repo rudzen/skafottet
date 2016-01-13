@@ -22,6 +22,8 @@ import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Set;
 
 /**
@@ -129,8 +131,7 @@ public class LobbySelectorFragment extends Fragment {
 
     private void configureAdapter() {
         lobbys.clear();
-        lobbys.addAll(GameUtility.mpc.lc.lobbyList.values());
-        removeInactive(lobbys, GameUtility.mpc.name);
+        removeInactive(GameUtility.mpc.lc.lobbyList, GameUtility.mpc.name);
         lobbyAdapter = new MultiplayerLobbyAdapter(GameUtility.mpc.name, getContext(), R.layout.multiplayer_player_list_row, lobbys);
         listView.setAdapter(lobbyAdapter);
         listView.setOnItemClickListener(new OnLobbyClick(this));
@@ -212,8 +213,7 @@ public class LobbySelectorFragment extends Fragment {
                 // TODO not logged in
             } else {
                 lobbys.clear();
-                lobbys.addAll(GameUtility.mpc.lc.lobbyList.values());
-                removeInactive(lobbys, GameUtility.mpc.name);
+                removeInactive(GameUtility.mpc.lc.lobbyList, GameUtility.mpc.name);
                 lobbyAdapter = new MultiplayerLobbyAdapter(GameUtility.mpc.name, getContext(), R.layout.multiplayer_player_list_row, lobbys);
                 listView.setAdapter(lobbyAdapter);
                 lobbyAdapter.notifyDataSetChanged();
@@ -222,8 +222,8 @@ public class LobbySelectorFragment extends Fragment {
         }
     }
 
-    private void removeInactive(ArrayList<LobbyDTO> l, String name) {
-        for(LobbyDTO dto: l){
+    private HashMap<String, LobbyDTO> removeInactive(HashMap<String, LobbyDTO> l, String name) {
+        for(LobbyDTO dto: l.values()){
             boolean b = false;
             for(LobbyPlayerStatus status: dto.getPlayerList().values()){
                 if (status.getName().equals(name) && status.getScore() == -1) {
@@ -231,8 +231,9 @@ public class LobbySelectorFragment extends Fragment {
                     break;
                 }
             }
-            if (!b) l.remove(dto);
+            if (b) lobbys.add(dto);
         }
+        return l;
     }
 
 }
