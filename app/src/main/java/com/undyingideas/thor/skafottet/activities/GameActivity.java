@@ -16,7 +16,7 @@ import com.undyingideas.thor.skafottet.fragments.CreateLobbyFragment;
 import com.undyingideas.thor.skafottet.fragments.EndOfGameFragment;
 import com.undyingideas.thor.skafottet.fragments.HangmanGameFragment;
 import com.undyingideas.thor.skafottet.fragments.HelpFragment;
-import com.undyingideas.thor.skafottet.fragments.MultiPlayerPlayerFragment;
+import com.undyingideas.thor.skafottet.fragments.LobbySelectorFragment;
 import com.undyingideas.thor.skafottet.fragments.dialogs.Login;
 import com.undyingideas.thor.skafottet.game.Hanged;
 import com.undyingideas.thor.skafottet.game.SaveGame;
@@ -28,7 +28,7 @@ import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import asia.ivity.android.marqueeview.MarqueeView;
 
 public class GameActivity extends AppCompatActivity implements
-        MultiPlayerPlayerFragment.OnMultiPlayerPlayerFragmentInteractionListener,
+        LobbySelectorFragment.OnMultiPlayerPlayerFragmentInteractionListener,
         EndOfGameFragment.OnEndGameButtonClickListenerInterface,
         ProgressBarInterface,
         Login.LoginListener,
@@ -93,7 +93,7 @@ public class GameActivity extends AppCompatActivity implements
             } else if (gameMode == Constant.MODE_MULTI_PLAYER || gameMode == Constant.MODE_MULTI_PLAYER_2) {
                 Log.d("theis", "mode = " + gameMode);
                 // just show the current player list
-                addFragment(MultiPlayerPlayerFragment.newInstance(true));
+                addFragment(LobbySelectorFragment.newInstance(true));
             } else if (gameMode == Constant.MODE_MULTI_PLAYER_LOBBY) {
                 addFragment(CreateLobbyFragment.newInstance(true));
             } else if (gameMode == Constant.MODE_ABOUT) {

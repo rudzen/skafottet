@@ -9,6 +9,7 @@ import java.util.ArrayList;
  */
 public class LobbyDTO {
 
+    private String word;
     private ArrayList<LobbyPlayerStatus> playerList = new ArrayList<>();
 
     public LobbyDTO(){
@@ -19,8 +20,17 @@ public class LobbyDTO {
         playerList.add(lps);
     }
 
-    public LobbyDTO(final ArrayList<LobbyPlayerStatus> playerList) {
+    public LobbyDTO(final String word, final ArrayList<LobbyPlayerStatus> playerList) {
+        this.word = word;
         this.playerList = playerList;
+    }
+
+    public String getWord() {
+        return word;
+    }
+
+    public void setWord(String word) {
+        this.word = word;
     }
 
     public ArrayList<LobbyPlayerStatus> getPlayerList() {

@@ -19,7 +19,6 @@ import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.PlayerDTO;
-import com.undyingideas.thor.skafottet.support.firebase.DTO.WordStatus;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
@@ -186,12 +185,10 @@ public class CreateLobbyFragment extends Fragment {
                     WordItem item = createLobbyFragment.wordList.get(position);
                     Log.d("createlobbyfragment", opponentName + " wordlist size = " + item.getWords().size() + " random ord " + item.getWords().get(getRandom(item.getWords().size())));
                     String w = item.getWords().get(getRandom(item.getWords().size()));
-                    WordStatus ws = new WordStatus(w, -1);
-                    ArrayList<WordStatus> a = new ArrayList<>(); a.add(ws);
-                    LobbyPlayerStatus lps1 = new LobbyPlayerStatus(); lps1.setName(opponentName); lps1.setWordList(a);
-                    LobbyPlayerStatus lps2 = new LobbyPlayerStatus(); lps2.setName(GameUtility.mpc.name); lps2.setWordList(a);
+                    LobbyPlayerStatus lps1 = new LobbyPlayerStatus(opponentName, -1);
+                    LobbyPlayerStatus lps2 = new LobbyPlayerStatus(GameUtility.mpc.name, -1);
                     LobbyDTO dto = new LobbyDTO();
-                    dto.add(lps1); dto.add(lps2);
+                    dto.add(lps1); dto.add(lps2); dto.setWord(w);
                     GameUtility.mpc.createLobby(dto);
 
                 } else {

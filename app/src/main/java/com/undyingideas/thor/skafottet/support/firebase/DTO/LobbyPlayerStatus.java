@@ -8,22 +8,22 @@ import java.util.ArrayList;
  * @author theis
  */
 public class LobbyPlayerStatus {
-    private ArrayList<WordStatus> wordList = new ArrayList<>();
     private String name;
+    private int score;
 
     public LobbyPlayerStatus(){}
 
-    public LobbyPlayerStatus(final String name, final ArrayList<WordStatus> wordList) {
+    public LobbyPlayerStatus(final String name, final int score) {
         this.name = name;
-        this.wordList = wordList;
+        this.score = score;
     }
 
-    public ArrayList<WordStatus> getWordList() {
-        return wordList;
+    public int getScore() {
+        return score;
     }
 
-    public void setWordList(final ArrayList<WordStatus> wordList) {
-        this.wordList = wordList;
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public String getName() {

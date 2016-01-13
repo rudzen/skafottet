@@ -27,17 +27,17 @@ public class PlayerController {
     public PlayerController(final MultiplayerController mp, final Firebase ref){
         this.ref = ref;
         mpcRef = mp;
-        this.ref.child(Constant.FIREBASE_MULTI_PLAYER).child("Players").addChildEventListener(new NameGetter(mpcRef));
+        this.ref.child("Players").addChildEventListener(new NameGetter(mpcRef));
     }
 
     public void createPlayer(final String name, final String password) {
-        final Firebase playersRef = ref.child(Constant.FIREBASE_MULTI_PLAYER).child("Players").child(name);
+        final Firebase playersRef = ref.child("Players").child(name);
         final fireBaseCreate h = new fireBaseCreate(name,password);
         playersRef.runTransaction(h);
     }
 
     public void addListener(final String name) {
-        ref.child(Constant.FIREBASE_MULTI_PLAYER).child("Players").child(name).child("gameList").addChildEventListener(new GameListListener(mpcRef));
+        ref.child("Players").child(name).child("gameList").addChildEventListener(new GameListListener(mpcRef));
     }
 }
 

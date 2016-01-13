@@ -1,5 +1,7 @@
 package com.undyingideas.thor.skafottet.support.highscore.online;
 
+import android.util.Log;
+
 import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.PlayerDTO;
 
@@ -66,10 +68,7 @@ public final class HighScoreContent {
        builder.append("Rank ").append(position).append("\nWords Guessed\n");
         for (final LobbyPlayerStatus game : playedGames) {
             //Adds nextline (Word : Score xxxx) to details
-            if(game.getName().equals(playerName)) {
-                builder.append("\n").append(game.getWordList().get(0).getWordID())
-                        .append(" -> Score : ").append(game.getWordList().get(0).getScore());
-            }
+            Log.d("highscore", "heloo");
         }
         return builder.toString();
     }

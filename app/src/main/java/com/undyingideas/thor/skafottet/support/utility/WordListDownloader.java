@@ -117,7 +117,7 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, ArrayList<
     @Override
     protected void onPostExecute(final ArrayList<String> strings) {
         final WordListActivity wordListActivity = wordListActivityWeakReference.get();
-        GameUtility.s_wordList.addWordListDirect(new WordItem(title, url, strings), true);
+        GameUtility.s_wordList.addWordListDirect(new WordItem(title, url, strings));
         Log.d("Downloader", strings.toString());
         if (pd != null && pd.isShowing()) {
             pd.dismiss();
@@ -139,7 +139,7 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, ArrayList<
 
     @Override
     protected void onCancelled(final ArrayList<String> strings) {
-        if (strings.size() > 1) GameUtility.s_wordList.addWordListDirect(new WordItem(title, url, strings), true);
+        if (strings.size() > 1) GameUtility.s_wordList.addWordListDirect(new WordItem(title, url, strings));
         onCancelled();
         super.onCancelled(strings);
     }

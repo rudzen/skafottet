@@ -22,7 +22,6 @@ import android.widget.TextView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyPlayerStatus;
-import com.undyingideas.thor.skafottet.support.firebase.DTO.WordStatus;
 
 import java.util.ArrayList;
 
@@ -86,8 +85,8 @@ public class MultiplayerLobbyAdapter extends ArrayAdapter<LobbyDTO> {
         viewHolder.textViewName.setText(sb.toString());
 
         sb = new StringBuilder(100);
-        for (final WordStatus wordStatus : dto.getPlayerList().get(0).getWordList()) {
-            sb.append(wordStatus.getScore()).append(" , ");
+        for (final LobbyPlayerStatus status: dto.getPlayerList()) {
+            sb.append(status.getScore()).append(" , ");
         }
         if (sb.length() > 3) {
             sb.delete(sb.length() - 3, sb.length());
