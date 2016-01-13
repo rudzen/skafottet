@@ -1,5 +1,8 @@
 package com.undyingideas.thor.skafottet.support.firebase.DTO;
 
+import android.util.ArrayMap;
+import android.util.ArraySet;
+
 import java.util.ArrayList;
 
 /**
@@ -10,17 +13,17 @@ import java.util.ArrayList;
 public class LobbyDTO {
 
     private String word;
-    private ArrayList<LobbyPlayerStatus> playerList = new ArrayList<>();
+    private ArrayMap<String, LobbyPlayerStatus> playerList = new ArrayMap<>();
 
     public LobbyDTO(){
 
     }
 
     public void add(final LobbyPlayerStatus lps) {
-        playerList.add(lps);
+        playerList.put(lps.getName(), lps);
     }
 
-    public LobbyDTO(final String word, final ArrayList<LobbyPlayerStatus> playerList) {
+    public LobbyDTO(final String word, final ArrayMap<String, LobbyPlayerStatus> playerList) {
         this.word = word;
         this.playerList = playerList;
     }
@@ -33,11 +36,20 @@ public class LobbyDTO {
         this.word = word;
     }
 
-    public ArrayList<LobbyPlayerStatus> getPlayerList() {
+    public ArrayMap<String, LobbyPlayerStatus> getPlayerList() {
         return playerList;
     }
 
-    public void setPlayerList(final ArrayList<LobbyPlayerStatus> playerList) {
+    public void setPlayerList(final ArrayMap<String, LobbyPlayerStatus> playerList) {
         this.playerList = playerList;
+    }
+
+    @Override
+    public String toString() {
+        String s = "";
+        s += "Word = "+word;
+        s += " , names = ";
+        for(LobbyPlayerStatus status: playerList.values()) s+= status.getName() + " ";
+        return s;
     }
 }

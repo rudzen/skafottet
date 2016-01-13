@@ -124,7 +124,7 @@ public class LobbySelectorFragment extends Fragment {
     }
 
     private void onButtonPressed(final int position) {
-        if (mListener != null) mListener.onPlayerClicked(lobbys.get(position).getPlayerList().get(0).getName());
+        if (mListener != null) mListener.onPlayerClicked(lobbys.get(position).getPlayerList().valueAt(0).getName());
     }
 
     private void configureAdapter() {
@@ -175,7 +175,7 @@ public class LobbySelectorFragment extends Fragment {
                 if(GameUtility.mpc.name == null)
                     Log.e("lobbyselectorfrag", "error : name == null");
                 else {
-                    for (final LobbyPlayerStatus lobbyPlayerStatus : lobbySelectorFragment.lobbys.get(position).getPlayerList())
+                    for (final LobbyPlayerStatus lobbyPlayerStatus : lobbySelectorFragment.lobbys.get(position).getPlayerList().values())
                         if (lobbyPlayerStatus.getName().equals(GameUtility.mpc.name)){
 
                                 if (lobbyPlayerStatus.getScore() == -1) {
@@ -225,7 +225,7 @@ public class LobbySelectorFragment extends Fragment {
     private void removeInactive(ArrayList<LobbyDTO> l, String name) {
         for(LobbyDTO dto: l){
             boolean b = false;
-            for(LobbyPlayerStatus status: dto.getPlayerList()){
+            for(LobbyPlayerStatus status: dto.getPlayerList().values()){
                 if (status.getName().equals(name) && status.getScore() == -1) {
                     b = true;
                     break;

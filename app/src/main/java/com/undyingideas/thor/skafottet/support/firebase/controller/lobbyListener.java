@@ -32,11 +32,11 @@ class LobbyListener implements ChildEventListener {
             } else {
                 dto = mpc.lc.lobbyList.get(key);
             }
-            for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                if (ds.getKey().equals("word")) dto.setWord(ds.getValue(String.class));
-                else dto.getPlayerList().add(ds.getValue(LobbyPlayerStatus.class));
-            }
 
+            if (dataSnapshot.getKey().equals("word")) dto.setWord(dataSnapshot.getValue(String.class));
+            else dto.getPlayerList().put(dataSnapshot.getKey(),new LobbyPlayerStatus(dataSnapshot.getKey(), dataSnapshot.getValue(Integer.class)));
+
+            Log.d("firebase lobbylis", key + " " + dto.toString());
         }
         mpc.lobbyUpdate();
     }
