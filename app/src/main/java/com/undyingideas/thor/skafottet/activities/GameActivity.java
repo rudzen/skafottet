@@ -18,7 +18,7 @@ import com.undyingideas.thor.skafottet.fragments.HangmanGameFragment;
 import com.undyingideas.thor.skafottet.fragments.HelpFragment;
 import com.undyingideas.thor.skafottet.fragments.LobbySelectorFragment;
 import com.undyingideas.thor.skafottet.fragments.dialogs.Login;
-import com.undyingideas.thor.skafottet.game.Hanged;
+import com.undyingideas.thor.skafottet.game.HangedMan;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
@@ -89,7 +89,7 @@ public class GameActivity extends AppCompatActivity implements
                 // throw in the game from the preferences
                 addFragment(HangmanGameFragment.newInstance((SaveGame) GameUtility.s_prefereces.getObject(Constant.KEY_SAVE_GAME, SaveGame.class)));
             } else if (gameMode == Constant.MODE_SINGLE_PLAYER) {
-                addFragment(HangmanGameFragment.newInstance(new SaveGame(new Hanged(GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)), false, "Du")));
+                addFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(), false, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du")));
             } else if (gameMode == Constant.MODE_MULTI_PLAYER || gameMode == Constant.MODE_MULTI_PLAYER_2) {
                 Log.d("theis", "mode = " + gameMode);
                 // just show the current player list
@@ -102,7 +102,7 @@ public class GameActivity extends AppCompatActivity implements
                 addFragment(new HelpFragment());
             }
         } else {
-            addFragment(HangmanGameFragment.newInstance(new SaveGame(new Hanged(GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)), false, "Du")));
+            addFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(), false, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du")));
         }
     }
 
@@ -139,14 +139,14 @@ public class GameActivity extends AppCompatActivity implements
     @Override
     public void startNewMultiplayerGame(final String opponentName, final String theWord) {
         Log.d(TAG, "Want to start new game against : " + opponentName + " with word : " + theWord);
-        replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new Hanged(theWord), true, "Du", opponentName)));
+        replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(theWord), true, "Du", opponentName)));
     }
 
     @Override
     public void onEndGameButtonClicked(final boolean newGame) {
         if (newGame) {
             // only allowed in single player for now.
-            replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new Hanged(GameUtility.s_prefereces.getListString(GameUtility.KEY_MULIGE_ORD)), false, "Du")));
+            replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(), false, "Du")));
         } else {
             finish();
         }

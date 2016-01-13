@@ -14,6 +14,7 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by rudz on 19-11-2015.
@@ -45,15 +46,25 @@ public class WordItem implements Parcelable, Serializable {
     public WordItem(final String title, final String url, final ArrayList<String> list) {
         this(title, url, false);
         if (list != null) {
-            words = list;
+            words.addAll(list);
         }
     }
+
+    public WordItem(final String title, final String url, final String[] list) {
+        this(title, url, false);
+        Collections.addAll(words, list);
+    }
+
 
     public WordItem(final String title, final String url) {
         this(title, url, false);
     }
 
     /* -------------- Helper Methods  -------------- */
+
+    public void sortList() {
+        Collections.sort(words);
+    }
 
     public boolean addWord(final String word) {
         return !words.contains(word) && words.add(word);

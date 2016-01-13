@@ -12,8 +12,7 @@ import android.support.annotation.DrawableRes;
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.support.firebase.controller.MultiplayerController;
-import com.undyingideas.thor.skafottet.support.wordlist.WordList;
-import com.undyingideas.thor.skafottet.support.wordlist.Words;
+import com.undyingideas.thor.skafottet.support.wordlist.WordController;
 
 /**
  * Created on 04-01-2016, 18:47.
@@ -21,20 +20,17 @@ import com.undyingideas.thor.skafottet.support.wordlist.Words;
  *
  * @author rudz
  */
+@SuppressWarnings("StaticVariableNamingConvention")
 public abstract class GameUtility {
 
-    public static MultiplayerController mpc;
-    public static Firebase fb;
-
-    public static final String KEY_MULIGE_ORD = "muligeOrd";
-
     @SuppressWarnings("StaticVariableOfConcreteClass")
-    public static WordList s_wordList = new WordList();
+    public static MultiplayerController mpc;
+    public static Firebase firebase;
 
     @SuppressWarnings("StaticVariableOfConcreteClass")
     public static TinyDB s_prefereces;
 
-    public static Words words = new Words();
+    public static WordController s_wordController;
 
     public static @DrawableRes
     final int[] imageRefs = new int[8];

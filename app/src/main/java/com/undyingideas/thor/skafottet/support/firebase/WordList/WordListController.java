@@ -36,7 +36,6 @@ public class WordListController {
     }
 
     public void addList(final WordItem wordItem) {
-
         final String title = wordItem.getTitle();
         final Firebase listRef = firebase.child("Wordlist").child(title);
         for(final String s : wordItem.getWords()) {

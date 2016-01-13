@@ -4,19 +4,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.StringHelper;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
 
-public class Hanged implements Parcelable {
-
-//    private static final long serialVersionUID = 23111;
+public class HangedMan implements Parcelable {
 
     private String theWord;
-
-    private ArrayList<String> possibleWords = new ArrayList<>();
     private ArrayList<String> usedLetters = new ArrayList<>();
     private String visibleWord;
     private int numWrongLetters;
@@ -25,37 +20,16 @@ public class Hanged implements Parcelable {
     private boolean isGameWon;
     private boolean isGameLost;
 
-    private final static String TAG = "GalgeLogik2";
+    private final static String TAG = "HangedMan";
 
-    public Hanged() {
-    }
-
-    public Hanged(final boolean defaults) {
-        if (defaults) setDefaults();
-    }
-
-    public Hanged(final String theWord) {
-        this.theWord = theWord;
+    public HangedMan() {
+        theWord = null;
         reset();
     }
 
-    public Hanged(final ArrayList<String> def_list) {
-        if (!def_list.isEmpty()) {
-            possibleWords.addAll(def_list);
-            Collections.sort(possibleWords);
-        } else setDefaults();
-        reset(4);
-    }
-
-    private void setDefaults() {
-        possibleWords.add("bil");
-        possibleWords.add("busrute");
-        possibleWords.add("gangsti");
-        possibleWords.add("solsort");
-        possibleWords.add("computer");
-        possibleWords.add("motorvej");
-        possibleWords.add("skovsnegl");
-        possibleWords.add("programmering");
+    public HangedMan(final String theWord) {
+        this.theWord = theWord;
+        reset();
     }
 
     public boolean isGameOver() {
@@ -68,18 +42,7 @@ public class Hanged implements Parcelable {
         numCorrectLettersLast = 0;
         isGameLost = false;
         isGameWon = false;
-        updateVisibleWord();
-    }
-
-    public void reset(final int minWordLenght) {
-        usedLetters.clear();
-        numWrongLetters = 0;
-        numCorrectLettersLast = 0;
-        isGameLost = false;
-        isGameWon = false;
-        theWord = "";
-        final Random r = new Random();
-        while (theWord.length() < minWordLenght) theWord = possibleWords.get(r.nextInt(possibleWords.size()));
+        if (theWord == null) theWord = GameUtility.s_wordController.getRandomWord();
         updateVisibleWord();
     }
 
@@ -124,22 +87,6 @@ public class Hanged implements Parcelable {
         if (isGameLost) Log.d(TAG, "| SPILLET ER TABT");
         else if (isGameWon) Log.d(TAG, "| SPILLET ER VUNDET");
         Log.d(TAG, "---------------------");
-    }
-
-    public void updatePossibleWords(final ArrayList<String> nyeOrd) {
-        if (!possibleWords.isEmpty()) possibleWords.clear();
-        possibleWords.addAll(nyeOrd);
-        Log.d(TAG, "muligeOrd størrelse : " + possibleWords.size());
-        reset(4);
-    }
-
-    public ArrayList<String> getPossibleWords() {
-        return possibleWords;
-    }
-
-    public void setPossibleWords(final ArrayList<String> possibleWords) {
-        this.possibleWords.clear();
-        this.possibleWords.addAll(possibleWords);
     }
 
     public String getTheWord() {
@@ -213,7 +160,6 @@ public class Hanged implements Parcelable {
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeString(theWord);
-        dest.writeStringList(possibleWords);
         dest.writeStringList(usedLetters);
         dest.writeString(visibleWord);
         dest.writeInt(numWrongLetters);
@@ -223,9 +169,8 @@ public class Hanged implements Parcelable {
         dest.writeByte(isGameLost ? (byte) 1 : (byte) 0);
     }
 
-    private Hanged(final Parcel in) {
+    private HangedMan(final Parcel in) {
         theWord = in.readString();
-        possibleWords = in.createStringArrayList();
         usedLetters = in.createStringArrayList();
         visibleWord = in.readString();
         numWrongLetters = in.readInt();
@@ -235,13 +180,13 @@ public class Hanged implements Parcelable {
         isGameLost = in.readByte() != 0;
     }
 
-    public static final Creator<Hanged> CREATOR = new HangedCreator();
+    public static final Creator<HangedMan> CREATOR = new HangedCreator();
 
-    private static class HangedCreator implements Creator<Hanged> {
+    private static class HangedCreator implements Creator<HangedMan> {
         @Override
-        public Hanged createFromParcel(final Parcel source) {return new Hanged(source);}
+        public HangedMan createFromParcel(final Parcel source) {return new HangedMan(source);}
 
         @Override
-        public Hanged[] newArray(final int size) {return new Hanged[size];}
+        public HangedMan[] newArray(final int size) {return new HangedMan[size];}
     }
 }
