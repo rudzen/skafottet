@@ -29,6 +29,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.WordListAdapter;
 import com.undyingideas.thor.skafottet.adapters.WordTitleListAdapter;
+import com.undyingideas.thor.skafottet.adapters.WordTitleListFirebaseAdapter;
+import com.undyingideas.thor.skafottet.support.firebase.WordList.WordListController;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.StringHelper;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
@@ -65,8 +67,9 @@ public class WordListActivity extends AppCompatActivity implements
 
     private MaterialDialog md; // for add list
 
-    private ListView listBuildIn, listCustom;
-    private WordTitleListAdapter adapterBuildIn, adapterCustom;
+    private ListView listFireBase, listLocal;
+    private WordTitleListAdapter adapterLocal;
+    private WordTitleListFirebaseAdapter adapterFirebase;
 
     @SuppressLint("InflateParams")
     @Override
@@ -114,18 +117,18 @@ public class WordListActivity extends AppCompatActivity implements
         }
 
         /* configure the side bar lists */
-        listBuildIn = (ListView) mDrawerLayout.findViewById(R.id.nav_drawer_build_in_lists);
-        listCustom = (ListView) mDrawerLayout.findViewById(R.id.nav_drawer_custom_lists);
+        listFireBase = (ListView) mDrawerLayout.findViewById(R.id.nav_drawer_build_in_lists);
+        listLocal = (ListView) mDrawerLayout.findViewById(R.id.nav_drawer_custom_lists);
 
         /* configure the adapters for the side bar lists */
-        adapterBuildIn = new WordTitleListAdapter(this, R.layout.word_list_nav_drawer_list, GameUtility.s_wordList.getWords());
-        adapterCustom = new WordTitleListAdapter(this, R.layout.word_list_nav_drawer_list, GameUtility.s_wordList.getWords());
+        adapterLocal = new WordTitleListAdapter(this, R.layout.word_list_nav_drawer_list, GameUtility.s_wordList.getWords());
+        adapterFirebase = new WordTitleListFirebaseAdapter(this, R.layout.word_list_nav_drawer_list, WordListController.getKeyList());
 
-        listBuildIn.setAdapter(adapterBuildIn);
-        listCustom.setAdapter(adapterCustom);
+        listFireBase.setAdapter(adapterLocal);
+        listLocal.setAdapter(adapterFirebase);
 
-        listBuildIn.setOnItemClickListener(new ListBuildInTitleClickListener());
-        listCustom.setOnItemClickListener(new ListBuildInTitleClickListener());
+        listFireBase.setOnItemClickListener(new ListBuildInTitleClickListener());
+        listLocal.setOnItemClickListener(new ListBuildInTitleClickListener());
 
         stickyList.setStickyHeaderTopOffset(0);
     }

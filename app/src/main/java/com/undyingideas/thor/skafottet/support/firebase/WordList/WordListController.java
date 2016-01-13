@@ -11,6 +11,7 @@ import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 
@@ -45,6 +46,13 @@ public class WordListController {
 
     public static void saveList() {
         GameUtility.s_prefereces.putObject(Constant.KEY_WORDS_FIREBASE, wordList);
+    }
+
+    public static ArrayList<String> getKeyList() {
+        final ArrayList<String> returnList = new ArrayList<>(wordList.size());
+        returnList.addAll(wordList.keySet());
+        Collections.sort(returnList);
+        return returnList;
     }
 
     @SuppressWarnings("unchecked")

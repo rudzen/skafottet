@@ -12,7 +12,6 @@
               android:paddingTop="@dimen/activity_vertical_margin"
               android:weightSum="7">
 
-
     <ImageView
         android:id="@+id/end_game_image_view"
         android:layout_width="wrap_content"
