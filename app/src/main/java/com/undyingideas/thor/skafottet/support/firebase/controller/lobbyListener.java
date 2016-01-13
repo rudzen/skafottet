@@ -32,6 +32,11 @@ class LobbyListener implements ChildEventListener {
             } else {
                 dto = mpc.lc.lobbyList.get(key);
             }
+            for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                if (ds.getKey().equals("word")) dto.setWord(ds.getValue(String.class));
+                else dto.getPlayerList().add(ds.getValue(LobbyPlayerStatus.class));
+            }
+
         }
         mpc.lobbyUpdate();
     }
@@ -62,6 +67,7 @@ class LobbyListener implements ChildEventListener {
     }
 
     private static LobbyDTO getDTO(final DataSnapshot ds) {
+        /*
         if (GameUtility.mpc.lc.lobbyList.containsKey(ds.getRef().getParent().getKey())
         final LobbyDTO dto = new LobbyDTO();
         dto.setWord(ds.child("word").getValue(String.class));
@@ -70,5 +76,7 @@ class LobbyListener implements ChildEventListener {
         Log.d("firebase", );
         //Log.d("firebase", dto.getWord() + dto.getPlayerList().get(0).getName() + dto.getPlayerList().get(1).getName());
         return dto;
+        */
+        return null;
     }
 }
