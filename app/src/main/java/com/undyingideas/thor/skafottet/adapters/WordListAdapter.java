@@ -172,12 +172,7 @@ public class WordListAdapter extends BaseAdapter implements StickyListHeadersAda
     }
 
     public void restore(final ArrayList<String> list) {
-        if (mItems == null) {
-            mItems = new ArrayList<>();
-        } else if (!mItems.isEmpty()) {
-            mItems.clear();
-        }
-        mItems.addAll(list);
+        mItems = list;
         mSectionIndices = getSectionIndices();
         mSectionLetters = getSectionLetters();
         notifyDataSetChanged();

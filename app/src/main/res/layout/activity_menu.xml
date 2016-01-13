@@ -9,14 +9,17 @@
   ~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   -->
 
-<RelativeLayout android:id="@+id/menu_background"
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:focusableInTouchMode="false"
-                android:orientation="vertical"
-                android:background="@drawable/reaper"
-                android:clickable="false">
+<RelativeLayout
+    android:id="@+id/menu_background"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/reaper"
+    android:clickable="false"
+    android:focusableInTouchMode="false"
+    android:orientation="vertical"
+    tools:context=".activities.MenuActivity">
 
     <com.undyingideas.thor.skafottet.views.StarField
         android:id="@+id/sf"
@@ -33,98 +36,101 @@
         android:id="@+id/menu_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/menu_image_logo"
+        android:layout_alignRight="@+id/menu_image_logo"
+        android:layout_centerHorizontal="true"
         android:background="@drawable/title_text"
         android:clickable="true"
-        android:contentDescription="The title image"
-        android:layout_alignRight="@+id/menu_image_logo"
-        android:layout_alignEnd="@+id/menu_image_logo"
-        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/contentDescriptionMenuTitle"
         />
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         >
 
         <ImageView
             android:id="@+id/menu_button_play"
-            android:background="@drawable/button_play"
             style="@style/menu_button_style"
             android:layout_marginTop="125dp"
-            />
+            android:background="@drawable/button_play"
+            android:contentDescription="@string/contentDescriptionMenuButtonPlay"/>
 
         <ImageView
             android:id="@+id/menu_button_highscore"
-            android:background="@drawable/button_highscore"
             style="@style/menu_button_style"
-            />
+            android:background="@drawable/button_highscore"
+            android:contentDescription="@string/contentDescriptionMenuHighscore"/>
 
         <ImageView
             android:id="@+id/menu_button_word_lists"
-            android:background="@drawable/button_ordlister"
             style="@style/menu_button_style"
-            />
+            android:background="@drawable/button_ordlister"
+            android:contentDescription="@string/contentDescriptionMenuWordLists"/>
 
         <ImageView
             android:id="@+id/menu_button_settings"
+            style="@style/menu_button_style"
             android:background="@drawable/button_settings"
-            style="@style/menu_button_style"/>
+            android:contentDescription="@string/contentDescriptionMenuSettings"/>
 
         <ImageView
             android:id="@+id/menu_button_about"
+            style="@style/menu_button_style"
             android:background="@drawable/button_about"
-            style="@style/menu_button_style"/>
+            android:contentDescription="@string/contentDescriptionMenuAbout"/>
 
         <ImageView
             android:id="@+id/menu_button_help"
-            android:background="@drawable/button_help"
             style="@style/menu_button_style"
-            />
+            android:background="@drawable/button_help"
+            android:contentDescription="@string/contentDescriptionMenuHelp"/>
 
         <ImageView
-            style="@style/menu_button_style"
             android:id="@+id/menu_button_login_out"
+            style="@style/menu_button_style"
             android:background="@drawable/button_login"
-            />
+            android:contentDescription="@string/contentDescriptionMenuLogInOut"/>
 
         <ImageView
             android:id="@+id/menu_button_quit"
-            android:background="@drawable/button_end"
             style="@style/menu_button_style"
-            android:layout_marginBottom="75dp"/>
+            android:layout_marginBottom="75dp"
+            android:background="@drawable/button_end"
+            android:contentDescription="@string/contentDescriptionMenuQuit"/>
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/LoginLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="1"
-            android:clickable="true"
             android:background="?selectableItemBackground"
-            android:id="@+id/LoginLayout">
+            android:clickable="true"
+            android:orientation="horizontal"
+            android:weightSum="1">
 
             <ImageView
                 android:id="@+id/menu_image_logo"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:contentDescription="Logo"
                 android:background="@drawable/game_end_lost"
-                android:clickable="false" />
+                android:clickable="false"
+                android:contentDescription="Logo"/>
 
             <TextView
+                android:id="@+id/loginText"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="login"
-                android:id="@+id/loginText"
-                android:clickable="false"
-                android:textIsSelectable="false"
                 android:layout_gravity="center"
-                android:layout_marginTop="4dp"
-                android:layout_marginLeft="10dp"
                 android:layout_marginBottom="4dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginRight="20dp"
-                android:contextClickable="true" />
+                android:layout_marginTop="4dp"
+                android:clickable="false"
+                android:contextClickable="true"
+                android:text="login"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textIsSelectable="false"/>
         </LinearLayout>
 
     </LinearLayout>

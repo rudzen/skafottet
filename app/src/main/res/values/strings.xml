@@ -22,7 +22,20 @@
     <string name="menu_new_multi_player_game">Nyt multiplayer</string>
     <string name="game_lost">Du er død!</string>
     <string name="game_won">Du undslap galgen!</string>
-
+    <string name="contentDescriptionMenuTitle">The title image</string>
+    <string name="contentDescriptionMenuButtonPlay">Play button</string>
+    <string name="contentDescriptionMenuHighscore">Highscore button</string>
+    <string name="contentDescriptionMenuWordLists">Word list button</string>
+    <string name="contentDescriptionMenuSettings">Settings button</string>
+    <string name="contentDescriptionMenuAbout">About button</string>
+    <string name="contentDescriptionMenuHelp">Help button</string>
+    <string name="contentDescriptionMenuLogInOut">Login/out button</string>
+    <string name="contentDescriptionMenuQuit">Quit button</string>
+    <string name="contentDescriptionLoadingImage">Splash screen image</string>
+    <string name="loading_text">Forbereder Galgen!</string>
+    <string name="contentDescriptionEndResultImage">Result image</string>
+    <string name="contentDescriptionEndMainMenuButton">End main menu button</string>
+    <string name="contentDescriptionEndNewGameButton">End new game button</string>
 
 
 </resources>

@@ -50,8 +50,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 public class WordListActivity extends AppCompatActivity implements
         AdapterView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener,
         StickyListHeadersListView.OnStickyHeaderOffsetChangedListener,
-        StickyListHeadersListView.OnStickyHeaderChangedListener
-        {
+        StickyListHeadersListView.OnStickyHeaderChangedListener {
 
     private static boolean fadeHeader = true;
 
@@ -225,10 +224,14 @@ public class WordListActivity extends AppCompatActivity implements
     }
 
     @Override
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onStickyHeaderChanged(final StickyListHeadersListView l, final View header, final int itemPosition, final long headerId) {
         header.setAlpha(1);
     }
+
+    public void refreshList() {
+        mAdapter.restore(GameUtility.s_wordList.getCurrentActiveList());
+    }
+
 
     private class ButtonClickListener implements View.OnClickListener {
         @Override
@@ -299,7 +302,7 @@ public class WordListActivity extends AppCompatActivity implements
             wordListActivityWeakReference = new WeakReference<>(wordListActivity);
         }
 
-        private static boolean isValid(final Context context,@NonNull final String title, @NonNull final String url) {
+        private static boolean isValid(final Context context, @NonNull final String title, @NonNull final String url) {
             final boolean validStuff = !title.isEmpty() && !url.isEmpty() && Pattern.compile(StringHelper.VALID_URL).matcher(url).find();
             if (validStuff) return true;
             Toast.makeText(context, "Forkert indtastede informationer.", Toast.LENGTH_SHORT).show();

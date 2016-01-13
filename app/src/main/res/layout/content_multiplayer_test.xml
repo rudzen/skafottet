@@ -13,8 +13,8 @@
     tools:showIn="@layout/fragment_multi_player_player">
 
     <ListView
+        android:id="@+id/multiplayer_player_list"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/multiplayer_player_list"/>
-    
+        android:layout_height="wrap_content"/>
+
 </RelativeLayout>

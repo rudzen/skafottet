@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.undyingideas.thor.skafottet.activities.WordListActivity;
 import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
 
 import java.io.BufferedReader;
@@ -32,13 +33,13 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, ArrayList<
     private static final Pattern removeSpaces = Pattern.compile("  ");
     private static final Pattern removeNonDK = Pattern.compile("[^a-zæøå]");
     private static final Pattern removeTags = Pattern.compile("<.+?>");
-    private final WeakReference<AppCompatActivity> appCompatActivityWeakReference;
+    private final WeakReference<WordListActivity> wordListActivityWeakReference;
     private final ArrayList<String> words = new ArrayList<>(100);
     private final String title, url;
     private MaterialDialog pd;
 
-    public WordListDownloader(final AppCompatActivity appCompatActivity, final WordItem wordItem) {
-        appCompatActivityWeakReference = new WeakReference<>(appCompatActivity);
+    public WordListDownloader(final WordListActivity wordListActivity, final WordItem wordItem) {
+        wordListActivityWeakReference = new WeakReference<>(wordListActivity);
         title = wordItem.getTitle();
         url = wordItem.getUrl();
     }
@@ -56,7 +57,7 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, ArrayList<
                 if (line.length() > 4) {
                     sb.append(line).append('\n');
                 }
-                line = br.readLine();
+                line = br.readLine().trim();
             }
         } catch (final Exception e) {
             // meh
@@ -70,9 +71,9 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, ArrayList<
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        final AppCompatActivity appCompatActivity = appCompatActivityWeakReference.get();
-        if (appCompatActivity != null) {
-            pd = new MaterialDialog.Builder(appCompatActivity)
+        final WordListActivity wordListActivity = wordListActivityWeakReference.get();
+        if (wordListActivity != null) {
+            pd = new MaterialDialog.Builder(wordListActivity)
                     .title("Indhenter " + title)
                     .content("Vent...")
                     .progress(true, 0)
@@ -85,8 +86,8 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, ArrayList<
 
     @Override
     protected ArrayList<String> doInBackground(final Void... params) {
-        final AppCompatActivity appCompatActivity = appCompatActivityWeakReference.get();
-        if (appCompatActivity != null) {
+        final WordListActivity wordListActivity = wordListActivityWeakReference.get();
+        if (wordListActivity != null) {
             publishProgress("Henter fra\n" + url, "Henter ordliste.");
             try {
                 final HashSet<String> dude = new HashSet<>();
@@ -115,10 +116,14 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, ArrayList<
 
     @Override
     protected void onPostExecute(final ArrayList<String> strings) {
+        final WordListActivity wordListActivity = wordListActivityWeakReference.get();
         GameUtility.s_wordList.addWordListDirect(new WordItem(title, url, strings), true);
         Log.d("Downloader", strings.toString());
         if (pd != null && pd.isShowing()) {
             pd.dismiss();
+        }
+        if (wordListActivity != null) {
+            wordListActivity.recreate();
         }
         super.onPostExecute(strings);
     }
@@ -141,7 +146,7 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, ArrayList<
 
     @Override
     protected void onCancelled() {
-        final AppCompatActivity appCompatActivity = appCompatActivityWeakReference.get();
+        final AppCompatActivity appCompatActivity = wordListActivityWeakReference.get();
         if (appCompatActivity != null && pd != null && pd.isShowing()) pd.dismiss();
         Toast.makeText(appCompatActivity, "Download afbrudt.", Toast.LENGTH_SHORT).show();
         super.onCancelled();
