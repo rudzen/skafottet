@@ -126,12 +126,13 @@ public class LobbySelectorFragment extends Fragment {
     }
 
     private void onButtonPressed(final int position) {
-        if (mListener != null) mListener.onPlayerClicked(lobbys.get(position).getPlayerList().valueAt(0).getName());
+        if (mListener != null) mListener.onPlayerClicked(lobbys.get(position).getPlayerList().get(0).getName());
     }
 
     private void configureAdapter() {
         lobbys.clear();
-        removeInactive(GameUtility.mpc.lc.lobbyList, GameUtility.mpc.name);
+
+        removeInactive(GameUtility.mpc.name);
         lobbyAdapter = new MultiplayerLobbyAdapter(GameUtility.mpc.name, getContext(), R.layout.multiplayer_player_list_row, lobbys);
         listView.setAdapter(lobbyAdapter);
         listView.setOnItemClickListener(new OnLobbyClick(this));
@@ -176,7 +177,7 @@ public class LobbySelectorFragment extends Fragment {
                 if(GameUtility.mpc.name == null)
                     Log.e("lobbyselectorfrag", "error : name == null");
                 else {
-                    for (final LobbyPlayerStatus lobbyPlayerStatus : lobbySelectorFragment.lobbys.get(position).getPlayerList().values())
+                    for (final LobbyPlayerStatus lobbyPlayerStatus : lobbySelectorFragment.lobbys.get(position).getPlayerList())
                         if (lobbyPlayerStatus.getName().equals(GameUtility.mpc.name)){
 
                                 if (lobbyPlayerStatus.getScore() == -1) {
@@ -189,6 +190,7 @@ public class LobbySelectorFragment extends Fragment {
                                         if (dto.equals(GameUtility.mpc.lc.lobbyList.get(key)))
                                             { k = key; break; }
 
+                                    GameUtility.mpc.setRunnable(null);
                                     lobbySelectorFragment.mListener.startNewMultiplayerGame(k, dto.getWord());
                                     //TODO
                                     return;
@@ -213,7 +215,8 @@ public class LobbySelectorFragment extends Fragment {
                 // TODO not logged in
             } else {
                 lobbys.clear();
-                removeInactive(GameUtility.mpc.lc.lobbyList, GameUtility.mpc.name);
+
+                removeInactive(GameUtility.mpc.name);
                 lobbyAdapter = new MultiplayerLobbyAdapter(GameUtility.mpc.name, getContext(), R.layout.multiplayer_player_list_row, lobbys);
                 listView.setAdapter(lobbyAdapter);
                 lobbyAdapter.notifyDataSetChanged();
@@ -222,18 +225,19 @@ public class LobbySelectorFragment extends Fragment {
         }
     }
 
-    private HashMap<String, LobbyDTO> removeInactive(HashMap<String, LobbyDTO> l, String name) {
-        for(LobbyDTO dto: l.values()){
-            boolean b = false;
-            for(LobbyPlayerStatus status: dto.getPlayerList().values()){
-                if (status.getName().equals(name) && status.getScore() == -1) {
-                    b = true;
-                    break;
-                }
+    private void removeInactive(String name) {
+        ArrayList<LobbyDTO> dtoList = new ArrayList<>();
+        dtoList.addAll(GameUtility.mpc.lc.lobbyList.values());
+        boolean b;
+        for(LobbyDTO dto : dtoList) {
+            b = false;
+            for(LobbyPlayerStatus status : dto.getPlayerList()){
+                if (status.getScore() == -1 && status.getName().equals(name))
+                {b = true; break; }
             }
-            if (b) lobbys.add(dto);
+            if(b) lobbys.add(dto);
         }
-        return l;
+
     }
 
 }

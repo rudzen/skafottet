@@ -36,8 +36,9 @@ public class LobbyDTO {
         this.word = word;
     }
 
-    public ArrayMap<String, LobbyPlayerStatus> getPlayerList() {
-        return playerList;
+    public ArrayList<LobbyPlayerStatus> getPlayerList() {
+        ArrayList<LobbyPlayerStatus> a = new ArrayList<>(playerList.values());
+        return a;
     }
 
     public void setPlayerList(final ArrayMap<String, LobbyPlayerStatus> playerList) {
@@ -51,5 +52,9 @@ public class LobbyDTO {
         s += " , names = ";
         for(LobbyPlayerStatus status: playerList.values()) s+= status.getName() + " ";
         return s;
+    }
+
+    public void put(String key, LobbyPlayerStatus lobbyPlayerStatus) {
+        playerList.put(key, lobbyPlayerStatus);
     }
 }
