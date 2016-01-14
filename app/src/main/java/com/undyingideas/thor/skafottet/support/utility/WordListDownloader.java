@@ -2,9 +2,7 @@ package com.undyingideas.thor.skafottet.support.utility;
 
 import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.undyingideas.thor.skafottet.activities.WordListActivity;
@@ -28,20 +26,19 @@ import java.util.regex.Pattern;
  *
  * @author rudz
  */
-public class WordListDownloader extends AsyncTask<Void, CharSequence, ArrayList<String>> {
+public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> {
 
     private static final Pattern removeSpaces = Pattern.compile("  ");
     private static final Pattern removeNonDK = Pattern.compile("[^a-zæøå]");
     private static final Pattern removeTags = Pattern.compile("<.+?>");
     private final WeakReference<WordListActivity> wordListActivityWeakReference;
-    private final ArrayList<String> words = new ArrayList<>(100);
     private final String title, url;
     private MaterialDialog pd;
 
-    public WordListDownloader(final WordListActivity wordListActivity, final WordItem wordItem) {
+    public WordListDownloader(final WordListActivity wordListActivity, final String title, final String url) {
         wordListActivityWeakReference = new WeakReference<>(wordListActivity);
-        title = wordItem.getTitle();
-        url = wordItem.getUrl();
+        this.title = title;
+        this.url = url;
     }
 
     private String downloadURL() throws IOException {
@@ -54,7 +51,7 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, ArrayList<
                     publishProgress("Downloader.... " + Integer.toString(count), "Vent...");
                     count = 1;
                 }
-                if (line.length() > 4) {
+                if (line.length() >= 4) {
                     sb.append(line).append('\n');
                 }
                 line = br.readLine().trim();
@@ -86,11 +83,12 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, ArrayList<
     }
 
     @Override
-    protected ArrayList<String> doInBackground(final Void... params) {
+    protected WordItem doInBackground(final Void... params) {
         final WordListActivity wordListActivity = wordListActivityWeakReference.get();
         if (wordListActivity != null) {
             publishProgress("Henter fra\n" + url, "Henter ordliste.");
             try {
+                final ArrayList<String> words = new ArrayList<>();
                 final HashSet<String> dude = new HashSet<>();
                 final StringTokenizer stringTokenizer = new StringTokenizer(downloadURL(), "\n");
                 int count = stringTokenizer.countTokens();
@@ -103,30 +101,32 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, ArrayList<
                 }
                 publishProgress("Fjerner duplanter og sorterer.");
                 dude.addAll(words);
-                words.clear();
-                words.addAll(dude);
-                Collections.sort(words);
+                final WordItem wordItem = new WordItem(title, url);
+                wordItem.getWords().addAll(dude);
+                Collections.sort(wordItem.getWords());
+                return wordItem;
             } catch (final IOException ioe) {
                 pd.dismiss();
                 cancel(true);
             }
-            return words;
         }
         return null;
     }
 
     @Override
-    protected void onPostExecute(final ArrayList<String> strings) {
-        final WordListActivity wordListActivity = wordListActivityWeakReference.get();
-        GameUtility.s_wordController.addLocalWordList(title, url, strings);
-        Log.d("Downloader", strings.toString());
+    protected void onPostExecute(final WordItem wordItem) {
+
+        GameUtility.s_wordController.replaceLocalWordList(wordItem);
+        GameUtility.s_prefereces.putObject(Constant.KEY_WORDS_LOCAL, GameUtility.s_wordController);
+        Log.d("Downloader", wordItem.toString());
         if (pd != null && pd.isShowing()) {
             pd.dismiss();
         }
+        final WordListActivity wordListActivity = wordListActivityWeakReference.get();
         if (wordListActivity != null) {
-            wordListActivity.recreate();
+            wordListActivity.refreshList();
         }
-        super.onPostExecute(strings);
+        super.onPostExecute(wordItem);
     }
 
     @Override
@@ -140,16 +140,16 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, ArrayList<
 
     @Override
     protected void onCancelled() {
-        final AppCompatActivity appCompatActivity = wordListActivityWeakReference.get();
-        if (appCompatActivity != null && pd != null && pd.isShowing()) pd.dismiss();
-        Toast.makeText(appCompatActivity, "Download afbrudt.", Toast.LENGTH_SHORT).show();
-        super.onCancelled();
+//        final AppCompatActivity appCompatActivity = wordListActivityWeakReference.get();
+//        if (appCompatActivity != null && pd != null && pd.isShowing()) pd.dismiss();
+//        Toast.makeText(appCompatActivity, "Download afbrudt.", Toast.LENGTH_SHORT).show();
+//        super.onCancelled();
     }
 
     private class DownloaderOnCancelListener implements DialogInterface.OnCancelListener {
         @Override
         public void onCancel(final DialogInterface dialog) {
-            onCancelled(words);
+//            pd.dismiss();
         }
     }
 }

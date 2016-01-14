@@ -37,6 +37,7 @@ import com.undyingideas.thor.skafottet.support.utility.WordListDownloader;
 import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
 
 import java.lang.ref.WeakReference;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
@@ -48,6 +49,7 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_word
  * Project : skafottet
  * This activity is responsible for a couple of things.
  * First off, the lists can be viewed.
+ *
  * @author rudz
  */
 public class WordListActivity extends AppCompatActivity implements
@@ -72,6 +74,10 @@ public class WordListActivity extends AppCompatActivity implements
     private WordTitleLocalAdapter adapterLocal;
     private WordTitleRemoteAdapter adapterRemote;
 
+    private Handler handler;
+    private Runnable refreshStopper;
+
+
     @SuppressLint("InflateParams")
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -81,7 +87,7 @@ public class WordListActivity extends AppCompatActivity implements
         /* long arsed onCreate, but unfortunatly it's the min. req code */
 
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.word_list_refresh_layout);
-        refreshLayout.setOnRefreshListener(new SwipeOnRefreshListener());
+        refreshLayout.setOnRefreshListener(new SwipeOnRefreshListener(this));
 
         mAdapter = new WordListAdapter(this, s_wordController.getCurrentList());
 
@@ -134,6 +140,9 @@ public class WordListActivity extends AppCompatActivity implements
         listLocal.setOnItemClickListener(new ListLocalTitleClickListener());
 
         stickyList.setStickyHeaderTopOffset(0);
+
+        refreshStopper = new RefreshStopper();
+        handler = new Handler();
     }
 
     @Override
@@ -217,6 +226,8 @@ public class WordListActivity extends AppCompatActivity implements
     }
 
     public void refreshList() {
+        adapterLocal.notifyDataSetChanged();
+        adapterRemote.notifyDataSetChanged();
         mAdapter.restore(s_wordController.getCurrentList());
     }
 
@@ -227,10 +238,26 @@ public class WordListActivity extends AppCompatActivity implements
         }
     }
 
-    private class SwipeOnRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
+    private static class SwipeOnRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
+
+        private final WeakReference<WordListActivity> wordListActivityWeakReference;
+
+        public SwipeOnRefreshListener(final WordListActivity wordListActivity) {
+            wordListActivityWeakReference = new WeakReference<>(wordListActivity);
+        }
+
         @Override
         public void onRefresh() {
-            new Handler().postDelayed(new RefreshStopper(), 1000);
+            final WordListActivity wordListActivity = wordListActivityWeakReference.get();
+            if (wordListActivity != null) {
+                if (s_wordController.isLocal() && !Objects.equals(s_wordController.getLocalWords().get(s_wordController.getIndexLocale()).getUrl(), "Lokal")) {
+                    final WordItem wordItem = s_wordController.getLocalWords().get(s_wordController.getIndexLocale());
+                    new WordListDownloader(wordListActivity, wordItem.getTitle(), wordItem.getUrl());
+                    wordListActivity.handler.postDelayed(wordListActivity.refreshStopper, 500);
+                } else {
+                    wordListActivity.handler.post(wordListActivity.refreshStopper);
+                }
+            }
         }
     }
 
@@ -309,10 +336,15 @@ public class WordListActivity extends AppCompatActivity implements
         @Override
         public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
             Log.d(TAG, "Local : " + position);
-//            Toast.makeText(getApplicationContext(), "Local List title clicked : " + position + " (" + s_wordController.getLocalWords().get(position).getTitle() , Toast.LENGTH_SHORT).show();
-            s_wordController.setCurrentLocalList(position);
-            s_wordController.setIsLocal(true);
-            refreshList();
+            if (!s_wordController.isLocal() || s_wordController.getIndexLocale() != position) {
+                s_wordController.setCurrentLocalList(position);
+                s_wordController.setIsLocal(true);
+                WindowLayout.showSnack("Ordliste skiftet til '" + s_wordController.getLocalWords().get(position).getTitle() + "'", stickyList, true);
+                refreshList();
+            } else {
+                WindowLayout.showSnack("'" + s_wordController.getLocalWords().get(position).getTitle() + "' er allerede din aktive ordliste.", stickyList, true);
+            }
+            mDrawerLayout.closeDrawer(GravityCompat.START);
         }
     }
 
@@ -320,10 +352,17 @@ public class WordListActivity extends AppCompatActivity implements
         @Override
         public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
             Log.d(TAG, "Remote : " + view.getTag());
-//            Toast.makeText(getApplicationContext(), "List title clicked : " + view.getTag(), Toast.LENGTH_SHORT).show();
-            s_wordController.setIndexRemote((String) view.getTag());
-            s_wordController.setIsLocal(false);
-            refreshList();
+            final String tag = (String) view.getTag();
+            if (s_wordController.isLocal() || !Objects.equals(tag, s_wordController.getIndexRemote())) {
+                s_wordController.setIndexRemote((String) view.getTag());
+                s_wordController.setIsLocal(false);
+                s_wordController.setCurrentLocalList(-1);
+                WindowLayout.showSnack("Ordliste skiftet til '" + tag + "'", stickyList, true);
+                refreshList();
+            } else {
+                WindowLayout.showSnack("'" + tag + "' er allerede din aktive ordliste.", stickyList, true);
+            }
+            mDrawerLayout.closeDrawer(GravityCompat.START);
         }
     }
 
@@ -336,13 +375,11 @@ public class WordListActivity extends AppCompatActivity implements
 
         Log.d("AddListFinished", "Title : " + title);
         Log.d("AddListFinished", "URL   : " + url);
-        Log.d("AddListFinished", "Title : " + startDownload);
+        Log.d("AddListFinished", "Start Download : " + startDownload);
 
         // this is where the list is initiated to be downloaded...
-        final WordItem wordItem = new WordItem(title, url, startDownload);
-
         if (startDownload) {
-            new WordListDownloader(this, wordItem).execute();
+            new WordListDownloader(this, title, url).execute();
         } else {
             s_wordController.addLocalWordList(title, url);
         }

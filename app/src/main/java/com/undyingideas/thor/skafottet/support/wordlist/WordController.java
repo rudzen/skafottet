@@ -95,6 +95,21 @@ public final class WordController implements Serializable, Parcelable {
         return true;
     }
 
+    public void replaceLocalWordList(final WordItem wordItem) {
+        // quick hack
+        boolean replaced = false;
+        for (int i = 0; i < localWords.size(); i++) {
+            if (Objects.equals(wordItem.getTitle().toLowerCase(), localWords.get(i).getTitle().toLowerCase()) && Objects.equals(wordItem.getUrl().toLowerCase(), localWords.get(i).getUrl().toLowerCase())) {
+                localWords.get(i).replaceWordList(wordItem.getWords());
+                replaced = true;
+                break;
+            }
+        }
+        if (!replaced) {
+            addLocalWordList(wordItem.getTitle(), wordItem.getUrl(), wordItem.getWords());
+        }
+    }
+
     public int getListCount() {
         return localWords.size() + WordListController.wordList.size();
     }

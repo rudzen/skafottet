@@ -91,13 +91,18 @@ public class WordItem implements Parcelable, Serializable {
         return words.size();
     }
 
+    public void replaceWordList(final ArrayList<String> newWords) {
+        words.clear();
+        words.addAll(newWords);
+    }
+
     /* -------------- Getters & Setters -------------- */
 
     public ArrayList<String> getWords() {
         return words;
     }
 
-    private void setWords(final ArrayList<String> words) {
+    public void setWords(final ArrayList<String> words) {
         this.words = words;
     }
 
