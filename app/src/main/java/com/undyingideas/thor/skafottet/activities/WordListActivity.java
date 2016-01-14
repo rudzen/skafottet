@@ -61,7 +61,6 @@ public class WordListActivity extends AppCompatActivity implements
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
 
-
     private StickyListHeadersListView stickyList;
     private SwipeRefreshLayout refreshLayout;
 
@@ -195,12 +194,12 @@ public class WordListActivity extends AppCompatActivity implements
 
     @Override
     public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-        Toast.makeText(this, "Item " + position + " clicked!", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Item " + position + " clicked!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onHeaderClick(final StickyListHeadersListView l, final View header, final int itemPosition, final long headerId, final boolean currentlySticky) {
-        Toast.makeText(this, "Header " + headerId + " currentlySticky ? " + currentlySticky, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Header " + headerId + " currentlySticky ? " + currentlySticky, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -310,10 +309,9 @@ public class WordListActivity extends AppCompatActivity implements
         @Override
         public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
             Log.d(TAG, "Local : " + position);
-            Toast.makeText(getApplicationContext(), "Local List title clicked : " + position + " (" + s_wordController.getLocalWords().get(position).getTitle() , Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "Local List title clicked : " + position + " (" + s_wordController.getLocalWords().get(position).getTitle() , Toast.LENGTH_SHORT).show();
             s_wordController.setCurrentLocalList(position);
             s_wordController.setIsLocal(true);
-
             refreshList();
         }
     }
@@ -321,18 +319,13 @@ public class WordListActivity extends AppCompatActivity implements
     private class ListRemoteTitleClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-//            final String tag = (String) view.getTag();
-//            Log.d(TAG, "Remote : " + view.getTag().toString());
-
-            Toast.makeText(getApplicationContext(), "List title clicked : " + view.getTag(), Toast.LENGTH_SHORT).show();
-
+            Log.d(TAG, "Remote : " + view.getTag());
+//            Toast.makeText(getApplicationContext(), "List title clicked : " + view.getTag(), Toast.LENGTH_SHORT).show();
             s_wordController.setIndexRemote((String) view.getTag());
             s_wordController.setIsLocal(false);
-
             refreshList();
         }
     }
-
 
     private void onFinishAddWordListDialog(final String title, final String url, final boolean startDownload) {
         /* the recieved input from the dual-edittext dialog fragment */

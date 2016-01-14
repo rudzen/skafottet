@@ -24,8 +24,9 @@
     <string name="game_won">Du undslap galgen!</string>
 
     <!-- WordList -->
-    <string name="word_lists_predefined">Lokale Lister</string>
-    <string name="word_lists_selfdefined">Online Lister</string>
+    <!--<string name="word_lists">Eksisterende Ordlister</string>-->
+    <string name="word_lists_local">Lokale Lister</string>
+    <string name="word_lists_remote">Online Lister</string>
 
     <!-- LoadingActivity -->
     <string name="loading_text">Forbereder Galgen!</string>

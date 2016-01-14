@@ -63,7 +63,7 @@
             android:padding="5dp"
             android:scrollbars="none">
 
-            <include layout="@layout/word_list_nav_drawer2">
+            <include layout="@layout/word_list_nav_drawer">
             </include>
 
         </ScrollView>

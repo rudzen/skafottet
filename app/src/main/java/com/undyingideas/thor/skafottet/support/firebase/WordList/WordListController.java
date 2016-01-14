@@ -18,9 +18,10 @@ import java.util.HashMap;
 /**
  * Created on 08-01-2016, 12:13.
  * Project : skafottet
- * @author Emil
  */
 public class WordListController {
+
+    private static final String TAG = "WordListController";
 
     private final Firebase firebase;
     public static HashMap<String, WordItem> wordList = new HashMap<>();
@@ -50,6 +51,7 @@ public class WordListController {
     public static ArrayList<String> getKeyList() {
         final ArrayList<String> returnList = new ArrayList<>(wordList.size());
         returnList.addAll(wordList.keySet());
+        Log.d(TAG, returnList.toString());
         Collections.sort(returnList);
         return returnList;
     }
@@ -69,12 +71,14 @@ public class WordListController {
         public void onChildAdded(final DataSnapshot dataSnapshot, final String s) {
             Log.d("UpdateList", "firebase" + dataSnapshot.getKey());
             wordList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
+            saveList();
         }
 
         @Override
         public void onChildChanged(final DataSnapshot dataSnapshot, final String s) {
             wordList.remove(s);
             wordList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
+            saveList();
         }
 
         @Override
@@ -94,7 +98,7 @@ public class WordListController {
 
         private WordItem getDTO(final DataSnapshot dataSnapshot) {
             final WordItem dto = new WordItem(dataSnapshot.getKey(), null);
-            for(final DataSnapshot s : dataSnapshot.getChildren()) dto.addWord(s.getValue().toString());
+            for(final DataSnapshot snapshot : dataSnapshot.getChildren()) dto.addWord(snapshot.getValue().toString());
             return dto;
         }
     }

@@ -65,7 +65,7 @@ public class LoadingActivity extends AppCompatActivity {
             }
         }
 
-        @SuppressWarnings({"AssignmentToStaticFieldFromInstanceMethod", "unchecked"})
+        @SuppressWarnings({"AssignmentToStaticFieldFromInstanceMethod", "unchecked", "OverlyLongMethod"})
         @Override
         protected Boolean doInBackground(final Void... params) {
             final LoadingActivity loadingActivity = loadingScreenWeakReference.get();
@@ -94,13 +94,10 @@ public class LoadingActivity extends AppCompatActivity {
 
                 try {
                     s_prefereces.checkForNullValue(Constant.KEY_WORDS_LOCAL);
-//                    s_wordController.setLocalWords((ArrayList<WordItem>) s_prefereces.getObject(Constant.KEY_WORDS_LOCAL, ArrayList.class);
                     s_wordController = (WordController) s_prefereces.getObject(Constant.KEY_WORDS_LOCAL, WordController.class);
                 } catch (final NullPointerException npe) {
                     Log.d(TAG, "Unable to load any local word list from preferences.");
-//                    ArrayList<WordItem> tmpList = new ArrayList<>();
                     s_wordController = new WordController(loadingActivity.getResources().getStringArray(R.array.countries));
-//                    tmpList.add(new WordItem("Lande", "Lokal", loadingActivity.getResources().getStringArray(R.array.countries)));
                     s_prefereces.putObject(Constant.KEY_WORDS_LOCAL, s_wordController.getLocalWords());
                 }
 
@@ -123,8 +120,6 @@ public class LoadingActivity extends AppCompatActivity {
                         s_wordController.setCurrentLocalList(0);
                     }
                 }
-
-
                 return true;
             }
             return null;
