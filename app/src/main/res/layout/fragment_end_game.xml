@@ -34,27 +34,25 @@
         android:layout_marginBottom="38dp"
         android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-    <asia.ivity.android.marqueeview.MarqueeView
+    <TextView
         android:id="@+id/end_game_lower_status_marquee_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         >
-
-        <TextView
-            android:id="@+id/end_game_lower_status_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/linearLayout"
-            android:layout_alignParentEnd="true"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do."
-            tools:ignore="HardcodedText"/>
-
-
-    </asia.ivity.android.marqueeview.MarqueeView>
+    </TextView>
+    <TextView
+        android:id="@+id/end_game_lower_status_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/linearLayout"
+        android:layout_alignParentEnd="true"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textSize="15sp"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do."
+        tools:ignore="HardcodedText"/>
 
 
     <LinearLayout

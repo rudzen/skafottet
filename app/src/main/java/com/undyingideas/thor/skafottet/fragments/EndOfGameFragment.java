@@ -26,8 +26,6 @@ import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 
 import java.lang.ref.WeakReference;
 
-import asia.ivity.android.marqueeview.MarqueeView;
-
 // TODO : Add information about multiplayer game and what word that was played.
 
 /**
@@ -51,7 +49,7 @@ public class EndOfGameFragment extends Fragment {
     private Shimmer shimmerTop;
     private EndGameClickListener endGameClickListener;
 
-    private MarqueeView marqueeViewLower;
+    private TextView marqueeViewLower;
     private TextView textViewLower;
 
     private Handler handler;
@@ -115,14 +113,14 @@ public class EndOfGameFragment extends Fragment {
             buttonMenu.setOnClickListener(endGameClickListener);
         }
 
-        marqueeViewLower = (MarqueeView) root.findViewById(R.id.end_game_lower_status_marquee_view);
+        marqueeViewLower = (TextView) root.findViewById(R.id.end_game_lower_status_marquee_view);
         textViewLower = (TextView) root.findViewById(R.id.end_game_lower_status_text_view);
 
-        marqueeViewLower.setPauseBetweenAnimations(500);
-        marqueeViewLower.setSpeed(10);
+//        marqueeViewLower.setPauseBetweenAnimations(500);
+//        marqueeViewLower.setSpeed(10);
 
-        startMarquee = new StartMarquee();
-        handler = new Handler();
+//        startMarquee = new StartMarquee();
+//        handler = new Handler();
 
 
         displayResults(getArguments());
@@ -164,12 +162,12 @@ public class EndOfGameFragment extends Fragment {
         if (!endGame.isMultiPlayer()) {
             if (endGame.getLogic().isGameLost()) {
                 imageViewResult.setImageResource(R.drawable.reaper);
-                lowerText = "Ordet var" + endGame.getLogic().getTheWord() + ". Dine gæt var : " + endGame.getLogic().getUsedLetters();
+                lowerText = "Ordet var " + endGame.getLogic().getTheWord() + ". Dine gæt var : " + endGame.getLogic().getUsedLetters();
                 textViewTop.setText(R.string.game_lost);
             } else {
                 imageViewResult.setImageResource(R.drawable.trophy);
                 textViewTop.setText(R.string.game_won);
-                lowerText = "Ordet var" + endGame.getLogic().getTheWord() + ". Dine gæt var : " + endGame.getLogic().getUsedLetters() + " og du gættede forkert " + endGame.getLogic().getNumWrongLetters() + " gange. tsktsk.";
+                lowerText = "Ordet var " + endGame.getLogic().getTheWord() + ". Dine gæt var : " + endGame.getLogic().getUsedLetters() + " og du gættede forkert " + endGame.getLogic().getNumWrongLetters() + " gange. tsktsk.";
             }
         } else {
             GameUtility.mpc.lc.updateLobby(endGame.getNames()[1], GameUtility.mpc.name, endGame.getLogic().getNumWrongLetters());
@@ -206,7 +204,7 @@ public class EndOfGameFragment extends Fragment {
             }
         }
         textViewLower.setText(lowerText);
-        handler.postDelayed(startMarquee, 500);
+//        handler.postDelayed(startMarquee, 500);
         YoYo.with(Techniques.ZoomInDown).duration(700).playOn(imageViewResult);
         YoYo.with(Techniques.ZoomInUp).duration(700).playOn(textViewTop);
         YoYo.with(Techniques.SlideInLeft).duration(700).playOn(textViewLower);
@@ -334,11 +332,11 @@ public class EndOfGameFragment extends Fragment {
         public void onAnimationRepeat(final Animator animation) { }
     }
 
-    private class StartMarquee implements Runnable {
-        @Override
-        public void run() {
-            marqueeViewLower.startMarquee();
-        }
-    }
+//    private class StartMarquee implements Runnable {
+//        @Override
+//        public void run() {
+//            marqueeViewLower.startMarquee();
+//        }
+//    }
 
 }
