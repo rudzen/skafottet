@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -55,6 +56,7 @@ public class MenuActivity extends MenuActivityAbstract{
     private ImageView title;
     private final ImageView[] buttons = new ImageView[BUTTON_COUNT];
     private LinearLayout loginLayout;
+    private TextView loginText;
     private static final int TITLE = -1;
 
     private static final int BUTTON_PLAY = 0;
@@ -98,6 +100,8 @@ public class MenuActivity extends MenuActivityAbstract{
 
         loginLayout = (LinearLayout) findViewById(R.id.LoginLayout);
         loginLayout.setOnClickListener(new LoginClickListener());
+        loginText = (TextView) findViewById(R.id.loginText);
+        if (GameUtility.mpc.name != null) loginText.setText(GameUtility.mpc.name);
 
         title = (ImageView) findViewById(R.id.menu_title);
         title.setClickable(true);
@@ -118,6 +122,7 @@ public class MenuActivity extends MenuActivityAbstract{
     protected void onResume() {
         super.onResume();
 //        WindowLayout.hideStatusBar(getWindow(), null);
+        if (GameUtility.mpc.name != null) loginText.setText(GameUtility.mpc.name); else loginText.setText("login");
         showAll();
     }
 
@@ -292,6 +297,7 @@ public class MenuActivity extends MenuActivityAbstract{
             buttons[BUTTON_LOGIN_OUT].setTag(true);
         }
         buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(GameUtility.mpc.name == null ? loginButtons[0] : loginButtons[1]));
+        if (GameUtility.mpc.name != null) loginText.setText(GameUtility.mpc.name); else loginText.setText("login");
         showAll();
     }
 
