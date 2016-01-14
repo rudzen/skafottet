@@ -37,8 +37,7 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
 //    private static final Pattern removeTags = Pattern.compile(".<+?>");
     private final WeakReference<WordListActivity> wordListActivityWeakReference;
     private final String title, url;
-    private MaterialDialog pd;
-
+    private WordListActivity wordListActivity;
 
     public WordListDownloader(final WordListActivity wordListActivity, final String title, final String url) {
         wordListActivityWeakReference = new WeakReference<>(wordListActivity);
@@ -72,9 +71,9 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        final WordListActivity wordListActivity = wordListActivityWeakReference.get();
+        wordListActivity = wordListActivityWeakReference.get();
         if (wordListActivity != null) {
-            pd = new MaterialDialog.Builder(wordListActivity)
+            wordListActivity.md = new MaterialDialog.Builder(wordListActivity)
                     .title("Indhenter " + title)
                     .content("Vent...")
                     .progress(true, 0)
@@ -88,7 +87,7 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
 
     @Override
     protected WordItem doInBackground(final Void... params) {
-        final WordListActivity wordListActivity = wordListActivityWeakReference.get();
+        wordListActivity = wordListActivityWeakReference.get();
         if (wordListActivity != null) {
             publishProgress("Henter fra\n" + url, "Henter ordliste.");
             StringTokenizer stringTokenizer = null;
@@ -124,7 +123,7 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
                 ListFetcher.saveWordLists(s_wordController, wordListActivity.getApplicationContext());
                 return wordItem;
             } else {
-                pd.dismiss();
+                wordListActivity.md.dismiss();
                 cancel(true);
             }
         }
@@ -133,26 +132,28 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
 
     @Override
     protected void onPostExecute(final WordItem wordItem) {
-
-        Log.d("Downloader", wordItem.toString());
-        if (pd != null && pd.isShowing()) {
-            pd.dismiss();
-        }
-        final WordListActivity wordListActivity = wordListActivityWeakReference.get();
+        wordListActivity = wordListActivityWeakReference.get();
         if (wordListActivity != null) {
+            Log.d("Downloader", wordItem.toString());
+            if (wordListActivity.md != null && wordListActivity.md.isShowing()) {
+                wordListActivity.md.dismiss();
+            }
             wordListActivity.refreshList();
             wordListActivity.setProgressBar(false);
         }
+
         super.onPostExecute(wordItem);
     }
 
     @Override
     protected void onProgressUpdate(final CharSequence... values) {
-        if (values.length == 2) {
-            pd.setMessage(String.format("Indlæser ord [%s] :%s%s", values[0], System.lineSeparator(), values[1]));
-        } else {
-            // values.length == 1
-            pd.setMessage(values[0]);
+        if (wordListActivity != null) {
+            if (values.length == 2) {
+                wordListActivity.md.setMessage(String.format("Indlæser ord [%s] :%s%s", values[0], System.lineSeparator(), values[1]));
+            } else {
+                // values.length == 1
+                wordListActivity.md.setMessage(values[0]);
+            }
         }
     }
 

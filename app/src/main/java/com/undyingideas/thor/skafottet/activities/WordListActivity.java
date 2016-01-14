@@ -72,9 +72,8 @@ public class WordListActivity extends AppCompatActivity implements
     private Toolbar toolbar;
     private ProgressBar progressBar;
 
-    private MaterialDialog md; // for add list
+    public MaterialDialog md; // for add list
 
-    private ListView listRemote, listLocal;
     private WordTitleLocalAdapter adapterLocal;
     private WordTitleRemoteAdapter adapterRemote;
 
@@ -132,8 +131,8 @@ public class WordListActivity extends AppCompatActivity implements
         }
 
         /* configure the side bar lists */
-        listRemote = (ListView) mDrawerLayout.findViewById(R.id.nav_drawer_remote_lists);
-        listLocal = (ListView) mDrawerLayout.findViewById(R.id.nav_drawer_local_lists);
+        final ListView listRemote = (ListView) mDrawerLayout.findViewById(R.id.nav_drawer_remote_lists);
+        final ListView listLocal = (ListView) mDrawerLayout.findViewById(R.id.nav_drawer_local_lists);
 
         /* configure the adapters for the side bar lists */
         adapterLocal = new WordTitleLocalAdapter(this, R.layout.word_list_nav_drawer_list, s_wordController.getLocalWords());

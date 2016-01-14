@@ -26,10 +26,10 @@
         android:hint="Ordliste webaddresse"
         android:inputType="textUri"
         android:padding="10dp"
-        android:singleLine="true"
-        android:textStyle="italic"
-        android:text="http://"
         android:selectAllOnFocus="false"
+        android:singleLine="true"
+        android:text="http://"
+        android:textStyle="italic"
         android:typeface="sans"/>
 
     <CheckBox
