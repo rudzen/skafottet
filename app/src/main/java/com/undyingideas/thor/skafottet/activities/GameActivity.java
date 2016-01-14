@@ -91,8 +91,6 @@ public class GameActivity extends AppCompatActivity implements
             } else if (gameMode == Constant.MODE_SINGLE_PLAYER) {
                 addFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(), false, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du")));
             } else if (gameMode == Constant.MODE_MULTI_PLAYER || gameMode == Constant.MODE_MULTI_PLAYER_2) {
-                Log.d("theis", "mode = " + gameMode);
-                // just show the current player list
                 addFragment(LobbySelectorFragment.newInstance(true));
             } else if (gameMode == Constant.MODE_MULTI_PLAYER_LOBBY) {
                 addFragment(CreateLobbyFragment.newInstance(true));
@@ -139,7 +137,7 @@ public class GameActivity extends AppCompatActivity implements
     @Override
     public void startNewMultiplayerGame(final String opponentName, final String theWord) {
         Log.d(TAG, "Want to start new game against : " + opponentName + " with word : " + theWord);
-        replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(theWord), true, "Du", opponentName)));
+        replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(theWord), true, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du", opponentName)));
     }
 
     @Override

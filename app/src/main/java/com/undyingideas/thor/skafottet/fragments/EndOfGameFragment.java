@@ -19,6 +19,8 @@ import com.romainpiel.shimmer.Shimmer;
 import com.romainpiel.shimmer.ShimmerTextView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game.SaveGame;
+import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyDTO;
+import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 
@@ -171,15 +173,31 @@ public class EndOfGameFragment extends Fragment {
             }
         } else {
             GameUtility.mpc.lc.updateLobby(endGame.getNames()[1], GameUtility.mpc.name, endGame.getLogic().getNumWrongLetters());
-            if (endGame.getLogic().isGameLost()) {
-                imageViewResult.setImageResource(R.drawable.reaper);
-                textViewTop.setText("Du er blever henrettet af " + endGame.getNames()[1]);
-                lowerText = "Ordet du tabte udfordringen fra " + endGame.getNames()[1] + " var " + endGame.getLogic().getTheWord();
-                for(final String s: endGame.getNames()) Log.d("Endgame", s);
+            LobbyDTO dto = GameUtility.mpc.lc.lobbyList.get(endGame.getNames()[1]);
+            boolean gameisDone = true;
+            for(LobbyPlayerStatus lps : dto.getPlayerList())
+                if (!lps.getName().equals(GameUtility.mpc.name) && lps.getScore() == -1)
+                    gameisDone = false;
+            if (gameisDone) {
+                if (endGame.getLogic().isGameLost()) {
+                    imageViewResult.setImageResource(R.drawable.reaper);
+                    textViewTop.setText("Du er blever henrettet af " + getWinner(dto));
+                    lowerText = "Ordet var " + endGame.getLogic().getTheWord();
+                } else {
+                    imageViewResult.setImageResource(R.drawable.trophy);
+                    textViewTop.setText("Du undslap galgen! - Triumf over " + getOther(dto, GameUtility.mpc.name));
+                    lowerText = "Du gættede ordet " + endGame.getLogic().getTheWord() + ", derved har du undgået at blive klynget op";
+                }
             } else {
-                imageViewResult.setImageResource(R.drawable.trophy);
-                textViewTop.setText("Du undslap galgen! - Triumf over " + endGame.getNames()[1]);
-                lowerText = "Du gættede ordet " + endGame.getLogic().getTheWord() + ", derved har du undgået at blive klynget op af " + endGame.getNames()[1];
+                if (endGame.getLogic().isGameLost()) {
+                    imageViewResult.setImageResource(R.drawable.reaper);
+                    textViewTop.setText("Du er blever men din modstander kan også nå at blive det.");
+                    lowerText = "Ordet var " + endGame.getLogic().getTheWord();
+                } else {
+                    imageViewResult.setImageResource(R.drawable.trophy);
+                    textViewTop.setText("Du undslap galgen! - Din modstander kan dog stadig nå at gøre det bedre.");
+                    lowerText = "Du gættede ordet " + endGame.getLogic().getTheWord() + ", derved har du undgået at blive klynget op" ;
+                }
             }
         }
         textViewLower.setText(lowerText);
@@ -187,6 +205,23 @@ public class EndOfGameFragment extends Fragment {
         YoYo.with(Techniques.ZoomInDown).duration(700).playOn(imageViewResult);
         YoYo.with(Techniques.ZoomInUp).duration(700).playOn(textViewTop);
         YoYo.with(Techniques.SlideInLeft).duration(700).playOn(textViewLower);
+    }
+
+    private String getWinner(LobbyDTO dto) {
+        for(int i = 0; i < 10; i++) {
+            for (LobbyPlayerStatus lps : dto.getPlayerList()) {
+                if (lps.getScore() == i) return lps.getName();
+            }
+        }
+        return "Error - no winner";
+    }
+
+    private String getOther(LobbyDTO dto, String name) {
+        String s = "";
+        for(LobbyPlayerStatus lps : dto.getPlayerList()) {
+            if (! lps.getName().equals(name)) s += lps.getName() + " , ";
+        }
+        return s.substring(0, s.length()-3);
     }
 
     @Override

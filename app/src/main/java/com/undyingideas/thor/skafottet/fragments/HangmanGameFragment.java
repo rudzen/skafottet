@@ -20,6 +20,8 @@ import com.romainpiel.shimmer.Shimmer;
 import com.romainpiel.shimmer.ShimmerTextView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game.SaveGame;
+import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyDTO;
+import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
@@ -100,6 +102,13 @@ public class HangmanGameFragment extends Fragment {
         return root;
     }
 
+    private String getOppNames(String lobbykey, String yourname) {
+        LobbyDTO dto = GameUtility.mpc.lc.lobbyList.get(lobbykey);
+        String s = "Modstander: ";
+        for(LobbyPlayerStatus lps: dto.getPlayerList()) if (!lps.getName().equals(yourname)) s += lps.getName() + " , ";
+        return s.substring(0, s.length()-3);
+    }
+
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -111,7 +120,7 @@ public class HangmanGameFragment extends Fragment {
 
         // testing :
         if (currentGame.isMultiPlayer()) {
-            WindowLayout.showSnack("Modstander: " + currentGame.getNames()[1], textViewWord, true);
+            WindowLayout.showSnack(getOppNames(currentGame.getNames()[1],currentGame.getNames()[0]), textViewWord, true);
         }
         //Toast.makeText(getContext(), currentGame.getLogic().getTheWord(), Toast.LENGTH_SHORT).show();
 
@@ -168,7 +177,7 @@ public class HangmanGameFragment extends Fragment {
     private void applySaveGameStatus() {
         textViewWord.setText(currentGame.getLogic().getVisibleWord());
         if (currentGame.isMultiPlayer()) {
-            textViewStatus.setText("Modstander : " + currentGame.getNames()[1]);
+            textViewStatus.setText(getOppNames(currentGame.getNames()[1],currentGame.getNames()[0]));
         } else {
             textViewStatus.setText("Du kæmper for føden");
         }
