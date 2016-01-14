@@ -64,6 +64,7 @@ public final class WordController implements Serializable, Parcelable {
 
     public void addLocalWordList(final String title, final String url, final ArrayList<String> theList) {
         localWords.add(new WordItem(title, url, theList));
+        currentLocalList = localWords.size() - 1;
     }
 
     public void addLocalWordList(final String title, final String url, final Set<String> theList) {

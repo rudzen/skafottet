@@ -19,6 +19,9 @@ import java.util.HashSet;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_prefereces;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_wordController;
+
 /**
  * Created on 09-01-2016, 16:06.
  * Project : skafottet
@@ -47,14 +50,12 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
         try (final BufferedReader br = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
             String line = br.readLine();
             while (line != null) {
-                if (count++ % 50 == 0) {
+                if (++count % 50 == 0) {
                     publishProgress("Downloader.... " + Integer.toString(count), "Vent...");
                     count = 1;
                 }
-                if (line.length() >= 4) {
-                    sb.append(line).append('\n');
-                }
-                line = br.readLine().trim();
+                sb.append(line);
+                line = br.readLine();
             }
         } catch (final Exception e) {
             // meh
@@ -90,7 +91,7 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
             try {
                 final ArrayList<String> words = new ArrayList<>();
                 final HashSet<String> dude = new HashSet<>();
-                final StringTokenizer stringTokenizer = new StringTokenizer(downloadURL(), "\n");
+                final StringTokenizer stringTokenizer = new StringTokenizer(downloadURL(), " ");
                 int count = stringTokenizer.countTokens();
                 while (stringTokenizer.hasMoreTokens()) {
                     words.add(stringTokenizer.nextToken());
@@ -99,11 +100,23 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
                         count = stringTokenizer.countTokens();
                     }
                 }
+                for (int i = 0; i < words.size(); i++) {
+                    if (words.get(i).length() < 4 || words.get(i).contains("w")) {
+                        words.remove(i);
+                    }
+                }
+
                 publishProgress("Fjerner duplanter og sorterer.");
                 dude.addAll(words);
                 final WordItem wordItem = new WordItem(title, url);
                 wordItem.getWords().addAll(dude);
                 Collections.sort(wordItem.getWords());
+                if (s_wordController.existsLocal(wordItem)) {
+                    s_wordController.replaceLocalWordList(wordItem);
+                } else {
+                    s_wordController.addLocalWordList(wordItem.getTitle(), wordItem.getUrl(), wordItem.getWords());
+                }
+                s_prefereces.putObject(Constant.KEY_WORDS_LOCAL, s_wordController);
                 return wordItem;
             } catch (final IOException ioe) {
                 pd.dismiss();
@@ -116,8 +129,6 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
     @Override
     protected void onPostExecute(final WordItem wordItem) {
 
-        GameUtility.s_wordController.replaceLocalWordList(wordItem);
-        GameUtility.s_prefereces.putObject(Constant.KEY_WORDS_LOCAL, GameUtility.s_wordController);
         Log.d("Downloader", wordItem.toString());
         if (pd != null && pd.isShowing()) {
             pd.dismiss();

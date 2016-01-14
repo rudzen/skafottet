@@ -93,9 +93,9 @@ public class LoadingActivity extends AppCompatActivity {
                 */
 
                 try {
-                    s_prefereces.checkForNullValue(Constant.KEY_WORDS_LOCAL);
+//                    s_prefereces.checkForNullValue(Constant.KEY_WORDS_LOCAL);
                     s_wordController = (WordController) s_prefereces.getObject(Constant.KEY_WORDS_LOCAL, WordController.class);
-                } catch (final NullPointerException npe) {
+                } catch (final Exception e) {
                     Log.d(TAG, "Unable to load any local word list from preferences.");
                     s_wordController = new WordController(loadingActivity.getResources().getStringArray(R.array.countries));
                     s_prefereces.putObject(Constant.KEY_WORDS_LOCAL, s_wordController.getLocalWords());
@@ -111,9 +111,9 @@ public class LoadingActivity extends AppCompatActivity {
 
                 /* repeating above for firebase list, except that we can't retrieve any list before connection is up. */
                 try {
-                    s_prefereces.checkForNullValue(Constant.KEY_WORDS_FIREBASE);
+//                    s_prefereces.checkForNullValue(Constant.KEY_WORDS_FIREBASE);
                     WordListController.wordList = (HashMap<String, WordItem>) s_prefereces.getObject(Constant.KEY_WORDS_FIREBASE, HashMap.class);
-                } catch (final NullPointerException npe) {
+                } catch (final Exception e) {
                     Log.d(TAG, "Unable to load any remote cached word lists from preferences, log in to update.");
                     if (!s_wordController.isLocal()) {
                         s_wordController.setIsLocal(true);
