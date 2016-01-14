@@ -226,8 +226,11 @@ public class WordListActivity extends AppCompatActivity implements
     }
 
     public void refreshList() {
+        adapterLocal = new WordTitleLocalAdapter(this, R.layout.word_list_nav_drawer_list, s_wordController.getLocalWords());
+        adapterRemote = new WordTitleRemoteAdapter(this, R.layout.word_list_nav_drawer_list, WordListController.getKeyList());
         adapterLocal.notifyDataSetChanged();
         adapterRemote.notifyDataSetChanged();
+        toolbar.setSubtitle("Antal lister : " + s_wordController.getListCount());
         mAdapter.restore(s_wordController.getCurrentList());
     }
 
