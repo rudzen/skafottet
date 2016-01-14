@@ -53,7 +53,7 @@
             android:textSize="30sp"
             android:visibility="gone"/>
 
-        <ScrollView
+        <LinearLayout
             android:id="@+id/left_drawer"
             android:layout_width="240dp"
             android:layout_height="match_parent"
@@ -61,12 +61,13 @@
             android:background="@android:color/black"
             android:clickable="true"
             android:padding="5dp"
+            android:orientation="vertical"
             android:scrollbars="none">
 
             <include layout="@layout/word_list_nav_drawer">
             </include>
 
-        </ScrollView>
+        </LinearLayout>
     </android.support.v4.widget.DrawerLayout>
 </LinearLayout>
 

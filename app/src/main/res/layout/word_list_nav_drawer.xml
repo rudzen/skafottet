@@ -1,42 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              >
 
-    <com.undyingideas.thor.skafottet.views.UnderlinedTextView
-        android:id="@+id/viewLocal"
-        style="@style/word_list_section_header"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="start|left"
-        android:text="@string/word_lists_local"
-        android:textStyle="bold"/>
+        android:orientation="vertical"
+        >
 
-    <ListView
-        android:id="@+id/nav_drawer_local_lists"
+        <com.undyingideas.thor.skafottet.views.UnderlinedTextView
+            android:id="@+id/viewLocal"
+            style="@style/word_list_section_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|left"
+            android:text="@string/word_lists_local"
+            android:textStyle="bold"/>
+
+        <ListView
+            android:id="@+id/nav_drawer_local_lists"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollIndicators="left"
+            android:smoothScrollbar="true"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/viewLocal"
-        android:scrollIndicators="left"
-        android:smoothScrollbar="true"
-        />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
 
-    <com.undyingideas.thor.skafottet.views.UnderlinedTextView
-        android:id="@+id/viewRemote"
-        style="@style/word_list_section_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/nav_drawer_local_lists"
-        android:layout_gravity="start|left"
-        android:text="@string/word_lists_remote"
-        android:textStyle="bold"/>
+        <com.undyingideas.thor.skafottet.views.UnderlinedTextView
+            android:id="@+id/viewRemote"
+            style="@style/word_list_section_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|left"
+            android:text="@string/word_lists_remote"
+            android:textStyle="bold"/>
 
-    <ListView
-        android:id="@+id/nav_drawer_remote_lists"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/viewRemote"
-        />
+        <ListView
+            android:id="@+id/nav_drawer_remote_lists"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
 
-</RelativeLayout>
+    </LinearLayout>
+
+
+</LinearLayout>
