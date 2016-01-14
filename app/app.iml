@@ -96,6 +96,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="library-2.4.0" level="project" />
     <orderEntry type="library" exported="" name="core-0.8.5.3" level="project" />
+    <orderEntry type="library" exported="" name="jsoup-1.8.3" level="project" />
     <orderEntry type="library" exported="" name="gson-2.5" level="project" />
     <orderEntry type="library" exported="" name="VerticalMarqueeTextView-1.0.0" level="project" />
     <orderEntry type="library" exported="" name="stickylistheaders-2.7.0" level="project" />

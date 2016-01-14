@@ -9,7 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.firebase.client.Firebase;
+import com.nineoldandroids.animation.Animator;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.support.firebase.WordList.WordListController;
 import com.undyingideas.thor.skafottet.support.firebase.controller.MultiplayerController;
@@ -41,6 +44,7 @@ public class LoadingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading_screen);
         new LoadWords(this).execute();
+        ListFetcher.listSaver = new ListFetcher.ListSaver(getApplicationContext());
     }
 
     @SuppressWarnings("AccessStaticViaInstance")
@@ -68,15 +72,6 @@ public class LoadingActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            final LoadingActivity loadingActivity = loadingScreenWeakReference.get();
-            if (loadingActivity != null) {
-//                s_wordController = ListFetcher.loadWordList(loadingActivity.getApplicationContext());
-//                if (s_wordController == null) {
-//                    s_wordController = new WordController(loadingActivity.getResources().getStringArray(R.array.countries));
-//                    ListFetcher.saveWordLists(s_wordController, loadingActivity.getApplicationContext());
-//                }
-            }
-            super.onPreExecute();
         }
 
         @SuppressWarnings({"AssignmentToStaticFieldFromInstanceMethod", "unchecked", "OverlyLongMethod"})
@@ -84,6 +79,7 @@ public class LoadingActivity extends AppCompatActivity {
         protected Boolean doInBackground(final Void... params) {
             final LoadingActivity loadingActivity = loadingScreenWeakReference.get();
             if (loadingActivity != null) {
+
 
                 /* This is the first code executed, thus some configuration of the application takes place.. */
                 setDefaultFont(loadingActivity.getApplicationContext(), "DEFAULT", Constant.FONT_BOLD);
@@ -106,7 +102,8 @@ public class LoadingActivity extends AppCompatActivity {
                 s_wordController = ListFetcher.loadWordList(loadingActivity.getApplicationContext());
                 if (s_wordController == null || s_wordController.getCurrentList() == null) {
                     s_wordController = new WordController(loadingActivity.getResources().getStringArray(R.array.countries));
-                    ListFetcher.saveWordLists(s_wordController, loadingActivity.getApplicationContext());
+                    ListFetcher.listHandler.post(ListFetcher.listSaver);
+//                    ListFetcher.saveWordLists(s_wordController, loadingActivity.getApplicationContext());
                 }
 
 
@@ -118,13 +115,13 @@ public class LoadingActivity extends AppCompatActivity {
                     Log.d(TAG, "Unable to load any remote cached word lists from preferences, log in to update.");
                     if (!s_wordController.isLocal()) {
                         s_wordController.setIsLocal(true);
-                        s_wordController.setCurrentLocalList(0);
+                        s_wordController.setIndexLocale(0);
                     }
                 }
 
                 Log.d(TAG, String.valueOf(s_wordController.isLocal()));
 
-                s_wordController.setCurrentLocalList(s_prefereces.getInt(Constant.KEY_WORDS_LIST_LOCAL_INDEX, 0));
+                s_wordController.setIndexLocale(s_prefereces.getInt(Constant.KEY_WORDS_LIST_LOCAL_INDEX, 0));
                 s_wordController.setIsLocal(s_prefereces.getBoolean(Constant.KEY_WORDS_IS_LIST_LOCAL));
                 s_wordController.setIndexRemote(s_prefereces.getString(Constant.KEY_WORDS_LIST_FIREBASE_KEY));
 
@@ -152,9 +149,37 @@ public class LoadingActivity extends AppCompatActivity {
                 }
                 final Intent intent = new Intent(loadingActivity, MenuActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                loadingActivity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                YoYo.with(Techniques.RollOut).duration(300).playOn(loadingActivity.findViewById(R.id.loading_screen_text));
+                YoYo.with(Techniques.RotateOut).duration(900).withListener(new EndAnimatorListener(loadingActivity)).playOn(loadingActivity.findViewById(R.id.loading_screen_image));
+//                loadingActivity.overridePendingTransition(anim., android.R.anim.fade_out);
                 loadingActivity.startActivity(intent);
             }
+        }
+
+        private static class EndAnimatorListener implements Animator.AnimatorListener {
+
+            private final WeakReference<LoadingActivity> loadingActivityWeakReference;
+
+            public EndAnimatorListener(final LoadingActivity loadingActivity) {
+                loadingActivityWeakReference = new WeakReference<>(loadingActivity);
+            }
+
+            @Override
+            public void onAnimationStart(final Animator animation) { }
+
+            @Override
+            public void onAnimationEnd(final Animator animation) {
+                final LoadingActivity loadingActivity = loadingActivityWeakReference.get();
+                if (loadingActivity != null) {
+                    loadingActivity.finish();
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(final Animator animation) { }
+
+            @Override
+            public void onAnimationRepeat(final Animator animation) { }
         }
     }
 
@@ -171,4 +196,5 @@ public class LoadingActivity extends AppCompatActivity {
         final Display display = appCompatActivity.getWindowManager().getDefaultDisplay();
         display.getSize(WindowLayout.screenDimension);
     }
+
 }

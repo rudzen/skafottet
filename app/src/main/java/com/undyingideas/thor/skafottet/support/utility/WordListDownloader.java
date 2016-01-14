@@ -8,6 +8,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.undyingideas.thor.skafottet.activities.WordListActivity;
 import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
 
+import org.jsoup.Jsoup;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -30,12 +32,13 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_word
  */
 public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> {
 
-    private static final Pattern removeSpaces = Pattern.compile("  ");
+//    private static final Pattern removeSpaces = Pattern.compile("  ");
     private static final Pattern removeNonDK = Pattern.compile("[^a-zæøå]");
-    private static final Pattern removeTags = Pattern.compile("<.+?>");
+//    private static final Pattern removeTags = Pattern.compile(".<+?>");
     private final WeakReference<WordListActivity> wordListActivityWeakReference;
     private final String title, url;
     private MaterialDialog pd;
+
 
     public WordListDownloader(final WordListActivity wordListActivity, final String title, final String url) {
         wordListActivityWeakReference = new WeakReference<>(wordListActivity);
@@ -47,14 +50,13 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
         final StringBuilder sb = new StringBuilder(500);
         int count = 1;
         try (final BufferedReader br = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
-            String line = br.readLine();
-            while (line != null) {
-                if (++count % 50 == 0) {
-                    publishProgress("Downloader.... " + Integer.toString(count), "Vent...");
-                    count = 1;
+            while (true) {
+                final String line = br.readLine();
+                if (line == null) break;
+                if (count++ % 10 == 0) {
+                    publishProgress(Integer.toString(count), "Downloader...");
                 }
                 sb.append(line);
-                line = br.readLine();
             }
         } catch (final Exception e) {
             // meh
@@ -62,7 +64,9 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
             throw new IOException(e.getMessage());
         }
         publishProgress("Udfritter resultatet", "Vent...");
-        return removeSpaces.matcher(removeNonDK.matcher(removeTags.matcher(sb.toString()).replaceAll(" ").toLowerCase()).replaceAll(" ")).replaceAll("").trim();
+        return Jsoup.parse(sb.toString()).text().toLowerCase();
+
+//        return removeSpaces.matcher(removeNonDK.matcher(removeTags.matcher(sb.toString()).replaceAll(" ").toLowerCase()).replaceAll(" ")).replaceAll("").trim();
     }
 
     @Override
@@ -87,27 +91,29 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
         final WordListActivity wordListActivity = wordListActivityWeakReference.get();
         if (wordListActivity != null) {
             publishProgress("Henter fra\n" + url, "Henter ordliste.");
+            StringTokenizer stringTokenizer = null;
             try {
+                stringTokenizer = new StringTokenizer(downloadURL(), " ");
+            } catch (final IOException e) {
+                e.printStackTrace();
+            }
+            if (stringTokenizer != null) {
+                publishProgress("Forbereder ordlisten..");
                 final ArrayList<String> words = new ArrayList<>();
-                final HashSet<String> dude = new HashSet<>();
-                final StringTokenizer stringTokenizer = new StringTokenizer(downloadURL(), " ");
-                int count = stringTokenizer.countTokens();
+                int wordSize = 0;
                 while (stringTokenizer.hasMoreTokens()) {
-                    words.add(stringTokenizer.nextToken());
-                    if (count % 25 == 0) {
-                        publishProgress(words.get(words.size() - 1), "Gemmer liste. " + Integer.toString(words.size()) + " / " + Integer.toString(count));
-                        count = stringTokenizer.countTokens();
+                    words.add(removeNonDK.matcher(stringTokenizer.nextToken()).replaceAll(""));
+                    wordSize = words.size() - 1;
+                    if (words.get(wordSize).length() < 4 || words.get(wordSize).contains("w")) {
+                        words.remove(wordSize);
                     }
-                }
-                for (int i = 0; i < words.size(); i++) {
-                    if (words.get(i).length() < 4 || words.get(i).contains("w")) {
-                        words.remove(i);
-                    }
+                    publishProgress(Integer.toString(wordSize), "Udfritter ord..");
                 }
 
+                final HashSet<String> dude = new HashSet<>(wordSize);
                 publishProgress("Fjerner duplanter og sorterer.");
                 dude.addAll(words);
-                final WordItem wordItem = new WordItem(title, url);
+                final WordItem wordItem = new WordItem(title, url, dude.size());
                 wordItem.getWords().addAll(dude);
                 Collections.sort(wordItem.getWords());
                 if (s_wordController.existsLocal(wordItem)) {
@@ -117,7 +123,7 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
                 }
                 ListFetcher.saveWordLists(s_wordController, wordListActivity.getApplicationContext());
                 return wordItem;
-            } catch (final IOException ioe) {
+            } else {
                 pd.dismiss();
                 cancel(true);
             }
@@ -135,17 +141,19 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
         final WordListActivity wordListActivity = wordListActivityWeakReference.get();
         if (wordListActivity != null) {
             wordListActivity.refreshList();
+            wordListActivity.setProgressBar(false);
         }
         super.onPostExecute(wordItem);
     }
 
     @Override
     protected void onProgressUpdate(final CharSequence... values) {
-        pd.setMessage(values[0]);
-        if (values.length >= 2) {
-            pd.setTitle(values[1]);
+        if (values.length == 2) {
+            pd.setMessage(String.format("Indlæser ord [%s] :%s%s", values[0], System.lineSeparator(), values[1]));
+        } else {
+            // values.length == 1
+            pd.setMessage(values[0]);
         }
-        super.onProgressUpdate(values);
     }
 
     @Override

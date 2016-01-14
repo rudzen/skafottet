@@ -1,10 +1,8 @@
 package com.undyingideas.thor.skafottet.activities;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -22,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -30,6 +29,7 @@ import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.WordListAdapter;
 import com.undyingideas.thor.skafottet.adapters.WordTitleLocalAdapter;
 import com.undyingideas.thor.skafottet.adapters.WordTitleRemoteAdapter;
+import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
 import com.undyingideas.thor.skafottet.support.firebase.WordList.WordListController;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 import com.undyingideas.thor.skafottet.support.utility.StringHelper;
@@ -56,7 +56,9 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_word
 public class WordListActivity extends AppCompatActivity implements
         AdapterView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener,
         StickyListHeadersListView.OnStickyHeaderOffsetChangedListener,
-        StickyListHeadersListView.OnStickyHeaderChangedListener {
+        StickyListHeadersListView.OnStickyHeaderChangedListener,
+        ProgressBarInterface
+{
 
     private static final String TAG = "WordListActicity";
 
@@ -68,6 +70,7 @@ public class WordListActivity extends AppCompatActivity implements
     private SwipeRefreshLayout refreshLayout;
 
     private Toolbar toolbar;
+    private ProgressBar progressBar;
 
     private MaterialDialog md; // for add list
 
@@ -111,8 +114,10 @@ public class WordListActivity extends AppCompatActivity implements
         toolbar.setLogo(R.mipmap.ic_launcher);
         toolbar.setLogoDescription("Applikations logo");
         toolbar.setNavigationContentDescription("Home icon");
-
         setSupportActionBar(toolbar);
+
+        progressBar = (ProgressBar) findViewById(R.id.topProgressBar);
+        progressBar.setVisibility(View.INVISIBLE); // it's GONE by default
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.word_item_drawer_layout);
 
@@ -188,6 +193,17 @@ public class WordListActivity extends AppCompatActivity implements
                     .show()
             ;
             return true;
+        } else if (id == R.id.action_word_list_remove) {
+            setProgressBar(true);
+            final String oldListName = "'" + s_wordController.getLocalWords().get(s_wordController.getIndexLocale()).getTitle() + "' ";
+            if (s_wordController.removeCurrentList()) {
+                refreshList();
+                WindowLayout.showSnack(oldListName + "er slettet, liste sat til " + s_wordController.getLocalWords().get(s_wordController.getIndexLocale()).getTitle(), stickyList, false);
+            } else {
+                WindowLayout.showSnack(oldListName + "kunne ikke slettes", stickyList, false);
+            }
+            setProgressBar(false);
+            return true;
         } else {
             return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
         }
@@ -202,18 +218,26 @@ public class WordListActivity extends AppCompatActivity implements
         }
     }
 
+    /* ************************************************************************ */
+    /* ************************************************************************ */
+    /* ********************** Interface Overrides ***************************** */
+    /* ************************************************************************ */
+    /* ************************************************************************ */
+
     @Override
     public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-//        Toast.makeText(this, "Item " + position + " clicked!", Toast.LENGTH_SHORT).show();
+        // for planned multiplayer challenge word selection update.
+        //Toast.makeText(this, "Item " + position + " clicked!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onHeaderClick(final StickyListHeadersListView l, final View header, final int itemPosition, final long headerId, final boolean currentlySticky) {
-//        Toast.makeText(this, "Header " + headerId + " currentlySticky ? " + currentlySticky, Toast.LENGTH_SHORT).show();
+        // not sure, but fun...
+        //Toast.makeText(this, "Header " + headerId + " currentlySticky ? " + currentlySticky, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onStickyHeaderOffsetChanged(final StickyListHeadersListView l, final View header, final int offset) {
         //noinspection PointlessBooleanExpression,ConstantConditions
 //        if (fadeHeader && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -226,14 +250,64 @@ public class WordListActivity extends AppCompatActivity implements
         header.setAlpha(1);
     }
 
+    @Override
+    public void setProgressBar(final boolean visible) {
+        progressBar.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    /* ************************************************************************ */
+    /* ************************************************************************ */
+    /* *********************** Helper Methods ********************************* */
+    /* ************************************************************************ */
+    /* ************************************************************************ */
+
+    /**
+     * Updates the lists, both the shown words and the drawer layouts..
+     */
     public void refreshList() {
+        setProgressBar(true);
         adapterLocal = new WordTitleLocalAdapter(this, R.layout.word_list_nav_drawer_list, s_wordController.getLocalWords());
         adapterRemote = new WordTitleRemoteAdapter(this, R.layout.word_list_nav_drawer_list, WordListController.getKeyList());
         adapterLocal.notifyDataSetChanged();
         adapterRemote.notifyDataSetChanged();
         toolbar.setSubtitle("Antal lister : " + s_wordController.getListCount());
         mAdapter.restore(s_wordController.getCurrentList());
+        Log.d("Refresh", s_wordController.getCurrentList().toString());
+        setProgressBar(false);
     }
+
+    /**
+     * Handles the functionality when the user has pressed accept for adding a custom list.
+     * @param title The title of the list
+     * @param url The URL of the list (guarenteed VALID web address!
+     * @param startDownload Initiate the download right away?
+     */
+    private void onFinishAddWordDialog(final String title, final String url, final boolean startDownload) {
+        /* the recieved input from the dual-edittext dialog fragment */
+        /* this function is only triggered if the user input was valid */
+
+        if (md != null && md.isShowing()) md.dismiss();
+        onWindowFocusChanged(true);
+
+        Log.d("AddListFinished", "Title : " + title);
+        Log.d("AddListFinished", "URL   : " + url);
+        Log.d("AddListFinished", "Start Download : " + startDownload);
+
+        // this is where the list is initiated to be downloaded...
+        if (startDownload) {
+            setProgressBar(true);
+            new WordListDownloader(this, title, url).execute();
+        } else {
+            s_wordController.addLocalWordList(title, url);
+            ListFetcher.listHandler.post(ListFetcher.listSaver);
+        }
+    }
+
+    /* ************************************************************************ */
+    /* ************************************************************************ */
+    /* *********************** Helper Classes ********************************* */
+    /* ************************************************************************ */
+    /* ************************************************************************ */
 
     private class RefreshStopper implements Runnable {
         @Override
@@ -301,7 +375,7 @@ public class WordListActivity extends AppCompatActivity implements
 
                         if (isValid(wordListActivity, title, url)) {
                             final CheckBox downloadNow = (CheckBox) dialogCustomView.findViewById(R.id.dialog_add_word_list_chk_download);
-                            wordListActivity.onFinishAddWordListDialog(title, url, downloadNow.isChecked());
+                            wordListActivity.onFinishAddWordDialog(title, url, downloadNow.isChecked());
                         }
                     }
                 }
@@ -341,7 +415,7 @@ public class WordListActivity extends AppCompatActivity implements
         public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
             Log.d(TAG, "Local : " + position);
             if (!s_wordController.isLocal() || s_wordController.getIndexLocale() != position) {
-                s_wordController.setCurrentLocalList(position);
+                s_wordController.setIndexLocale(position);
                 s_wordController.setIsLocal(true);
                 WindowLayout.showSnack("Ordliste skiftet til '" + s_wordController.getLocalWords().get(position).getTitle() + "'", stickyList, true);
                 refreshList();
@@ -360,7 +434,7 @@ public class WordListActivity extends AppCompatActivity implements
             if (s_wordController.isLocal() || !Objects.equals(tag, s_wordController.getIndexRemote())) {
                 s_wordController.setIndexRemote((String) view.getTag());
                 s_wordController.setIsLocal(false);
-                s_wordController.setCurrentLocalList(-1);
+                s_wordController.setIndexLocale(-1);
                 WindowLayout.showSnack("Ordliste skiftet til '" + tag + "'", stickyList, true);
                 refreshList();
             } else {
@@ -370,28 +444,6 @@ public class WordListActivity extends AppCompatActivity implements
         }
     }
 
-    private void onFinishAddWordListDialog(final String title, final String url, final boolean startDownload) {
-        /* the recieved input from the dual-edittext dialog fragment */
-        /* this function is only triggered if the user input was valid */
 
-        if (md != null && md.isShowing()) md.dismiss();
-        onWindowFocusChanged(true);
 
-        Log.d("AddListFinished", "Title : " + title);
-        Log.d("AddListFinished", "URL   : " + url);
-        Log.d("AddListFinished", "Start Download : " + startDownload);
-
-        // this is where the list is initiated to be downloaded...
-        if (startDownload) {
-            new WordListDownloader(this, title, url).execute();
-        } else {
-            s_wordController.addLocalWordList(title, url);
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    ListFetcher.saveWordLists(s_wordController, getApplicationContext());
-                }
-            });
-        }
-    }
 }

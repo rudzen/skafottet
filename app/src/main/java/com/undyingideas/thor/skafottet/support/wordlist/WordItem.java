@@ -56,9 +56,13 @@ public class WordItem implements Parcelable, Serializable {
         Collections.addAll(words, list);
     }
 
-
     public WordItem(final String title, final String url) {
         this(title, url, false);
+    }
+
+    public WordItem(final String title, final String url, final int startSize) {
+        this(title, url);
+        words.ensureCapacity(startSize);
     }
 
     /* -------------- Helper Methods  -------------- */

@@ -1,6 +1,7 @@
 package com.undyingideas.thor.skafottet.support.utility;
 
 import android.content.Context;
+import android.os.Handler;
 
 import com.undyingideas.thor.skafottet.support.wordlist.WordController;
 
@@ -11,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.ref.WeakReference;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -24,6 +26,9 @@ import java.util.zip.GZIPOutputStream;
 public final class ListFetcher {
 
     private static final String filename = "words.dat";
+
+    public static Handler listHandler = new Handler();
+    public static Runnable listSaver;
 
     private static byte[] compressWordList(WordController wordController) throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -74,6 +79,23 @@ public final class ListFetcher {
             e.printStackTrace();
             return false;
         }
-
     }
+
+    public static class ListSaver implements Runnable {
+
+        final WeakReference<Context> contextWeakReference;
+
+        public ListSaver(final Context context) {
+            contextWeakReference = new WeakReference<>(context);
+        }
+
+        @Override
+        public void run() {
+            final Context context = contextWeakReference.get();
+            if (context != null) {
+                saveWordLists(GameUtility.s_wordController, context);
+            }
+        }
+    }
+
 }

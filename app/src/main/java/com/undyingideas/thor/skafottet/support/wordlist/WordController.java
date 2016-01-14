@@ -9,6 +9,8 @@ import com.undyingideas.thor.skafottet.support.firebase.WordList.WordListControl
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
@@ -23,11 +25,11 @@ public final class WordController implements Serializable, Parcelable {
 
     private static final long serialVersionUID = 321;
     private ArrayList<WordItem> localWords;
-    private int currentLocalList;
     private boolean isLocal;
     private int indexLocale;
     private String indexRemote;
     private Random random;
+    private Comparator<WordItem> wordItemComparator;
 
     public WordController() { }
 
@@ -43,7 +45,8 @@ public final class WordController implements Serializable, Parcelable {
 
     private void reset() {
         localWords = new ArrayList<>();
-        currentLocalList = 0;
+        wordItemComparator = new WordItemComparator();
+        indexLocale = 0;
         isLocal = true;
     }
 
@@ -55,16 +58,12 @@ public final class WordController implements Serializable, Parcelable {
 
     public ArrayList<String> getCurrentList() {
         Log.d("WordController", String.valueOf(isLocal));
-        if (isLocal) {
-            return localWords.get(currentLocalList).getWords();
-        } else {
-            return WordListController.wordList.get(indexRemote).getWords();
-        }
+        return isLocal ? localWords.get(indexLocale).getWords() : WordListController.wordList.get(indexRemote).getWords();
     }
 
     public void addLocalWordList(final String title, final String url, final ArrayList<String> theList) {
         localWords.add(new WordItem(title, url, theList));
-        currentLocalList = localWords.size() - 1;
+        indexLocale = localWords.size() - 1;
     }
 
     public void addLocalWordList(final String title, final String url, final Set<String> theList) {
@@ -115,21 +114,50 @@ public final class WordController implements Serializable, Parcelable {
         return localWords.size() + WordListController.wordList.size();
     }
 
+    /**
+     * Will remove the current LOCAL list and reset the currentList to one lower.
+     * The first (default) list CAN NOT be removed.
+     */
+    public boolean removeCurrentList() {
+        if (indexLocale > 0 && localWords.size() > 1) {
+            localWords.remove(indexLocale--);
+            localWords.trimToSize();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Sorts the current local lists, the build-in default list is not sorted, and thus will always be the first.
+     */
+    public void sortLocalLists() {
+        Collections.sort(localWords, wordItemComparator);
+    }
+
+    /**
+     *  comparator for sorting the local list */
+    private static class WordItemComparator implements Comparator<WordItem> {
+        @Override
+        public int compare(final WordItem lhs, final WordItem rhs) {
+            /* avoid sorting the local list(s) */
+            if (!Objects.equals(lhs.getUrl(), "Lokal") && !Objects.equals(rhs.getUrl(), "Lokal")) {
+                return lhs.getTitle().compareToIgnoreCase(rhs.getTitle());
+            }
+            return 0;
+        }
+    }
+
     /* getters and setters */
 
     public ArrayList<WordItem> getLocalWords() { return localWords; }
 
-    public void setLocalWords(ArrayList<WordItem> localWords) { this.localWords = localWords; }
-
-    public int getCurrentLocalList() { return currentLocalList; }
-
-    public void setCurrentLocalList(int currentLocalList) { this.currentLocalList = currentLocalList; }
+    public void setLocalWords(final ArrayList<WordItem> localWords) { this.localWords = localWords; }
 
     public boolean isLocal() {
         return isLocal;
     }
 
-    public void setIsLocal(boolean isLocal) {
+    public void setIsLocal(final boolean isLocal) {
         this.isLocal = isLocal;
     }
 
@@ -137,15 +165,17 @@ public final class WordController implements Serializable, Parcelable {
         return indexLocale;
     }
 
-    public void setIndexLocale(int indexLocale) {
-        this.indexLocale = indexLocale;
+    public void setIndexLocale(final int indexLocale) {
+        if (indexLocale > -1) {
+            this.indexLocale = indexLocale;
+        }
     }
 
     public String getIndexRemote() {
         return indexRemote;
     }
 
-    public void setIndexRemote(String indexRemote) {
+    public void setIndexRemote(final String indexRemote) {
         this.indexRemote = indexRemote;
     }
 
@@ -153,7 +183,7 @@ public final class WordController implements Serializable, Parcelable {
         return random;
     }
 
-    public void setRandom(Random random) {
+    public void setRandom(final Random random) {
         this.random = random;
     }
 
@@ -163,7 +193,6 @@ public final class WordController implements Serializable, Parcelable {
     public String toString() {
         return "WordController{" +
                 "localWords=" + localWords +
-                ", currentLocalList=" + currentLocalList +
                 ", isLocal=" + isLocal +
                 ", indexLocale=" + indexLocale +
                 ", indexRemote='" + indexRemote + '\'' +
@@ -181,7 +210,6 @@ public final class WordController implements Serializable, Parcelable {
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeTypedList(localWords);
-        dest.writeInt(currentLocalList);
         dest.writeByte(isLocal ? (byte) 1 : (byte) 0);
         dest.writeInt(indexLocale);
         dest.writeString(indexRemote);
@@ -190,7 +218,6 @@ public final class WordController implements Serializable, Parcelable {
 
     protected WordController(final Parcel in) {
         localWords = in.createTypedArrayList(WordItem.CREATOR);
-        currentLocalList = in.readInt();
         isLocal = in.readByte() != 0;
         indexLocale = in.readInt();
         indexRemote = in.readString();

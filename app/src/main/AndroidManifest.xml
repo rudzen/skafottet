@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    package="com.undyingideas.thor.skafottet"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.undyingideas.thor.skafottet" >
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
-    <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+    <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
 
     <application
         android:allowBackup="true"
@@ -16,46 +15,46 @@
         android:isGame="true"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".activities.LoadingActivity"
             android:noHistory="true"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activities.WordListActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.MenuActivity"/>
+                android:value=".activities.MenuActivity" />
         </activity>
         <activity
             android:name=".activities.GameActivity"
             android:parentActivityName=".activities.LoadingActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
-        <activity android:name=".activities.MenuActivity"/>
-
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:name=".activities.MenuActivity" />
         <activity
             android:name=".activities.PlayerListActivity"
             android:label="@string/title_player_list"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.MenuActivity"/>
+                android:value=".activities.MenuActivity" />
         </activity>
         <activity
             android:name=".activities.PlayerDetailActivity"
             android:label="@string/title_player_detail"
             android:parentActivityName=".activities.PlayerListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.PlayerListActivity"/>
+                android:value=".activities.PlayerListActivity" />
         </activity>
     </application>
 

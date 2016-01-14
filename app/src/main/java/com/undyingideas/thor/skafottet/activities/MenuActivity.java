@@ -16,7 +16,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -264,14 +263,9 @@ public class MenuActivity extends MenuActivityAbstract{
 
     private void callMethod(final String method_name) {
         if (FINISH.equals(method_name)) {
+            ListFetcher.listHandler.post(ListFetcher.listSaver);
             overridePendingTransition(0, 0);
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    finish();
-                    ListFetcher.saveWordLists(GameUtility.s_wordController, getApplicationContext());
-                }
-            });
+            finish();
         } else {
             try {
                 getClass().getDeclaredMethod(method_name).invoke(this);

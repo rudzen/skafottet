@@ -10,4 +10,13 @@
         android:orderInCategory="0"
         android:title="Tilføj ordlist"
         />
+
+    <item
+        android:id="@+id/action_word_list_remove"
+        android:icon="@android:drawable/ic_menu_delete"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="10"
+        android:title="Fjern ordlist"
+    />
+
 </menu>
