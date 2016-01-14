@@ -60,7 +60,7 @@ public final class ListFetcher {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return new WordController();
+        return null;
     }
 
     public static boolean saveWordLists(WordController wordController, final Context context) {

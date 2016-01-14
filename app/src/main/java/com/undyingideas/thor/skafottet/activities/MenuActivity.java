@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -37,6 +38,7 @@ import com.undyingideas.thor.skafottet.fragments.dialogs.Login;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
+import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import java.lang.ref.WeakReference;
@@ -263,7 +265,13 @@ public class MenuActivity extends MenuActivityAbstract{
     private void callMethod(final String method_name) {
         if (FINISH.equals(method_name)) {
             overridePendingTransition(0, 0);
-            finish();
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    finish();
+                    ListFetcher.saveWordLists(GameUtility.s_wordController, getApplicationContext());
+                }
+            });
         } else {
             try {
                 getClass().getDeclaredMethod(method_name).invoke(this);

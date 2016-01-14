@@ -18,6 +18,7 @@ import java.util.Collections;
 
 /**
  * Created by rudz on 19-11-2015.
+ *
  * @author rudz
  */
 public class WordItem implements Parcelable, Serializable {
@@ -178,4 +179,6 @@ public class WordItem implements Parcelable, Serializable {
         @Override
         public WordItem[] newArray(final int size) {return new WordItem[size];}
     }
+
+
 }
