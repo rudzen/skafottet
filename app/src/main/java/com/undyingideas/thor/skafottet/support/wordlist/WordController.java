@@ -80,7 +80,7 @@ public final class WordController implements Serializable, Parcelable {
     public String getRandomWord() {
         random = new Random(System.currentTimeMillis());
         final String returnString;
-        if (isLocal) {
+        if (isLocal || WordListController.wordList == null || WordListController.wordList.isEmpty()) {
             returnString = localWords.get(indexLocale).getWords().get(random.nextInt(localWords.get(indexLocale).getWordListSize()));
         } else {
             returnString = WordListController.wordList.get(indexRemote).getWords().get(random.nextInt(WordListController.wordList.get(indexRemote).getWordListSize()));

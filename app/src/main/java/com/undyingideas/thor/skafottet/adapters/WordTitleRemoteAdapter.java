@@ -12,6 +12,7 @@ package com.undyingideas.thor.skafottet.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,18 +25,17 @@ import java.util.ArrayList;
 
 /**
  * Created on 27-12-2015, 09:59.<br>
- * Adapter for showing the relevant information about game selection.
- * Tweaked to support custom tag for item selection based on current availble game modes.
+ * Adapter for remote lists (firebase).
  * @author rudz
  */
-public class WordTitleListFirebaseAdapter extends ArrayAdapter<String> {
+public class WordTitleRemoteAdapter extends ArrayAdapter<String> {
 
     private final Context context;
     private final int layoutResourceId;
     private final ArrayList<String> data;
     private final static String DESC = "FireBase liste";
 
-    public WordTitleListFirebaseAdapter(final Context context, final int layoutResourceId, final ArrayList<String> data) {
+    public WordTitleRemoteAdapter(final Context context, final int layoutResourceId, final ArrayList<String> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
@@ -59,7 +59,8 @@ public class WordTitleListFirebaseAdapter extends ArrayAdapter<String> {
         }
         ViewHolder.s_textViewItemTitle.setText(data.get(position));
         ViewHolder.s_textViewDesc.setText(DESC);
-        view.setTag(position); // tag the bastard
+        Log.d(DESC, data.get(position));
+        view.setTag(data.get(position));
         return view;
     }
 

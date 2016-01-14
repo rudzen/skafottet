@@ -17,7 +17,7 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/nav_drawer_build_in_lists"
+        android:id="@+id/nav_drawer_local_lists"
         android:layout_weight="5"/>
 
     <com.undyingideas.thor.skafottet.views.UnderlinedTextView
@@ -32,7 +32,7 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/nav_drawer_custom_lists"
+        android:id="@+id/nav_drawer_remote_lists"
         android:layout_weight="5"/>
 
 </LinearLayout>

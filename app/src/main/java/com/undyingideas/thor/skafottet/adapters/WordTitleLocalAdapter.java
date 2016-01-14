@@ -25,17 +25,16 @@ import java.util.ArrayList;
 
 /**
  * Created on 27-12-2015, 09:59.<br>
- * Adapter for showing the relevant information about game selection.
- * Tweaked to support custom tag for item selection based on current availble game modes.
+ * Adapter for local word lists.
  * @author rudz
  */
-public class WordTitleListAdapter extends ArrayAdapter<WordItem> {
+public class WordTitleLocalAdapter extends ArrayAdapter<WordItem> {
 
     private final Context context;
     private final int layoutResourceId;
     private final ArrayList<WordItem> data;
 
-    public WordTitleListAdapter(final Context context, final int layoutResourceId, final ArrayList<WordItem> data) {
+    public WordTitleLocalAdapter(final Context context, final int layoutResourceId, final ArrayList<WordItem> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
@@ -60,7 +59,7 @@ public class WordTitleListAdapter extends ArrayAdapter<WordItem> {
         final WordItem wordItem = data.get(position);
         ViewHolder.s_textViewItemTitle.setText(wordItem.getTitle());
         ViewHolder.s_textViewDesc.setText(wordItem.getUrl());
-        view.setTag(position); // tag the bastard
+        view.setTag(position);
         return view;
     }
 

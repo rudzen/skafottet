@@ -14,7 +14,7 @@ import android.widget.ListView;
 
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.MultiplayerPlayersAdapter;
-import com.undyingideas.thor.skafottet.adapters.WordTitleListAdapter;
+import com.undyingideas.thor.skafottet.adapters.WordTitleLocalAdapter;
 import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyPlayerStatus;
@@ -41,7 +41,7 @@ public class CreateLobbyFragment extends Fragment {
     private final ArrayList<PlayerDTO> players = new ArrayList<>();
     private final ArrayList<WordItem> wordList = new ArrayList<>();
     private MultiplayerPlayersAdapter playerAdapter;
-    private WordTitleListAdapter wordTitleAdapter;
+    private WordTitleLocalAdapter wordTitleAdapter;
     private Runnable updater;
 
     @Nullable
@@ -224,7 +224,7 @@ public class CreateLobbyFragment extends Fragment {
                 // ups not logged in
                 Log.e("CreateLobbyFragment", "not logged in error");
             } else if (opponentName != null) {
-                wordTitleAdapter = new WordTitleListAdapter(getContext(), R.layout.word_list_nav_drawer_list, wordList);
+                wordTitleAdapter = new WordTitleLocalAdapter(getContext(), R.layout.word_list_nav_drawer_list, wordList);
                 listView.setAdapter(wordTitleAdapter);
                 wordTitleAdapter.notifyDataSetChanged();
             } else {

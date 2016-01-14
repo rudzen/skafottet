@@ -28,10 +28,9 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.WordListAdapter;
-import com.undyingideas.thor.skafottet.adapters.WordTitleListAdapter;
-import com.undyingideas.thor.skafottet.adapters.WordTitleListFirebaseAdapter;
+import com.undyingideas.thor.skafottet.adapters.WordTitleLocalAdapter;
+import com.undyingideas.thor.skafottet.adapters.WordTitleRemoteAdapter;
 import com.undyingideas.thor.skafottet.support.firebase.WordList.WordListController;
-import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.StringHelper;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.support.utility.WordListDownloader;
@@ -41,6 +40,8 @@ import java.lang.ref.WeakReference;
 import java.util.regex.Pattern;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
+
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_wordController;
 
 /**
  * Created on 12-01-2016, 07:24.
@@ -54,6 +55,8 @@ public class WordListActivity extends AppCompatActivity implements
         StickyListHeadersListView.OnStickyHeaderOffsetChangedListener,
         StickyListHeadersListView.OnStickyHeaderChangedListener {
 
+    private static final String TAG = "WordListActicity";
+
     private WordListAdapter mAdapter;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -66,9 +69,9 @@ public class WordListActivity extends AppCompatActivity implements
 
     private MaterialDialog md; // for add list
 
-    private ListView listFireBase, listLocal;
-    private WordTitleListAdapter adapterLocal;
-    private WordTitleListFirebaseAdapter adapterFirebase;
+    private ListView listRemote, listLocal;
+    private WordTitleLocalAdapter adapterLocal;
+    private WordTitleRemoteAdapter adapterRemote;
 
     @SuppressLint("InflateParams")
     @Override
@@ -81,7 +84,7 @@ public class WordListActivity extends AppCompatActivity implements
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.word_list_refresh_layout);
         refreshLayout.setOnRefreshListener(new SwipeOnRefreshListener());
 
-        mAdapter = new WordListAdapter(this, GameUtility.s_wordController.getCurrentList());
+        mAdapter = new WordListAdapter(this, s_wordController.getCurrentList());
 
         stickyList = (StickyListHeadersListView) findViewById(R.id.list);
         stickyList.setOnItemClickListener(this);
@@ -97,7 +100,7 @@ public class WordListActivity extends AppCompatActivity implements
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.word_list_title));
-        toolbar.setSubtitle("Antal Lister : " + GameUtility.s_wordController.getListCount()); // "<nuværende liste>"); // vil blive sat dynamisk ved klik på liste og ved opstart!
+        toolbar.setSubtitle("Antal Lister : " + s_wordController.getListCount()); // "<nuværende liste>"); // vil blive sat dynamisk ved klik på liste og ved opstart!
         toolbar.setCollapsible(false);
         toolbar.setLogo(R.mipmap.ic_launcher);
         toolbar.setLogoDescription("Applikations logo");
@@ -118,18 +121,18 @@ public class WordListActivity extends AppCompatActivity implements
         }
 
         /* configure the side bar lists */
-        listFireBase = (ListView) mDrawerLayout.findViewById(R.id.nav_drawer_build_in_lists);
-        listLocal = (ListView) mDrawerLayout.findViewById(R.id.nav_drawer_custom_lists);
+        listRemote = (ListView) mDrawerLayout.findViewById(R.id.nav_drawer_remote_lists);
+        listLocal = (ListView) mDrawerLayout.findViewById(R.id.nav_drawer_local_lists);
 
         /* configure the adapters for the side bar lists */
-        adapterLocal = new WordTitleListAdapter(this, R.layout.word_list_nav_drawer_list, GameUtility.s_wordController.getLocalWords());
-        adapterFirebase = new WordTitleListFirebaseAdapter(this, R.layout.word_list_nav_drawer_list, WordListController.getKeyList());
+        adapterLocal = new WordTitleLocalAdapter(this, R.layout.word_list_nav_drawer_list, s_wordController.getLocalWords());
+        adapterRemote = new WordTitleRemoteAdapter(this, R.layout.word_list_nav_drawer_list, WordListController.getKeyList());
 
-        listFireBase.setAdapter(adapterLocal);
-        listLocal.setAdapter(adapterFirebase);
+        listRemote.setAdapter(adapterRemote);
+        listLocal.setAdapter(adapterLocal);
 
-        listFireBase.setOnItemClickListener(new ListBuildInTitleClickListener());
-        listLocal.setOnItemClickListener(new ListBuildInTitleClickListener());
+        listRemote.setOnItemClickListener(new ListRemoteTitleClickListener());
+        listLocal.setOnItemClickListener(new ListLocalTitleClickListener());
 
         stickyList.setStickyHeaderTopOffset(0);
     }
@@ -215,14 +218,7 @@ public class WordListActivity extends AppCompatActivity implements
     }
 
     public void refreshList() {
-        mAdapter.restore(GameUtility.s_wordController.getCurrentList());
-    }
-
-    private class ListBuildInTitleClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-            Toast.makeText(getApplicationContext(), "List title clicked : " + view.getTag(), Toast.LENGTH_SHORT).show();
-        }
+        mAdapter.restore(s_wordController.getCurrentList());
     }
 
     private class RefreshStopper implements Runnable {
@@ -310,6 +306,34 @@ public class WordListActivity extends AppCompatActivity implements
         }
     }
 
+    private class ListLocalTitleClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+            Log.d(TAG, "Local : " + position);
+            Toast.makeText(getApplicationContext(), "Local List title clicked : " + position + " (" + s_wordController.getLocalWords().get(position).getTitle() , Toast.LENGTH_SHORT).show();
+            s_wordController.setCurrentLocalList(position);
+            s_wordController.setIsLocal(true);
+
+            refreshList();
+        }
+    }
+
+    private class ListRemoteTitleClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+//            final String tag = (String) view.getTag();
+//            Log.d(TAG, "Remote : " + view.getTag().toString());
+
+            Toast.makeText(getApplicationContext(), "List title clicked : " + view.getTag(), Toast.LENGTH_SHORT).show();
+
+            s_wordController.setIndexRemote((String) view.getTag());
+            s_wordController.setIsLocal(false);
+
+            refreshList();
+        }
+    }
+
+
     private void onFinishAddWordListDialog(final String title, final String url, final boolean startDownload) {
         /* the recieved input from the dual-edittext dialog fragment */
         /* this function is only triggered if the user input was valid */
@@ -327,7 +351,7 @@ public class WordListActivity extends AppCompatActivity implements
         if (startDownload) {
             new WordListDownloader(this, wordItem).execute();
         } else {
-            GameUtility.s_wordController.addLocalWordList(title, url);
+            s_wordController.addLocalWordList(title, url);
         }
     }
 }
