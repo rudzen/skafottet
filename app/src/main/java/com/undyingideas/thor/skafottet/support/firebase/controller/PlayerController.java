@@ -109,6 +109,7 @@ class NameGetter implements ChildEventListener {
     private static PlayerDTO getDTO(final DataSnapshot dataSnapshot) {
         final PlayerDTO dto = new PlayerDTO(dataSnapshot.getKey());
         dto.setScore(Integer.valueOf(dataSnapshot.child("score").getValue().toString()));
+        dto.setPassword(dataSnapshot.child("pass").getValue().toString());
         if (dataSnapshot.hasChild("gameList"))
             for(final DataSnapshot ds : dataSnapshot.child("gameList").getChildren())
                 dto.getGameList().add(ds.getValue().toString());

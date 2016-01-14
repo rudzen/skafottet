@@ -52,8 +52,8 @@ public class Login extends DialogFragment {
         if (ViewHolder.s_pass == null || ViewHolder.s_name == null) return false;
         final String pass = ViewHolder.s_pass.getText().toString();
         final boolean validStuff = !ViewHolder.s_name.getText().toString().isEmpty() && !pass.isEmpty();
-        Log.d("Login", String.valueOf(GameUtility.mpc.login(ViewHolder.s_name.getText().toString())));
-        if (validStuff) return true;
+        //Log.d("Login", String.valueOf(GameUtility.mpc.login(ViewHolder.s_name.getText().toString())));
+        if (validStuff && GameUtility.mpc.login(ViewHolder.s_name.getText().toString(), ViewHolder.s_pass.getText().toString())) return true;
         Toast.makeText(getActivity(), "Forkert indtastede informationer.", Toast.LENGTH_SHORT).show();
         return false;
     }
