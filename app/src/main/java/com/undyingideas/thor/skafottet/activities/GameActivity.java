@@ -146,7 +146,7 @@ public class GameActivity extends AppCompatActivity implements
     public void onEndGameButtonClicked(final boolean newGame) {
         if (newGame) {
             // only allowed in single player for now.
-            replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(), false, "Du")));
+            replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(), false, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du")));
         } else {
             finish();
         }

@@ -34,23 +34,18 @@ import static android.util.TypedValue.applyDimension;
 public class AboutFragment extends Fragment {
 
     private static final String SEP = System.lineSeparator();
-    private static final String RUDY = "Rudy", ADAM = "Adam", THEIS = "Theis", THOR = "Thor";
+    private static final String RUDY = "Rudy", ADAM = "Adam", THEIS = "Theis";
 
     private static final String[] ROWS = {
             "Skafottet - et 3-ugers projekt, af Gruppe 23" + SEP +
-                    "Gruppe medlemmer :" + SEP +
+                    "Gruppe medlemmer der har tilføjet til projektet :" + SEP +
                     "s133235 Rudy Alex Kohn, s133235@student.dtu.dk" + SEP +
-                    "sXXXXXX Adam Hammer Palmar" + SEP +
-                    "sXXXXXX Thor Adrian Dahlstrøm" + SEP +
-                    "sXXXXXX Theis Friis Strømming" + SEP +
-                    "sXXXXXX Emil Hvis Hansen" + SEP +
+                    "sXXXXXX Adam Hammer Palmar, sXXXXXX@student.dtu.dk" + SEP +
+                    "sXXXXXX Theis Friis Strømming, sXXXXXX@student@dtu.dk" + SEP +
             "Projekt ansvarlig : Rudy Alex Kohn" +
                     SEP + SEP +
-                    "Design og Grafik : " + RUDY + SEP +
-                    "Kode : " + RUDY + ", " + ADAM + ", " + THEIS + SEP +
-                    "Firebase Design : " + ADAM + ", " + THEIS + SEP +
-                    "Multiplayer Design : " + THEIS + ", " + RUDY + SEP +
-                    "Baseret på originalt kode af : " + THOR + SEP +
+                    "Design / Grafik / Kode : " + RUDY + SEP +
+                    "Firebase Design / Kode : " + ADAM + ", " + THEIS + SEP +
 
             "Original galgelogik af Jakob Nordfalk." + SEP + "http://www.javabog.dk",
             "TinyDB preferences interface af kcochibili." + SEP + "https://github.com/kcochibili/TinyDB--Android-Shared-Preferences-Turbo",
@@ -58,8 +53,6 @@ public class AboutFragment extends Fragment {
                     "  ~ <s133235@student.dtu> wrote this file. As long as you retain this notice you" + SEP +
                     "  ~ can do whatever you want with this stuff. If we meet some day, and you think" + SEP +
                     "  ~ this stuff is worth it, you can buy me a beer in return - Group 23"
-
-
     };
 
     @Nullable

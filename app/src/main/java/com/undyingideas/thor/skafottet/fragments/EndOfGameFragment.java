@@ -49,8 +49,8 @@ public class EndOfGameFragment extends Fragment {
     private Shimmer shimmerTop;
     private EndGameClickListener endGameClickListener;
 
-    private TextView textViewLower;
     private MarqueeView marqueeViewLower;
+    private TextView textViewLower;
 
     private Handler handler;
     private Runnable startMarquee;
@@ -113,13 +113,13 @@ public class EndOfGameFragment extends Fragment {
             buttonMenu.setOnClickListener(endGameClickListener);
         }
 
-        textViewLower = (TextView) root.findViewById(R.id.end_game_lower_status_text_view);
         marqueeViewLower = (MarqueeView) root.findViewById(R.id.end_game_lower_status_marquee_view);
+        textViewLower = (TextView) root.findViewById(R.id.end_game_lower_status_text_view);
 
         marqueeViewLower.setPauseBetweenAnimations(500);
         marqueeViewLower.setSpeed(10);
 
-        startMarquee = new startMarquee();
+        startMarquee = new StartMarquee();
         handler = new Handler();
 
 
@@ -294,7 +294,7 @@ public class EndOfGameFragment extends Fragment {
         public void onAnimationRepeat(final Animator animation) { }
     }
 
-    private class startMarquee implements Runnable {
+    private class StartMarquee implements Runnable {
         @Override
         public void run() {
             marqueeViewLower.startMarquee();
