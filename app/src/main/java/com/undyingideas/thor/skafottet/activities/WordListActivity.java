@@ -31,6 +31,7 @@ import com.undyingideas.thor.skafottet.adapters.WordListAdapter;
 import com.undyingideas.thor.skafottet.adapters.WordTitleLocalAdapter;
 import com.undyingideas.thor.skafottet.adapters.WordTitleRemoteAdapter;
 import com.undyingideas.thor.skafottet.support.firebase.WordList.WordListController;
+import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 import com.undyingideas.thor.skafottet.support.utility.StringHelper;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.support.utility.WordListDownloader;
@@ -385,6 +386,12 @@ public class WordListActivity extends AppCompatActivity implements
             new WordListDownloader(this, title, url).execute();
         } else {
             s_wordController.addLocalWordList(title, url);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    ListFetcher.saveWordLists(s_wordController, getApplicationContext());
+                }
+            });
         }
     }
 }

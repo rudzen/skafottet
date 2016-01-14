@@ -11,18 +11,16 @@ import android.view.Display;
 
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.support.firebase.WordList.WordListController;
 import com.undyingideas.thor.skafottet.support.firebase.controller.MultiplayerController;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
+import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 import com.undyingideas.thor.skafottet.support.utility.TinyDB;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.support.wordlist.WordController;
-import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
-import java.util.HashMap;
 
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_prefereces;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_wordController;
@@ -92,13 +90,10 @@ public class LoadingActivity extends AppCompatActivity {
                 * 3) If not, reset the list to default build in list.
                 */
 
-                try {
-//                    s_prefereces.checkForNullValue(Constant.KEY_WORDS_LOCAL);
-                    s_wordController = (WordController) s_prefereces.getObject(Constant.KEY_WORDS_LOCAL, WordController.class);
-                } catch (final Exception e) {
-                    Log.d(TAG, "Unable to load any local word list from preferences.");
+                s_wordController = ListFetcher.loadWordList(loadingActivity.getApplicationContext());
+                if (s_wordController == null) {
                     s_wordController = new WordController(loadingActivity.getResources().getStringArray(R.array.countries));
-                    s_prefereces.putObject(Constant.KEY_WORDS_LOCAL, s_wordController.getLocalWords());
+                    ListFetcher.saveWordLists(s_wordController, loadingActivity.getApplicationContext());
                 }
 
                 Log.d(TAG, String.valueOf(s_wordController.isLocal()));
@@ -108,18 +103,6 @@ public class LoadingActivity extends AppCompatActivity {
                 s_wordController.setIndexRemote(s_prefereces.getString(Constant.KEY_WORDS_LIST_FIREBASE_KEY));
 
                 Log.d(TAG, s_wordController.toString());
-
-                /* repeating above for firebase list, except that we can't retrieve any list before connection is up. */
-                try {
-//                    s_prefereces.checkForNullValue(Constant.KEY_WORDS_FIREBASE);
-                    WordListController.wordList = (HashMap<String, WordItem>) s_prefereces.getObject(Constant.KEY_WORDS_FIREBASE, HashMap.class);
-                } catch (final Exception e) {
-                    Log.d(TAG, "Unable to load any remote cached word lists from preferences, log in to update.");
-                    if (!s_wordController.isLocal()) {
-                        s_wordController.setIsLocal(true);
-                        s_wordController.setCurrentLocalList(0);
-                    }
-                }
                 return true;
             }
             return null;

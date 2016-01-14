@@ -117,27 +117,47 @@ public final class WordController implements Serializable, Parcelable {
 
     /* getters and setters */
 
-    public boolean isLocal() { return isLocal; }
+    public ArrayList<WordItem> getLocalWords() { return localWords; }
 
-    public void setIsLocal(final boolean isLocal) { this.isLocal = isLocal; }
-
-    public int getIndexLocale() { return indexLocale; }
-
-    public void setIndexLocale(final int indexLocale) { this.indexLocale = indexLocale; }
-
-    public String getIndexRemote() { return indexRemote; }
-
-    public void setIndexRemote(final String indexRemote) { this.indexRemote = indexRemote; }
+    public void setLocalWords(ArrayList<WordItem> localWords) { this.localWords = localWords; }
 
     public int getCurrentLocalList() { return currentLocalList; }
 
-    public void setCurrentLocalList(final int currentLocalList) { this.currentLocalList = currentLocalList; }
+    public void setCurrentLocalList(int currentLocalList) { this.currentLocalList = currentLocalList; }
 
-    public ArrayList<WordItem> getLocalWords() { return localWords; }
+    public boolean isLocal() {
+        return isLocal;
+    }
 
-    public void setLocalWords(final ArrayList<WordItem> localWords) { this.localWords = localWords; }
+    public void setIsLocal(boolean isLocal) {
+        this.isLocal = isLocal;
+    }
 
-    /* overrides */
+    public int getIndexLocale() {
+        return indexLocale;
+    }
+
+    public void setIndexLocale(int indexLocale) {
+        this.indexLocale = indexLocale;
+    }
+
+    public String getIndexRemote() {
+        return indexRemote;
+    }
+
+    public void setIndexRemote(String indexRemote) {
+        this.indexRemote = indexRemote;
+    }
+
+    public Random getRandom() {
+        return random;
+    }
+
+    public void setRandom(Random random) {
+        this.random = random;
+    }
+
+/* overrides */
 
     @Override
     public String toString() {
@@ -151,12 +171,9 @@ public final class WordController implements Serializable, Parcelable {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        return super.equals(o);
-    }
 
     /* parcel code .. DON'T TOUCH! */
+
 
     @Override
     public int describeContents() { return 0; }
@@ -180,7 +197,7 @@ public final class WordController implements Serializable, Parcelable {
         random = (Random) in.readSerializable();
     }
 
-    public static final Parcelable.Creator<WordController> CREATOR = new WordControllerCreator();
+    public static final Creator<WordController> CREATOR = new WordControllerCreator();
 
     private static class WordControllerCreator implements Creator<WordController> {
         @Override

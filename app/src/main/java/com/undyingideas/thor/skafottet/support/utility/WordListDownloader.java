@@ -19,7 +19,6 @@ import java.util.HashSet;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_prefereces;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_wordController;
 
 /**
@@ -116,7 +115,7 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
                 } else {
                     s_wordController.addLocalWordList(wordItem.getTitle(), wordItem.getUrl(), wordItem.getWords());
                 }
-                s_prefereces.putObject(Constant.KEY_WORDS_LOCAL, s_wordController);
+                ListFetcher.saveWordLists(s_wordController, wordListActivity.getApplicationContext());
                 return wordItem;
             } catch (final IOException ioe) {
                 pd.dismiss();

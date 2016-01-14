@@ -9,6 +9,7 @@ import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.StringHelper;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 @SuppressWarnings("unused")
 public class HangedMan implements Parcelable {
@@ -51,7 +52,7 @@ public class HangedMan implements Parcelable {
     private StringBuilder updateVisibleWord(@NonNull final StringBuilder stringBuilder) {
         for (int n = 0; n < theWord.length(); n++) {
             final String letter = theWord.substring(n, n + 1);
-            stringBuilder.append(usedLetters.contains(letter) ? letter : '*');
+            stringBuilder.append(usedLetters.contains(letter) ? letter : Objects.equals(letter, " ") ? ' ' : '*');
         }
         return stringBuilder;
     }
@@ -86,8 +87,7 @@ public class HangedMan implements Parcelable {
         Log.d(TAG, "| forkerteBogstaver = " + Integer.toString(numWrongLetters));
         Log.d(TAG, "| brugeBogstaver    = " + usedLetters);
         Log.d(TAG, "---------------------");
-        if (isGameLost) Log.d(TAG, "| SPILLET ER TABT");
-        else if (isGameWon) Log.d(TAG, "| SPILLET ER VUNDET");
+        Log.d(TAG, "SPILLET ER " + (isGameLost ? " TABT" : isGameWon ? " VUNDET" : " I GANG"));
         Log.d(TAG, "---------------------");
     }
 
