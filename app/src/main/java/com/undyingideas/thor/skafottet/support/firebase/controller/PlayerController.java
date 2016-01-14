@@ -39,6 +39,10 @@ public class PlayerController {
     public void addListener(final String name) {
         ref.child("Players").child(name).child("gameList").addChildEventListener(new GameListListener(mpcRef));
     }
+
+    public void updatePlayerScore(final String name, int newScore) {
+        ref.child("Players").child(name).child("score").setValue(newScore);
+    }
 }
 
 class fireBaseCreate implements Transaction.Handler{

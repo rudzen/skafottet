@@ -179,6 +179,11 @@ public class EndOfGameFragment extends Fragment {
                 if (!lps.getName().equals(GameUtility.mpc.name) && lps.getScore() == -1)
                     gameisDone = false;
             if (gameisDone) {
+                for (LobbyPlayerStatus lps : dto.getPlayerList()){
+                    if (lps.getName().equals(getWinner(dto)))
+                        GameUtility.mpc.pc.updatePlayerScore(lps.getName(), lps.getScore()+1);
+                }
+
                 if (endGame.getLogic().isGameLost()) {
                     imageViewResult.setImageResource(R.drawable.reaper);
                     textViewTop.setText("Du er blever henrettet af " + getWinner(dto));
