@@ -61,9 +61,10 @@ public class MultiplayerController {
         }
     }
 
-    public boolean login(final String name) {
+    public boolean login(final String name, final String pass) {
         if (pc.playerList.containsKey(name)) {
             logout();
+            if (!pc.playerList.get(name).getPassword().equals(pass)) return false; // if incorrect password
             this.name = name;
             pc.addListener(name);
             lc = new LobbyController(this, ref);
