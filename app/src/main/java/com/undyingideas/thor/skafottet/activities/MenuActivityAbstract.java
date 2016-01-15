@@ -21,7 +21,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.fragments.dialogs.Login;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.views.StarField;
 
@@ -36,7 +35,7 @@ import java.lang.ref.WeakReference;
  * @author rudz
  */
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
-public abstract class MenuActivityAbstract extends AppCompatActivity implements Login.LoginListener{
+public abstract class MenuActivityAbstract extends AppCompatActivity {
 
     @Nullable
     StarField sf; // needs to be protected, as menu act should be able to pause the damn thing.

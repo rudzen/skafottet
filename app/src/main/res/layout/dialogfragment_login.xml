@@ -8,23 +8,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/loginName"
-        android:autoText="true" />
+        android:autoText="true"
+        android:inputType="textPersonName"
+        android:hint="Navn"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/LoginPass" />
+        android:inputType="textPassword"
+        android:id="@+id/loginPass"
+        android:hint="Kodeord"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/btnLoginCancel" />
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="New Button"-->
+        <!--android:id="@+id/btnLoginCancel" />-->
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/btnLoginOk" />
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="New Button"-->
+        <!--android:id="@+id/btnLoginOk" />-->
 
 </LinearLayout>

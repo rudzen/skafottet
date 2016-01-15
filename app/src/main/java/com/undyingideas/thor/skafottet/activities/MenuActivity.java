@@ -20,10 +20,12 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -33,7 +35,6 @@ import com.nineoldandroids.animation.Animator;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.StartGameAdapter;
 import com.undyingideas.thor.skafottet.adapters.StartGameItem;
-import com.undyingideas.thor.skafottet.fragments.dialogs.Login;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
@@ -48,7 +49,7 @@ import java.util.ArrayList;
  *
  * @author rudz
  */
-public class MenuActivity extends MenuActivityAbstract{
+public class MenuActivity extends MenuActivityAbstract {
 
     private static final String FINISH = "finish";
     private static final int BACK_PRESSED_DELAY = 2000;
@@ -100,7 +101,7 @@ public class MenuActivity extends MenuActivityAbstract{
         loginButtons[1] = R.drawable.button_logout;
 
         loginLayout = (LinearLayout) findViewById(R.id.LoginLayout);
-        loginLayout.setOnClickListener(new LoginClickListener());
+        loginLayout.setOnClickListener(new OnLoginClickListener(this));
         loginText = (TextView) findViewById(R.id.loginText);
         if (GameUtility.mpc.name != null) loginText.setText(GameUtility.mpc.name);
 
@@ -123,7 +124,8 @@ public class MenuActivity extends MenuActivityAbstract{
     protected void onResume() {
         super.onResume();
 //        WindowLayout.hideStatusBar(getWindow(), null);
-        if (GameUtility.mpc.name != null) loginText.setText(GameUtility.mpc.name); else loginText.setText("login");
+        if (GameUtility.mpc.name != null) loginText.setText(GameUtility.mpc.name);
+        else loginText.setText("login");
         showAll();
     }
 
@@ -209,7 +211,8 @@ public class MenuActivity extends MenuActivityAbstract{
 
     @SuppressWarnings("unused")
     private void showLogin() {
-        Login.newInstance("Login", "OK", "Cancel", true).show(getSupportFragmentManager(), "Login");
+        loginLayout.callOnClick();
+//        Login.newInstance("Login", "OK", "Cancel", true).show(getSupportFragmentManager(), "Login");
     }
 
     @SuppressWarnings({"unused", "AccessStaticViaInstance"})
@@ -230,7 +233,7 @@ public class MenuActivity extends MenuActivityAbstract{
             // nothing happends here, its just for not adding the option to continue a game.
         } finally {
             startGameItems.add(new StartGameItem(Constant.MODE_SINGLE_PLAYER, "Nyt singleplayer", "Tilfældigt ord.", GameUtility.imageRefs[0]));
-            if(GameUtility.mpc.name != null) {
+            if (GameUtility.mpc.name != null) {
                 startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER, getString(R.string.menu_new_multi_player_game), "Udfordring.", GameUtility.imageRefs[0]));
                 startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_2, getString(R.string.menu_new_multi_player_game), "Tværfaglig udfordring", GameUtility.imageRefs[0]));
                 startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_LOBBY, "Se spil lobbyer", "Ikke for sarte sjæle", GameUtility.imageRefs[0]));
@@ -294,19 +297,13 @@ public class MenuActivity extends MenuActivityAbstract{
         ;
     }
 
-    @Override
     public void onFinishLoginDialog(final String title, final String pass) {
         if (title != null && pass != null) {
             buttons[BUTTON_LOGIN_OUT].setTag(true);
         }
         buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(GameUtility.mpc.name == null ? loginButtons[0] : loginButtons[1]));
-        if (GameUtility.mpc.name != null) loginText.setText(GameUtility.mpc.name); else loginText.setText("login");
-        showAll();
-    }
-
-    @Override
-    public void onCancel() {
-        buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(GameUtility.mpc.name == null ? loginButtons[0] : loginButtons[1]));
+        if (GameUtility.mpc.name != null) loginText.setText(GameUtility.mpc.name);
+        else loginText.setText("Login");
         showAll();
     }
 
@@ -488,13 +485,85 @@ public class MenuActivity extends MenuActivityAbstract{
         public void onAnimationRepeat(final Animator animation) { }
     }
 
-    private class LoginClickListener implements View.OnClickListener {
+//    private class LoginClickListener implements View.OnClickListener {
+//        @Override
+//        public void onClick(final View v) {
+//            Login.newInstance("Login", "OK", "Cancel", true).show(getSupportFragmentManager(), "Login");
+//        }
+//    }
+
+    private static class OnLoginClickListener implements View.OnClickListener {
+
+        private final WeakReference<MenuActivity> menuActivityWeakReference;
+
+        public OnLoginClickListener(final MenuActivity menuActivity) {
+            menuActivityWeakReference = new WeakReference<>(menuActivity);
+        }
+
         @Override
         public void onClick(final View v) {
-            Login.newInstance("Login", "OK", "Cancel", true).show(getSupportFragmentManager(), "Login");
-
+            final MenuActivity menuActivity = menuActivityWeakReference.get();
+            if (menuActivity != null) {
+                menuActivity.md = new MaterialDialog.Builder(menuActivity)
+                        .customView(R.layout.dialogfragment_login, false)
+                        .positiveText("Ok")
+                        .negativeText("Afbryd")
+                        .onAny(new OnLoginClickResponse(menuActivity))
+                        .title("Login")
+                        .show();
+            }
         }
     }
+
+    /**
+     * Listener for adding list dialog !
+     */
+    private static class OnLoginClickResponse implements MaterialDialog.SingleButtonCallback {
+
+        private final WeakReference<MenuActivity> menuActivityWeakReference;
+
+        public OnLoginClickResponse(final MenuActivity menuActivity) {
+            menuActivityWeakReference = new WeakReference<>(menuActivity);
+        }
+
+        private static boolean isValid(final Context context, @NonNull final String title, @NonNull final String url) {
+            final boolean validStuff = !title.isEmpty() && !url.isEmpty();
+            if (validStuff) return true;
+            Toast.makeText(context, "Forkert indtastede informationer.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        @Override
+        public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+            final MenuActivity menuActivity = menuActivityWeakReference.get();
+            if (menuActivity != null) {
+                if (which == DialogAction.POSITIVE) {
+                    /* let's inflate the dialog view... */
+                    final View dialogCustomView = dialog.getCustomView();
+                    if (dialogCustomView != null) {
+                        final EditText editTextTitle = (EditText) dialogCustomView.findViewById(R.id.loginName);
+                        final EditText editTextURL = (EditText) dialogCustomView.findViewById(R.id.loginPass);
+                        final String user = editTextTitle.getText().toString().trim();
+                        final String pass = editTextURL.getText().toString().trim();
+                        Log.d("Login", user);
+                        Log.d("Login", pass);
+                        Log.d("Login", String.valueOf(isValid(menuActivity, user, pass)));
+
+                        if (isValid(menuActivity, user, pass)) {
+                            menuActivity.onFinishLoginDialog(user, pass);
+                        }
+                    }
+                } else {
+                    menuActivity.buttons[BUTTON_LOGIN_OUT].setBackground(menuActivity.getResources().getDrawable(GameUtility.mpc.name == null ? menuActivity.loginButtons[0] : menuActivity.loginButtons[1]));
+                    menuActivity.callMethod("showAll");
+                }
+                dialog.dismiss();
+                menuActivity.onWindowFocusChanged(true);
+            }
+        }
+    }
+
+
 
     private class NewGameCancelListener implements DialogInterface.OnCancelListener {
         @Override
@@ -513,5 +582,6 @@ public class MenuActivity extends MenuActivityAbstract{
                 .show();
         showAll();
     }
+
 
 }

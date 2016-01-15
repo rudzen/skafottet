@@ -85,9 +85,9 @@ public class Login extends DialogFragment {
         getDialog().setOnCancelListener(new LoginOnCancelListener());
 
         ViewHolder.s_name = (EditText) view.findViewById(R.id.loginName);
-        ViewHolder.s_pass = (EditText) view.findViewById(R.id.LoginPass);
-        ViewHolder.s_btnOk = (Button) view.findViewById(R.id.btnLoginOk);
-        ViewHolder.s_btnCancel = (Button) view.findViewById(R.id.btnLoginCancel);
+        ViewHolder.s_pass = (EditText) view.findViewById(R.id.loginPass);
+//        ViewHolder.s_btnOk = (Button) view.findViewById(R.id.btnLoginOk);
+//        ViewHolder.s_btnCancel = (Button) view.findViewById(R.id.btnLoginCancel);
 
         final EditTextClickHandler handler = new EditTextClickHandler(this);
         ViewHolder.s_name.setOnKeyListener(handler);
