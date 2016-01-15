@@ -35,17 +35,21 @@ import com.nineoldandroids.animation.Animator;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.StartGameAdapter;
 import com.undyingideas.thor.skafottet.adapters.StartGameItem;
+import com.undyingideas.thor.skafottet.broadcastrecievers.InternetReciever;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
+import com.undyingideas.thor.skafottet.support.utility.NetwordHelper;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 /**
- * Very basic activity.
+ * The main menu activity.
+ * Quite large, but contains only relevant code.
+ *
  *
  * @author rudz
  */
@@ -86,6 +90,7 @@ public class MenuActivity extends MenuActivityAbstract {
 
     private final int[] loginButtons = new int[2];
 
+    private Runnable connectionObserver;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -118,6 +123,9 @@ public class MenuActivity extends MenuActivityAbstract {
         buttons[BUTTON_HELP] = (ImageView) findViewById(R.id.menu_button_help);
         buttons[BUTTON_LOGIN_OUT] = (ImageView) findViewById(R.id.menu_button_login_out);
         buttons[BUTTON_QUIT] = (ImageView) findViewById(R.id.menu_button_quit);
+
+        connectionObserver = new ConnectionObserver(this);
+        InternetReciever.addObserver(connectionObserver);
     }
 
     @Override
@@ -583,5 +591,23 @@ public class MenuActivity extends MenuActivityAbstract {
         showAll();
     }
 
+
+    private static class ConnectionObserver implements Runnable {
+
+        private final WeakReference<MenuActivity> menuActivityWeakReference;
+
+        public ConnectionObserver(final MenuActivity menuActivity) {
+            menuActivityWeakReference = new WeakReference<>(menuActivity);
+        }
+
+        @Override
+        public void run() {
+            final MenuActivity menuActivity = menuActivityWeakReference.get();
+            if (menuActivity != null) {
+                WindowLayout.showSnack(NetwordHelper.getConnectivityStatusString(menuActivity), menuActivity.title, true);
+                InternetReciever.addObserver(menuActivity.connectionObserver);
+            }
+        }
+    }
 
 }

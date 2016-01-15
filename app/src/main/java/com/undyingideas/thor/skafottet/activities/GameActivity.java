@@ -27,6 +27,13 @@ import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import asia.ivity.android.marqueeview.MarqueeView;
 
+/**
+ * The main game activity.
+ * It has the responsibility of showing the game itself and the end game display to the user.
+ *
+ * This contains the basic stuff for handling all the fragments which are displayed here.
+ * @author rudz
+ */
 public class GameActivity extends AppCompatActivity implements
         LobbySelectorFragment.OnMultiPlayerPlayerFragmentInteractionListener,
         EndOfGameFragment.OnEndGameButtonClickListenerInterface,
@@ -81,7 +88,6 @@ public class GameActivity extends AppCompatActivity implements
         mv.setPauseBetweenAnimations(500);
         mv.setSpeed(10);
         handler.postDelayed(mvReset, 500);
-
 
         topProgressBar = (ProgressBar) findViewById(R.id.topProgressBar);
         topProgressBar.setVisibility(View.INVISIBLE);
@@ -147,9 +153,9 @@ public class GameActivity extends AppCompatActivity implements
     @Override
     public void onEndGameButtonClicked(final boolean newGame) {
         if (newGame) {
-            // only allowed in single player for now.
             replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(), false, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du")));
         } else {
+            // go back to the menu
             finish();
         }
     }
@@ -158,5 +164,6 @@ public class GameActivity extends AppCompatActivity implements
     public void setProgressBar(final boolean visible) {
         topProgressBar.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
     }
+
 }
 

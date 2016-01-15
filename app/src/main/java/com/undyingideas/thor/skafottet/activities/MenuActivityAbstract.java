@@ -32,6 +32,7 @@ import java.lang.ref.WeakReference;
  * <p>
  *     Contains Starfield View & Sensor related code ONLY!.
  * </p>
+ * Uses WeakReferences to avoid having any loose ends where the GC can't collect the object.
  * @author rudz
  */
 @SuppressWarnings("AbstractClassExtendsConcreteClass")

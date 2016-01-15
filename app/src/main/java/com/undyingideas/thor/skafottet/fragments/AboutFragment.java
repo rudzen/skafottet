@@ -45,7 +45,8 @@ public class AboutFragment extends Fragment {
             "Projekt ansvarlig : Rudy Alex Kohn" +
                     SEP + SEP +
                     "Design / Grafik / Kode : " + RUDY + SEP +
-                    "Firebase Design / Kode : " + ADAM + ", " + THEIS + SEP +
+                    "Firebase Design / Kode : " + ADAM + ", " + THEIS + SEP + SEP + " " + SEP +
+                    "Baseret på originalt skafott af Thor" + SEP + SEP +
 
             "Original galgelogik af Jakob Nordfalk." + SEP + "http://www.javabog.dk",
             "TinyDB preferences interface af kcochibili." + SEP + "https://github.com/kcochibili/TinyDB--Android-Shared-Preferences-Turbo",

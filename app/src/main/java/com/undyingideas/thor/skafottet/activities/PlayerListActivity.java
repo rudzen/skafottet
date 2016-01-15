@@ -30,6 +30,8 @@ import java.util.List;
  * lead to a {@link PlayerDetailActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
+ * @author adam
+ * @author rudz
  */
 public class PlayerListActivity extends AppCompatActivity implements Runnable, ProgressBarInterface {
 
@@ -58,7 +60,7 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable, P
         fab.setOnClickListener(new FloaterClickHandler());
 
         topProgressBar = (ProgressBar) findViewById(R.id.player_list_top_progress_bar);
-
+        topProgressBar.setVisibility(View.INVISIBLE);
 
         recyclerView = findViewById(R.id.player_list);
         assert recyclerView != null;
@@ -160,7 +162,6 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable, P
                     final Context context = v.getContext();
                     final Intent intent = new Intent(context, PlayerDetailActivity.class);
                     intent.putExtra(PlayerDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-
                     context.startActivity(intent);
                 }
             }
@@ -173,6 +174,5 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable, P
         if (hasFocus) {
             WindowLayout.setImmersiveMode(getWindow());
         }
-
     }
 }

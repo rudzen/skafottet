@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.undyingideas.thor.skafottet"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest
+    package="com.undyingideas.thor.skafottet"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
-
-    <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -60,6 +60,9 @@
             android:name=".broadcastrecievers.InternetReciever"
             android:enabled="true"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
         </receiver>
 
         <!-- This service is only used on devices with API v17+ -->
