@@ -32,16 +32,31 @@ public class Hangman3dView extends View{
     public boolean onTouchEvent(MotionEvent e){
         float x = e.getX();
         float y = e.getY();
-        if(e.getAction() == MotionEvent.ACTION_MOVE) {
+        Log.d("hangman", ""+x + " , "+y);
+
             float dx = x - mPreviousX;
             float dy = y - mPreviousY;
+            // reverse direction of rotation above the mid-line
+            if (y > getHeight() / 2) {
+                dx = dx * -1 ;
+            }
+
+            // reverse direction of rotation to left of the mid-line
+            if (x < getWidth() / 2) {
+                dy = dy * -1 ;
+            }
+            Log.d("hangman", ""+dx);
+            S.rotateLeft(dx * TOUCH_SCALE_FACTOR);
+
+        invalidate();
+            mPreviousX = x;
+            mPreviousY = y;
             return true;
-        } else {
-            return false;
-        }
+
     }
 
-    private float x, y;
+    private float mPreviousX, mPreviousY;
+    private final float TOUCH_SCALE_FACTOR = 10.0f / 320;
 
     int framerate=25;
     int delay=1000/framerate;

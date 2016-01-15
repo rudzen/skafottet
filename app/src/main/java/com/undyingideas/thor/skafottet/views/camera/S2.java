@@ -31,7 +31,6 @@ public class S2 {
 	public void drawLine(Canvas g, V2 p1, V2 p2, Paint p) {
 		V2 p1w = transform(p1);
 		V2 p2w = transform(p2);
-		Log.d("draws2", p1w + " , " +p2w);
 		g.drawLine((float) p1w.x, (float) p1w.y, (float) p2w.x, (float) p2w.y, p);
 	}
 	public void drawPoint(Canvas c, V2 point, Paint p){
