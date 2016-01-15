@@ -17,6 +17,8 @@ import static android.view.MotionEvent.*;
  */
 public class Hangman3dView extends View{
 
+    public final static String TAG = "hangman3dview";
+
     private float mPreviousX, mPreviousY;
     private final float TOUCH_SCALE_FACTOR = 2f / 180;
     int framerate=25;
@@ -75,13 +77,15 @@ public class Hangman3dView extends View{
                 invalidate();
                 // no break;
             case ACTION_DOWN:
-                Log.d("MotionEvent", "touchstarted");
+                if (e.getAction()!= ACTION_MOVE) Log.d(TAG, "touchstarted");
                 mPreviousX = x;
                 mPreviousY = y;
                 break;
             case ACTION_UP :
-                Log.d("MotionEvent", "touchstopped");
+                Log.d(TAG, "touchstopped");
                 break;
+            default:
+                Log.d(TAG, "unaccounted event " +e.getAction());
         }
         return true;
     }
