@@ -3,6 +3,7 @@ package com.undyingideas.thor.skafottet.game;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
@@ -10,56 +11,69 @@ import com.undyingideas.thor.skafottet.support.utility.StringHelper;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("unused")
 public class HangedMan implements Parcelable {
 
-    private String theWord;
-    private ArrayList<String> usedLetters = new ArrayList<>();
-    private String visibleWord;
-    private int numWrongLetters;
-    private int numCorrectLettersLast;
-    private boolean lastLetterCorrect;
-    private boolean isGameWon;
-    private boolean isGameLost;
+    private static final Pattern ambersamRepl = Pattern.compile("&");
 
-    private final static String TAG = "HangedMan";
+    private static final String TAG = "HangedMan";
+
+    private ArrayList<String> usedLetters = new ArrayList<>();
+
+    @Nullable
+    private String theWord;
+
+    private String visibleWord;
+
+    private int numWrongLetters;
+
+    private int numCorrectLettersLast;
+
+    private boolean lastLetterCorrect;
+
+    private boolean isGameWon;
+
+    private boolean isGameLost;
 
     public HangedMan() {
         theWord = null;
-        reset();
+        reset(true);
     }
 
     public HangedMan(@NonNull final String theWord) {
         this.theWord = theWord.toLowerCase();
-        reset();
+        reset(false);
     }
 
     public boolean isGameOver() {
         return isGameWon || isGameLost;
     }
 
-    private void reset() {
+    private void reset(final boolean newWord) {
         usedLetters.clear();
         numWrongLetters = 0;
         numCorrectLettersLast = 0;
         isGameLost = false;
         isGameWon = false;
-        if (theWord == null) theWord = GameUtility.s_wordController.getRandomWord().toLowerCase();
+        if (newWord) theWord = GameUtility.s_wordController.getRandomWord().toLowerCase();
         visibleWord = updateVisibleWord(new StringBuilder(theWord.length())).toString();
     }
 
     private StringBuilder updateVisibleWord(@NonNull final StringBuilder stringBuilder) {
-        for (int n = 0; n < theWord.length(); n++) {
-            final String letter = theWord.substring(n, n + 1);
-            stringBuilder.append(usedLetters.contains(letter) ? letter : Objects.equals(letter, " ") ? ' ' : '*');
+        if (theWord != null) {
+            for (int n = 0; n < theWord.length(); n++) {
+                final String letter = theWord.substring(n, n + 1);
+                stringBuilder.append(usedLetters.contains(letter) ? letter : Objects.equals(letter, " ") ? ' ' : '*');
+            }
         }
         return stringBuilder;
     }
 
+    @SuppressWarnings("OverlyComplexBooleanExpression")
     public void guessLetter(@NonNull final String letter) {
-        if (letter.length() != 1) return;
-        if (visibleWord.contains(letter) || isGameWon || isGameLost) return;
+        if (isGameWon || isGameLost || letter.length() != 1 || visibleWord.contains(letter)) return;
         Log.d(TAG, "Der gættes på bogstavet: " + letter);
 
         usedLetters.add(letter);
@@ -91,70 +105,51 @@ public class HangedMan implements Parcelable {
         Log.d(TAG, "---------------------");
     }
 
-    public String getTheWord() {
-        return theWord;
-    }
+    /* ************************************* */
+    /* ************************************* */
+    /* ******** Getters & Setters ********** */
+    /* ************************************* */
+    /* ************************************* */
 
-    public void setTheWord(@NonNull final String theWord) {
-        this.theWord = theWord;
-    }
+    public String getTheWord() { return theWord; }
 
-    public ArrayList<String> getUsedLetters() {
-        return usedLetters;
-    }
+    public ArrayList<String> getUsedLetters() { return usedLetters; }
 
-    public void setUsedLetters(@NonNull final ArrayList<String> usedLetters) {
-        this.usedLetters.clear();
-        this.usedLetters.addAll(usedLetters);
-    }
+    public String getVisibleWord() { return visibleWord; }
 
-    public String getVisibleWord() {
-        return visibleWord;
-    }
+    public int getNumWrongLetters() { return numWrongLetters; }
 
-    public void setVisibleWord(final String visibleWord) {
-        this.visibleWord = visibleWord;
-    }
+    public int getNumCorrectLettersLast() { return numCorrectLettersLast; }
 
-    public int getNumWrongLetters() {
-        return numWrongLetters;
-    }
+    public boolean isGameLost() { return isGameLost; }
 
-    public void setNumWrongLetters(final int numWrongLetters) {
-        this.numWrongLetters = numWrongLetters;
-    }
+    public boolean isGameWon() { return isGameWon; }
 
-    public int getNumCorrectLettersLast() {
-        return numCorrectLettersLast;
-    }
+    public boolean isLastLetterCorrect() { return lastLetterCorrect; }
 
-    public void setNumCorrectLettersLast(final int numCorrectLettersLast) {
-        this.numCorrectLettersLast = numCorrectLettersLast;
-    }
 
-    public boolean isLastLetterCorrect() {
-        return lastLetterCorrect;
-    }
+    public void setTheWord(final String theWord) { this.theWord = theWord; }
 
-    public void setLastLetterCorrect(final boolean lastLetterCorrect) {
-        this.lastLetterCorrect = lastLetterCorrect;
-    }
+    public void setUsedLetters(final ArrayList<String> usedLetters) { this.usedLetters = usedLetters; }
 
-    public boolean isGameWon() {
-        return isGameWon;
-    }
+    public void setVisibleWord(final String visibleWord) { this.visibleWord = visibleWord; }
 
-    public void setGameWon(final boolean gameWon) {
-        isGameWon = gameWon;
-    }
+    public void setNumWrongLetters(final int numWrongLetters) { this.numWrongLetters = numWrongLetters; }
 
-    public boolean isGameLost() {
-        return isGameLost;
-    }
+    public void setNumCorrectLettersLast(final int numCorrectLettersLast) { this.numCorrectLettersLast = numCorrectLettersLast; }
 
-    public void setGameLost(final boolean gameLost) {
-        isGameLost = gameLost;
-    }
+    public void setIsGameLost(final boolean isGameLost) { this.isGameLost = isGameLost; }
+
+    public void setIsGameWon(final boolean isGameWon) { this.isGameWon = isGameWon; }
+
+    public void setLastLetterCorrect(final boolean lastLetterCorrect) { this.lastLetterCorrect = lastLetterCorrect; }
+
+
+    /* ************************************* */
+    /* ************************************* */
+    /* ************** Parcel  ************** */
+    /* ************************************* */
+    /* ************************************* */
 
     @Override
     public int describeContents() { return 0; }
@@ -171,7 +166,7 @@ public class HangedMan implements Parcelable {
         dest.writeByte(isGameLost ? (byte) 1 : (byte) 0);
     }
 
-    private HangedMan(final Parcel in) {
+    protected HangedMan(final Parcel in) {
         theWord = in.readString();
         usedLetters = in.createStringArrayList();
         visibleWord = in.readString();
@@ -182,9 +177,9 @@ public class HangedMan implements Parcelable {
         isGameLost = in.readByte() != 0;
     }
 
-    public static final Creator<HangedMan> CREATOR = new HangedCreator();
+    public static final Creator<HangedMan> CREATOR = new HangedManCreator();
 
-    private static class HangedCreator implements Creator<HangedMan> {
+    private static class HangedManCreator implements Creator<HangedMan> {
         @Override
         public HangedMan createFromParcel(final Parcel source) {return new HangedMan(source);}
 

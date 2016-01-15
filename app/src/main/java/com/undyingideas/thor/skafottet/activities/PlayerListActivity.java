@@ -17,12 +17,10 @@ import android.widget.TextView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.fragments.PlayerDetailFragment;
 import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
-import com.undyingideas.thor.skafottet.support.firebase.DTO.PlayerDTO;
 import com.undyingideas.thor.skafottet.support.highscore.online.HighScoreContent;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,19 +41,12 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable, P
     private View recyclerView;
     private ProgressBar topProgressBar;
 
-
-    private final ArrayList<PlayerDTO> players = new ArrayList<>();
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_list);
 
-//        Firebase.setAndroidContext(this);
-//        myFirebaseRef = new Firebase(Constant.HANGMANDTU_FIREBASEIO);
-
         GameUtility.mpc.setRunnable(this);
-//        mpc = new MultiplayerController(myFirebaseRef, this);
         GameUtility.mpc.pc.createPlayer("Thor", "Kuss3");
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -86,7 +77,9 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable, P
     //This method is called on update
     @Override
     public void run() {
+        setProgressBar(true);
         setupRecyclerView((RecyclerView) recyclerView, GameUtility.mpc.getHighScoreItems());
+        setProgressBar(false);
     }
 
     @Override
@@ -100,7 +93,6 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable, P
             WindowLayout.showSnack("Replace with your own action", view, false);
         }
     }
-
 
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
@@ -183,5 +175,4 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable, P
         }
 
     }
-
 }
