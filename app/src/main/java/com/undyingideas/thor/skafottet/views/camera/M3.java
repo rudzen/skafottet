@@ -1,8 +1,8 @@
-package com.undyingideas.thor.skafottet.camera;
+package com.undyingideas.thor.skafottet.views.camera;
 
 public class M3 {
 
-	public double a, b, c, d, e, f, g, h, i;
+	public float a, b, c, d, e, f, g, h, i;
 	
 	public final static M3 inverse;
     public final static M3 sX;
@@ -24,7 +24,7 @@ public class M3 {
 				0, 0, 0);
     }
     
-	public M3(double a, double b, double c, double d, double e, double f, double g, double h, double i) {
+	public M3(float a, float b, float c, float d, float e, float f, float g, float h, float i) {
 		this.a = a;
 		this.b = b;
 		this.c = c;
@@ -60,12 +60,12 @@ public class M3 {
 		return new M3(a - m.a, b - m.b, c - m.c, d - m.d, e - m.e, f - m.f, g - m.g, h - m.h, i - m.i);
 	}
 
-	public M3 mul(double x) {
+	public M3 mul(float x) {
 		return new M3(a * x, b * x, c * x, d * x , e*x , f*x , g*x,h*x,i*x);
 	}
 
 	public V3 getColumVector(int index) {
-		double valX, valY, valZ = valX = valY = 0;
+		float valX, valY, valZ = valX = valY = 0;
 		if (index == 1) {
 			valX += a;
 			valY += d;

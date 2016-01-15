@@ -1,4 +1,4 @@
-package com.undyingideas.thor.skafottet.camera;
+package com.undyingideas.thor.skafottet.views.camera;
 
 import android.graphics.Color;
 import android.graphics.Paint;
