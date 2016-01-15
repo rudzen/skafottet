@@ -22,8 +22,6 @@ import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Set;
 
 /**

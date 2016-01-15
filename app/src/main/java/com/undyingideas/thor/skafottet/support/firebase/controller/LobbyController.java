@@ -1,10 +1,8 @@
 package com.undyingideas.thor.skafottet.support.firebase.controller;
 
 import com.firebase.client.Firebase;
-import com.firebase.client.Query;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyPlayerStatus;
-import com.undyingideas.thor.skafottet.support.utility.Constant;
 
 import java.util.HashMap;
 

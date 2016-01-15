@@ -7,7 +7,6 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyPlayerStatus;
-import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 
 /**
  * Created on 07-01-2016, 12:13.

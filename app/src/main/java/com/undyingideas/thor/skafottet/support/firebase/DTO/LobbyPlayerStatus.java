@@ -1,7 +1,5 @@
 package com.undyingideas.thor.skafottet.support.firebase.DTO;
 
-import java.util.ArrayList;
-
 /**
  * Created on 05-01-2016, 12:13.
  * Project : skafottet

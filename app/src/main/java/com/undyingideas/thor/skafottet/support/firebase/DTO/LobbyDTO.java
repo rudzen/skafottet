@@ -1,7 +1,6 @@
 package com.undyingideas.thor.skafottet.support.firebase.DTO;
 
 import android.util.ArrayMap;
-import android.util.ArraySet;
 
 import java.util.ArrayList;
 
