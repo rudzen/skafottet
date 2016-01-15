@@ -194,21 +194,20 @@ public class HangmanGameFragment extends Fragment {
         } else {
             textViewStatus.setText("Du kæmper for føden");
         }
+        resetButtons();
 
+        // set the button status for the already guessed letters, this is just a quick and dirty hack :-)
+        Log.d("Game", String.valueOf(currentGame.getLogic().getNumWrongLetters()));
         if (currentGame.getLogic().getNumWrongLetters() > 0) {
-            for (final String s : currentGame.getLogic().getUsedLetters()) {
-                for (final Button button : listOfButtons) {
-                    if (button.getText() == s) {
-                        button.setClickable(false);
-                        button.setVisibility(View.INVISIBLE);
-                        break;
-                    }
+            Log.d("Game", currentGame.getLogic().getUsedLetters().toString());
+            for (final Button button : listOfButtons) {
+                if (currentGame.getLogic().getUsedLetters().contains(button.getText().toString())) {
+                    button.setClickable(false);
+                    button.setVisibility(View.INVISIBLE);
                 }
-
             }
-        } else {
-            resetButtons();
         }
+        listOfButtons.clear();
 
         noose.setErrors(currentGame.getLogic().getNumWrongLetters());
         //noose.setImageBitmap(GameUtility.invert(getContext(), currentGame.getLogic().getNumWrongLetters()));
@@ -237,7 +236,6 @@ public class HangmanGameFragment extends Fragment {
             button.setVisibility(View.VISIBLE);
             button.setOnClickListener(onButtonClickListener);
         }
-        listOfButtons.clear();
     }
 
     private static ArrayList<Button> getChildren(final ViewGroup vg) {
