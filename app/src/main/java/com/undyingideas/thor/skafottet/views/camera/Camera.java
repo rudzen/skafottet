@@ -19,14 +19,11 @@ public class Camera {
 
 	public float pivor = 0;
 
-	Paint paint;
-	Paint blackPaint;
-
 	/** zoom **/
 	private float z = 4;
 
 	// display
-	private S2 s2;
+	private final S2 s2;
 
 	V3 c =new V3(0,0,0);
 	M3 Rz;
@@ -34,35 +31,27 @@ public class Camera {
 	M3 Su;
 	public float northDegree = 0;
 
-	public Camera(float sx, float sy, int ox, int oy, Paint paint){
+	public Camera(final float sx, final float sy, final  int ox, final int oy){
 		s2=new S2(sx, sy, ox, oy);
-		this.paint= paint;
 		cameraCenter = new V3(12, 12, 6);
 		moveCameraTo(cameraCenter);
 		focusPoint = new V3(9,9,6);
 		focus(focusPoint);
 		z = 4.5f;
 
-
-		blackPaint = new Paint();
-		blackPaint.setColor(Color.BLACK);
-		blackPaint.setStrokeWidth(20);
-
-
-
 		u = new V3(0,1,1).unit();
 		 Su = new M3(0,   -u.z,  u.y,
 				u.z ,   0 , -u.x,
 				-u.y, u.x , 0);
 
-		float phi=(float)(Math.PI/100);
+		final float phi=(float)(Math.PI/100);
 //    M3 Rz=I.add(Sz.mul(Math.sin(phi))).add(Sz.mul(Sz).mul(1-Math.cos(phi)));
 		Rz=M3.inverse.add(Su.mul((float)Math.sin(phi))).add(Su.mul(Su).mul((float) (1 - Math.cos(phi))));
 
 	}
 
 
-	public V2 project(V3 p){
+	public V2 project(final V3 p){
 		V3 EP=p.sub(cameraCenter);
 
 		float d=EP.dot(D);
@@ -74,32 +63,10 @@ public class Camera {
 		return new V2(rm,um);
 	}
 
-
-	protected void onDraw(Canvas canvas) {
-
-		drawAxis(canvas);
-		for(int i = 0; i < 10; i++){
-			drawLine(canvas, new V3(i, 0, 0), new V3(i, 10, 0), paint);
-			drawLine(canvas, new V3(0, i, 0), new V3(10, i, 0), paint);
-		}
-
-		for(int i = 25; i < 35; i++){
-			drawLine(canvas, new V3(i, 25, 0), new V3(i, 35, 0), paint);
-			drawLine(canvas, new V3(25, i, 0), new V3(10+25, i, 0), paint);
-		}
-
-		for(int i = 25; i < 35; i++){
-			drawLine(canvas, new V3(i, 0, 0), new V3(i, 10, 0), paint);
-			drawLine(canvas, new V3(0, i, 0), new V3(10, i, 0), paint);
-		}
-
-		drawLine(canvas, new V3(1, 0, 0), new V3(1, 0, 1), blackPaint);
-
-	}
-	public void drawAxis(Canvas canvas){
+	public void drawAxis(Canvas canvas, Paint paint){
 		drawLine(canvas, new V3(0, 0, 0), new V3(10, 0, 0), paint);
 		drawLine(canvas, new V3(0, 0, 0), new V3(0, 10, 0), paint);
-		drawLine(canvas, new V3(0,0,0), new V3(0,0,10),paint);
+		drawLine(canvas, new V3(0, 0, 0), new V3(0, 0, 10), paint);
 
 	}
 
