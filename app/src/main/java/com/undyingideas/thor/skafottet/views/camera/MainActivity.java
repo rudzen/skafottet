@@ -20,8 +20,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     int framerate = 250;
     int delay = 1000/framerate;
 
-    double ts;
-    double t;
+    float ts;
+    float t;
     Camera cam;
     M3 Rz;
     V3 focusPoint;
@@ -37,13 +37,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
     //Projectile motion
-    double g=9.82;    // m/(s*s)
+    float g=9.82f;    // m/(s*s)
     V2 r0=new V2(0, 0);
     double ang = 45;
     double ang2 = 60;
 
-    V2 v0=new V2(Math.cos(Math.toRadians(ang))*10, Math.sin(Math.toRadians(ang))*10);
-    V2 v1 = new V2(Math.cos(Math.toRadians(ang2))*10, Math.sin(Math.toRadians(ang2))*10);
+    V2 v0=new V2((float)(Math.cos(Math.toRadians(ang))*10), (float)Math.sin(Math.toRadians(ang))*10);
+    V2 v1 = new V2((float)(Math.cos(Math.toRadians(ang2))*10), (float)Math.sin(Math.toRadians(ang2))*10);
     V2 a=new V2(0,-g);
     private Button btnMoveCloser;
     private Button btnMoveAway;
@@ -88,14 +88,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         paint.setColor(Color.BLUE);
 
         //Init camera
-        cam = new Camera(this,100,100,500,500,paint);
+        cam = new Camera(100,100,500,500,paint);
 
         top.addView(btnStopStart);
         top.addView(btnMoveCloser);
         top.addView(btnMoveAway);
         top.addView(btnMoveTowards);
-        layout.addView(top);
-        layout.addView(cam);
+        //layout.addView(top);
+        //layout.addView(cam);
 
         ts=System.currentTimeMillis();
 
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 -u.y, u.x , 0);
         double phi=Math.PI/100;
         //Rotation matric
-        Rz=M3.inverse.add(Su.mul(Math.sin(phi))).add(Su.mul(Su).mul(1-Math.cos(phi)));
+        Rz=M3.inverse.add(Su.mul((float)Math.sin(phi))).add(Su.mul(Su).mul((float)(1-Math.cos(phi))));
 
         y=0;
 
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
             V3 a = cam.getCameraCenter();
             V3 b = cam.getFocusPoint();
-            V3 c = b.sub(a).mul(0.05);
+            V3 c = b.sub(a).mul(0.05f);
             cam.moveCameraTo(a.add(c));
             cam.setFocusPoint(b.add(c));
 
@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onPause() {
         super.onPause();
-        System.out.println("nu blev onPause() kaldt");
+
         sensorManager.unregisterListener(this);
 
     }
@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
         //Velosity change
-        t=(System.currentTimeMillis()-ts)/1000.0;
+       // t=((float)System.currentTimeMillis()-ts)/1000.0;
 
 
 
@@ -220,14 +220,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
 
-//      traj.add(r);
-        cam.traj.add(r2);
 
-        if(r2.z < 0){
-            cam.traj.clear();
-            ts = System.currentTimeMillis();
-
-        }
 
 
 
@@ -237,8 +230,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 //        cam.setFocusPoint(Rz.mul(cam.getFocusPoint().sub(cam.getCameraCenter())).add(cam.getCameraCenter()));
 
 
-        double degreeY = e.values[1];
-        double degreeX= e.values[0];
+        float degreeY = e.values[1];
+        float degreeX= e.values[0];
 
         //if degreeY is -90 phone is looking horizontal
         if(degreeY < 0) {
@@ -260,22 +253,22 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
 
-        double xOffset = cam.getCameraCenter().x;
-        double yOffset = cam.getCameraCenter().y;
-        double zOffset = cam.getCameraCenter().z;
+        float xOffset = cam.getCameraCenter().x;
+        float yOffset = cam.getCameraCenter().y;
+        float zOffset = cam.getCameraCenter().z;
 
 
         //FINDING  HEIGHT OF Z projektet onto plane.
 
-        V3 upDownPoint = new V3(xOffset-Math.cos(Math.toRadians(degreeY))*10,yOffset,zOffset+Math.sin(Math.toRadians(degreeY))*10);
+        V3 upDownPoint = new V3((float)(xOffset-Math.cos(Math.toRadians(degreeY))*10),yOffset,(float)(zOffset+Math.sin(Math.toRadians(degreeY))*10));
 
 
 
 
-        V3 turnPoint = new V3(xOffset+(-Math.sin(Math.toRadians(degreeX))*10),yOffset+(-Math.cos(Math.toRadians(degreeX))*10),0);
+        V3 turnPoint = new V3(xOffset+((float)-Math.sin(Math.toRadians(degreeX))*10),yOffset+((float)-Math.cos(Math.toRadians(degreeX))*10),0);
 
-        V2 turn = new V2(xOffset+(-Math.sin(Math.toRadians(degreeX))*10),yOffset+(-Math.cos(Math.toRadians(degreeX))*10));
-        V2 upDown = new V2(xOffset-Math.cos(Math.toRadians(degreeY))*10,yOffset);
+        V2 turn = new V2(xOffset+((float)-Math.sin(Math.toRadians(degreeX))*10),yOffset+((float)-Math.cos(Math.toRadians(degreeX))*10));
+        V2 upDown = new V2(xOffset-(float)Math.cos(Math.toRadians(degreeY))*10,yOffset);
 
         V2 projection = turn.projection(upDown);
 
@@ -291,19 +284,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 //                + cam.getFocusPoint().getY() + " Y "
 //                + cam.getFocusPoint().getZ() + " Z ");
 
-        cam.redraw();
+
 
 
     }
 
 
-    V3 r(double t, V2 v0){
-        V2 v = a.mul(0.5*t*t).add(v0.mul(t)).add(r0);
+    V3 r(float t, V2 v0){
+        V2 v = a.mul(0.5f*t*t).add(v0.mul(t)).add(r0);
         return new V3(0,v.x,v.y);
 //      return -0.5*g*t*t+v0*t+x0;
     }
 
-    V2 v(double t, V2 v0){
+    V2 v(float t, V2 v0){
         return a.mul(t).add(v0);
 //      return -g*t+v0;
     }

@@ -6,12 +6,11 @@ import android.graphics.Paint;
 import android.view.View;
 
 
-public class S3 extends View {
+public class S3 {
 	private S2 s2;
 
-	public S3(Context a, float sx, float sy, int ox, int oy, Paint paint) {
-		super(a);
-		s2 = new S2(a,sx, sy, ox, oy,paint);
+	public S3(float sx, float sy, int ox, int oy) {
+		s2 = new S2(sx, sy, ox, oy);
 	}
 
 	public static V2 project(V3 p) {

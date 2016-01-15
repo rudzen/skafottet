@@ -35,7 +35,7 @@ public class Camera {
 	public float northDegree = 0;
 
 	public Camera(float sx, float sy, int ox, int oy, Paint paint){
-		s2=new S2(sx, sy, ox, oy, paint);
+		s2=new S2(sx, sy, ox, oy);
 		this.paint= paint;
 		cameraCenter = new V3(12, 12, 6);
 		moveCameraTo(cameraCenter);

@@ -86,8 +86,8 @@ public class V2 {
 	}
 	
 	public static V2 rotate(V2 v, float degrees) {
-		return new M2(	Math.cos(degrees), -Math.sin(degrees),
-                		Math.sin(degrees),  Math.cos(degrees)).mul(v);
+		return new M2(	(float)Math.cos(degrees),(float) -Math.sin(degrees),
+				(float)Math.sin(degrees),  (float)Math.cos(degrees)).mul(v);
 	}
 	
 	public float arg() {

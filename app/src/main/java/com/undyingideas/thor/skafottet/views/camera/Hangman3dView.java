@@ -2,8 +2,11 @@ package com.undyingideas.thor.skafottet.views.camera;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 /**
@@ -25,6 +28,21 @@ public class Hangman3dView extends View{
         buildGallow();
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent e){
+        float x = e.getX();
+        float y = e.getY();
+        if(e.getAction() == MotionEvent.ACTION_MOVE) {
+            float dx = x - mPreviousX;
+            float dy = y - mPreviousY;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private float x, y;
+
     int framerate=25;
     int delay=1000/framerate;
 
@@ -32,10 +50,8 @@ public class Hangman3dView extends View{
     double ts;
     double t;     // simulation time in sec.
 
-    int x=150 , y=150;
-
     // App
-    Camera S=new Camera(x,y, 400,400, new Paint());
+    Camera S=new Camera(150,150, 400,400, new Paint());
     V3 u = new V3(0,1,1).unit();
     //		M3 Sz = new M3(
 //				0,   -u.z,  u.y,
@@ -44,7 +60,7 @@ public class Hangman3dView extends View{
     double phi = Math.PI/100;
     M3 Rz = M3.inverse.add(M3.sZ.mul((float)Math.sin(phi))).add(M3.sZ.mul(M3.sZ).mul((float) (1 - Math.cos(phi))));
 
-    V3 c = new V3(0,0,0);
+    V3 c = new V3(0,0,3);
     Cube[] gallow;
     Cube[] body;
     int fejl = 0;
@@ -80,7 +96,10 @@ public class Hangman3dView extends View{
     @Override
     protected void onDraw(Canvas c){
         Paint p = new Paint();
+        p.setStrokeWidth(10);
+        p.setColor(Color.BLUE);
 
+        Log.d("draw3", "draw");
         S.focus(this.c);
         for(Cube cu: gallow){
             cu.draw(S, c, p);

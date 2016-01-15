@@ -25,6 +25,7 @@ import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
+import com.undyingideas.thor.skafottet.views.camera.Hangman3dView;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class HangmanGameFragment extends Fragment {
     private ArrayList<Button> listOfButtons;
     private SaveGame currentGame;
 
-    private ImageView noose;
+    private Hangman3dView noose;
 
     private ShimmerTextView textViewWord, textViewStatus;
 
@@ -73,7 +74,7 @@ public class HangmanGameFragment extends Fragment {
         onCreate(savedInstanceState);
         final View root = inflater.inflate(R.layout.fragment_hangman_game, container, false);
 
-        noose = (ImageView) root.findViewById(R.id.imageView);
+        noose = (Hangman3dView) root.findViewById(R.id.imageView);
 
         listOfButtons = new ArrayList<>(28);
 
@@ -195,7 +196,7 @@ public class HangmanGameFragment extends Fragment {
             textViewStatus.setText("Du kæmper for føden");
         }
         resetButtons();
-        noose.setImageBitmap(GameUtility.invert(getContext(), currentGame.getLogic().getNumWrongLetters()));
+        //noose.setImageBitmap(GameUtility.invert(getContext(), currentGame.getLogic().getNumWrongLetters()));
     }
 
     private void readFromBundle(final Bundle bundle) {
@@ -233,7 +234,7 @@ public class HangmanGameFragment extends Fragment {
     private void updateScreen() {
         textViewWord.setText(currentGame.getLogic().getVisibleWord());
         if (!currentGame.getLogic().isLastLetterCorrect()) {
-            noose.setImageBitmap(GameUtility.invert(getContext(), currentGame.getLogic().getNumWrongLetters()));
+            //noose.setImageBitmap(GameUtility.invert(getContext(), currentGame.getLogic().getNumWrongLetters()));
             YoYo.with(Techniques.Landing).duration(100).playOn(noose);
         }
     }
