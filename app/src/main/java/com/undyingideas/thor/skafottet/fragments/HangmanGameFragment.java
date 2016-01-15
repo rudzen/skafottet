@@ -196,6 +196,7 @@ public class HangmanGameFragment extends Fragment {
             textViewStatus.setText("Du kæmper for føden");
         }
         resetButtons();
+        noose.setErrors(currentGame.getLogic().getNumWrongLetters());
         //noose.setImageBitmap(GameUtility.invert(getContext(), currentGame.getLogic().getNumWrongLetters()));
     }
 
@@ -234,6 +235,7 @@ public class HangmanGameFragment extends Fragment {
     private void updateScreen() {
         textViewWord.setText(currentGame.getLogic().getVisibleWord());
         if (!currentGame.getLogic().isLastLetterCorrect()) {
+            noose.setErrors(currentGame.getLogic().getNumWrongLetters());
             //noose.setImageBitmap(GameUtility.invert(getContext(), currentGame.getLogic().getNumWrongLetters()));
             YoYo.with(Techniques.Landing).duration(100).playOn(noose);
         }

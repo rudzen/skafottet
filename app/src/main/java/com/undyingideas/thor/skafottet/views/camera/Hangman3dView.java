@@ -21,6 +21,7 @@ public class Hangman3dView extends View{
     public Hangman3dView(Context context, AttributeSet attrs) {
         super(context, attrs);
         buildGallow();
+        buildBody();
     }
 
     public Hangman3dView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -34,29 +35,27 @@ public class Hangman3dView extends View{
         float y = e.getY();
         Log.d("hangman", ""+x + " , "+y);
 
-            float dx = x - mPreviousX;
-            float dy = y - mPreviousY;
-            // reverse direction of rotation above the mid-line
-            if (y > getHeight() / 2) {
-                dx = dx * -1 ;
-            }
+        float dx = x - mPreviousX;
+        float dy = y - mPreviousY;
+        // reverse direction of rotation above the mid-line
+        if (y > getHeight() / 2) {
+            dx = dx * -1 ;
+        }
 
-            // reverse direction of rotation to left of the mid-line
-            if (x < getWidth() / 2) {
-                dy = dy * -1 ;
-            }
-            Log.d("hangman", ""+dx);
-            S.rotateLeft(dx * TOUCH_SCALE_FACTOR);
+        // reverse direction of rotation to left of the mid-line
+        if (x < getWidth() / 2) {
+            dy = dy * -1;
+        }
+        S.rotateLeft(dx * TOUCH_SCALE_FACTOR);
 
         invalidate();
-            mPreviousX = x;
-            mPreviousY = y;
-            return true;
-
+        mPreviousX = x;
+        mPreviousY = y;
+        return true;
     }
 
     private float mPreviousX, mPreviousY;
-    private final float TOUCH_SCALE_FACTOR = 10.0f / 320;
+    private final float TOUCH_SCALE_FACTOR = 2f / 180;
 
     int framerate=25;
     int delay=1000/framerate;
@@ -78,7 +77,7 @@ public class Hangman3dView extends View{
     V3 c = new V3(0,0,3);
     Cube[] gallow;
     Cube[] body;
-    int fejl = 0;
+    int errors = 0;
 
 
     void buildGallow(){
@@ -114,11 +113,17 @@ public class Hangman3dView extends View{
         p.setStrokeWidth(10);
         p.setColor(Color.BLUE);
 
-        Log.d("draw3", "draw");
         S.focus(this.c);
         for(Cube cu: gallow){
             cu.draw(S, c, p);
         }
+        for(int i = 0; i < errors; i++) {
+            body[i].draw(S, c, p);
+        }
     }
 
+    public void setErrors(int errors) {
+        this.errors = errors;
+        invalidate();
+    }
 }

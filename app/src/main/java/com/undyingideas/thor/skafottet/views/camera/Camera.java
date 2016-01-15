@@ -41,7 +41,7 @@ public class Camera {
 		moveCameraTo(cameraCenter);
 		focusPoint = new V3(9,9,6);
 		focus(focusPoint);
-		z = 5f;
+		z = 4.5f;
 
 
 		blackPaint = new Paint();
