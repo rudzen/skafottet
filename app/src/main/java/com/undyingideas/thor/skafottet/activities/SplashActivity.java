@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Display;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
@@ -158,14 +157,9 @@ public class SplashActivity extends AppCompatActivity {
     public void onWindowFocusChanged(final boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
-            setScreenDimension(this);
+            WindowLayout.setScreenDimension(this);
             WindowLayout.setImmersiveMode(getWindow());
         }
-    }
-
-    private static void setScreenDimension(final AppCompatActivity appCompatActivity) {
-        final Display display = appCompatActivity.getWindowManager().getDefaultDisplay();
-        display.getSize(WindowLayout.screenDimension);
     }
 
     private class MyEndAnimationListener implements AnimationListener {
