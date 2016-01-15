@@ -9,7 +9,7 @@ import android.view.Display;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.firebase.client.Firebase;
@@ -44,15 +44,15 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_word
 public class SplashActivity extends AppCompatActivity {
 
     private Animation animation;
-    private ImageView logo;
-    private TextView title_left, title2_right;
+    private RelativeLayout logo;
+    private TextView title1, title2;
 
-    private static final String TAG = "LoadingActivity";
+    private static final String TAG = "SplashActivity";
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+        setContentView(R.layout.activity_splash2);
         FontUtils.setDefaultFont(getApplicationContext(), "DEFAULT", Constant.FONT_BOLD);
         FontUtils.setDefaultFont(getApplicationContext(), "MONOSPACE", Constant.FONT_BOLD);
         FontUtils.setDefaultFont(getApplicationContext(), "SERIF", Constant.FONT_LIGHT);
@@ -60,9 +60,12 @@ public class SplashActivity extends AppCompatActivity {
 
         new Handler().post(new LoadConfig());
 
-        logo = (ImageView) findViewById(R.id.splash_logo);
-        title_left = (TextView) findViewById(R.id.splash_text_left);
-        title2_right = (TextView) findViewById(R.id.splash_text_right);
+        logo = (RelativeLayout) findViewById(R.id.splash_center_circle);
+        title2 = (TextView) findViewById(R.id.splash_text_left);
+        title1 = (TextView) findViewById(R.id.splash_text_right);
+
+        logo.startAnimation(AnimationUtils.loadAnimation(this, R.anim.step_number_fader));
+
 
         if (savedInstanceState == null) flyIn();
 
@@ -70,25 +73,29 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void flyIn() {
-        animation = AnimationUtils.loadAnimation(this, R.anim.logo_animation);
-        logo.startAnimation(animation);
+//        animation = AnimationUtils.loadAnimation(this, R.anim.logo_animation);
+//        logo.startAnimation(animation);
 
         animation = AnimationUtils.loadAnimation(this, R.anim.app_name_animation);
-        title_left.startAnimation(animation);
+        title1.startAnimation(animation);
 
         animation = AnimationUtils.loadAnimation(this, R.anim.pro_animation);
-        title2_right.startAnimation(animation);
+        title2.startAnimation(animation);
     }
 
     private void endSplash() {
-        animation = AnimationUtils.loadAnimation(this, R.anim.logo_animation_back);
+        logo.setAnimation(null);
+        animation = AnimationUtils.loadAnimation(this, R.anim.step_number_back);
         logo.startAnimation(animation);
 
+//        animation = AnimationUtils.loadAnimation(this, R.anim.logo_animation_back);
+//        logo.startAnimation(animation);
+
         animation = AnimationUtils.loadAnimation(this, R.anim.app_name_animation_back);
-        title_left.startAnimation(animation);
+        title1.startAnimation(animation);
 
         animation = AnimationUtils.loadAnimation(this, R.anim.pro_animation_back);
-        title2_right.startAnimation(animation);
+        title2.startAnimation(animation);
 
         animation.setAnimationListener(new MyEndAnimationListener(this));
     }
@@ -120,7 +127,7 @@ public class SplashActivity extends AppCompatActivity {
 
 
             try {
-                s_preferences.checkForNullValue(Constant.KEY_WORDS_FIREBASE);
+                s_preferences.checkForNullKey(Constant.KEY_WORDS_FIREBASE);
                 WordListController.wordList = (HashMap<String, WordItem>) s_preferences.getObject(Constant.KEY_WORDS_FIREBASE, HashMap.class);
             } catch (final Exception e) {
                 Log.d(TAG, "Unable to load any remote cached word lists from preferences, log in to update.");

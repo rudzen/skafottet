@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.daimajia.androidanimations.library.Techniques;
@@ -195,7 +194,22 @@ public class HangmanGameFragment extends Fragment {
         } else {
             textViewStatus.setText("Du kæmper for føden");
         }
-        resetButtons();
+
+        if (currentGame.getLogic().getNumWrongLetters() > 0) {
+            for (final String s : currentGame.getLogic().getUsedLetters()) {
+                for (final Button button : listOfButtons) {
+                    if (button.getText() == s) {
+                        button.setClickable(false);
+                        button.setVisibility(View.INVISIBLE);
+                        break;
+                    }
+                }
+
+            }
+        } else {
+            resetButtons();
+        }
+
         noose.setErrors(currentGame.getLogic().getNumWrongLetters());
         //noose.setImageBitmap(GameUtility.invert(getContext(), currentGame.getLogic().getNumWrongLetters()));
     }

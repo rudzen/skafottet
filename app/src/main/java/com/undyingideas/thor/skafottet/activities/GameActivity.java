@@ -21,6 +21,7 @@ import com.undyingideas.thor.skafottet.game.HangedMan;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
+import com.undyingideas.thor.skafottet.support.utility.FontUtils;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
@@ -57,6 +58,11 @@ public class GameActivity extends AppCompatActivity implements
 //        requestWindowFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        FontUtils.setDefaultFont(getApplicationContext(), "DEFAULT", Constant.FONT_BOLD);
+        FontUtils.setDefaultFont(getApplicationContext(), "MONOSPACE", Constant.FONT_BOLD);
+        FontUtils.setDefaultFont(getApplicationContext(), "SERIF", Constant.FONT_LIGHT);
+        FontUtils.setDefaultFont(getApplicationContext(), "SANS_SERIF", Constant.FONT_BOLD);
+
 
         final Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(tb);
