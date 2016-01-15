@@ -6,7 +6,7 @@ import android.graphics.Paint;
 import android.view.View;
 
 
-public class S3 extends View implements IPlane3D {
+public class S3 extends View {
 	private S2 s2;
 
 	public S3(Context a, double sx, double sy, int ox, int oy, Paint paint) {
@@ -19,7 +19,6 @@ public class S3 extends View implements IPlane3D {
 	}
 
 
-	@Override
 	public void drawLine(Canvas c, V3 v1, V3 v2, Paint paint) {
 		 s2.drawLine(c,project(v1),project(v2),paint);
 	}

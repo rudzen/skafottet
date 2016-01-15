@@ -51,7 +51,7 @@ public class Camera extends View {
 		moveCameraTo(cameraCenter);
 		focusPoint = new V3(9,9,6);
 		focus(focusPoint);
-		setZoom(5);
+		z = (double) 5;
 
 
 		blackPaint = new Paint();
@@ -60,7 +60,6 @@ public class Camera extends View {
 
 
 		cube = new V3[8];
-		System.out.println(Math.toDegrees(Math.PI/100));
 		cube[0]=new V3(1,4,1);
 		cube[1]=new V3(1,4,3);
 		cube[2]=new V3(1,6,1);
@@ -147,7 +146,7 @@ public class Camera extends View {
 
 		drawLine(canvas, new V3(1, 0, 0), new V3(1, 0, 1), blackPaint);
 
-		drawPoint(canvas, getFocusPoint(), blackPaint);
+		drawPoint(canvas, focusPoint, blackPaint);
 		blackPaint.setTextSize(100f);
 
 		Paint p = new Paint(Color.BLUE);
@@ -222,7 +221,6 @@ public class Camera extends View {
 		z = zoom;
 	}
 
-	@Override
 	public void drawLine(Canvas c, V3 v1, V3 v2, Paint paint) {
 		if(project(v1) == null ||project(v2) == null) return;
 		s2.drawLine(c, project(v1), project(v2), paint);
