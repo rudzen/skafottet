@@ -180,11 +180,16 @@ public class HangmanGameFragment extends Fragment {
 //        }
     }
 
-    private String getOppNames(String lobbykey, String yourname) {
-        LobbyDTO dto = GameUtility.mpc.lc.lobbyList.get(lobbykey);
-        String s = "Modstander: ";
-        for(LobbyPlayerStatus lps: dto.getPlayerList()) if (!lps.getName().equals(yourname)) s += lps.getName() + " , ";
-        return s.substring(0, s.length()-3);
+    private static String getOppNames(final String lobbykey, final String yourname) {
+        try {
+            final LobbyDTO dto = GameUtility.mpc.lc.lobbyList.get(lobbykey);
+            String s = "Modstander: ";
+            for(final LobbyPlayerStatus lps: dto.getPlayerList()) if (!lps.getName().equals(yourname)) s += lps.getName() + " , ";
+            return s.length() > 3 ? s.substring(0, s.length()-3) : s;
+        } catch (final Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     private void applySaveGameStatus() {
@@ -225,11 +230,11 @@ public class HangmanGameFragment extends Fragment {
     }
 
     private void resetButtons() {
-        YoYo.with(Techniques.Flash).duration(400).playOn(buttonRows[0]);
-        YoYo.with(Techniques.Flash).duration(400).playOn(buttonRows[1]);
-        YoYo.with(Techniques.Flash).duration(400).playOn(buttonRows[2]);
-        YoYo.with(Techniques.Flash).duration(400).playOn(buttonRows[3]);
-        YoYo.with(Techniques.Landing).duration(400).playOn(noose);
+        YoYo.with(Techniques.Pulse).duration(400).playOn(buttonRows[0]);
+        YoYo.with(Techniques.Pulse).duration(400).playOn(buttonRows[1]);
+        YoYo.with(Techniques.Pulse).duration(400).playOn(buttonRows[2]);
+        YoYo.with(Techniques.Pulse).duration(400).playOn(buttonRows[3]);
+        YoYo.with(Techniques.FadeIn).duration(400).playOn(noose);
 
         for (final Button button : listOfButtons) {
             YoYo.with(Techniques.Flash).duration(400).playOn(button);
@@ -263,7 +268,7 @@ public class HangmanGameFragment extends Fragment {
         currentGame.getLogic().guessLetter(guess);
         textViewWord.setText(currentGame.getLogic().getVisibleWord());
         if (!currentGame.getLogic().isLastLetterCorrect()) {
-            if (vibrator != null) vibrator.vibrate(100);
+            if (vibrator != null) vibrator.vibrate(50);
             YoYo.with(Techniques.Flash).duration(300).playOn(textViewWord);
         }
         if (currentGame.getLogic().isGameOver()) {
@@ -286,7 +291,8 @@ public class HangmanGameFragment extends Fragment {
             final HangmanGameFragment hangmanGameFragment = hangmanGameFragmentWeakReference.get();
             if (hangmanGameFragment != null) {
                 final Button button = (Button) v;
-                YoYo.with(Techniques.Flash).duration(100).withListener(new OnButtonClickAnimatorListener(v)).playOn(v);
+                button.setClickable(false);
+                YoYo.with(Techniques.FadeOut).duration(200).withListener(new OnButtonClickAnimatorListener(v)).playOn(v);
                 hangmanGameFragment.listOfButtons.add(button);
                 hangmanGameFragment.guess(button.getText().toString());
             }

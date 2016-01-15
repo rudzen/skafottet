@@ -78,6 +78,7 @@ public class Hangman3dView extends View{
     Cube[] gallow;
     Cube[] body;
     int errors = 0;
+    Paint p = new Paint();
 
 
     void buildGallow(){
@@ -94,6 +95,10 @@ public class Hangman3dView extends View{
         gallow[6] = new Cube(new V3(-0.75f, 0, 11), 1, 1, 3.5f); // bar
 
         gallow[7] = new Cube(new V3(0.75f,0,9.75f), 0.25f,1.5f, 0.25f); // snor
+
+        p.setStrokeWidth(10);
+        p.setColor(Color.RED);
+
     }
 
     void buildBody(){
@@ -109,10 +114,6 @@ public class Hangman3dView extends View{
 
     @Override
     protected void onDraw(Canvas c){
-        Paint p = new Paint();
-        p.setStrokeWidth(10);
-        p.setColor(Color.BLUE);
-
         S.focus(this.c);
         for(Cube cu: gallow){
             cu.draw(S, c, p);
