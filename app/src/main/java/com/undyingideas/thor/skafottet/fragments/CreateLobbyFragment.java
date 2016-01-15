@@ -27,7 +27,9 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 /**
- * Created by Theis' on 12-01-2016.
+ * Created on 12-01-2016, 06:39.
+ * Project : skafottet
+ * @author Theis'
  */
 public class CreateLobbyFragment extends Fragment {
     private static final String KEY_IS_ONLINE = "o";

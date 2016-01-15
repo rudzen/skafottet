@@ -3,6 +3,8 @@ package com.undyingideas.thor.skafottet.game;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Arrays;
+
 /**
  * Created on 09-01-2016, 13:13.
  * Project : skafottet
@@ -34,6 +36,15 @@ public class SaveGame implements Parcelable {
     public String[] getNames() { return names; }
 
     public void setNames(final String ... names) { this.names = names; }
+
+    @Override
+    public String toString() {
+        return "SaveGame{" +
+                "names=" + Arrays.toString(names) +
+                ", multiPlayer=" + multiPlayer +
+                ", logic=" + logic +
+                '}';
+    }
 
     @Override
     public int describeContents() { return 0; }

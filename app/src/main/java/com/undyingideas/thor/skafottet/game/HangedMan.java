@@ -105,12 +105,28 @@ public class HangedMan implements Parcelable {
         Log.d(TAG, "---------------------");
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("HangedMan{");
+        sb.append("usedLetters=").append(usedLetters);
+        sb.append(", theWord='").append(theWord).append('\'');
+        sb.append(", visibleWord='").append(visibleWord).append('\'');
+        sb.append(", numWrongLetters=").append(numWrongLetters);
+        sb.append(", numCorrectLettersLast=").append(numCorrectLettersLast);
+        sb.append(", lastLetterCorrect=").append(lastLetterCorrect);
+        sb.append(", isGameWon=").append(isGameWon);
+        sb.append(", isGameLost=").append(isGameLost);
+        sb.append('}');
+        return sb.toString();
+    }
+
     /* ************************************* */
     /* ************************************* */
     /* ******** Getters & Setters ********** */
     /* ************************************* */
     /* ************************************* */
 
+    @Nullable
     public String getTheWord() { return theWord; }
 
     public ArrayList<String> getUsedLetters() { return usedLetters; }
@@ -128,7 +144,7 @@ public class HangedMan implements Parcelable {
     public boolean isLastLetterCorrect() { return lastLetterCorrect; }
 
 
-    public void setTheWord(final String theWord) { this.theWord = theWord; }
+    public void setTheWord(@Nullable final String theWord) { this.theWord = theWord; }
 
     public void setUsedLetters(final ArrayList<String> usedLetters) { this.usedLetters = usedLetters; }
 

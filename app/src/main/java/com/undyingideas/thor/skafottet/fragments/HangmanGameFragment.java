@@ -47,6 +47,8 @@ public class HangmanGameFragment extends Fragment {
     private Animation sepAnimation;
     private OnButtonClickListener onButtonClickListener;
 
+//    private Handler gameHandler;
+
     public static HangmanGameFragment newInstance(final SaveGame saveGame) {
         final HangmanGameFragment hangmanGameFragment = new HangmanGameFragment();
         final Bundle args = new Bundle();
@@ -102,13 +104,6 @@ public class HangmanGameFragment extends Fragment {
         return root;
     }
 
-    private String getOppNames(String lobbykey, String yourname) {
-        LobbyDTO dto = GameUtility.mpc.lc.lobbyList.get(lobbykey);
-        String s = "Modstander: ";
-        for(LobbyPlayerStatus lps: dto.getPlayerList()) if (!lps.getName().equals(yourname)) s += lps.getName() + " , ";
-        return s.substring(0, s.length()-3);
-    }
-
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -133,8 +128,13 @@ public class HangmanGameFragment extends Fragment {
     }
 
     @Override
+    public void onDetach() {
+        GameUtility.s_prefereces.putObject(Constant.KEY_SAVE_GAME, currentGame);
+        super.onDetach();
+    }
+
+    @Override
     public void onSaveInstanceState(final Bundle outState) {
-        // save to prefs, we don't know if we come back ever! :-)
         GameUtility.s_prefereces.putObject(Constant.KEY_SAVE_GAME, currentGame);
 
         outState.putParcelable(Constant.KEY_SAVE_GAME, currentGame);
@@ -172,6 +172,19 @@ public class HangmanGameFragment extends Fragment {
         shimmerStatus.start(textViewStatus);
         sepKnown.setAnimation(sepAnimation);
         sepStatus.setAnimation(sepAnimation);
+
+//        if (getView() != null) {
+//            getView().setFocusableInTouchMode(true);
+//            getView().requestFocus();
+//            getView().setOnKeyListener(new OnBackPressedSimulator());
+//        }
+    }
+
+    private String getOppNames(String lobbykey, String yourname) {
+        LobbyDTO dto = GameUtility.mpc.lc.lobbyList.get(lobbykey);
+        String s = "Modstander: ";
+        for(LobbyPlayerStatus lps: dto.getPlayerList()) if (!lps.getName().equals(yourname)) s += lps.getName() + " , ";
+        return s.substring(0, s.length()-3);
     }
 
     private void applySaveGameStatus() {
@@ -215,6 +228,34 @@ public class HangmanGameFragment extends Fragment {
         final ArrayList<Button> a = new ArrayList<>();
         for (int i = 0; i < vg.getChildCount(); i++) a.add((Button) vg.getChildAt(i));
         return a;
+    }
+
+    private void updateScreen() {
+        textViewWord.setText(currentGame.getLogic().getVisibleWord());
+        if (!currentGame.getLogic().isLastLetterCorrect()) {
+            noose.setImageBitmap(GameUtility.invert(getContext(), currentGame.getLogic().getNumWrongLetters()));
+            YoYo.with(Techniques.Landing).duration(100).playOn(noose);
+        }
+    }
+
+    private void startEndgame() {
+        // TODO : Erstat DU med spillerens navn og HAM med modstanderens navn..
+        getFragmentManager().beginTransaction().replace(R.id.fragment_content, EndOfGameFragment.newInstance(currentGame)).commit();
+        Log.d("play", "finishing");
+    }
+
+    private void guess(final String guess) {
+        currentGame.getLogic().guessLetter(guess);
+        textViewWord.setText(currentGame.getLogic().getVisibleWord());
+        if (!currentGame.getLogic().isLastLetterCorrect()) {
+            if (vibrator != null) vibrator.vibrate(100);
+            YoYo.with(Techniques.Flash).duration(300).playOn(textViewWord);
+        }
+        if (currentGame.getLogic().isGameOver()) {
+            startEndgame();
+        } else {
+            updateScreen();
+        }
     }
 
     private static class OnButtonClickListener implements View.OnClickListener {
@@ -262,33 +303,4 @@ public class HangmanGameFragment extends Fragment {
         @Override
         public void onAnimationRepeat(final Animator animation) { }
     }
-
-    private void updateScreen() {
-        textViewWord.setText(currentGame.getLogic().getVisibleWord());
-        if (!currentGame.getLogic().isLastLetterCorrect()) {
-            noose.setImageBitmap(GameUtility.invert(getContext(), currentGame.getLogic().getNumWrongLetters()));
-            YoYo.with(Techniques.Landing).duration(100).playOn(noose);
-        }
-    }
-
-    private void StartEndgame() {// gathers need data for starting up the endgame Fragment
-        // TODO : Erstat DU med spillerens navn og HAM med modstanderens navn..
-        getFragmentManager().beginTransaction().replace(R.id.fragment_content, EndOfGameFragment.newInstance(currentGame)).commit();
-        Log.d("play", "finishing");
-    }
-
-    private void guess(final String guess) {
-        currentGame.getLogic().guessLetter(guess);
-        textViewWord.setText(currentGame.getLogic().getVisibleWord());
-        if (!currentGame.getLogic().isLastLetterCorrect()) {
-            if (vibrator != null) vibrator.vibrate(100);
-            YoYo.with(Techniques.Flash).duration(300).playOn(textViewWord);
-        }
-        if (currentGame.getLogic().isGameOver()) {
-            StartEndgame();
-        } else {
-            updateScreen();
-        }
-    }
-
 }
