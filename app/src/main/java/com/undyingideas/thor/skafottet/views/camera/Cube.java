@@ -1,23 +1,19 @@
-package com.undyingideas.thor.skafottet.camera;
+package com.undyingideas.thor.skafottet.views.camera;
 
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.view.View;
 
-public class Cube extends View {
+public class Cube {
 	V3[] cube = new V3[8];
 	public V3 c = new V3(0,0,0);
-	public Cube(Context a, V3[] cube){
-		super(a);
+	public Cube(V3[] cube){
 		if (cube.length == 8) this.cube = cube;
 		for (int i=0; i<cube.length; i++) c=c.add(cube[i]);
-		c=c.mul(1.0/cube.length);
+		c=c.mul(1f / cube.length);
 	}
-	public Cube(Context a ,V3 center, double width, double length, double height){
-		super(a);
+	public Cube(V3 center, float width, float length, float height){
 		c = center;
 		cube[0] = c.add(new V3(-height/2,-width/2,-length/2));
 		cube[1] = c.add(new V3(-height/2,-width/2,length/2));
@@ -26,7 +22,7 @@ public class Cube extends View {
 		cube[4] = c.add(new V3(height/2,-width/2,-length/2));
 		cube[5] = c.add(new V3(height/2,-width/2,length/2));
 		cube[6] = c.add(new V3(height/2,width/2,-length/2));
-		cube[7] = c.add(new V3(height/2,width/2,length/2));
+		cube[7] = c.add(new V3(height / 2, width / 2, length / 2));
 	}
 	
 	void move(V3 vector){
@@ -72,8 +68,18 @@ public class Cube extends View {
 			S.drawLine(g, v[0][i], v[1][i],p);
 	}
 
-	@Override
-	public void onDraw(Canvas c){
-//		paintCube(c);
+	public void draw(Camera s, Canvas c, Paint paint) {
+		s.drawLine(c, cube[0], cube[1], paint);
+		s.drawLine(c, cube[1], cube[3], paint);
+		s.drawLine(c, cube[3], cube[2], paint);
+		s.drawLine(c, cube[2], cube[0], paint);
+		s.drawLine(c, cube[4], cube[5], paint);
+		s.drawLine(c, cube[5], cube[7], paint);
+		s.drawLine(c, cube[7], cube[6], paint);
+		s.drawLine(c, cube[6], cube[4], paint);
+		s.drawLine(c, cube[0], cube[4], paint);
+		s.drawLine(c, cube[1], cube[5], paint);
+		s.drawLine(c, cube[3], cube[7], paint);
+		s.drawLine(c, cube[2], cube[6], paint);
 	}
 }

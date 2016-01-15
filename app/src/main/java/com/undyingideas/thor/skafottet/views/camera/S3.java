@@ -1,4 +1,4 @@
-package com.undyingideas.thor.skafottet.camera;
+package com.undyingideas.thor.skafottet.views.camera;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,7 +9,7 @@ import android.view.View;
 public class S3 extends View {
 	private S2 s2;
 
-	public S3(Context a, double sx, double sy, int ox, int oy, Paint paint) {
+	public S3(Context a, float sx, float sy, int ox, int oy, Paint paint) {
 		super(a);
 		s2 = new S2(a,sx, sy, ox, oy,paint);
 	}

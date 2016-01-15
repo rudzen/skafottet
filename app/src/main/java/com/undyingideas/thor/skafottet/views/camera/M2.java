@@ -1,9 +1,9 @@
-package com.undyingideas.thor.skafottet.camera;
+package com.undyingideas.thor.skafottet.views.camera;
 
 public class M2 {
-	public double a, b, c, d;
+	public float a, b, c, d;
 
-	public M2(double a, double b, double c, double d) {
+	public M2(float a, float b, float c, float d) {
 		this.a = a;
 		this.b = b;
 		this.c = c;
@@ -18,7 +18,7 @@ public class M2 {
 		return new M2(a - m.a, b - m.b, c - m.c, d - m.d);
 	}
 
-	public M2 scalarMul(double x) {
+	public M2 scalarMul(float x) {
 		return new M2(a * x, b * x, c * x, d * x);
 	}
 
@@ -26,7 +26,7 @@ public class M2 {
 		return new M2(d, -b, -c, a).scalarMul(1 / det());
 	}
 
-	public double det() {
+	public float det() {
 		return (a * d - c * b);
 	}
 

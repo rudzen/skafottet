@@ -1,8 +1,8 @@
-package com.undyingideas.thor.skafottet.camera;
+package com.undyingideas.thor.skafottet.views.camera;
 
 public class V3 {
 	
-	public double x, y, z;
+	public float x, y, z;
 	public final static V3 i, j, k;
 	
 	static {
@@ -11,7 +11,7 @@ public class V3 {
 		k = new V3(0, 0, 1);
 	}
 	
-	public V3(double x, double y ,double z) {
+	public V3(float x, float y ,float z) {
 		this.x=x;
 		this.y=y;
 		this.z=z;
@@ -21,11 +21,11 @@ public class V3 {
 		return new V3(x + v.x, y + v.y, z + v.z);  
 	}
 	
-	public V3 add(double x, double y, double z) {
+	public V3 add(float x, float y, float z) {
 		return new V3(this.x + x, this.y + y, this.z + z);
 	}
 	
-	public V3 add(double valueToAdd) {
+	public V3 add(float valueToAdd) {
 		return new V3(x + valueToAdd, y + valueToAdd, z + valueToAdd);
 	}
 
@@ -33,41 +33,41 @@ public class V3 {
 		return new V3(x - v.x, y - v.y, z - v.z);
 	}
 	
-	public V3 mul(double k){
+	public V3 mul(float k){
 		return new V3(x * k, y * k , z * k);
 	}
 	public V3 mul(V3 v){
 		return new V3(x * v.x, y * v.y , z * v.z);
 	}
 	
-	public double length(){
-		return Math.sqrt(x * x + y * y + z * z);
+	public float length(){
+		return (float)Math.sqrt(x * x + y * y + z * z);
 	}
 
-	public double getX() {
+	public float getX() {
 		return x;
 	}
 
-	public void setX(double x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 
-	public double getY() {
+	public float getY() {
 		return y;
 	}
 
-	public void setY(double y) {
+	public void setY(float y) {
 		this.y = y;
 	}
-	public void setZ(double z){
+	public void setZ(float z){
 		this.z = z;
 	}
-	public double getZ(){
+	public float getZ(){
 		return z;
 	}
 
 	public V3 unit() {
-		double len = length();
+		float len = length();
 		return new V3(x / len, y / len, z / len);
 	}
 	
@@ -77,7 +77,7 @@ public class V3 {
 
 	}
 	
-	public double dot(V3 v){
+	public float dot(V3 v){
 		return x * v.x + y * v.y + z * v.z;
 	}
 
