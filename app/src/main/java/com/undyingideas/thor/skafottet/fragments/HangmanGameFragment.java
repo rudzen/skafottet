@@ -129,13 +129,13 @@ public class HangmanGameFragment extends Fragment {
 
     @Override
     public void onDetach() {
-        GameUtility.s_prefereces.putObject(Constant.KEY_SAVE_GAME, currentGame);
+        GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, currentGame);
         super.onDetach();
     }
 
     @Override
     public void onSaveInstanceState(final Bundle outState) {
-        GameUtility.s_prefereces.putObject(Constant.KEY_SAVE_GAME, currentGame);
+        GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, currentGame);
 
         outState.putParcelable(Constant.KEY_SAVE_GAME, currentGame);
         super.onSaveInstanceState(outState);
@@ -204,7 +204,7 @@ public class HangmanGameFragment extends Fragment {
                 // restore complete game state!!
                 currentGame = bundle.getParcelable(Constant.KEY_SAVE_GAME);
                 // and save the game!
-                GameUtility.s_prefereces.putObject(Constant.KEY_SAVE_GAME, currentGame);
+                GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, currentGame);
             }
         }
     }

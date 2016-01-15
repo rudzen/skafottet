@@ -13,10 +13,34 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
 public class FontUtils {
+
+    /* ********************************************** */
+    /*              The best way!... */
+    /* ********************************************** */
+    public static void setDefaultFont(final Context context, final String staticTypefaceFieldName, final String fontAssetName) {
+        replaceFont(staticTypefaceFieldName, Typeface.createFromAsset(context.getAssets(), fontAssetName));
+    }
+
+    private static void replaceFont(final String staticTypefaceFieldName, final Typeface newTypeface) {
+        try {
+            final Field staticField = Typeface.class.getDeclaredField(staticTypefaceFieldName);
+            staticField.setAccessible(true);
+            staticField.set(null, newTypeface);
+        } catch (final Exception e) {
+            e.printStackTrace();
+        }
+    }
+    /* ********************************************** */
+
+
+
+
+
 
     public interface FontTypes {
         String LIGHT = "Light";

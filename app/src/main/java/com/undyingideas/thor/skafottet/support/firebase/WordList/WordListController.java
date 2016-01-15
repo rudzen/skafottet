@@ -45,7 +45,7 @@ public class WordListController {
     }
 
     public static void saveList() {
-        GameUtility.s_prefereces.putObject(Constant.KEY_WORDS_FIREBASE, wordList);
+        GameUtility.s_preferences.putObject(Constant.KEY_WORDS_FIREBASE, wordList);
     }
 
     public static ArrayList<String> getKeyList() {
@@ -58,7 +58,7 @@ public class WordListController {
 
     @SuppressWarnings("unchecked")
     public static void loadList() {
-        wordList = (HashMap<String, WordItem>) GameUtility.s_prefereces.getObject(Constant.KEY_WORDS_FIREBASE, HashMap.class);
+        wordList = (HashMap<String, WordItem>) GameUtility.s_preferences.getObject(Constant.KEY_WORDS_FIREBASE, HashMap.class);
     }
 
     class WordGetter implements ChildEventListener {

@@ -30,7 +30,7 @@ public class HelpFragment extends Fragment {
         final HelpDTO help = new HelpDTO();
         try {
             checkForNullKey(Constant.KEY_PREF_HELP);
-            help.addStringData((HelpDTO) GameUtility.s_prefereces.getObject(Constant.KEY_PREF_HELP, HelpDTO.class));
+            help.addStringData((HelpDTO) GameUtility.s_preferences.getObject(Constant.KEY_PREF_HELP, HelpDTO.class));
         } catch (final NullPointerException npe) {
             try {
                 final InputStream input = getResources().openRawResource(R.raw.skafottet);
