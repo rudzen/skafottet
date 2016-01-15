@@ -1,6 +1,7 @@
 package com.undyingideas.thor.skafottet.views.camera;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
@@ -11,14 +12,17 @@ import android.view.View;
 public class Hangman3dView extends View{
     public Hangman3dView(Context context) {
         super(context);
+        buildGallow();
     }
 
     public Hangman3dView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        buildGallow();
     }
 
     public Hangman3dView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        buildGallow();
     }
 
     int framerate=25;
@@ -47,6 +51,7 @@ public class Hangman3dView extends View{
 
 
     void buildGallow(){
+
         gallow = new Cube[8];
         gallow[0] = new Cube(new V3(-3f, -3f, 0.5f), 1f, 1f, 1f); // forhøjning
         gallow[1] = new Cube(new V3(-3, 3, 0.5f), 1, 1, 1);
@@ -72,5 +77,14 @@ public class Hangman3dView extends View{
     }
 
 
+    @Override
+    protected void onDraw(Canvas c){
+        Paint p = new Paint();
+
+        S.focus(this.c);
+        for(Cube cu: gallow){
+            cu.draw(S, c, p);
+        }
+    }
 
 }

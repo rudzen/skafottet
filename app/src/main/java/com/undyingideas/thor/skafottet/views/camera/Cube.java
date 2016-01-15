@@ -22,7 +22,7 @@ public class Cube {
 		cube[4] = c.add(new V3(height/2,-width/2,-length/2));
 		cube[5] = c.add(new V3(height/2,-width/2,length/2));
 		cube[6] = c.add(new V3(height/2,width/2,-length/2));
-		cube[7] = c.add(new V3(height/2,width/2,length/2));
+		cube[7] = c.add(new V3(height / 2, width / 2, length / 2));
 	}
 	
 	void move(V3 vector){
@@ -68,4 +68,18 @@ public class Cube {
 			S.drawLine(g, v[0][i], v[1][i],p);
 	}
 
+	public void draw(Camera s, Canvas c, Paint paint) {
+		s.drawLine(c, cube[0], cube[1], paint);
+		s.drawLine(c, cube[1], cube[3], paint);
+		s.drawLine(c, cube[3], cube[2], paint);
+		s.drawLine(c, cube[2], cube[0], paint);
+		s.drawLine(c, cube[4], cube[5], paint);
+		s.drawLine(c, cube[5], cube[7], paint);
+		s.drawLine(c, cube[7], cube[6], paint);
+		s.drawLine(c, cube[6], cube[4], paint);
+		s.drawLine(c, cube[0], cube[4], paint);
+		s.drawLine(c, cube[1], cube[5], paint);
+		s.drawLine(c, cube[3], cube[7], paint);
+		s.drawLine(c, cube[2], cube[6], paint);
+	}
 }
