@@ -11,6 +11,7 @@ import android.view.View;
 
 /**
  * Created by theis on 15-01-2016.
+ *
  */
 public class Hangman3dView extends View{
     public Hangman3dView(Context context) {
@@ -33,24 +34,28 @@ public class Hangman3dView extends View{
     public boolean onTouchEvent(MotionEvent e){
         float x = e.getX();
         float y = e.getY();
-        Log.d("hangman", ""+x + " , "+y);
-
-        float dx = x - mPreviousX;
-        float dy = y - mPreviousY;
-        // reverse direction of rotation above the mid-line
-        if (y > getHeight() / 2) {
-            dx = dx * -1 ;
+        switch (e.getAction()){
+            case (MotionEvent.ACTION_MOVE) :
+                float dx = x - mPreviousX;
+                float dy = y - mPreviousY;
+                if (y > getHeight() / 2) {
+                    dx = dx * -1 ;          // reverse direction of rotation above the mid-line
+                }
+                if (x < getWidth() / 2) {
+                    dy = dy * -1;           // reverse direction of rotation to left of the mid-line
+                }
+                S.rotateLeft(dx * TOUCH_SCALE_FACTOR);
+                invalidate();
+                // no break;
+            case (MotionEvent.ACTION_DOWN) :
+                Log.d("MotionEvent", "touchstarted");
+                mPreviousX = x;
+                mPreviousY = y;
+                break;
+            case (MotionEvent.ACTION_UP) :
+                Log.d("MotionEvent", "touchstopped");
+                break;
         }
-
-        // reverse direction of rotation to left of the mid-line
-        if (x < getWidth() / 2) {
-            dy = dy * -1;
-        }
-        S.rotateLeft(dx * TOUCH_SCALE_FACTOR);
-
-        invalidate();
-        mPreviousX = x;
-        mPreviousY = y;
         return true;
     }
 
