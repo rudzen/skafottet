@@ -220,8 +220,8 @@ public class MenuActivity extends MenuActivityAbstract{
 
         try {
             // If previous game is found, add it to list :-)
-            GameUtility.s_prefereces.checkForNullKey(Constant.KEY_SAVE_GAME);
-            final SaveGame saveGame = (SaveGame) GameUtility.s_prefereces.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
+            GameUtility.s_preferences.checkForNullKey(Constant.KEY_SAVE_GAME);
+            final SaveGame saveGame = (SaveGame) GameUtility.s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
             Log.d(TAG, saveGame.toString());
             if (saveGame != null && saveGame.getLogic() != null && !saveGame.getLogic().isGameOver()) {
                 startGameItems.add(new StartGameItem(Constant.MODE_CONT_GAME, "Fortsæt sidste spil", "Type : " + (saveGame.isMultiPlayer() ? "Multi" : "Single") + "player / Gæt : " + saveGame.getLogic().getVisibleWord(), GameUtility.imageRefs[saveGame.getLogic().getNumWrongLetters()]));

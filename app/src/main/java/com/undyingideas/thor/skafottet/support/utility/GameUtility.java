@@ -28,7 +28,7 @@ public abstract class GameUtility {
     public static Firebase firebase;
 
     @SuppressWarnings("StaticVariableOfConcreteClass")
-    public static TinyDB s_prefereces;
+    public static TinyDB s_preferences;
 
     public static WordController s_wordController;
 

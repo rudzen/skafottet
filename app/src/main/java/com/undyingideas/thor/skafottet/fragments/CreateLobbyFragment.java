@@ -68,7 +68,7 @@ public class CreateLobbyFragment extends Fragment {
         if (isOffline) {
             // read the last list used...
             try {
-                final ArrayList<PlayerDTO> ply = (ArrayList<PlayerDTO>) GameUtility.s_prefereces.getObject(KEY_LAST_PLAYER_LIST, ArrayList.class);
+                final ArrayList<PlayerDTO> ply = (ArrayList<PlayerDTO>) GameUtility.s_preferences.getObject(KEY_LAST_PLAYER_LIST, ArrayList.class);
                 players.clear();
                 players.addAll(ply);
             } catch (final Exception e) {
@@ -235,7 +235,7 @@ public class CreateLobbyFragment extends Fragment {
 
                 players.remove(GameUtility.mpc.pc.playerList.get(GameUtility.mpc.name)); // remove logged in player TODO rewrite
                 playerAdapter.notifyDataSetChanged();
-                GameUtility.s_prefereces.putObject(KEY_LAST_PLAYER_LIST, players);
+                GameUtility.s_preferences.putObject(KEY_LAST_PLAYER_LIST, players);
             }
             setProgressListener.setProgressBar(false);
         }

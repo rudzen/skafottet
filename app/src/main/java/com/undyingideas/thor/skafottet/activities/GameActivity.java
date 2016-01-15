@@ -87,7 +87,7 @@ public class GameActivity extends AppCompatActivity implements
             final int gameMode = bundle.getInt(Constant.KEY_MODE);
             if (gameMode == Constant.MODE_CONT_GAME) {
                 // throw in the game from the preferences
-                addFragment(HangmanGameFragment.newInstance((SaveGame) GameUtility.s_prefereces.getObject(Constant.KEY_SAVE_GAME, SaveGame.class)));
+                addFragment(HangmanGameFragment.newInstance((SaveGame) GameUtility.s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class)));
             } else if (gameMode == Constant.MODE_SINGLE_PLAYER) {
                 addFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(), false, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du")));
             } else if (gameMode == Constant.MODE_MULTI_PLAYER || gameMode == Constant.MODE_MULTI_PLAYER_2) {

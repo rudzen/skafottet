@@ -149,7 +149,7 @@ public class EndOfGameFragment extends Fragment {
         Log.d(TAG, "SaveGame was loaded OK.");
 
         /* write an invalid save game to prefs */
-        GameUtility.s_prefereces.putObject(Constant.KEY_SAVE_GAME, new SaveGame(null, false, null));
+        GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, new SaveGame(null, false, null));
 
 
 
