@@ -505,7 +505,7 @@ public class MenuActivity extends MenuActivityAbstract {
             final MenuActivity menuActivity = menuActivityWeakReference.get();
             if (menuActivity != null) {
                 menuActivity.md = new MaterialDialog.Builder(menuActivity)
-                        .customView(R.layout.dialogfragment_login, false)
+                        .customView(R.layout.login, false)
                         .positiveText("Ok")
                         .negativeText("Afbryd")
                         .onAny(new OnLoginClickResponse(menuActivity))

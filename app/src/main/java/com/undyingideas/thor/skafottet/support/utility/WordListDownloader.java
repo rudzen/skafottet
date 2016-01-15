@@ -38,11 +38,17 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
     private final WeakReference<WordListActivity> wordListActivityWeakReference;
     private final String title, url;
     private WordListActivity wordListActivity;
+    private final boolean multi;
 
     public WordListDownloader(final WordListActivity wordListActivity, final String title, final String url) {
+        this(wordListActivity, title, url, false);
+    }
+
+    public WordListDownloader(final WordListActivity wordListActivity, final String title, final String url, final boolean multi) {
         wordListActivityWeakReference = new WeakReference<>(wordListActivity);
         this.title = title;
         this.url = url;
+        this.multi = multi;
     }
 
     private String downloadURL() throws IOException {
@@ -135,11 +141,18 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
         wordListActivity = wordListActivityWeakReference.get();
         if (wordListActivity != null) {
             Log.d("Downloader", wordItem.toString());
-            if (wordListActivity.md != null && wordListActivity.md.isShowing()) {
+            if (wordListActivity.md != null && !multi && wordListActivity.md.isShowing()) {
                 wordListActivity.md.dismiss();
             }
             wordListActivity.refreshList();
             wordListActivity.setProgressBar(false);
+            if (multi) {
+                if (!wordListActivity.isListUpdateDone()) {
+                    wordListActivity.decreaseListCount();
+                } else {
+                    wordListActivity.md.dismiss();
+                }
+            }
         }
 
         super.onPostExecute(wordItem);

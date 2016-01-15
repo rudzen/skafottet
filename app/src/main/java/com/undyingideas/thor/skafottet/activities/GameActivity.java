@@ -17,7 +17,6 @@ import com.undyingideas.thor.skafottet.fragments.EndOfGameFragment;
 import com.undyingideas.thor.skafottet.fragments.HangmanGameFragment;
 import com.undyingideas.thor.skafottet.fragments.HelpFragment;
 import com.undyingideas.thor.skafottet.fragments.LobbySelectorFragment;
-import com.undyingideas.thor.skafottet.fragments.dialogs.Login;
 import com.undyingideas.thor.skafottet.game.HangedMan;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
@@ -31,7 +30,6 @@ public class GameActivity extends AppCompatActivity implements
         LobbySelectorFragment.OnMultiPlayerPlayerFragmentInteractionListener,
         EndOfGameFragment.OnEndGameButtonClickListenerInterface,
         ProgressBarInterface,
-        Login.LoginListener,
         CreateLobbyFragment.OnCreateLobbyFragmentInteractionListener
 {
 
@@ -153,25 +151,6 @@ public class GameActivity extends AppCompatActivity implements
     @Override
     public void setProgressBar(final boolean visible) {
         topProgressBar.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
-    }
-
-    @Override
-    public void onFinishLoginDialog(final String title, final String pass) {
-        Log.d("Login", title + pass);
-
-    }
-
-    @Override
-    public void onCancel() {
-
-    }
-
-    private class LoginClick implements View.OnClickListener {
-
-        @Override
-        public void onClick(final View v) {
-            Login.newInstance("Login", "OK", "Cancel", true).show(getSupportFragmentManager(), "Login");
-        }
     }
 }
 

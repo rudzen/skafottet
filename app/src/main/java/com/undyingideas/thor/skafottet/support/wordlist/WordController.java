@@ -153,17 +153,11 @@ public final class WordController implements Serializable, Parcelable {
 
     public void setLocalWords(final ArrayList<WordItem> localWords) { this.localWords = localWords; }
 
-    public boolean isLocal() {
-        return isLocal;
-    }
+    public boolean isLocal() { return isLocal; }
 
-    public void setIsLocal(final boolean isLocal) {
-        this.isLocal = isLocal;
-    }
+    public void setIsLocal(final boolean isLocal) { this.isLocal = isLocal; }
 
-    public int getIndexLocale() {
-        return indexLocale;
-    }
+    public int getIndexLocale() { return indexLocale; }
 
     public void setIndexLocale(final int indexLocale) {
         if (indexLocale > -1) {
@@ -171,21 +165,13 @@ public final class WordController implements Serializable, Parcelable {
         }
     }
 
-    public String getIndexRemote() {
-        return indexRemote;
-    }
+    public String getIndexRemote() { return indexRemote; }
 
-    public void setIndexRemote(final String indexRemote) {
-        this.indexRemote = indexRemote;
-    }
+    public void setIndexRemote(final String indexRemote) { this.indexRemote = indexRemote; }
 
-    public Random getRandom() {
-        return random;
-    }
+    public Random getRandom() { return random; }
 
-    public void setRandom(final Random random) {
-        this.random = random;
-    }
+    public void setRandom(final Random random) { this.random = random; }
 
 /* overrides */
 

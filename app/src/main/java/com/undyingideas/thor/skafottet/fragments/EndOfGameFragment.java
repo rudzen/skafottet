@@ -152,9 +152,7 @@ public class EndOfGameFragment extends Fragment {
         GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, new SaveGame(null, false, null));
 
 
-
         final CharSequence lowerText;
-
 
         // WARNING .. NEEDS TO BE CLEANED UP!
 

@@ -1,7 +1,6 @@
 package com.undyingideas.thor.skafottet.activities;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -79,6 +78,8 @@ public class WordListActivity extends AppCompatActivity implements
 
     private Handler handler;
     private Runnable refreshStopper;
+
+    private int listCount; // for updating all lists.
 
 
     @SuppressLint("InflateParams")
@@ -180,6 +181,8 @@ public class WordListActivity extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         final int id = item.getItemId();
+        boolean returnValue = false;
+        setProgressBar(true);
         if (id == R.id.action_word_list_add) {
                         /* show Yes/No dialog here! */
             new MaterialDialog.Builder(this)
@@ -189,11 +192,11 @@ public class WordListActivity extends AppCompatActivity implements
                     .positiveText(R.string.dialog_yes)
                     .negativeText(R.string.dialog_no)
                     .title("Tilføj Ordliste")
-                    .show()
-            ;
-            return true;
+                    .show();
+            returnValue = true;
+            setProgressBar(false);
         } else if (id == R.id.action_word_list_remove) {
-            setProgressBar(true);
+            // TODO : Der er noget fisk med det her.. skal undersøges når der er tid (hvis :)
             final String oldListName = "'" + s_wordController.getLocalWords().get(s_wordController.getIndexLocale()).getTitle() + "' ";
             if (s_wordController.removeCurrentList()) {
                 refreshList();
@@ -201,11 +204,28 @@ public class WordListActivity extends AppCompatActivity implements
             } else {
                 WindowLayout.showSnack(oldListName + "kunne ikke slettes", stickyList, false);
             }
+            returnValue = true;
             setProgressBar(false);
-            return true;
+        } else if (id == R.id.action_word_list_update_all) {
+            listCount = s_wordController.getLocalWords().size() - 1;
+            for (final WordItem wordItem : s_wordController.getLocalWords()) {
+                new WordListDownloader(this, wordItem.getTitle(), wordItem.getUrl()).execute();
+            }
+            returnValue = true;
         } else {
-            return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+            returnValue = mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
         }
+        return returnValue;
+    }
+
+    // this is a ugly hack..
+
+    public void decreaseListCount() {
+        listCount--;
+    }
+
+    public boolean isListUpdateDone() {
+        return listCount == 0;
     }
 
     @Override
@@ -349,11 +369,8 @@ public class WordListActivity extends AppCompatActivity implements
             wordListActivityWeakReference = new WeakReference<>(wordListActivity);
         }
 
-        private static boolean isValid(final Context context, @NonNull final String title, @NonNull final String url) {
-            final boolean validStuff = !title.isEmpty() && !url.isEmpty() && Pattern.compile(StringHelper.VALID_URL).matcher(url).find();
-            if (validStuff) return true;
-            Toast.makeText(context, "Forkert indtastede informationer.", Toast.LENGTH_SHORT).show();
-            return false;
+        private static boolean isValid(@NonNull final String title, @NonNull final String url) {
+            return !title.isEmpty() && !url.isEmpty() && Pattern.compile(StringHelper.VALID_URL).matcher(url).find();
         }
 
         @Override
@@ -370,11 +387,13 @@ public class WordListActivity extends AppCompatActivity implements
                         final String url = editTextURL.getText().toString().trim();
                         Log.d("DL DIAG", title);
                         Log.d("DL DIAG", url);
-                        Log.d("DL DIAG", String.valueOf(isValid(wordListActivity, title, url)));
+                        Log.d("DL DIAG", String.valueOf(isValid(title, url)));
 
-                        if (isValid(wordListActivity, title, url)) {
+                        if (isValid(title, url)) {
                             final CheckBox downloadNow = (CheckBox) dialogCustomView.findViewById(R.id.dialog_add_word_list_chk_download);
                             wordListActivity.onFinishAddWordDialog(title, url, downloadNow.isChecked());
+                        } else {
+                            Toast.makeText(wordListActivity, "Forkert indtastede informationer.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -398,7 +417,7 @@ public class WordListActivity extends AppCompatActivity implements
             if (wordListActivity != null) {
                 if (which == DialogAction.POSITIVE) {
                     wordListActivity.md = new MaterialDialog.Builder(wordListActivity)
-                            .customView(R.layout.dialog_add_wordlist, false)
+                            .customView(R.layout.wordlist_add, false)
                             .positiveText("Ok")
                             .negativeText("Afbryd")
                             .onAny(new OnAddWordResponseCallback(wordListActivity))
