@@ -4,12 +4,15 @@ import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.undyingideas.thor.skafottet.R;
 
 public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
 
-    public static final String ACTION_PLAY = "PLAY";
+    public static Intent intent = new Intent();
+
+    private static final String ACTION_PLAY = "SKAFOTMUSIK";
     private static final int music = R.raw.reign_supreme;
     private static MusicPlay mInstance;
 
@@ -25,7 +28,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
         // so that we know we have to resume playback once we get focus back)
         Paused
         // playback paused (media player ready!)
-    };
+    }
 
     State mState = State.Retrieving;
 
@@ -41,10 +44,14 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
 
     @Override
     public int onStartCommand(final Intent intent, final int flags, final int startId) {
+        Log.d("Player", "onStartCommand");
         if (intent.getAction().equals(ACTION_PLAY)) {
+            Log.d("Player", "Filter was correct");
             mMediaPlayer = MediaPlayer.create(this, music); // initialize it here
             mMediaPlayer.setOnPreparedListener(this);
             mMediaPlayer.setOnErrorListener(this);
+            mMediaPlayer.setLooping(true);
+
 //            mMediaPlayer.setAudioStreamType(AudioManager.RES);
             initMediaPlayer();
         }
@@ -98,10 +105,10 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     }
 
     public void startMusic() {
-        if (mState != State.Preparing && mState != State.Retrieving) {
-            mMediaPlayer.start();
-            mState = State.Playing;
-        }
+        mMediaPlayer.start();
+        mState = State.Playing;
+//        if (mState != State.Preparing && mState != State.Retrieving) {
+//        }
     }
 
     public boolean isPlaying() {

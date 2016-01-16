@@ -84,6 +84,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
+
+        <service android:name=".support.audio.music.MusicPlay" >
+
+        </service>
+
     </application>
 
 </manifest>

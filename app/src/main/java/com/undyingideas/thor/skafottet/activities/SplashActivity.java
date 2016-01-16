@@ -67,6 +67,7 @@ public class SplashActivity extends AppCompatActivity {
         logo.startAnimation(AnimationUtils.loadAnimation(this, R.anim.step_number_fader));
 
 
+
         if (savedInstanceState == null) flyIn();
 
         new Handler().postDelayed(new EndSplash(), 3000);
@@ -110,7 +111,9 @@ public class SplashActivity extends AppCompatActivity {
                 s_preferences = new TinyDB(getApplicationContext());
             }
 
-            startService(new Intent(MusicPlay.ACTION_PLAY));
+            MusicPlay.intent = new Intent(getApplicationContext(), MusicPlay.class);
+            MusicPlay.intent.setAction("SKAFOTMUSIK");
+            startService(MusicPlay.intent);
 
             // only for testing stuff!!!!
             s_preferences.clear();
