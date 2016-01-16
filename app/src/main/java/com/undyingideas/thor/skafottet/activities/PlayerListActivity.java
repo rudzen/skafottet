@@ -59,7 +59,7 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable, P
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new FloaterClickHandler());
 
-        topProgressBar = (ProgressBar) findViewById(R.id.player_list_top_progress_bar);
+        topProgressBar = (ProgressBar) findViewById(R.id.topProgressBar);
         topProgressBar.setVisibility(View.INVISIBLE);
 
         recyclerView = findViewById(R.id.player_list);
