@@ -16,13 +16,14 @@ import android.net.NetworkInfo;
 /**
  * Determines network connection state.
  * Created by rudz on 10-11-2015.
+ * - Updated 16-01-2016 to mirror broadcast internet connection intent type values.
  * @author rudz
  */
-public class NetwordHelper {
+public final class NetworkHelper {
 
+    private static final int TYPE_NOT_CONNECTED = -1;
+    private static final int TYPE_MOBILE = 0;
     private static final int TYPE_WIFI = 1;
-    private static final int TYPE_MOBILE = 2;
-    private static final int TYPE_NOT_CONNECTED = 0;
 
     public static int getConnectivityStatus(final Context context) {
         final ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

@@ -19,7 +19,8 @@
     android:clickable="false"
     android:focusableInTouchMode="false"
     android:orientation="vertical"
-    tools:context=".activities.MenuActivity">
+    tools:context=".activities.MenuActivity"
+    xmlns:marquee="http://schemas.android.com/apk/res-auto">
 
     <com.undyingideas.thor.skafottet.views.StarField
         android:id="@+id/sf"
@@ -107,30 +108,31 @@
             android:background="?selectableItemBackground"
             android:clickable="true"
             android:orientation="horizontal"
-            android:weightSum="1">
+            >
 
-            <ImageView
-                android:id="@+id/menu_image_logo"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:background="@drawable/game_end_lost"
+            <asia.ivity.android.marqueeview.MarqueeView
+                android:id="@+id/marqueeView150"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:clickable="false"
-                android:contentDescription="Logo"/>
+                marquee:speed="4"
+                marquee:pause="1000"
+                marquee:autoStart="true"
+                >
 
-            <TextView
-                android:id="@+id/loginText"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginBottom="4dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="4dp"
-                android:clickable="false"
-                android:contextClickable="true"
-                android:text="login"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textIsSelectable="false"/>
+                <TextView
+                    android:id="@+id/menu_login_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do."
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:clickable="false"
+                    tools:ignore="HardcodedText"/>
+            </asia.ivity.android.marqueeview.MarqueeView>
+
         </LinearLayout>
 
     </LinearLayout>

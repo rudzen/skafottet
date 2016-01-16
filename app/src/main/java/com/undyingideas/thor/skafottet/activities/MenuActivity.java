@@ -36,24 +36,29 @@ import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.StartGameAdapter;
 import com.undyingideas.thor.skafottet.adapters.StartGameItem;
 import com.undyingideas.thor.skafottet.broadcastrecievers.InternetReciever;
+import com.undyingideas.thor.skafottet.broadcastrecievers.InternetRecieverData;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
-import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
-import com.undyingideas.thor.skafottet.support.utility.NetwordHelper;
+import com.undyingideas.thor.skafottet.support.utility.NetworkHelper;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+import asia.ivity.android.marqueeview.MarqueeView;
+
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.imageRefs;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.mpc;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_preferences;
+
 /**
  * The main menu activity.
  * Quite large, but contains only relevant code.
  *
- *
  * @author rudz
  */
-public class MenuActivity extends MenuActivityAbstract {
+public class MenuActivity extends MenuActivityAbstract implements InternetRecieverData.InternetRecieverInterface {
 
     private static final String FINISH = "finish";
     private static final int BACK_PRESSED_DELAY = 2000;
@@ -63,6 +68,7 @@ public class MenuActivity extends MenuActivityAbstract {
     private final ImageView[] buttons = new ImageView[BUTTON_COUNT];
     private LinearLayout loginLayout;
     private TextView loginText;
+    private MarqueeView scroller;
     private static final int TITLE = -1;
 
     private static final int BUTTON_PLAY = 0;
@@ -90,7 +96,7 @@ public class MenuActivity extends MenuActivityAbstract {
 
     private final int[] loginButtons = new int[2];
 
-    private Runnable connectionObserver;
+    private InternetRecieverData connectionObserver;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -107,8 +113,12 @@ public class MenuActivity extends MenuActivityAbstract {
 
         loginLayout = (LinearLayout) findViewById(R.id.LoginLayout);
         loginLayout.setOnClickListener(new OnLoginClickListener(this));
-        loginText = (TextView) findViewById(R.id.loginText);
-        if (GameUtility.mpc.name != null) loginText.setText(GameUtility.mpc.name);
+//        scroller = (MarqueeView) findViewById(R.id.menu_status_scroller);
+        loginText = (TextView) findViewById(R.id.menu_login_text);
+
+        onInternetStatusChanged(NetworkHelper.getConnectivityStatus(getApplicationContext()));
+
+        if (mpc.name != null) loginText.setText(mpc.name);
 
         title = (ImageView) findViewById(R.id.menu_title);
         title.setClickable(true);
@@ -124,17 +134,34 @@ public class MenuActivity extends MenuActivityAbstract {
         buttons[BUTTON_LOGIN_OUT] = (ImageView) findViewById(R.id.menu_button_login_out);
         buttons[BUTTON_QUIT] = (ImageView) findViewById(R.id.menu_button_quit);
 
-        connectionObserver = new ConnectionObserver(this);
+        connectionObserver = new InternetRecieverData(this);
         InternetReciever.addObserver(connectionObserver);
+    }
+
+    @Override
+    protected void onPostCreate(final Bundle savedInstanceState) {
+//        scroller.startMarquee();
+        super.onPostCreate(savedInstanceState);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 //        WindowLayout.hideStatusBar(getWindow(), null);
-        if (GameUtility.mpc.name != null) loginText.setText(GameUtility.mpc.name);
+        if (mpc.name != null) loginText.setText(mpc.name);
         else loginText.setText("login");
         showAll();
+        if (connectionObserver == null) {
+            connectionObserver = new InternetRecieverData(this);
+        }
+        onInternetStatusChanged(NetworkHelper.getConnectivityStatus(getApplicationContext()));
+        InternetReciever.addObserver(connectionObserver);
+    }
+
+    @Override
+    protected void onPause() {
+        InternetReciever.removeObserver(connectionObserver);
+        super.onPause();
     }
 
     @SuppressWarnings("AssignmentToNull")
@@ -167,7 +194,7 @@ public class MenuActivity extends MenuActivityAbstract {
     }
 
     private void showAll() {
-        buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(loginButtons[GameUtility.mpc.name == null ? 0 : 1]));
+        buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(loginButtons[mpc.name == null ? 0 : 1]));
         YoYo.with(Techniques.FadeIn).duration(1000).withListener(new EnterAnimatorHandler(this)).playOn(title);
         for (final ImageView button : buttons) {
             button.setClickable(true);
@@ -231,20 +258,20 @@ public class MenuActivity extends MenuActivityAbstract {
 
         try {
             // If previous game is found, add it to list :-)
-            GameUtility.s_preferences.checkForNullKey(Constant.KEY_SAVE_GAME);
-            final SaveGame saveGame = (SaveGame) GameUtility.s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
+            s_preferences.checkForNullKey(Constant.KEY_SAVE_GAME);
+            final SaveGame saveGame = (SaveGame) s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
             Log.d(TAG, saveGame.toString());
             if (saveGame != null && saveGame.getLogic() != null && !saveGame.getLogic().isGameOver()) {
-                startGameItems.add(new StartGameItem(Constant.MODE_CONT_GAME, "Fortsæt sidste spil", "Type : " + (saveGame.isMultiPlayer() ? "Multi" : "Single") + "player / Gæt : " + saveGame.getLogic().getVisibleWord(), GameUtility.imageRefs[saveGame.getLogic().getNumWrongLetters()]));
+                startGameItems.add(new StartGameItem(Constant.MODE_CONT_GAME, "Fortsæt sidste spil", "Type : " + (saveGame.isMultiPlayer() ? "Multi" : "Single") + "player / Gæt : " + saveGame.getLogic().getVisibleWord(), imageRefs[saveGame.getLogic().getNumWrongLetters()]));
             }
         } catch (final NullPointerException npe) {
             // nothing happends here, its just for not adding the option to continue a game.
         } finally {
-            startGameItems.add(new StartGameItem(Constant.MODE_SINGLE_PLAYER, "Nyt singleplayer", "Tilfældigt ord.", GameUtility.imageRefs[0]));
-            if (GameUtility.mpc.name != null) {
-                startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER, getString(R.string.menu_new_multi_player_game), "Udfordring.", GameUtility.imageRefs[0]));
-                startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_2, getString(R.string.menu_new_multi_player_game), "Tværfaglig udfordring", GameUtility.imageRefs[0]));
-                startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_LOBBY, "Se spil lobbyer", "Ikke for sarte sjæle", GameUtility.imageRefs[0]));
+            startGameItems.add(new StartGameItem(Constant.MODE_SINGLE_PLAYER, "Nyt singleplayer", "Tilfældigt ord.", imageRefs[0]));
+            if (mpc.name != null) {
+                startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER, getString(R.string.menu_new_multi_player_game), "Udfordring.", imageRefs[0]));
+                startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_2, getString(R.string.menu_new_multi_player_game), "Tværfaglig udfordring", imageRefs[0]));
+                startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_LOBBY, "Se spil lobbyer", "Ikke for sarte sjæle", imageRefs[0]));
             }
 
             final StartGameAdapter adapter = new StartGameAdapter(this, R.layout.new_game_list_row, startGameItems);
@@ -309,8 +336,8 @@ public class MenuActivity extends MenuActivityAbstract {
         if (title != null && pass != null) {
             buttons[BUTTON_LOGIN_OUT].setTag(true);
         }
-        buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(GameUtility.mpc.name == null ? loginButtons[0] : loginButtons[1]));
-        if (GameUtility.mpc.name != null) loginText.setText(GameUtility.mpc.name);
+        buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(mpc.name == null ? loginButtons[0] : loginButtons[1]));
+        if (mpc.name != null) loginText.setText(mpc.name);
         else loginText.setText("Login");
         showAll();
     }
@@ -493,13 +520,6 @@ public class MenuActivity extends MenuActivityAbstract {
         public void onAnimationRepeat(final Animator animation) { }
     }
 
-//    private class LoginClickListener implements View.OnClickListener {
-//        @Override
-//        public void onClick(final View v) {
-//            Login.newInstance("Login", "OK", "Cancel", true).show(getSupportFragmentManager(), "Login");
-//        }
-//    }
-
     private static class OnLoginClickListener implements View.OnClickListener {
 
         private final WeakReference<MenuActivity> menuActivityWeakReference;
@@ -514,9 +534,11 @@ public class MenuActivity extends MenuActivityAbstract {
             if (menuActivity != null) {
                 menuActivity.md = new MaterialDialog.Builder(menuActivity)
                         .customView(R.layout.login, false)
+                        .cancelable(true)
                         .positiveText("Ok")
                         .negativeText("Afbryd")
-                        .onAny(new OnLoginClickResponse(menuActivity))
+                        .onPositive(new OnLoginClickResponse(menuActivity))
+                        .onNegative(new QuitDialogCallback(menuActivity))
                         .title("Login")
                         .show();
             }
@@ -562,7 +584,7 @@ public class MenuActivity extends MenuActivityAbstract {
                         }
                     }
                 } else {
-                    menuActivity.buttons[BUTTON_LOGIN_OUT].setBackground(menuActivity.getResources().getDrawable(GameUtility.mpc.name == null ? menuActivity.loginButtons[0] : menuActivity.loginButtons[1]));
+                    menuActivity.buttons[BUTTON_LOGIN_OUT].setBackground(menuActivity.getResources().getDrawable(mpc.name == null ? menuActivity.loginButtons[0] : menuActivity.loginButtons[1]));
                     menuActivity.callMethod("showAll");
                 }
                 dialog.dismiss();
@@ -570,7 +592,6 @@ public class MenuActivity extends MenuActivityAbstract {
             }
         }
     }
-
 
 
     private class NewGameCancelListener implements DialogInterface.OnCancelListener {
@@ -591,23 +612,52 @@ public class MenuActivity extends MenuActivityAbstract {
         showAll();
     }
 
+    private void updateMargueeScroller(final int connectionState) {
+        final StringBuilder sb = new StringBuilder(50);
+        sb.append("Nuværende spil : ");
 
-    private static class ConnectionObserver implements Runnable {
-
-        private final WeakReference<MenuActivity> menuActivityWeakReference;
-
-        public ConnectionObserver(final MenuActivity menuActivity) {
-            menuActivityWeakReference = new WeakReference<>(menuActivity);
-        }
-
-        @Override
-        public void run() {
-            final MenuActivity menuActivity = menuActivityWeakReference.get();
-            if (menuActivity != null) {
-                WindowLayout.showSnack(NetwordHelper.getConnectivityStatusString(menuActivity), menuActivity.title, true);
-                InternetReciever.addObserver(menuActivity.connectionObserver);
+        // this is just a quick hack! but we need some basic info!
+        final SaveGame sg;
+        try {
+            sg = (SaveGame) s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
+            if (sg.getLogic() != null) {
+                sb.append(sg.getLogic().getVisibleWord());
+                sb.append(". Antal Gæt : ");
+                sb.append(sg.getLogic().getUsedLetters().isEmpty() ? "Ingen" : sg.getLogic().getUsedLetters());
+                sb.append(". Forsøg brugt : ");
+                sb.append(sg.getLogic().getNumWrongLetters() == 0 ? "Ingen" : sg.getLogic().getNumWrongLetters());
+            } else {
+                sb.append("Intet");
             }
+        } catch (final Exception e) {
+            sb.append("Intet");
         }
+
+        sb.append(". Logget ind : ");
+        sb.append(mpc.name != null ? mpc.name : "Nej");
+        sb.append(". Forbindelse : ");
+        if (connectionState > -1) {
+            sb.append(InternetRecieverData.CONNECTION_INFO.get(connectionState));
+        } else {
+            sb.append("Ingen");
+        }
+        sb.append('.');
+        loginText.setText(sb.toString());
+    }
+
+    @Override
+    public void onInternetStatusChanged(final int connectionState) {
+        updateMargueeScroller(connectionState);
+        if (connectionState > -1) {
+            // we have a connection now !
+        }
+
+    }
+
+    @Override
+    public void onInternetStatusChanged(final String connectionState) {
+        // string version... could be displayed along the way..
+        WindowLayout.showSnack(connectionState, sf, true);
     }
 
 }
