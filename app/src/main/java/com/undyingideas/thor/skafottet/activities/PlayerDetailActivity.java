@@ -3,7 +3,6 @@ package com.undyingideas.thor.skafottet.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -32,9 +31,9 @@ public class PlayerDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new FloaterClickHandler());
 
         // Show the Up button in the action bar.
-        final ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
         }
 
         if (savedInstanceState == null) {
