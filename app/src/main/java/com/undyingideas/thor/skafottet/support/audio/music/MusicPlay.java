@@ -18,6 +18,8 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
 
     private MediaPlayer mMediaPlayer;    // The Media Player
 
+    public static int lifecounter;
+
     // indicates the state our service:
     enum State {
         Retrieving, // the MediaRetriever is retrieving music

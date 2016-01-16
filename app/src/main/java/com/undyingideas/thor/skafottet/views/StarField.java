@@ -138,10 +138,7 @@ public class StarField extends View implements PreferenceChangeListener {
         super.onDraw(canvas);
         for (final Star2D star : stars) {
             p.setAlpha(star.fade);
-            canvas.drawCircle(star.xy.x, star.xy.y, 3, p);
+            canvas.drawCircle(star.xy.x, star.xy.y, 4, p);
         }
     }
-
-
-
 }

@@ -159,7 +159,9 @@ public class MenuActivity extends MenuActivityAbstract implements
     @Override
     protected void onPause() {
         InternetReciever.removeObserver(connectionObserver);
-        stopService(MusicPlay.intent);
+//        if (MusicPlay.lifecounter == 0) {
+//            stopService(MusicPlay.intent);
+//        }
         super.onPause();
     }
 
@@ -167,6 +169,7 @@ public class MenuActivity extends MenuActivityAbstract implements
     @Override
     protected void onDestroy() {
         for (int i = 0; i < buttons.length; i++) buttons[i] = null;
+        stopService(MusicPlay.intent);
         super.onDestroy();
     }
 
