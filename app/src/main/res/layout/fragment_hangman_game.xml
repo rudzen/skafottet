@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              android:background="@drawable/skull"
+              android:background="@drawable/death"
               tools:context=".activities.GameActivity"
               android:weightSum="12.4"
     >

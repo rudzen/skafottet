@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.support.audio.music.MusicPlay;
 import com.undyingideas.thor.skafottet.support.firebase.WordList.WordListController;
 import com.undyingideas.thor.skafottet.support.firebase.controller.MultiplayerController;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
@@ -108,6 +109,8 @@ public class SplashActivity extends AppCompatActivity {
             if (s_preferences == null) {
                 s_preferences = new TinyDB(getApplicationContext());
             }
+
+            startService(new Intent(MusicPlay.ACTION_PLAY));
 
             // only for testing stuff!!!!
             s_preferences.clear();

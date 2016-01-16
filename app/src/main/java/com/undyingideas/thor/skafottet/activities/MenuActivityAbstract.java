@@ -141,7 +141,7 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
         if (batteryLevelRecieverData != null && BatteryLevelReciever.containsObserver(batteryLevelRecieverData)) {
             BatteryLevelReciever.removeObserver(batteryLevelRecieverData);
         }
-        batteryLevelRecieverData = new BatteryLevelRecieverData(this);
+        batteryLevelRecieverData = new BatteryLevelRecieverData(this, false);
         batteryLevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         BatteryLevelReciever.addObserver(batteryLevelRecieverData);
         batteryLevelReciever = new BatteryLevelReciever();
@@ -219,11 +219,15 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
     @Override
     public void onBatteryStatusChanged(final BatteryDTO batteryInformation) {
         Log.d(TAG, String.valueOf(batteryInformation.getLevel()));
+        BatteryLevelReciever.addObserver(batteryLevelRecieverData);
 
-
-        // turn off the starfield if lower than 25% battery
         if (sf != null) {
-            sf.setRun(batteryInformation.getLevel() > 25);
+            // turn off the starfield if lower than 25% battery
+            if (sf.isRun() && batteryInformation.getLevel() < 25) {
+                sf.setRun(false);
+            } else if (!sf.isRun() && batteryInformation.getLevel() > 25) {
+                sf.setRun(true);
+            }
         }
     }
 }
