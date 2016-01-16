@@ -10,6 +10,8 @@
 
 package com.undyingideas.thor.skafottet.activities;
 
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -21,6 +23,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.broadcastrecievers.BatteryDTO;
+import com.undyingideas.thor.skafottet.broadcastrecievers.BatteryLevelReciever;
+import com.undyingideas.thor.skafottet.broadcastrecievers.BatteryLevelRecieverData;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.views.StarField;
 
@@ -30,18 +35,26 @@ import java.lang.ref.WeakReference;
  * Created on 28-12-2015, 13:07.
  * Project : R-TicTacToe
  * <p>
- *     Contains Starfield View & Sensor related code ONLY!.
+ *     Contains :<br>
+ *         - Starfield View<br>
+ *         - Sensor<br>
+ *         - Battery Check
  * </p>
  * Uses WeakReferences to avoid having any loose ends where the GC can't collect the object.
  * @author rudz
  */
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
-public abstract class MenuActivityAbstract extends AppCompatActivity {
+public abstract class MenuActivityAbstract extends AppCompatActivity implements BatteryLevelRecieverData.BatteryLevelRecieveDataInterface {
 
+    /* star field stuff */
     @Nullable
-    StarField sf; // needs to be protected, as menu act should be able to pause the damn thing.
+    StarField sf;
     private Handler starhandler;
     private UpdateStarfield updateStarfield;
+
+    /* battery stuff */
+    IntentFilter batteryLevelFilter;
+    BatteryLevelReciever batteryLevelReciever;
 
     /* sensor stuff */
     @Nullable
@@ -71,6 +84,7 @@ public abstract class MenuActivityAbstract extends AppCompatActivity {
         starhandler.post(updateStarfield);
 
         registerSensor();
+        registerBatteryReciever();
 
     }
 
@@ -87,6 +101,7 @@ public abstract class MenuActivityAbstract extends AppCompatActivity {
             sf.setRun(true);
         }
         starhandler.post(updateStarfield);
+        registerBatteryReciever();
     }
 
     @Override
@@ -95,6 +110,9 @@ public abstract class MenuActivityAbstract extends AppCompatActivity {
         if (sf != null) sf.setRun(false);
         starhandler.removeCallbacksAndMessages(null);
         if (mSensor != null && mSensorManager != null) mSensorManager.unregisterListener(sensorListener, mSensor);
+        if (batteryLevelReciever != null) {
+            unregisterBatteryReciever();
+        }
     }
 
     @Override
@@ -113,6 +131,17 @@ public abstract class MenuActivityAbstract extends AppCompatActivity {
             // it also stops the animation when a dialog is showing (which is quite okay!)
             sf.setRun(hasFocus);
         }
+    }
+    private void registerBatteryReciever() {
+        batteryLevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        batteryLevelReciever = new BatteryLevelReciever();
+        registerReceiver(batteryLevelReciever, batteryLevelFilter);
+    }
+
+    private void unregisterBatteryReciever() {
+        unregisterReceiver(batteryLevelReciever);
+        batteryLevelFilter = null;
+        batteryLevelReciever = null;
     }
 
     private void registerSensor() {
@@ -173,5 +202,13 @@ public abstract class MenuActivityAbstract extends AppCompatActivity {
 
         @Override
         public void onAccuracyChanged(final Sensor sensor, final  int accuracy) { }
+    }
+
+    @Override
+    public void onBatteryStatusChanged(final BatteryDTO batteryInformation) {
+        // turn off the starfield if lower than 25% battery
+        if (sf != null) {
+            sf.setRun(batteryInformation.getLevel() > 25);
+        }
     }
 }

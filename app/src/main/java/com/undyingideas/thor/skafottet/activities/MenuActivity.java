@@ -108,7 +108,6 @@ public class MenuActivity extends MenuActivityAbstract implements InternetReciev
 
         loginLayout = (LinearLayout) findViewById(R.id.LoginLayout);
         loginLayout.setOnClickListener(new OnLoginClickListener(this));
-//        scroller = (MarqueeView) findViewById(R.id.menu_status_scroller);
         loginText = (TextView) findViewById(R.id.menu_login_text);
 
         onInternetStatusChanged(NetworkHelper.getConnectivityStatus(getApplicationContext()));
@@ -142,9 +141,7 @@ public class MenuActivity extends MenuActivityAbstract implements InternetReciev
     @Override
     protected void onResume() {
         super.onResume();
-//        WindowLayout.hideStatusBar(getWindow(), null);
-        if (mpc.name != null) loginText.setText(mpc.name);
-        else loginText.setText("login");
+        updateMargueeScroller(NetworkHelper.getConnectivityStatus(getApplicationContext()));
         showAll();
         if (connectionObserver == null) {
             connectionObserver = new InternetRecieverData(this);
@@ -230,19 +227,21 @@ public class MenuActivity extends MenuActivityAbstract implements InternetReciev
 
     @SuppressWarnings("unused")
     private void showSettings() {
-        notReady();
+        showDialog("Hov!", "Denne funktion mangler stadig.");
     }
 
     @SuppressWarnings("unused")
     private void showWordList() {
-//        notReady();
         startActivity(new Intent(this, WordListActivity.class));
     }
 
     @SuppressWarnings("unused")
     private void showLogin() {
-        loginLayout.callOnClick();
-//        Login.newInstance("Login", "OK", "Cancel", true).show(getSupportFragmentManager(), "Login");
+        if (NetworkHelper.getConnectivityStatus(getApplicationContext()) > -1) {
+            loginLayout.callOnClick();
+        } else {
+            showDialog("Fejl", "Ingen internetforbindelse tilstede.");
+        }
     }
 
     @SuppressWarnings({"unused", "AccessStaticViaInstance"})
@@ -332,8 +331,7 @@ public class MenuActivity extends MenuActivityAbstract implements InternetReciev
             buttons[BUTTON_LOGIN_OUT].setTag(true);
         }
         buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(mpc.name == null ? loginButtons[0] : loginButtons[1]));
-        if (mpc.name != null) loginText.setText(mpc.name);
-        else loginText.setText("Login");
+        updateMargueeScroller(NetworkHelper.getConnectivityStatus(getApplicationContext()));
         showAll();
     }
 
@@ -597,11 +595,11 @@ public class MenuActivity extends MenuActivityAbstract implements InternetReciev
         }
     }
 
-    private void notReady() {
+    private void showDialog(final CharSequence title, final CharSequence content) {
         new MaterialDialog.Builder(this)
                 .backgroundColor(Color.BLACK)
-                .title("Ikke klar endnu")
-                .content("Ikke implementeret!")
+                .title(title)
+                .content(content)
                 .positiveText("Ok")
                 .show();
         showAll();
@@ -649,7 +647,11 @@ public class MenuActivity extends MenuActivityAbstract implements InternetReciev
     public void onInternetStatusChanged(final int connectionState) {
         updateMargueeScroller(connectionState);
         if (connectionState > -1) {
-            // we have a connection now !
+            // we have a connection now ! enable the firebase controller
+
+        } else {
+            // kill the firebase controller
+
         }
 
     }
