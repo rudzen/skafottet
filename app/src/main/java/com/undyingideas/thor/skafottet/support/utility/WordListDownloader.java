@@ -79,15 +79,17 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
         super.onPreExecute();
         wordListActivity = wordListActivityWeakReference.get();
         if (wordListActivity != null) {
-            wordListActivity.md = new MaterialDialog.Builder(wordListActivity)
-                    .title("Indhenter " + title)
-                    .content("Vent...")
-                    .progress(true, 0)
-                    .progressIndeterminateStyle(true)
-                    .negativeText("Afbryd")
-                    .cancelable(true)
-                    .cancelListener(new DownloaderOnCancelListener())
-                    .show();
+            if (wordListActivity.md == null || !wordListActivity.md.isShowing()) {
+                wordListActivity.md = new MaterialDialog.Builder(wordListActivity)
+                        .title("Indhenter " + title)
+                        .content("Vent...")
+                        .progress(true, 0)
+                        .progressIndeterminateStyle(true)
+                        .negativeText("Afbryd")
+                        .cancelable(true)
+                        .cancelListener(new DownloaderOnCancelListener())
+                        .show();
+            }
         }
     }
 
@@ -121,11 +123,7 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
                 final WordItem wordItem = new WordItem(title, url, dude.size());
                 wordItem.getWords().addAll(dude);
                 Collections.sort(wordItem.getWords());
-                if (s_wordController.existsLocal(wordItem)) {
-                    s_wordController.replaceLocalWordList(wordItem);
-                } else {
-                    s_wordController.addLocalWordList(wordItem.getTitle(), wordItem.getUrl(), wordItem.getWords());
-                }
+                s_wordController.replaceLocalWordList(wordItem);
                 ListFetcher.saveWordLists(s_wordController, wordListActivity.getApplicationContext());
                 return wordItem;
             } else {
@@ -141,18 +139,11 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
         wordListActivity = wordListActivityWeakReference.get();
         if (wordListActivity != null) {
             Log.d("Downloader", wordItem.toString());
-            if (wordListActivity.md != null && !multi && wordListActivity.md.isShowing()) {
+            if (wordListActivity.md != null && wordListActivity.md.isShowing()) {
                 wordListActivity.md.dismiss();
             }
             wordListActivity.refreshList();
             wordListActivity.setProgressBar(false);
-            if (multi) {
-                if (!wordListActivity.isListUpdateDone()) {
-                    wordListActivity.decreaseListCount();
-                } else {
-                    wordListActivity.md.dismiss();
-                }
-            }
         }
 
         super.onPostExecute(wordItem);

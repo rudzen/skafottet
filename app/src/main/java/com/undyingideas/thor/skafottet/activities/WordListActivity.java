@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -37,6 +38,7 @@ import com.undyingideas.thor.skafottet.support.utility.WordListDownloader;
 import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -56,8 +58,7 @@ public class WordListActivity extends AppCompatActivity implements
         AdapterView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener,
         StickyListHeadersListView.OnStickyHeaderOffsetChangedListener,
         StickyListHeadersListView.OnStickyHeaderChangedListener,
-        ProgressBarInterface
-{
+        ProgressBarInterface {
 
     private static final String TAG = "WordListActicity";
 
@@ -206,11 +207,8 @@ public class WordListActivity extends AppCompatActivity implements
             }
             returnValue = true;
             setProgressBar(false);
-        } else if (id == R.id.action_word_list_update_all) {
-            listCount = s_wordController.getLocalWords().size() - 1;
-            for (final WordItem wordItem : s_wordController.getLocalWords()) {
-                new WordListDownloader(this, wordItem.getTitle(), wordItem.getUrl()).execute();
-            }
+        } else if (id == R.id.action_word_list_update) {
+            updateCurrentList();
             returnValue = true;
         } else {
             returnValue = mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
@@ -218,15 +216,15 @@ public class WordListActivity extends AppCompatActivity implements
         return returnValue;
     }
 
-    // this is a ugly hack..
-
-    public void decreaseListCount() {
-        listCount--;
+    private boolean updateCurrentList() {
+        if (s_wordController.isLocal() && s_wordController.getIndexLocale() > 0) {
+            new WordListDownloader(this, s_wordController.getLocalWords().get(s_wordController.getIndexLocale()).getTitle(), s_wordController.getLocalWords().get(s_wordController.getIndexLocale()).getUrl()).execute();
+            return true;
+        }
+        WindowLayout.showSnack("Denne liste kan ikke opdateres.", refreshLayout, true);
+        return false;
     }
 
-    public boolean isListUpdateDone() {
-        return listCount == 0;
-    }
 
     @Override
     public void onBackPressed() {
@@ -297,9 +295,13 @@ public class WordListActivity extends AppCompatActivity implements
 
     /**
      * Handles the functionality when the user has pressed accept for adding a custom list.
-     * @param title The title of the list
-     * @param url The URL of the list (guarenteed VALID web address!
-     * @param startDownload Initiate the download right away?
+     *
+     * @param title
+     *         The title of the list
+     * @param url
+     *         The URL of the list (guarenteed VALID web address!
+     * @param startDownload
+     *         Initiate the download right away?
      */
     private void onFinishAddWordDialog(final String title, final String url, final boolean startDownload) {
         /* the recieved input from the dual-edittext dialog fragment */
@@ -317,7 +319,7 @@ public class WordListActivity extends AppCompatActivity implements
             setProgressBar(true);
             new WordListDownloader(this, title, url).execute();
         } else {
-            s_wordController.addLocalWordList(title, url);
+            s_wordController.replaceLocalWordList(new WordItem(title, url, new ArrayList<String>()));
             ListFetcher.listHandler.post(ListFetcher.listSaver);
         }
     }
@@ -347,9 +349,7 @@ public class WordListActivity extends AppCompatActivity implements
         public void onRefresh() {
             final WordListActivity wordListActivity = wordListActivityWeakReference.get();
             if (wordListActivity != null) {
-                if (s_wordController.isLocal() && !Objects.equals(s_wordController.getLocalWords().get(s_wordController.getIndexLocale()).getUrl(), "Lokal")) {
-                    final WordItem wordItem = s_wordController.getLocalWords().get(s_wordController.getIndexLocale());
-                    new WordListDownloader(wordListActivity, wordItem.getTitle(), wordItem.getUrl());
+                if (!wordListActivity.updateCurrentList()) {
                     wordListActivity.handler.postDelayed(wordListActivity.refreshStopper, 500);
                 } else {
                     wordListActivity.handler.post(wordListActivity.refreshStopper);
@@ -462,6 +462,56 @@ public class WordListActivity extends AppCompatActivity implements
         }
     }
 
+
+
+    /* TEST ZONE - HANDLER <-> MESSAGE SYSTEM IN PROGRESS !!! */
+
+    public static final int MSG_ID_CLOSE_PD = 1;
+    public static final int MSG_ID_REFRESH = 2;
+    public static final int MSG_ID_OPEN_PD = 3;
+
+    public static final String MSG_KEY_PD_TITLE = "mpdti";
+    public static final String MSG_KEY_PD_TEXT = "mpdtx";
+
+    private class MessageReciever extends Handler {
+        private Bundle bundle;
+
+        @Override
+        public void handleMessage(final Message inputMessage) {
+            if (inputMessage != null) {
+                if (inputMessage.what == MSG_ID_REFRESH) {
+                    bundle = inputMessage.getData();
+                    if (bundle.containsKey(MSG_KEY_PD_TITLE)) {
+                        md.setTitle(bundle.getString(MSG_KEY_PD_TITLE));
+                    }
+                    md.setContent(bundle.getString(MSG_KEY_PD_TEXT));
+                } else if (inputMessage.what == MSG_ID_CLOSE_PD) {
+                    md.dismiss();
+                    md = null;
+                } else if (inputMessage.what == MSG_ID_OPEN_PD) {
+                    bundle = inputMessage.getData();
+                    md = new MaterialDialog.Builder(getApplicationContext())
+                            .title(bundle.getString(MSG_KEY_PD_TITLE))
+                            .content(bundle.getString(MSG_KEY_PD_TEXT))
+                            .progress(true, 0)
+                            .progressIndeterminateStyle(true)
+                            .negativeText("Afbryd")
+                            .cancelable(true)
+                            .show();
+                }
+            }
+        }
+    }
+
+    private class WordUpdater implements Runnable {
+
+        private Bundle bundle;
+
+        @Override
+        public void run() {
+            Message msg = handler.obtainMessage();
+        }
+    }
 
 
 }

@@ -118,7 +118,7 @@ public class MenuActivity extends MenuActivityAbstract implements InternetReciev
 
         onInternetStatusChanged(NetworkHelper.getConnectivityStatus(getApplicationContext()));
 
-        if (mpc.name != null) loginText.setText(mpc.name);
+        if (mpc != null &&  mpc.name != null) loginText.setText(mpc.name);
 
         title = (ImageView) findViewById(R.id.menu_title);
         title.setClickable(true);
@@ -634,7 +634,12 @@ public class MenuActivity extends MenuActivityAbstract implements InternetReciev
         }
 
         sb.append(". Logget ind : ");
-        sb.append(mpc.name != null ? mpc.name : "Nej");
+        try {
+            sb.append(mpc != null && mpc.name != null ? mpc.name : "Nej");
+        } catch (final Exception e) {
+            e.printStackTrace();
+            sb.append("Nej");
+        }
         sb.append(". Forbindelse : ");
         if (connectionState > -1) {
             sb.append(InternetRecieverData.CONNECTION_INFO.get(connectionState));

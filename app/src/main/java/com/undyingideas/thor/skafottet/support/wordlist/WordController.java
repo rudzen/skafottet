@@ -99,8 +99,11 @@ public final class WordController implements Serializable, Parcelable {
         // quick hack
         boolean replaced = false;
         for (int i = 0; i < localWords.size(); i++) {
-            if (Objects.equals(wordItem.getTitle().toLowerCase(), localWords.get(i).getTitle().toLowerCase()) && Objects.equals(wordItem.getUrl().toLowerCase(), localWords.get(i).getUrl().toLowerCase())) {
-                localWords.get(i).replaceWordList(wordItem.getWords());
+            if (localWords.get(i).getTitle().equalsIgnoreCase(wordItem.getTitle()) || localWords.get(i).getUrl().equalsIgnoreCase(wordItem.getUrl())) {
+                // so we keep the index!
+                localWords.get(i).setTitle(wordItem.getTitle());
+                localWords.get(i).setUrl(wordItem.getUrl());
+                localWords.get(i).setWords(wordItem.getWords());
                 replaced = true;
                 break;
             }

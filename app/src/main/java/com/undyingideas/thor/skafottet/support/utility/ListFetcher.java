@@ -81,6 +81,10 @@ public final class ListFetcher {
         }
     }
 
+    public static boolean deleteList(final Context context) {
+        return context.deleteFile(filename);
+    }
+
     public static class ListSaver implements Runnable {
 
         final WeakReference<Context> contextWeakReference;

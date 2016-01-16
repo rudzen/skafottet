@@ -20,7 +20,7 @@
     />
 
     <item
-        android:id="@+id/action_word_list_update_all"
+        android:id="@+id/action_word_list_update"
         android:icon="@android:drawable/ic_menu_rotate"
         app:showAsAction="ifRoom"
         android:orderInCategory="20"

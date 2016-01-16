@@ -110,7 +110,8 @@ public class SplashActivity extends AppCompatActivity {
             }
 
             // only for testing stuff!!!!
-//                s_prefereces.clear();
+            s_preferences.clear();
+            Log.d(TAG, "Wordlist deleted : " + ListFetcher.deleteList(getApplicationContext()));
 
                 /* begin loading wordlist
                 * 1) Check if any existing word list exist already
