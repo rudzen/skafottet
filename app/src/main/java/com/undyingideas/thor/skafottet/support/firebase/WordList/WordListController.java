@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-
 /**
  * Created on 08-01-2016, 12:13.
  * Project : skafottet

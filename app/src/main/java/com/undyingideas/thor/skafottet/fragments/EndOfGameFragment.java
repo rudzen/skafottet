@@ -255,6 +255,12 @@ public class EndOfGameFragment extends Fragment {
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        // something could be done here, but what? :-)
+    }
+
+    @Override
     public void onViewStateRestored(@Nullable final Bundle savedInstanceState) {
         if (savedInstanceState != null && savedInstanceState.containsKey(Constant.KEY_SAVE_GAME)) {
             Log.d(TAG, "SaveGame was found in onViewStateRestored()");

@@ -72,6 +72,15 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name=".broadcastrecievers.BatteryLevelReciever"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BATTERY_CHANGED"/>
+            </intent-filter>
+        </receiver>
+
         <!-- This service is only used on devices with API v17+ -->
         <service
             android:name=".views.SkafotDream"
