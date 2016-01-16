@@ -9,7 +9,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import static android.view.MotionEvent.*;
+import static android.view.MotionEvent.ACTION_DOWN;
+import static android.view.MotionEvent.ACTION_MOVE;
+import static android.view.MotionEvent.ACTION_UP;
 
 /**
  * Created by theis on 15-01-2016.
@@ -36,24 +38,24 @@ public class Hangman3dView extends View{
     V3 c = new V3(0,0,3);
     Cube[] gallow;
     Cube[] body;
-    int errors = 0;
+    int errors;
     Paint p = new Paint();
 
-    public Hangman3dView(Context context) {
+    public Hangman3dView(final Context context) {
         super(context);
         buildGallow();
         buildBody();
         buildOther();
     }
 
-    public Hangman3dView(Context context, AttributeSet attrs) {
+    public Hangman3dView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
         buildGallow();
         buildBody();
         buildOther();
     }
 
-    public Hangman3dView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public Hangman3dView(final Context context, final AttributeSet attrs, final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         buildGallow();
         buildBody();
@@ -61,7 +63,7 @@ public class Hangman3dView extends View{
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent e){
+    public boolean onTouchEvent(final MotionEvent e){
         final float x = e.getX(), y = e.getY();
         switch (e.getAction()){
             case ACTION_MOVE :
@@ -122,7 +124,7 @@ public class Hangman3dView extends View{
 
     @Override
     protected void onDraw(final Canvas canvas){
-        S.focus(this.c);
+        S.focus(c);
         for(final Cube cu: gallow){
             cu.draw(S, canvas, p); // draw gallow
         }

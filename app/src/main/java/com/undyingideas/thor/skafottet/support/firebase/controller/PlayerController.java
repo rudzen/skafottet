@@ -39,7 +39,7 @@ public class PlayerController {
         ref.child("Players").child(name).child("gameList").addChildEventListener(new GameListListener(mpcRef));
     }
 
-    public void updatePlayerScore(final String name, int newScore) {
+    public void updatePlayerScore(final String name, final int newScore) {
         ref.child("Players").child(name).child("score").setValue(newScore);
     }
 }

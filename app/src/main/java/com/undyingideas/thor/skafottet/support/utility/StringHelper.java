@@ -121,7 +121,7 @@ public final class StringHelper {
 
     public static void setPatterns() {
         /* configure pattern for loading of list, this is necessary as it might have changed! */
-        Pattern patLoad = setWordLength(regLowerCase, 3);
+        final Pattern patLoad = setWordLength(regLowerCase, 3);
     }
 
 }

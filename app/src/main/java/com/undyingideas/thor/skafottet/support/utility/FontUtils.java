@@ -50,7 +50,7 @@ public class FontUtils {
     /**
      * map of font types to font paths in assets
      */
-    private static Map<String, String> fontMap = new HashMap<>();
+    private static final Map<String, String> fontMap = new HashMap<>();
 
     static {
         fontMap.put(FontTypes.LIGHT, "fonts/Roboto-Light.ttf");
@@ -66,8 +66,8 @@ public class FontUtils {
      * @param fontType
      * @return
      */
-    private static Typeface getRobotoTypeface(Context context, String fontType) {
-        String fontPath = fontMap.get(fontType);
+    private static Typeface getRobotoTypeface(final Context context, final String fontType) {
+        final String fontPath = fontMap.get(fontType);
         if (!typefaceCache.containsKey(fontType)) {
             typefaceCache.put(fontType, Typeface.createFromAsset(context.getAssets(), fontPath));
         }

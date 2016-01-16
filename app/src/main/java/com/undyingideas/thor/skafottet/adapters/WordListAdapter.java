@@ -29,7 +29,7 @@ public class WordListAdapter extends BaseAdapter implements StickyListHeadersAda
     private ArrayList<String> mItems;
     private int[] mSectionIndices;
     private Character[] mSectionLetters;
-    private LayoutInflater mInflater;
+    private final LayoutInflater mInflater;
 
     public WordListAdapter(final Context mContext, final ArrayList<String> mItems) {
 //        this.mContext = mContext;
@@ -39,7 +39,7 @@ public class WordListAdapter extends BaseAdapter implements StickyListHeadersAda
         mSectionLetters = getSectionLetters();
     }
 
-    public WordListAdapter(Context context) {
+    public WordListAdapter(final Context context) {
 //        mContext = context;
         mInflater = LayoutInflater.from(context);
 //        mItems = context.getResources().getStringArray(R.array.countries);
@@ -150,7 +150,7 @@ public class WordListAdapter extends BaseAdapter implements StickyListHeadersAda
     }
 
     @Override
-    public int getSectionForPosition(int position) {
+    public int getSectionForPosition(final int position) {
         for (int i = 0; i < mSectionIndices.length; i++) {
             if (position < mSectionIndices[i]) {
                 return i - 1;

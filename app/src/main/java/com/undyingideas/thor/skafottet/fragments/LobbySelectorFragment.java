@@ -182,9 +182,9 @@ public class LobbySelectorFragment extends Fragment {
                                     Log.d("firebaseopengame", lobbySelectorFragment.lobbys.get(position).getWord());
                                     //noinspection ConstantConditions
                                     String k = "";
-                                    LobbyDTO dto = lobbySelectorFragment.lobbys.get(position);
-                                    Set<String> keys = GameUtility.mpc.lc.lobbyList.keySet();
-                                    for (String key : keys)
+                                    final LobbyDTO dto = lobbySelectorFragment.lobbys.get(position);
+                                    final Set<String> keys = GameUtility.mpc.lc.lobbyList.keySet();
+                                    for (final String key : keys)
                                         if (dto.equals(GameUtility.mpc.lc.lobbyList.get(key)))
                                             { k = key; break; }
 
@@ -223,21 +223,21 @@ public class LobbySelectorFragment extends Fragment {
         }
     }
 
-    private void removeInactive(String name) {
-        ArrayList<LobbyDTO> dtoList = new ArrayList<>();
+    private void removeInactive(final String name) {
+        final ArrayList<LobbyDTO> dtoList = new ArrayList<>();
         dtoList.addAll(GameUtility.mpc.lc.lobbyList.values());
         boolean b;
-        for(LobbyDTO dto : dtoList) {
+        for(final LobbyDTO dto : dtoList) {
             b = false;
             try {
-                for (LobbyPlayerStatus status : dto.getPlayerList()) {
+                for (final LobbyPlayerStatus status : dto.getPlayerList()) {
                     if (status.getScore() == -1 && status.getName().equals(name)) {
                         b = true;
                         break;
                     }
                 }
                 if (b) lobbys.add(dto);
-            } catch (NullPointerException e) {
+            } catch (final NullPointerException e) {
                 Log.e("NullPointer", e.toString());
             }
         }

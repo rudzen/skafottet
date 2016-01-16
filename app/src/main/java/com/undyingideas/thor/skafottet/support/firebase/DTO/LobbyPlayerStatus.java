@@ -20,7 +20,7 @@ public class LobbyPlayerStatus {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(final int score) {
         this.score = score;
     }
 

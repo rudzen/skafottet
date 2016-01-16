@@ -153,10 +153,10 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
     protected void onProgressUpdate(final CharSequence... values) {
         if (wordListActivity != null) {
             if (values.length == 2) {
-                wordListActivity.md.setMessage(String.format("Indlæser ord [%s] :%s%s", values[0], System.lineSeparator(), values[1]));
+                wordListActivity.md.setContent(String.format("Indlæser ord [%s] :%s%s", values[0], System.lineSeparator(), values[1]));
             } else {
                 // values.length == 1
-                wordListActivity.md.setMessage(values[0]);
+                wordListActivity.md.setContent(values[0]);
             }
         }
     }

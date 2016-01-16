@@ -2,7 +2,6 @@ package com.undyingideas.thor.skafottet.views.camera;
 
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 
 public class Camera {
@@ -17,7 +16,7 @@ public class Camera {
 	private V3 R = V3.k;
 	private V3 focusPoint;
 
-	public float pivor = 0;
+	public float pivor;
 
 	/** zoom **/
 	private float z = 4;
@@ -29,7 +28,7 @@ public class Camera {
 	M3 Rz;
 	V3 u;
 	M3 Su;
-	public float northDegree = 0;
+	public float northDegree;
 
 	public Camera(final float sx, final float sy, final  int ox, final int oy){
 		s2=new S2(sx, sy, ox, oy);
@@ -52,18 +51,18 @@ public class Camera {
 
 
 	public V2 project(final V3 p){
-		V3 EP=p.sub(cameraCenter);
+		final V3 EP=p.sub(cameraCenter);
 
-		float d=EP.dot(D);
+		final float d=EP.dot(D);
 		if(d < 0) return null;
-		float u=EP.dot(U);
-		float r=EP.dot(R);
-		float rm=(r/d)*z;
-		float um=(u/d)*z;
+		final float u=EP.dot(U);
+		final float r=EP.dot(R);
+		final float rm=(r/d)*z;
+		final float um=(u/d)*z;
 		return new V2(rm,um);
 	}
 
-	public void drawAxis(Canvas canvas, Paint paint){
+	public void drawAxis(final Canvas canvas, final Paint paint){
 		drawLine(canvas, new V3(0, 0, 0), new V3(10, 0, 0), paint);
 		drawLine(canvas, new V3(0, 0, 0), new V3(0, 10, 0), paint);
 		drawLine(canvas, new V3(0, 0, 0), new V3(0, 0, 10), paint);
@@ -74,11 +73,11 @@ public class Camera {
 		return focusPoint;
 	}
 
-	public void setFocusPoint(V3 v){
+	public void setFocusPoint(final V3 v){
 		focusPoint = v;
 		focus(focusPoint);
 	}
-	public void move(V3 vector){
+	public void move(final V3 vector){
 		cameraCenter = cameraCenter.add(vector);
 	}
 
@@ -86,46 +85,46 @@ public class Camera {
 		return cameraCenter;
 	}
 
-	public void moveCameraTo(V3 p){
+	public void moveCameraTo(final V3 p){
 		cameraCenter=new V3(p.getX(),p.getY(),p.getZ());
 	}
 
-	public void focus(V3 p){
+	public void focus(final V3 p){
 		D=p.sub(cameraCenter).unit();
 		R=D.cross(V3.k).unit();
 		U=R.cross(D);
 	}
 
-	public void rotateAround(float phi){
+	public void rotateAround(final float phi){
 		rotate(M3.sX, phi);
 	}
-	public void rotateUp(float phi){
+	public void rotateUp(final float phi){
 		rotate(M3.sY, phi);
 	}
-	public void rotateLeft(float phi){
+	public void rotateLeft(final float phi){
 		rotate(M3.sZ, phi);
 	}
 	
-	public void rotate(M3 s, float phi){
-		M3 Rz = M3.inverse.add( s.mul((float)( Math.sin(phi)))).add(s.mul(s).mul((float) (1 - Math.cos(phi))));
+	public void rotate(final M3 s, final float phi){
+		final M3 Rz = M3.inverse.add( s.mul((float) Math.sin(phi))).add(s.mul(s).mul((float) (1 - Math.cos(phi))));
 		moveCameraTo(Rz.mul(cameraCenter));
 	}
-	public V3 rotateCameraFocusTo(M3 s, float phi){
-		M3 Rz = M3.inverse.add( s.mul((float) Math.sin(phi))).add( s.mul( s).mul( (float)(1-Math.cos( phi))));
-		V3 cen= new V3(cameraCenter.x,cameraCenter.y,cameraCenter.z);
+	public V3 rotateCameraFocusTo(final M3 s, final float phi){
+		final M3 Rz = M3.inverse.add( s.mul((float) Math.sin(phi))).add( s.mul( s).mul( (float)(1-Math.cos( phi))));
+		final V3 cen= new V3(cameraCenter.x,cameraCenter.y,cameraCenter.z);
 		return Rz.mul(focusPoint.sub(cen)).add(cen);
 	}
 
 
-	public void setZoom(float zoom){
+	public void setZoom(final float zoom){
 		z = zoom;
 	}
 
-	public void drawLine(Canvas c, V3 v1, V3 v2, Paint paint) {
+	public void drawLine(final Canvas c, final V3 v1, final V3 v2, final Paint paint) {
 		if(project(v1) == null ||project(v2) == null) return;
 		s2.drawLine(c, project(v1), project(v2), paint);
 	}
-	public void drawPoint(Canvas c, V3 point,Paint p){
+	public void drawPoint(final Canvas c, final V3 point, final Paint p){
 		if(project(point) == null ) return;
 		s2.drawPoint(c, project(point), p);
 	}

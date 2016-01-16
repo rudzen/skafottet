@@ -31,12 +31,12 @@ public class LobbyDTO {
         return word;
     }
 
-    public void setWord(String word) {
+    public void setWord(final String word) {
         this.word = word;
     }
 
     public ArrayList<LobbyPlayerStatus> getPlayerList() {
-        ArrayList<LobbyPlayerStatus> a = new ArrayList<>(playerList.values());
+        final ArrayList<LobbyPlayerStatus> a = new ArrayList<>(playerList.values());
         return a;
     }
 
@@ -49,11 +49,11 @@ public class LobbyDTO {
         String s = "";
         s += "Word = "+word;
         s += " , names = ";
-        for(LobbyPlayerStatus status: playerList.values()) s+= status.getName() + " ";
+        for(final LobbyPlayerStatus status: playerList.values()) s+= status.getName() + " ";
         return s;
     }
 
-    public void put(String key, LobbyPlayerStatus lobbyPlayerStatus) {
+    public void put(final String key, final LobbyPlayerStatus lobbyPlayerStatus) {
         playerList.put(key, lobbyPlayerStatus);
     }
 }

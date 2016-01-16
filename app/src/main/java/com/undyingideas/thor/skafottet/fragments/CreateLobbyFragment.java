@@ -184,12 +184,12 @@ public class CreateLobbyFragment extends Fragment {
                 if(GameUtility.mpc.name == null) {
                     //GameUtility.mpc.login(multiPlayerPlayerFragment.players.get(position).getName());
                 } else if (opponentName != null) {
-                    WordItem item = createLobbyFragment.wordList.get(position);
+                    final WordItem item = createLobbyFragment.wordList.get(position);
                     Log.d("createlobbyfragment", opponentName + " wordlist size = " + item.getWords().size() + " random ord " + item.getWords().get(getRandom(item.getWords().size())));
-                    String w = item.getWords().get(getRandom(item.getWords().size()));
-                    LobbyPlayerStatus lps1 = new LobbyPlayerStatus(opponentName, -1);
-                    LobbyPlayerStatus lps2 = new LobbyPlayerStatus(GameUtility.mpc.name, -1);
-                    LobbyDTO dto = new LobbyDTO();
+                    final String w = item.getWords().get(getRandom(item.getWords().size()));
+                    final LobbyPlayerStatus lps1 = new LobbyPlayerStatus(opponentName, -1);
+                    final LobbyPlayerStatus lps2 = new LobbyPlayerStatus(GameUtility.mpc.name, -1);
+                    final LobbyDTO dto = new LobbyDTO();
                     dto.add(lps1); dto.add(lps2); dto.setWord(w);
                     GameUtility.mpc.createLobby(dto);
 
@@ -200,7 +200,7 @@ public class CreateLobbyFragment extends Fragment {
             }
         }
 
-        private int getRandom(int size) {
+        private int getRandom(final int size) {
             return (int) ( 4 + Math.random()*4*size ) % size;
         }
     }

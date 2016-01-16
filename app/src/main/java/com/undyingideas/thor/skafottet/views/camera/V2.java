@@ -11,36 +11,36 @@ public class V2 {
 		j = new V2(0, 1);
 	}
 	
-	public V2(float x, float y){
+	public V2(final float x, final float y){
 		this.x =x;
 		this.y =y;
 	}
 	
-	public V2 add(V2 v){
+	public V2 add(final V2 v){
 		return new V2(x + v.x, y + v.y);  
 	}
 
-	public V2 sub(V2 v){
+	public V2 sub(final V2 v){
 		return new V2(x-v.x,y-v.y);
 	}
 	
-	public V2 mul(float k){
+	public V2 mul(final float k){
 		return new V2(x*k , y*k);
 	}
-	public V2 mul(V2 v){
+	public V2 mul(final V2 v){
 		return new V2(x*v.x,y*v.y);
 	}
-	public float det(V2 v){
-		return (x*v.y-y*v.x);
+	public float det(final V2 v){
+		return x*v.y-y*v.x;
 	}
 	
-	public float distanceToPoint(V2 v){
-		float dx = v.x - x;
-		float dy = v.y - y;
+	public float distanceToPoint(final V2 v){
+		final float dx = v.x - x;
+		final float dy = v.y - y;
 		return (float)Math.sqrt(dx*dx + dy*dy);
 	}
 	
-	public V2 projection(V2 v){
+	public V2 projection(final V2 v){
 		return mul(v.mul((float)1.0/v.length()));
 	}
 	public float length(){
@@ -51,7 +51,7 @@ public class V2 {
 		return x;
 	}
 
-	public void setX(float x) {
+	public void setX(final float x) {
 		this.x = x;
 	}
 
@@ -59,33 +59,33 @@ public class V2 {
 		return y;
 	}
 
-	public void setY(float y) {
+	public void setY(final float y) {
 		this.y = y;
 	}
-	public V2 norm(V2 v1){
+	public V2 norm(final V2 v1){
 		return new V2(v1.x - x, v1.y - y);
 	}
 	
 	public void normL(){
-		float temp = x;
+		final float temp = x;
 		x = -y;
 		y = temp;
 	}
 
 	public V2 unit() {
-		float len = length();
+		final float len = length();
 		return new V2(x / len, y / len);
 	}
 	
-	public float scal(V2 v) {
+	public float scal(final V2 v) {
 		return x*y + v.x*v.y;
 	}
 	
-	public boolean isOrtogonal(V2 v) {
+	public boolean isOrtogonal(final V2 v) {
 		return scal(v) == 0;
 	}
 	
-	public static V2 rotate(V2 v, float degrees) {
+	public static V2 rotate(final V2 v, final float degrees) {
 		return new M2(	(float)Math.cos(degrees),(float) -Math.sin(degrees),
 				(float)Math.sin(degrees),  (float)Math.cos(degrees)).mul(v);
 	}
@@ -94,12 +94,12 @@ public class V2 {
 		return (float)Math.atan(y / x);
 	}
 	
-	public float projectionLen(V2 v) {
+	public float projectionLen(final V2 v) {
 		return Math.abs(scal(v) / Math.abs(length()));
 	}
 
 	public V2 crossVector() {
-		return new V2(y * (-1), x);
+		return new V2(-y, x);
 	}
 	
 	@Override
@@ -107,7 +107,7 @@ public class V2 {
 		return "[" + Float.toString(x) + " , " + Float.toString(y) + "]";
 	}
 	
-	public boolean equals(V2 o){
-		return (this.x == o.x && this.y == o.y);
+	public boolean equals(final V2 o){
+		return x == o.x && y == o.y;
 	}
 }

@@ -169,13 +169,13 @@ public class EndOfGameFragment extends Fragment {
             }
         } else {
             GameUtility.mpc.lc.updateLobby(endGame.getNames()[1], GameUtility.mpc.name, endGame.getLogic().getNumWrongLetters());
-            LobbyDTO dto = GameUtility.mpc.lc.lobbyList.get(endGame.getNames()[1]);
+            final LobbyDTO dto = GameUtility.mpc.lc.lobbyList.get(endGame.getNames()[1]);
             boolean gameisDone = true;
-            for(LobbyPlayerStatus lps : dto.getPlayerList())
+            for(final LobbyPlayerStatus lps : dto.getPlayerList())
                 if (!lps.getName().equals(GameUtility.mpc.name) && lps.getScore() == -1)
                     gameisDone = false;
             if (gameisDone) {
-                for (LobbyPlayerStatus lps : dto.getPlayerList()){
+                for (final LobbyPlayerStatus lps : dto.getPlayerList()){
                     if (lps.getName().equals(getWinner(dto)))
                         GameUtility.mpc.pc.updatePlayerScore(lps.getName(), lps.getScore()+1);
                 }
@@ -208,18 +208,18 @@ public class EndOfGameFragment extends Fragment {
         YoYo.with(Techniques.SlideInLeft).duration(700).playOn(textViewLower);
     }
 
-    private String getWinner(LobbyDTO dto) {
+    private String getWinner(final LobbyDTO dto) {
         for(int i = 0; i < 10; i++) {
-            for (LobbyPlayerStatus lps : dto.getPlayerList()) {
+            for (final LobbyPlayerStatus lps : dto.getPlayerList()) {
                 if (lps.getScore() == i) return lps.getName();
             }
         }
         return "Error - no winner";
     }
 
-    private String getOther(LobbyDTO dto, String name) {
+    private String getOther(final LobbyDTO dto, final String name) {
         String s = "";
-        for(LobbyPlayerStatus lps : dto.getPlayerList()) {
+        for(final LobbyPlayerStatus lps : dto.getPlayerList()) {
             if (! lps.getName().equals(name)) s += lps.getName() + " , ";
         }
         return s.substring(0, s.length()-3);

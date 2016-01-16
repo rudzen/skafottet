@@ -30,7 +30,7 @@ public final class ListFetcher {
     public static Handler listHandler = new Handler();
     public static Runnable listSaver;
 
-    private static byte[] compressWordList(WordController wordController) throws IOException {
+    private static byte[] compressWordList(final WordController wordController) throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final GZIPOutputStream gzipOut = new GZIPOutputStream(baos);
         try (final ObjectOutputStream objectOut = new ObjectOutputStream(gzipOut)) {
@@ -68,7 +68,7 @@ public final class ListFetcher {
         return null;
     }
 
-    public static boolean saveWordLists(WordController wordController, final Context context) {
+    public static boolean saveWordLists(final WordController wordController, final Context context) {
         try {
             final byte[] comp = compressWordList(wordController);
             final FileOutputStream outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);

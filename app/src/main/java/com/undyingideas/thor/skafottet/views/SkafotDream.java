@@ -37,7 +37,7 @@ public class SkafotDream extends DreamService {
     private final AnimatorListener mAnimListener = new AnimatorListenerAdapter() {
 
         @Override
-        public void onAnimationEnd(Animator animation) {
+        public void onAnimationEnd(final Animator animation) {
             // Start animation again
             startTextViewScrollAnimation();
         }
@@ -99,7 +99,7 @@ public class SkafotDream extends DreamService {
     }
 
     private String getTextFromPreferences() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         return prefs.getString(getString(R.string.pref_dream_text_key),
                 getString(R.string.pref_dream_text_default));
     }

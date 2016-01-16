@@ -11,32 +11,32 @@ public class V3 {
 		k = new V3(0, 0, 1);
 	}
 	
-	public V3(float x, float y ,float z) {
+	public V3(final float x, final float y , final float z) {
 		this.x=x;
 		this.y=y;
 		this.z=z;
 	}
 	
-	public V3 add(V3 v){
+	public V3 add(final V3 v){
 		return new V3(x + v.x, y + v.y, z + v.z);  
 	}
 	
-	public V3 add(float x, float y, float z) {
+	public V3 add(final float x, final float y, final float z) {
 		return new V3(this.x + x, this.y + y, this.z + z);
 	}
 	
-	public V3 add(float valueToAdd) {
+	public V3 add(final float valueToAdd) {
 		return new V3(x + valueToAdd, y + valueToAdd, z + valueToAdd);
 	}
 
-	public V3 sub(V3 v){
+	public V3 sub(final V3 v){
 		return new V3(x - v.x, y - v.y, z - v.z);
 	}
 	
-	public V3 mul(float k){
+	public V3 mul(final float k){
 		return new V3(x * k, y * k , z * k);
 	}
-	public V3 mul(V3 v){
+	public V3 mul(final V3 v){
 		return new V3(x * v.x, y * v.y , z * v.z);
 	}
 	
@@ -48,7 +48,7 @@ public class V3 {
 		return x;
 	}
 
-	public void setX(float x) {
+	public void setX(final float x) {
 		this.x = x;
 	}
 
@@ -56,10 +56,10 @@ public class V3 {
 		return y;
 	}
 
-	public void setY(float y) {
+	public void setY(final float y) {
 		this.y = y;
 	}
-	public void setZ(float z){
+	public void setZ(final float z){
 		this.z = z;
 	}
 	public float getZ(){
@@ -67,17 +67,17 @@ public class V3 {
 	}
 
 	public V3 unit() {
-		float len = length();
+		final float len = length();
 		return new V3(x / len, y / len, z / len);
 	}
 	
-	public V3 cross(V3 v) {
+	public V3 cross(final V3 v) {
 
 		return new V3(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
 
 	}
 	
-	public float dot(V3 v){
+	public float dot(final V3 v){
 		return x * v.x + y * v.y + z * v.z;
 	}
 

@@ -24,7 +24,7 @@ public class M3 {
 				0, 0, 0);
     }
     
-	public M3(float a, float b, float c, float d, float e, float f, float g, float h, float i) {
+	public M3(final float a, final float b, final float c, final float d, final float e, final float f, final float g, final float h, final float i) {
 		this.a = a;
 		this.b = b;
 		this.c = c;
@@ -36,7 +36,7 @@ public class M3 {
 		this.i = i;
 	}
 
-	public M3(V3 col1, V3 col2, V3 col3) {
+	public M3(final V3 col1, final V3 col2, final V3 col3) {
 		a = col1.x;
 		b = col2.x;
 		c = col3.x;
@@ -52,19 +52,19 @@ public class M3 {
 		return new M3(0,0,0,0,0,0,0,0,0);
 	}
 	
-	public M3 add(M3 m) {
+	public M3 add(final M3 m) {
 		return new M3(a + m.a, b + m.b, c + m.c, d + m.d, e + m.e, f + m.f, g + m.g, h + m.h, i + m.i);
 	}
 
-	public M3 sub(M3 m) {
+	public M3 sub(final M3 m) {
 		return new M3(a - m.a, b - m.b, c - m.c, d - m.d, e - m.e, f - m.f, g - m.g, h - m.h, i - m.i);
 	}
 
-	public M3 mul(float x) {
+	public M3 mul(final float x) {
 		return new M3(a * x, b * x, c * x, d * x , e*x , f*x , g*x,h*x,i*x);
 	}
 
-	public V3 getColumVector(int index) {
+	public V3 getColumVector(final int index) {
 		float valX, valY, valZ = valX = valY = 0;
 		if (index == 1) {
 			valX += a;
@@ -82,7 +82,7 @@ public class M3 {
 		return new V3(valX, valY, valZ);
 	}
 	
-	public M3 mul(M3 m) {
+	public M3 mul(final M3 m) {
 		return new M3(
 				a*m.a+b*m.d+c*m.g,
 				a*m.b+b*m.e+c*m.h,
@@ -95,7 +95,7 @@ public class M3 {
 				g*m.c+h*m.f+i*m.i);
 	}
 
-	public V3 mul(V3 v) {
+	public V3 mul(final V3 v) {
 		return new V3(
 				a*v.x + b*v.y+c*v.z,
 				d*v.x + e*v.y+f*v.z,
@@ -117,7 +117,7 @@ public class M3 {
 	 * @param matrix : The matrix to transpose
 	 * @return The matrix transposed
 	 */
-	public static M3 transpose(M3 matrix) {
+	public static M3 transpose(final M3 matrix) {
 		return new M3(matrix.a, matrix.d, matrix.g,
 					  matrix.b, matrix.e, matrix.h,
 					  matrix.c, matrix.f, matrix.i);

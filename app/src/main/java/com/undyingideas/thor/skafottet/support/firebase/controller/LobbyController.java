@@ -30,7 +30,7 @@ public class LobbyController {
         final Firebase newPostRef = lobbyRef.push();
 
         newPostRef.child("word").setValue(lobbyDTO.getWord());
-        for(LobbyPlayerStatus status: lobbyDTO.getPlayerList())
+        for(final LobbyPlayerStatus status: lobbyDTO.getPlayerList())
                 newPostRef.child(status.getName()).setValue(status.getScore());
 
         // Add lobby id to players lobby list
@@ -44,7 +44,7 @@ public class LobbyController {
         ref.child("Lobby").child(key).addChildEventListener(new LobbyListener(mpcRef));
     }
 
-    public void updateLobby(String s, String s1, int numWrongLetters) {
+    public void updateLobby(final String s, final String s1, final int numWrongLetters) {
         ref.child("Lobby").child(s).child(s1).setValue(numWrongLetters);
     }
 }

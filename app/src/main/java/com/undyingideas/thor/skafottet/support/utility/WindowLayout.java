@@ -59,7 +59,7 @@ public abstract class WindowLayout {
 
     public static void setScreenDimension(final AppCompatActivity appCompatActivity) {
         final Display display = appCompatActivity.getWindowManager().getDefaultDisplay();
-        display.getSize(WindowLayout.screenDimension);
+        display.getSize(screenDimension);
     }
 
 }

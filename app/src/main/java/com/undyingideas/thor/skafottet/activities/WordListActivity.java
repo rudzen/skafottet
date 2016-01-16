@@ -487,7 +487,6 @@ public class WordListActivity extends AppCompatActivity implements
                     md.setContent(bundle.getString(MSG_KEY_PD_TEXT));
                 } else if (inputMessage.what == MSG_ID_CLOSE_PD) {
                     md.dismiss();
-                    md = null;
                 } else if (inputMessage.what == MSG_ID_OPEN_PD) {
                     bundle = inputMessage.getData();
                     md = new MaterialDialog.Builder(getApplicationContext())
@@ -509,7 +508,7 @@ public class WordListActivity extends AppCompatActivity implements
 
         @Override
         public void run() {
-            Message msg = handler.obtainMessage();
+            final Message msg = handler.obtainMessage();
         }
     }
 
