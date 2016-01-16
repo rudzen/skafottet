@@ -14,7 +14,7 @@
     <item
         android:id="@+id/action_word_list_remove"
         android:icon="@android:drawable/ic_menu_delete"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         android:orderInCategory="10"
         android:title="Fjern ordlist"
     />
@@ -22,9 +22,9 @@
     <item
         android:id="@+id/action_word_list_update"
         android:icon="@android:drawable/ic_menu_rotate"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         android:orderInCategory="20"
-        android:title="Opdater alle lokale ordlister"
+        android:title="Opdater viste liste"
         />
 
 </menu>

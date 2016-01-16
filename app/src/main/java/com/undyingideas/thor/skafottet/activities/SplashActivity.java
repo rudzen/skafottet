@@ -120,7 +120,7 @@ public class SplashActivity extends AppCompatActivity {
                 */
             s_wordController = ListFetcher.loadWordList(getApplicationContext());
             if (s_wordController == null || s_wordController.getCurrentList() == null) {
-                s_wordController = new WordController(getResources().getStringArray(R.array.countries));
+                s_wordController = new WordController(getResources().getStringArray(R.array.lande));
                 ListFetcher.listHandler.post(ListFetcher.listSaver);
 //                    ListFetcher.saveWordLists(s_wordController, loadingActivity.getApplicationContext());
             }

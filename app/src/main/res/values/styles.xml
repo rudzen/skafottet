@@ -37,12 +37,7 @@
         <item name="md_btnstacked_gravity">end</item>
         <item name="md_medium_font">Roboto-Bold.ttf</item>
         <item name="md_regular_font">Roboto-Light.ttf</item>
-    </style>
-
-    <style name="background">
-        <item name="android:alpha">0.2</item>
-        <item name="android:scaleType">fitXY</item>
-        <item name="android:src">@drawable/dansemacabre</item>
+        <item name="android:textColorPrimaryInverse">@color/primary_text_material_light</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -50,9 +45,14 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+        />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:background">@color/colorPrimary</item>
+
+    </style>
 
     <style name="menu_button_style">
         <item name="android:layout_width">125dp</item>
