@@ -20,6 +20,9 @@ import java.util.List;
  * Created on 06-01-2016, 12:13.
  * Project : skafottet
  * @author theis
+ *
+ * - Additional coding and structure
+ * @author gummp
  */
 public class MultiplayerController {
     @Nullable
@@ -135,13 +138,11 @@ public class MultiplayerController {
             playerHighScoreList.add(highScoreDTO);
         }
 
-
         //Now we have a arraylist of playerHighScoreDTOs with the matching name and lobbystatus.
-
         HighScoreContent.HighScoreItem item;
 
         int i = 1;
-        final List<HighScoreContent.HighScoreItem> list = new ArrayList<>();
+        final ArrayList<HighScoreContent.HighScoreItem> list = new ArrayList<>();
 
       //  playerHighScoreList = sortHighScoreList(playerHighScoreList);
         Collections.sort(playerHighScoreList);
@@ -152,11 +153,6 @@ public class MultiplayerController {
             list.add(item);
             HighScoreContent.addItem(item);
         }
-
-
-
         return list;
     }
-
-
 }

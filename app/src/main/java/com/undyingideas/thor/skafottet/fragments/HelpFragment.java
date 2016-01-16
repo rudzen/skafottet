@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.support.firebase.DTO.HelpDTO;
+import com.undyingideas.thor.skafottet.support.firebase.DTO.HelpFileDTO;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 
@@ -27,10 +27,10 @@ public class HelpFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View fragmentView = inflater.inflate(R.layout.fragment_help, container, false);
         final WebView wv = (WebView) fragmentView.findViewById(R.id.wv);
-        final HelpDTO help = new HelpDTO();
+        final HelpFileDTO help = new HelpFileDTO();
         try {
             checkForNullKey(Constant.KEY_PREF_HELP);
-            help.addStringData((HelpDTO) GameUtility.s_preferences.getObject(Constant.KEY_PREF_HELP, HelpDTO.class));
+            help.addStringData((HelpFileDTO) GameUtility.s_preferences.getObject(Constant.KEY_PREF_HELP, HelpFileDTO.class));
         } catch (final NullPointerException npe) {
             try {
                 final InputStream input = getResources().openRawResource(R.raw.skafottet);

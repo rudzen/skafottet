@@ -29,6 +29,7 @@ import java.util.ArrayList;
  * Created on 27-12-2015, 09:59.<br>
  * Project : skafottet<br>
  * Adapter for showing multiplayer players from firebase..
+ *
  * @author rudz
  */
 @SuppressWarnings("StaticVariableOfConcreteClass")
@@ -65,39 +66,26 @@ public class MultiplayerLobbyAdapter extends ArrayAdapter<LobbyDTO> {
             viewHolder.icon = (ImageView) view.findViewById(R.id.new_game_icon);
             viewHolder.icon.setImageResource(R.drawable.game_end_won);
         }
-
-
-
         final LobbyDTO dto = data.get(position);
-
         StringBuilder sb = new StringBuilder(100);
 
-//        String names = "";
-        for (final LobbyPlayerStatus lobbyPlayerStatus : dto.getPlayerList() ){
+        for (final LobbyPlayerStatus lobbyPlayerStatus : dto.getPlayerList()) {
             if (!lobbyPlayerStatus.getName().equals(activePlayer))
                 sb.append(lobbyPlayerStatus.getName()).append(" , ");
-//                names += lobbyPlayerStatus.getName() + " , ";
         }
         if (sb.length() > 3) {
             sb.delete(sb.length() - 3, sb.length());
         }
-//        names = names.substring(0, names.length()-3);
         viewHolder.textViewName.setText(sb.toString());
 
         sb = new StringBuilder(100);
-        for (final LobbyPlayerStatus status: dto.getPlayerList()) {
+        for (final LobbyPlayerStatus status : dto.getPlayerList()) {
             sb.append(status.getScore()).append(" , ");
         }
         if (sb.length() > 3) {
             sb.delete(sb.length() - 3, sb.length());
         }
         viewHolder.textViewScore.setText(sb.toString());
-
-//        names = "";
-//        for (final WordStatus s : dto.getPlayerList().get(0).getWordList())
-//            names += s.getScore() + " , ";
-//        names = names.substring(0,names.length()-3);
-//        viewHolder.textViewScore.setText(names);
 
         return view;
     }

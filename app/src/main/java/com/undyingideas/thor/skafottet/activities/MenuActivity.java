@@ -46,8 +46,6 @@ import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-import asia.ivity.android.marqueeview.MarqueeView;
-
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.imageRefs;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.mpc;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_preferences;
@@ -68,8 +66,6 @@ public class MenuActivity extends MenuActivityAbstract implements InternetReciev
     private final ImageView[] buttons = new ImageView[BUTTON_COUNT];
     private LinearLayout loginLayout;
     private TextView loginText;
-    private MarqueeView scroller;
-    private static final int TITLE = -1;
 
     private static final int BUTTON_PLAY = 0;
     private static final int BUTTON_HIGHSCORE = 1;
@@ -88,7 +84,6 @@ public class MenuActivity extends MenuActivityAbstract implements InternetReciev
     private MaterialDialog md;
 
     private int newGameID = -1;
-    private int maxID; // quick hack for the dialog ID mess
 
     private View.OnClickListener s_buttonListener;
 
