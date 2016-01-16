@@ -10,7 +10,7 @@ import android.util.Log;
 import java.util.ArrayList;
 
 /**
- * Stakes a claim for information from the system about the current internet connection state.
+ * Stakes a claim for information from the system about the current battery information.
  * Observers can ask to be notified about the current state in the correct order by stacking them up.
  * Uses {@link BatteryLevelRecieverData} to handle the information about the type.
  *
@@ -28,7 +28,7 @@ public class BatteryLevelReciever extends BroadcastReceiver {
         Log.d(TAG, "BatteryLevel change");
         if (intent.getExtras() != null) {
 
-            // notify the observers who cares about the current internet state!
+            // notify the observers who cares about the current battery state!
             for (final BatteryLevelRecieverData internetRecieverData : observers) {
                 internetRecieverData.setData(BatteryDTO.newBuilder()
                         .level(intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0))
