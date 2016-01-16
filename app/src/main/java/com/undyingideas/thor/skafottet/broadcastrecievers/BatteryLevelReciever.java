@@ -69,5 +69,8 @@ public class BatteryLevelReciever extends BroadcastReceiver {
         return observers.remove(observerToRemove);
     }
 
+    public static boolean containsObserver(final BatteryLevelRecieverData batteryLevelRecieverData) {
+        return observers.contains(batteryLevelRecieverData);
+    }
 
 }

@@ -55,6 +55,7 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
     /* battery stuff */
     IntentFilter batteryLevelFilter;
     BatteryLevelReciever batteryLevelReciever;
+    BatteryLevelRecieverData batteryLevelRecieverData;
 
     /* sensor stuff */
     @Nullable
@@ -83,6 +84,7 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
         starhandler = new Handler();
         starhandler.post(updateStarfield);
 
+
         registerSensor();
         registerBatteryReciever();
 
@@ -101,6 +103,9 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
             sf.setRun(true);
         }
         starhandler.post(updateStarfield);
+        if (batteryLevelRecieverData == null) {
+            batteryLevelRecieverData = new BatteryLevelRecieverData(this);
+        }
         registerBatteryReciever();
     }
 
@@ -133,12 +138,19 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
         }
     }
     private void registerBatteryReciever() {
+        if (batteryLevelRecieverData != null && BatteryLevelReciever.containsObserver(batteryLevelRecieverData)) {
+            BatteryLevelReciever.removeObserver(batteryLevelRecieverData);
+        }
+        batteryLevelRecieverData = new BatteryLevelRecieverData(this);
         batteryLevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        BatteryLevelReciever.addObserver(batteryLevelRecieverData);
         batteryLevelReciever = new BatteryLevelReciever();
         registerReceiver(batteryLevelReciever, batteryLevelFilter);
     }
 
     private void unregisterBatteryReciever() {
+        BatteryLevelReciever.removeObserver(batteryLevelRecieverData);
+        batteryLevelRecieverData = null;
         unregisterReceiver(batteryLevelReciever);
         batteryLevelFilter = null;
         batteryLevelReciever = null;
@@ -206,6 +218,9 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
 
     @Override
     public void onBatteryStatusChanged(final BatteryDTO batteryInformation) {
+        Log.d(TAG, String.valueOf(batteryInformation.getLevel()));
+
+
         // turn off the starfield if lower than 25% battery
         if (sf != null) {
             sf.setRun(batteryInformation.getLevel() > 25);
