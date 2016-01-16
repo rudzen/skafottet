@@ -59,9 +59,7 @@ public class AboutFragment extends Fragment {
 
             "Original galgelogik af Jakob Nordfalk." + SEP + "http://www.javabog.dk",
             "TinyDB preferences interface af kcochibili." + SEP + "https://github.com/kcochibili/TinyDB--Android-Shared-Preferences-Turbo" + SEP + SEP
-            + SEP + SEP + "Ingen dyr led nød under udviklingen af denne app, ej heller under brugen af samme. Vi forventer invasion fra en flok tapirer i nær fremtid, så det skal slås fast vi er dyrevenner!"
-
-
+            + SEP + SEP + "Ingen dyr led nød under udviklingen af denne app, ej heller under brugen af samme. Vi forventer en invasion af flok tapirer i nær fremtid, så det skal slås fast vi er dyrevenner!"
 
             ,
             "\"THE BEER-WARE LICENSE\" (Revision 42):" + SEP +
