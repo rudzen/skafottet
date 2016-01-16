@@ -20,8 +20,10 @@ import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
 
-public class StarField extends View {
+public class StarField extends View implements PreferenceChangeListener {
 
     private static final float LOW_PASS_FILTER = 0.3f;
     private static final int UPDATE_RATE = 1000 / 70;
@@ -96,6 +98,11 @@ public class StarField extends View {
         updateHandler.post(updater);
     }
 
+    @Override
+    public void preferenceChange(PreferenceChangeEvent pce) {
+        // do nothing for now
+    }
+
     private class UpdateStarfield implements Runnable {
         @Override
         public void run() {
@@ -134,4 +141,7 @@ public class StarField extends View {
             canvas.drawCircle(star.xy.x, star.xy.y, 3, p);
         }
     }
+
+
+
 }

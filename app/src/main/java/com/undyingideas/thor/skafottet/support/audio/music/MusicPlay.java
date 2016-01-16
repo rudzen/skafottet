@@ -45,7 +45,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     @Override
     public int onStartCommand(final Intent intent, final int flags, final int startId) {
         Log.d("Player", "onStartCommand");
-        if (intent.getAction().equals(ACTION_PLAY)) {
+        if (intent.getAction() != null && intent.getAction().equals(ACTION_PLAY)) {
             Log.d("Player", "Filter was correct");
             mMediaPlayer = MediaPlayer.create(this, music); // initialize it here
             mMediaPlayer.setOnPreparedListener(this);
@@ -54,7 +54,15 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
 
 //            mMediaPlayer.setAudioStreamType(AudioManager.RES);
             initMediaPlayer();
+        } else {
+            if (mMediaPlayer != null) {
+                mMediaPlayer.stop();
+                mMediaPlayer.release();
+                mMediaPlayer = null;
+            }
+            return -1;
         }
+
         return START_STICKY;
     }
 

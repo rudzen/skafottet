@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -82,6 +83,9 @@ public class AboutFragment extends Fragment {
         ll.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         ll.setOrientation(LinearLayout.VERTICAL);
 
+        /* configure toolbar home button */
+
+
         final int padding = (int) applyDimension(COMPLEX_UNIT_DIP, 4, getActivity().getResources().getDisplayMetrics());
         int i = 0;
 
@@ -105,5 +109,14 @@ public class AboutFragment extends Fragment {
     public void onDestroy() {
         tv = null;
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onDestroy();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

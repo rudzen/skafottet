@@ -86,7 +86,7 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
 
 
         registerSensor();
-        registerBatteryReciever();
+//        registerBatteryReciever();
 
     }
 
@@ -150,8 +150,8 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
 
     private void unregisterBatteryReciever() {
         BatteryLevelReciever.removeObserver(batteryLevelRecieverData);
-        batteryLevelRecieverData = null;
         unregisterReceiver(batteryLevelReciever);
+        batteryLevelRecieverData = null;
         batteryLevelFilter = null;
         batteryLevelReciever = null;
     }

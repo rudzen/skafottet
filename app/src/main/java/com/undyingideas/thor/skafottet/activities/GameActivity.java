@@ -79,7 +79,7 @@ public class GameActivity extends AppCompatActivity implements
         }
 
         /* configure the custom marquee view linked with a textview */
-        mvReset = new startMarquee();
+        mvReset = new StartMarquee();
         handler = new Handler();
 
         mv = (MarqueeView) findViewById(R.id.game_marqueeView);
@@ -132,7 +132,7 @@ public class GameActivity extends AppCompatActivity implements
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content, fragment).addToBackStack(null).commit();
     }
 
-    private class startMarquee implements Runnable {
+    private class StartMarquee implements Runnable {
         @Override
         public void run() {
             mv.startMarquee();

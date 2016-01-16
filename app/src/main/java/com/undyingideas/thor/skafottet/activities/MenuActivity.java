@@ -38,6 +38,7 @@ import com.undyingideas.thor.skafottet.adapters.StartGameItem;
 import com.undyingideas.thor.skafottet.broadcastrecievers.InternetReciever;
 import com.undyingideas.thor.skafottet.broadcastrecievers.InternetRecieverData;
 import com.undyingideas.thor.skafottet.game.SaveGame;
+import com.undyingideas.thor.skafottet.support.audio.music.MusicPlay;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 import com.undyingideas.thor.skafottet.support.utility.NetworkHelper;
@@ -45,6 +46,8 @@ import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
 
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.imageRefs;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.mpc;
@@ -56,7 +59,10 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_pref
  *
  * @author rudz
  */
-public class MenuActivity extends MenuActivityAbstract implements InternetRecieverData.InternetRecieverInterface {
+public class MenuActivity extends MenuActivityAbstract implements
+        InternetRecieverData.InternetRecieverInterface,
+        PreferenceChangeListener
+{
 
     private static final String FINISH = "finish";
     private static final int BACK_PRESSED_DELAY = 2000;
@@ -153,6 +159,7 @@ public class MenuActivity extends MenuActivityAbstract implements InternetReciev
     @Override
     protected void onPause() {
         InternetReciever.removeObserver(connectionObserver);
+        stopService(MusicPlay.intent);
         super.onPause();
     }
 
@@ -255,14 +262,14 @@ public class MenuActivity extends MenuActivityAbstract implements InternetReciev
             s_preferences.checkForNullKey(Constant.KEY_SAVE_GAME);
             final SaveGame saveGame = (SaveGame) s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
             Log.d(TAG, saveGame.toString());
-            if (saveGame != null && saveGame.getLogic() != null && !saveGame.getLogic().isGameOver()) {
+            if (saveGame.getLogic() != null && !saveGame.getLogic().isGameOver()) {
                 startGameItems.add(new StartGameItem(Constant.MODE_CONT_GAME, "Fortsæt sidste spil", "Type : " + (saveGame.isMultiPlayer() ? "Multi" : "Single") + "player / Gæt : " + saveGame.getLogic().getVisibleWord(), imageRefs[saveGame.getLogic().getNumWrongLetters()]));
             }
         } catch (final NullPointerException npe) {
             // nothing happends here, its just for not adding the option to continue a game.
         } finally {
             startGameItems.add(new StartGameItem(Constant.MODE_SINGLE_PLAYER, "Nyt singleplayer", "Tilfældigt ord.", imageRefs[0]));
-            if (mpc.name != null) {
+            if (mpc.name != null && NetworkHelper.getConnectivityStatus(getApplicationContext()) > -1) {
                 startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER, getString(R.string.menu_new_multi_player_game), "Udfordring.", imageRefs[0]));
                 startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_2, getString(R.string.menu_new_multi_player_game), "Tværfaglig udfordring", imageRefs[0]));
                 startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_LOBBY, "Se spil lobbyer", "Ikke for sarte sjæle", imageRefs[0]));
@@ -333,6 +340,11 @@ public class MenuActivity extends MenuActivityAbstract implements InternetReciev
         buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(mpc.name == null ? loginButtons[0] : loginButtons[1]));
         updateMargueeScroller(NetworkHelper.getConnectivityStatus(getApplicationContext()));
         showAll();
+    }
+
+    @Override
+    public void preferenceChange(final PreferenceChangeEvent pce) {
+        // do nothing for now.
     }
 
     @SuppressWarnings("AccessStaticViaInstance")
