@@ -32,7 +32,7 @@ public class WordListController {
         Log.d("firebasewlc", firebase.toString());
     }
 
-    public ArrayList<WordItem> getArray(){
+    public static ArrayList<WordItem> getArray(){
         return new ArrayList<>(wordList.values());
     }
 
@@ -61,7 +61,7 @@ public class WordListController {
         wordList = (HashMap<String, WordItem>) GameUtility.s_preferences.getObject(Constant.KEY_WORDS_FIREBASE, HashMap.class);
     }
 
-    class WordGetter implements ChildEventListener {
+    static class WordGetter implements ChildEventListener {
         private final WordListController wlcRef;
         public WordGetter(final WordListController wlcRef) {
             this.wlcRef = wlcRef;

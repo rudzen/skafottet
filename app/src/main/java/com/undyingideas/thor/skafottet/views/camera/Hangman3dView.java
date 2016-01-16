@@ -77,7 +77,7 @@ public class Hangman3dView extends View{
                 }
                 S.rotateLeft(dx * TOUCH_SCALE_FACTOR);
                 invalidate();
-                // no break;
+                //noinspection fallthrough
             case ACTION_DOWN:
                 if (e.getAction()!= ACTION_MOVE) Log.d(TAG, "touchstarted");
                 mPreviousX = x;

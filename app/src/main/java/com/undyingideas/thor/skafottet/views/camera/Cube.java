@@ -10,7 +10,7 @@ public class Cube {
 	public V3 c = new V3(0,0,0);
 	public Cube(final V3[] cube){
 		if (cube.length == 8) this.cube = cube;
-		for (int i=0; i<cube.length; i++) c=c.add(cube[i]);
+		for (final V3 aCube : cube) c = c.add(aCube);
 		c=c.mul(1f / cube.length);
 	}
 	public Cube(final V3 center, final float width, final float length, final float height){
@@ -59,7 +59,7 @@ public class Cube {
 		return r;
 	}
 	
-	public void paintCube(final Canvas g, final Cube c, final Camera S){
+	public static void paintCube(final Canvas g, final Cube c, final Camera S){
 		final V3[][] v = c.readyToPaint();
 		final Paint p = new Paint();
 		p.setColor(Color.BLUE);

@@ -36,8 +36,7 @@ public class LobbyDTO {
     }
 
     public ArrayList<LobbyPlayerStatus> getPlayerList() {
-        final ArrayList<LobbyPlayerStatus> a = new ArrayList<>(playerList.values());
-        return a;
+        return new ArrayList<>(playerList.values());
     }
 
     public void setPlayerList(final ArrayMap<String, LobbyPlayerStatus> playerList) {

@@ -19,6 +19,7 @@ import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.PlayerDTO;
+import com.undyingideas.thor.skafottet.support.firebase.WordList.WordListController;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
@@ -200,7 +201,7 @@ public class CreateLobbyFragment extends Fragment {
             }
         }
 
-        private int getRandom(final int size) {
+        private static int getRandom(final int size) {
             return (int) ( 4 + Math.random()*4*size ) % size;
         }
     }
@@ -218,7 +219,7 @@ public class CreateLobbyFragment extends Fragment {
         @Override
         public void run() {
             wordList.clear();
-            wordList.addAll(GameUtility.mpc.wlc.wordList.values());
+            wordList.addAll(WordListController.wordList.values());
             Log.d("UpdateList", wordList.toString() + "  " +wordList.size());
             players.clear();
             players.addAll(GameUtility.mpc.pc.playerList.values());

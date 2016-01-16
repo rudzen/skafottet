@@ -208,7 +208,7 @@ public class EndOfGameFragment extends Fragment {
         YoYo.with(Techniques.SlideInLeft).duration(700).playOn(textViewLower);
     }
 
-    private String getWinner(final LobbyDTO dto) {
+    private static String getWinner(final LobbyDTO dto) {
         for(int i = 0; i < 10; i++) {
             for (final LobbyPlayerStatus lps : dto.getPlayerList()) {
                 if (lps.getScore() == i) return lps.getName();
@@ -217,7 +217,7 @@ public class EndOfGameFragment extends Fragment {
         return "Error - no winner";
     }
 
-    private String getOther(final LobbyDTO dto, final String name) {
+    private static String getOther(final LobbyDTO dto, final String name) {
         String s = "";
         for(final LobbyPlayerStatus lps : dto.getPlayerList()) {
             if (! lps.getName().equals(name)) s += lps.getName() + " , ";

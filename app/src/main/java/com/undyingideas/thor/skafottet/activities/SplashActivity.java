@@ -127,7 +127,7 @@ public class SplashActivity extends AppCompatActivity {
 
 
             try {
-                s_preferences.checkForNullKey(Constant.KEY_WORDS_FIREBASE);
+                TinyDB.checkForNullKey(Constant.KEY_WORDS_FIREBASE);
                 WordListController.wordList = (HashMap<String, WordItem>) s_preferences.getObject(Constant.KEY_WORDS_FIREBASE, HashMap.class);
             } catch (final Exception e) {
                 Log.d(TAG, "Unable to load any remote cached word lists from preferences, log in to update.");

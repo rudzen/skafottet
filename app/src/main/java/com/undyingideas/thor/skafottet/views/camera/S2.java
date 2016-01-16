@@ -38,8 +38,8 @@ public class S2 {
 		c.drawPoint((float) point1.x, (float) point1.y, p);
 	}
 
-	public void drawCube(final Canvas g, final Cube cube, final Camera camera){
-		cube.paintCube(g, cube, camera);
+	public static void drawCube(final Canvas g, final Cube cube, final Camera camera){
+		Cube.paintCube(g, cube, camera);
 	}
 
 	public void setOrigo(final int ox, final int oy) {

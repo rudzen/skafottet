@@ -169,7 +169,7 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
 //        super.onCancelled();
     }
 
-    private class DownloaderOnCancelListener implements DialogInterface.OnCancelListener {
+    private static class DownloaderOnCancelListener implements DialogInterface.OnCancelListener {
         @Override
         public void onCancel(final DialogInterface dialog) {
 //            pd.dismiss();
