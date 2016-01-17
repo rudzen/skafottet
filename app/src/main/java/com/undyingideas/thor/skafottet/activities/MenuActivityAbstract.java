@@ -16,12 +16,9 @@ import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
-import android.media.AudioManager;
-import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.undyingideas.thor.skafottet.R;
@@ -47,7 +44,7 @@ import java.lang.ref.WeakReference;
  * @author rudz
  */
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
-public abstract class MenuActivityAbstract extends AppCompatActivity implements BatteryLevelRecieverData.BatteryLevelRecieveDataInterface {
+public abstract class MenuActivityAbstract extends SoundAbstract implements BatteryLevelRecieverData.BatteryLevelRecieveDataInterface {
 
     protected Handler menuHandler;
 
@@ -60,14 +57,6 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
     IntentFilter batteryLevelFilter;
     BatteryLevelReciever batteryLevelReciever;
     BatteryLevelRecieverData batteryLevelRecieverData;
-
-    /* sound stuff */
-    private SoundPool soundPool;
-    private float actVolume, maxVolume, volume;
-    private AudioManager audioManager;
-    private boolean isLoaded;
-    private int menuClick;
-    protected SoundPoolHelper soundPoolHelper;
 
     /* sensor stuff */
     @Nullable
@@ -96,19 +85,7 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
         menuHandler = new Handler();
         menuHandler.post(updateStarfield);
 
-        /* set up the sound stuff */
-        audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-        actVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        volume = actVolume / maxVolume;
 
-        soundPoolHelper = new SoundPoolHelper();
-
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
-        soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
-        soundPool.setOnLoadCompleteListener(soundPoolHelper);
-        menuClick = soundPool.load(this, R.raw.reign_supreme, 1);
 
         registerSensor();
 //        registerBatteryReciever();
@@ -257,27 +234,5 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
         }
     }
 
-    public void playSound() {
-        if (isLoaded) {
-            soundPool.play(menuClick, volume, volume, 1, 0, 1f);
-        }
-    }
-
-    private class SoundPoolHelper implements SoundPool.OnLoadCompleteListener, Runnable {
-
-        private boolean isLoaded;
-
-        @Override
-        public void onLoadComplete(final SoundPool soundPool, final int sampleId, final int status) {
-            isLoaded = true;
-        }
-
-        @Override
-        public void run() {
-            if (isLoaded) {
-                soundPool.play(menuClick, volume, volume, 1, 0, 1f);
-            }
-        }
-    }
 
 }

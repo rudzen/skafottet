@@ -1,5 +1,6 @@
 package com.undyingideas.thor.skafottet.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import com.romainpiel.shimmer.Shimmer;
 import com.romainpiel.shimmer.ShimmerTextView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game.SaveGame;
+import com.undyingideas.thor.skafottet.interfaces.GameSoundNotifier;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
@@ -47,7 +49,7 @@ public class HangmanGameFragment extends Fragment {
     private Animation sepAnimation;
     private OnButtonClickListener onButtonClickListener;
 
-//    private Handler gameHandler;
+    private GameSoundNotifier gameSoundNotifier;
 
     public static HangmanGameFragment newInstance(final SaveGame saveGame) {
         final HangmanGameFragment hangmanGameFragment = new HangmanGameFragment();
@@ -105,6 +107,16 @@ public class HangmanGameFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        if (context instanceof GameSoundNotifier) {
+            gameSoundNotifier = (GameSoundNotifier) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement GameSoundNotifier");
+        }
+    }
+
+    @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getArguments() != null) {
@@ -115,7 +127,7 @@ public class HangmanGameFragment extends Fragment {
 
         // testing :
         if (currentGame.isMultiPlayer()) {
-            WindowLayout.showSnack(getOppNames(currentGame.getNames()[1],currentGame.getNames()[0]), textViewWord, true);
+            WindowLayout.showSnack(getOppNames(currentGame.getNames()[1], currentGame.getNames()[0]), textViewWord, true);
         }
         //Toast.makeText(getContext(), currentGame.getLogic().getTheWord(), Toast.LENGTH_SHORT).show();
 
@@ -184,8 +196,8 @@ public class HangmanGameFragment extends Fragment {
         try {
             final LobbyDTO dto = GameUtility.mpc.lc.lobbyList.get(lobbykey);
             String s = "Modstander: ";
-            for(final LobbyPlayerStatus lps: dto.getPlayerList()) if (!lps.getName().equals(yourname)) s += lps.getName() + " , ";
-            return s.length() > 3 ? s.substring(0, s.length()-3) : s;
+            for (final LobbyPlayerStatus lps : dto.getPlayerList()) if (!lps.getName().equals(yourname)) s += lps.getName() + " , ";
+            return s.length() > 3 ? s.substring(0, s.length() - 3) : s;
         } catch (final Exception e) {
             e.printStackTrace();
         }
@@ -195,7 +207,7 @@ public class HangmanGameFragment extends Fragment {
     private void applySaveGameStatus() {
         textViewWord.setText(currentGame.getLogic().getVisibleWord());
         if (currentGame.isMultiPlayer()) {
-            textViewStatus.setText(getOppNames(currentGame.getNames()[1],currentGame.getNames()[0]));
+            textViewStatus.setText(getOppNames(currentGame.getNames()[1], currentGame.getNames()[0]));
         } else {
             textViewStatus.setText("Du kæmper for føden");
         }
@@ -268,10 +280,19 @@ public class HangmanGameFragment extends Fragment {
         currentGame.getLogic().guessLetter(guess);
         textViewWord.setText(currentGame.getLogic().getVisibleWord());
         if (!currentGame.getLogic().isLastLetterCorrect()) {
+            gameSoundNotifier.playGameSound(GameUtility.SFX_GAME_WRONG_1);
             if (vibrator != null) vibrator.vibrate(50);
             YoYo.with(Techniques.Flash).duration(300).playOn(textViewWord);
+        } else {
+            gameSoundNotifier.playGameSound(GameUtility.SFX_GAME_RIGHT);
         }
+
         if (currentGame.getLogic().isGameOver()) {
+            if (currentGame.getLogic().isGameWon()) {
+                gameSoundNotifier.playGameSound(GameUtility.SFX_WON);
+            } else {
+                gameSoundNotifier.playGameSound(GameUtility.SFX_LOST);
+            }
             startEndgame();
         } else {
             updateScreen();

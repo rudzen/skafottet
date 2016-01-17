@@ -19,6 +19,7 @@ import com.romainpiel.shimmer.Shimmer;
 import com.romainpiel.shimmer.ShimmerTextView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game.SaveGame;
+import com.undyingideas.thor.skafottet.interfaces.GameSoundNotifier;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
@@ -56,7 +57,9 @@ public class EndOfGameFragment extends Fragment {
     private Runnable startMarquee;
 
     @Nullable
-    private OnEndGameButtonClickListenerInterface mListener;
+    private OnEndGameButtonClickListenerInterface onEndGameButtonClickListenerInterface;
+
+    private GameSoundNotifier gameSoundNotifier;
 
     /**
      * Constructs a new EndOfGameFragment.
@@ -84,9 +87,14 @@ public class EndOfGameFragment extends Fragment {
     public void onAttach(final Context context) {
         super.onAttach(context);
         if (context instanceof OnEndGameButtonClickListenerInterface) {
-            mListener = (OnEndGameButtonClickListenerInterface) context;
+            onEndGameButtonClickListenerInterface = (OnEndGameButtonClickListenerInterface) context;
         } else {
             throw new RuntimeException(context.toString() + " must implement OnEndGameButtonClickListenerInterface");
+        }
+        if (context instanceof GameSoundNotifier) {
+            gameSoundNotifier = (GameSoundNotifier) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement GameSoundNotifier");
         }
     }
 
@@ -295,6 +303,7 @@ public class EndOfGameFragment extends Fragment {
         public void onClick(final View v) {
             final EndOfGameFragment endOfGameFragment = endOfGameFragmentWeakReference.get();
             if (endOfGameFragment != null) {
+                endOfGameFragment.gameSoundNotifier.playGameSound(GameUtility.SFX_MENU_CLICK);
                 YoYo.with(Techniques.ZoomOut).duration(300).playOn(endOfGameFragment.imageViewResult);
                 YoYo.with(Techniques.ZoomOut).duration(400).playOn(endOfGameFragment.textViewTop);
                 if (v == endOfGameFragment.buttonMenu) {
@@ -325,7 +334,7 @@ public class EndOfGameFragment extends Fragment {
         public void onAnimationEnd(final Animator animation) {
             final EndOfGameFragment endOfGameFragment = endOfGameFragmentWeakReference.get();
             if (endOfGameFragment != null) {
-                endOfGameFragment.mListener.onEndGameButtonClicked(clickedImageView == endOfGameFragment.buttonNewGame);
+                endOfGameFragment.onEndGameButtonClickListenerInterface.onEndGameButtonClicked(clickedImageView == endOfGameFragment.buttonNewGame);
             }
         }
 

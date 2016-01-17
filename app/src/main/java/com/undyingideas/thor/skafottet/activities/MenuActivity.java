@@ -105,11 +105,12 @@ public class MenuActivity extends MenuActivityAbstract implements
         super.onCreate(savedInstanceState);
         // contentView is set in super class..
 
+        initSound();
+
         if (s_buttonListener == null) {
             s_buttonListener = new MenuButtonClickHandler(this);
         }
 
-        // just cauze it's possible... BRO!
         loginButtons[0] = R.drawable.button_login;
         loginButtons[1] = R.drawable.button_logout;
 
@@ -385,7 +386,7 @@ public class MenuActivity extends MenuActivityAbstract implements
             final Context context = view.getContext();
             if (context instanceof MenuActivity) {
                 final MenuActivity menuActivity = (MenuActivity) context;
-                menuActivity.menuHandler.post(menuActivity.soundPoolHelper);
+                menuActivity.playSound(GameUtility.SFX_MENU_CLICK);
                 menuActivity.md.dismiss();
                 Log.d(TAG, "New game mode selected : " + view.getTag());
                 menuActivity.newGameID = (int) view.getTag();
@@ -457,7 +458,7 @@ public class MenuActivity extends MenuActivityAbstract implements
 
                 }
                 if (menuActivity.button_clicked >= 0 && menuActivity.button_clicked < BUTTON_COUNT) {
-                    menuActivity.menuHandler.post(menuActivity.soundPoolHelper);
+                    menuActivity.playSound(GameUtility.SFX_MENU_CLICK);
                 }
                 menuActivity.setMenuButtonsClickable(buttonStates);
             }

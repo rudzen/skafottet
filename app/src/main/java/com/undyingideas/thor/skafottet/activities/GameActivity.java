@@ -3,7 +3,6 @@ package com.undyingideas.thor.skafottet.activities;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -20,6 +19,7 @@ import com.undyingideas.thor.skafottet.fragments.HelpFragment;
 import com.undyingideas.thor.skafottet.fragments.LobbySelectorFragment;
 import com.undyingideas.thor.skafottet.game.HangedMan;
 import com.undyingideas.thor.skafottet.game.SaveGame;
+import com.undyingideas.thor.skafottet.interfaces.GameSoundNotifier;
 import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.FontUtils;
@@ -35,11 +35,12 @@ import asia.ivity.android.marqueeview.MarqueeView;
  * This contains the basic stuff for handling all the fragments which are displayed here.
  * @author rudz
  */
-public class GameActivity extends AppCompatActivity implements
+public class GameActivity extends SoundAbstract implements
         LobbySelectorFragment.OnMultiPlayerPlayerFragmentInteractionListener,
         EndOfGameFragment.OnEndGameButtonClickListenerInterface,
         ProgressBarInterface,
-        CreateLobbyFragment.OnCreateLobbyFragmentInteractionListener
+        CreateLobbyFragment.OnCreateLobbyFragmentInteractionListener,
+        GameSoundNotifier
 {
 
     private static final String TAG = "GameActivity";
@@ -71,6 +72,7 @@ public class GameActivity extends AppCompatActivity implements
         FontUtils.setDefaultFont(getApplicationContext(), "SERIF", Constant.FONT_LIGHT);
         FontUtils.setDefaultFont(getApplicationContext(), "SANS_SERIF", Constant.FONT_BOLD);
 
+        initSound();
 
         final Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(tb);
@@ -140,6 +142,11 @@ public class GameActivity extends AppCompatActivity implements
     private void replaceFragment(final Fragment fragment) {
         currentFragment = fragment;
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content, fragment).addToBackStack(null).commit();
+    }
+
+    @Override
+    public void playGameSound(final int sound) {
+        playSound(sound);
     }
 
     private class StartMarquee implements Runnable {

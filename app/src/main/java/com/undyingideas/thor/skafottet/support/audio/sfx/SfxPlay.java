@@ -22,13 +22,13 @@
 // */
 //public class SfxPlay implements SoundPool.OnLoadCompleteListener, Runnable {
 //
-//    public static final int GAME_WRONG_1 = 0;
-//    public static final int GAME_WRONG_2 = 1;
-//    public static final int GAME_RIGHT = 2;
-//    public static final int MENU_CLICK = 3;
-//    public static final int WON = 4;
-//    public static final int LOST = 5;
-//    public static final int CHALLENGE = 6;
+//    public static final int SFX_GAME_WRONG_1 = 0;
+//    public static final int SFX_GAME_WRONG_2 = 1;
+//    public static final int SFX_GAME_RIGHT = 2;
+//    public static final int SFX_MENU_CLICK = 3;
+//    public static final int SFX_WON = 4;
+//    public static final int SFX_LOST = 5;
+//    public static final int SFX_CHALLENGE = 6;
 //
 //    private SoundPool soundPool;
 //    private float actVolume, maxVolume, volume;
