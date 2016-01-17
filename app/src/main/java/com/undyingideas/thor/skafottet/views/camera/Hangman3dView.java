@@ -136,7 +136,7 @@ public class Hangman3dView extends View{
         gallow[4] = new Cube(new V3(0,0, 1.25f), 7,0.5f, 7); // platform
 
         gallow[5] = new Cube(new V3(-3, 0, 6.5f), 1,10,1); // stolpe
-        gallow[6] = new Cube(new V3(-0.75f, 0, 11), 1, 1, 3.5f); // bar
+        gallow[6] = new Cube(new V3(-0.5f, 0, 11), 1, 1, 4f); // bar
         float f1 = 0.2f, f2 = -0.2f, v1 = -2.5f, low = 10.5f, v2 = -2.2f;
         gallow[7] = new Cube(new V3(v1, f1, 10f), new V3(v1, f2, 10f), new V3(v1, f1, 10.125f), new V3(v1, f2, 10.125f),
                 new V3(v2, f1, low), new V3(v2, f2, low), new V3(-2.3f, f1, low), new V3(-2.3f, f2, low));
@@ -201,8 +201,10 @@ public class Hangman3dView extends View{
         for(final Cube cu: gallow){
             cu.draw(S, canvas, p); // draw gallow
         }
+        p.setStrokeWidth(3f); p.setColor(Color.GRAY);
         for(final Rope r : rope)
             r.draw(S, canvas, p);
+        p.setStrokeWidth(7f); p.setColor(Color.RED);
         for(int i = 0; i < errors; i++) {
             body[i].draw(S, canvas, p); // draw inflicted bodyparts
         }
