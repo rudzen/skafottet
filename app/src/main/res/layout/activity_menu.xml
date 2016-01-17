@@ -20,7 +20,7 @@
     android:orientation="vertical"
     android:background="@drawable/background"
     tools:context=".activities.MenuActivity"
-    xmlns:marquee="http://schemas.android.com/apk/res-auto">
+    >
 
     <com.undyingideas.thor.skafottet.views.StarField
         android:id="@+id/sf"
@@ -40,16 +40,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/title_text"
+        android:src="@drawable/skafottet_logo"
         android:clickable="true"
         android:contentDescription="@string/contentDescriptionMenuTitle"
-        />
+        android:alpha="0.7"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        >
+        android:alpha="0.8">
 
         <ImageView
             android:id="@+id/menu_button_play"
@@ -101,39 +101,51 @@
             android:background="@drawable/button_end"
             android:contentDescription="@string/contentDescriptionMenuQuit"/>
 
-        <LinearLayout
-            android:id="@+id/LoginLayout"
+
+        <com.hanks.htextview.HTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?selectableItemBackground"
-            android:clickable="true"
-            android:orientation="horizontal"
-            >
+            android:id="@+id/menu_buttom_text"
+            android:gravity="bottom"
+            android:textSize="20sp"
+            android:textColor="@color/colorAccent"
+            android:padding="10dp"/>
 
-            <asia.ivity.android.marqueeview.MarqueeView
-                android:id="@+id/marqueeView150"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                marquee:speed="4"
-                marquee:pause="1000"
-                marquee:autoStart="true"
-                >
+        <!--<LinearLayout-->
+            <!--android:id="@+id/LoginLayout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="?selectableItemBackground"-->
+            <!--android:clickable="true"-->
+            <!--android:orientation="horizontal"-->
+            <!-->-->
 
-                <TextView
-                    android:id="@+id/menu_login_text"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do."
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    android:clickable="false"
-                    tools:ignore="HardcodedText"/>
-            </asia.ivity.android.marqueeview.MarqueeView>
+            <!-- -->
+            <!-- -->
+            <!--<asia.ivity.android.marqueeview.MarqueeView-->
+                <!--android:id="@+id/marqueeView150"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:clickable="false"-->
+                <!--marquee:speed="3"-->
+                <!--marquee:pause="2000"-->
+                <!--marquee:autoStart="true"-->
+                <!-->-->
 
-        </LinearLayout>
+                <!--<TextView-->
+                    <!--android:id="@+id/menu_login_text"-->
+                    <!--android:layout_width="fill_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do."-->
+                    <!--android:textSize="20sp"-->
+                    <!--android:textStyle="bold"-->
+                    <!--android:singleLine="true"-->
+                    <!--android:ellipsize="end"-->
+                    <!--android:clickable="false"-->
+                    <!--tools:ignore="HardcodedText"/>-->
+            <!--</asia.ivity.android.marqueeview.MarqueeView>-->
+
+        <!--</LinearLayout>-->
 
     </LinearLayout>
 

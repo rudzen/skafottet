@@ -168,12 +168,12 @@ public class EndOfGameFragment extends Fragment {
         if (!endGame.isMultiPlayer()) {
             if (endGame.getLogic().isGameLost()) {
                 imageViewResult.setImageResource(R.drawable.reaper);
-                lowerText = "Ordet var " + endGame.getLogic().getTheWord() + ". Dine gæt var : " + endGame.getLogic().getUsedLetters();
+                lowerText = "Ordet var " + endGame.getLogic().getTheWord() + ".\nDine gæt var : " + endGame.getLogic().getUsedLetters();
                 textViewTop.setText(R.string.game_lost);
             } else {
                 imageViewResult.setImageResource(R.drawable.trophy);
                 textViewTop.setText(R.string.game_won);
-                lowerText = "Ordet var " + endGame.getLogic().getTheWord() + ". Dine gæt var : " + endGame.getLogic().getUsedLetters() + " og du gættede forkert " + endGame.getLogic().getNumWrongLetters() + " gange. tsktsk.";
+                lowerText = "Ordet var " + endGame.getLogic().getTheWord() + ".\nDine gæt var : " + endGame.getLogic().getUsedLetters() + " og du gættede forkert " + endGame.getLogic().getNumWrongLetters() + " gange. tsktsk.";
             }
         } else {
             GameUtility.mpc.lc.updateLobby(endGame.getNames()[1], GameUtility.mpc.name, endGame.getLogic().getNumWrongLetters());
@@ -200,7 +200,7 @@ public class EndOfGameFragment extends Fragment {
             } else {
                 if (endGame.getLogic().isGameLost()) {
                     imageViewResult.setImageResource(R.drawable.reaper);
-                    textViewTop.setText("Du er blever men din modstander kan også nå at blive det.");
+                    textViewTop.setText("Du er blevet hængt\nmen din modstander kan også nå at blive det.\n");
                     lowerText = "Ordet var " + endGame.getLogic().getTheWord();
                 } else {
                     imageViewResult.setImageResource(R.drawable.trophy);

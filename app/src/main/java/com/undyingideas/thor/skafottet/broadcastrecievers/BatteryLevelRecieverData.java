@@ -12,7 +12,7 @@ import java.lang.ref.WeakReference;
  * For use with {@link BatteryLevelReciever}.<br>
  * @author rudz
  */
-public class BatteryLevelRecieverData implements Runnable {
+public final class BatteryLevelRecieverData implements Runnable {
 
     /* store the destination interface as a WEAK reference, this allows the system to GC the subject
        if needed. Since it's guarded nothing will happend if the target was destroyed. */
@@ -72,17 +72,21 @@ public class BatteryLevelRecieverData implements Runnable {
      * Setter for connection state, this is invokes through the reciever.
      * @param newData The connection state of the system
      */
-    public void setData(final BatteryDTO newData) {
+    public final void setData(final BatteryDTO newData) {
         data = newData;
+    }
+
+    public final BatteryDTO getData() {
+        return data;
     }
 
     /**
      * Sets the keepInReciever feature
      * @param newValue If true, it will not be removed from the internet reciever.
      */
-    public void setKeepInReciever(final boolean newValue) {
+    public final void setKeepInReciever(final boolean newValue) {
         keepInReciever = newValue;
     }
 
-    public boolean isKeepInReciever() { return keepInReciever; }
+    public final boolean isKeepInReciever() { return keepInReciever; }
 }

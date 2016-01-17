@@ -26,16 +26,16 @@ import java.util.prefs.PreferenceChangeListener;
 public class StarField extends View implements PreferenceChangeListener {
 
     private static final float LOW_PASS_FILTER = 0.3f;
-    private static final int UPDATE_RATE = 1000 / 70;
+    private static final int UPDATE_RATE = 1000 / 100;
 
     private final ArrayList<Star2D> stars = new ArrayList<>(75);
     private Paint p;
-    private Handler updateHandler;
-    private boolean run;
+    private Handler handleCalculate, handleUpdate;
+    private volatile boolean run;
     private int width, height;
-    private PointF gravity;
+    private volatile PointF gravity;
     private float z;
-    private Runnable updater;
+    private Runnable calculator, updater;
 
     private static final String TAG = "Starfield";
 
@@ -46,11 +46,14 @@ public class StarField extends View implements PreferenceChangeListener {
     public void setRun(final boolean run) {
         this.run = run;
         if (run) {
-            updateHandler = new Handler();
+            handleCalculate = new Handler();
+            handleUpdate = new Handler();
+            calculator = new CalculateStarfield();
             updater = new UpdateStarfield();
-            updateHandler.post(updater);
+            handleCalculate.post(calculator);
+            handleCalculate.post(updater);
         } else {
-            updateHandler.removeCallbacksAndMessages(null);
+            handleCalculate.removeCallbacksAndMessages(null);
         }
     }
 
@@ -83,7 +86,7 @@ public class StarField extends View implements PreferenceChangeListener {
         Log.d(TAG, "Width  : " + w);
         Log.d(TAG, "Height : " + h);
         if (!stars.isEmpty()) stars.clear();
-        for (int i = 1; i <= 75; i += 5) {
+        for (int i = 1; i <= 50; i += 5) {
             addStar((float) Math.random() * w, (float) Math.random() * h, (float) Math.random() * 3);
             addStar((float) Math.random() * w, (float) Math.random() * h, (float) Math.random() * 3);
             addStar((float) Math.random() * w, (float) Math.random() * h, (float) Math.random() * 3);
@@ -93,9 +96,12 @@ public class StarField extends View implements PreferenceChangeListener {
         stars.trimToSize();
 
         run = true;
-        updateHandler = new Handler();
+        handleCalculate = new Handler();
+        handleUpdate = new Handler();
+        calculator = new CalculateStarfield();
         updater = new UpdateStarfield();
-        updateHandler.post(updater);
+        handleCalculate.post(calculator);
+        handleUpdate.post(updater);
     }
 
     @Override
@@ -103,7 +109,7 @@ public class StarField extends View implements PreferenceChangeListener {
         // do nothing for now
     }
 
-    private class UpdateStarfield implements Runnable {
+    private class CalculateStarfield implements Runnable {
         @Override
         public void run() {
             //final long time = System.nanoTime();
@@ -124,7 +130,17 @@ public class StarField extends View implements PreferenceChangeListener {
                 else star2D.fade -= (int) star2D.fadespeed;
             }
             //Log.d(TAG, "Time to update was (ns) : " + (System.nanoTime() - time));
-            if (run) updateHandler.postDelayed(updater, UPDATE_RATE);
+            if (run) handleCalculate.postDelayed(calculator, UPDATE_RATE);
+        }
+    }
+
+    private class UpdateStarfield implements Runnable {
+        private static final int FPS = 1000 / 30;
+
+        @Override
+        public void run() {
+            invalidate();
+            handleUpdate.postDelayed(updater, FPS);
         }
     }
 
@@ -138,7 +154,7 @@ public class StarField extends View implements PreferenceChangeListener {
         super.onDraw(canvas);
         for (final Star2D star : stars) {
             p.setAlpha(star.fade);
-            canvas.drawCircle(star.xy.x, star.xy.y, 4, p);
+            canvas.drawCircle(star.xy.x, star.xy.y, 5, p);
         }
     }
 }

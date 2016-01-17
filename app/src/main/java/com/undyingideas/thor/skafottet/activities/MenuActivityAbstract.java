@@ -51,7 +51,7 @@ public abstract class MenuActivityAbstract extends SoundAbstract implements Batt
     /* star field stuff */
     @Nullable
     StarField sf;
-    private UpdateStarfield updateStarfield;
+//    private UpdateStarfield updateStarfield;
 
     /* battery stuff */
     IntentFilter batteryLevelFilter;
@@ -80,13 +80,6 @@ public abstract class MenuActivityAbstract extends SoundAbstract implements Batt
 
         sf.init(WindowLayout.screenDimension.x, WindowLayout.screenDimension.y, Color.RED);
 
-        updateStarfield = new UpdateStarfield(this);
-
-        menuHandler = new Handler();
-        menuHandler.post(updateStarfield);
-
-
-
         registerSensor();
 //        registerBatteryReciever();
 
@@ -104,7 +97,7 @@ public abstract class MenuActivityAbstract extends SoundAbstract implements Batt
         } else {
             sf.setRun(true);
         }
-        menuHandler.post(updateStarfield);
+//        menuHandler.post(updateStarfield);
         if (batteryLevelRecieverData == null) {
             batteryLevelRecieverData = new BatteryLevelRecieverData(this);
         }
@@ -176,24 +169,6 @@ public abstract class MenuActivityAbstract extends SoundAbstract implements Batt
             } else {
                 mSensorManager = null;
                 Log.e(TAG, "TYPE_ACCELEROMETER sensor NOT registered");
-            }
-        }
-    }
-
-    private static class UpdateStarfield implements Runnable {
-        private final WeakReference<MenuActivityAbstract> menuActivityAbstractWeakReference;
-        private static final int FPS = 1000 / 30;
-
-        public UpdateStarfield(final MenuActivityAbstract menuActivityAbstract) {
-            menuActivityAbstractWeakReference = new WeakReference<>(menuActivityAbstract);
-        }
-
-        @Override
-        public void run() {
-            final MenuActivityAbstract menuActivityAbstract = menuActivityAbstractWeakReference.get();
-            if (menuActivityAbstract != null && menuActivityAbstract.sf != null) {
-                menuActivityAbstract.sf.invalidate();
-                menuActivityAbstract.menuHandler.postDelayed(menuActivityAbstract.updateStarfield, FPS);
             }
         }
     }

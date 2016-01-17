@@ -22,15 +22,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.hanks.htextview.HTextView;
+import com.hanks.htextview.HTextViewType;
 import com.nineoldandroids.animation.Animator;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.StartGameAdapter;
@@ -46,6 +46,7 @@ import com.undyingideas.thor.skafottet.support.utility.NetworkHelper;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
@@ -71,8 +72,13 @@ public class MenuActivity extends MenuActivityAbstract implements
     private static final int BUTTON_COUNT = 8;
     private ImageView title;
     private final ImageView[] buttons = new ImageView[BUTTON_COUNT];
-    private LinearLayout loginLayout;
-    private TextView loginText;
+    private HTextView textView_buttom;
+//    private static final String INFO_GAME = "Nuværende spil: %s";
+//    private static final String INFO_GUESS = "Dine gæt: %s";
+//    private static final String INFO_LEFT = "Gæt tilbage: %i";
+//    private static final String INFO_LOGGED_IN = "Logged ind: %s";
+//    private static final String INFO_CONNECTION = "Forbindelse: %s";
+    private UpdateText updateText;
 
     private static final int BUTTON_PLAY = 0;
     private static final int BUTTON_HIGHSCORE = 1;
@@ -114,13 +120,12 @@ public class MenuActivity extends MenuActivityAbstract implements
         loginButtons[0] = R.drawable.button_login;
         loginButtons[1] = R.drawable.button_logout;
 
-        loginLayout = (LinearLayout) findViewById(R.id.LoginLayout);
-        loginLayout.setOnClickListener(new OnLoginClickListener(this));
-        loginText = (TextView) findViewById(R.id.menu_login_text);
+        textView_buttom = (HTextView) findViewById(R.id.menu_buttom_text);
+        textView_buttom.setAnimateType(HTextViewType.EVAPORATE);
+        textView_buttom.setOnClickListener(new OnLoginClickListener(this));
+        updateText = new UpdateText();
 
         onInternetStatusChanged(NetworkHelper.getConnectivityStatus(getApplicationContext()));
-
-        if (mpc != null &&  mpc.name != null) loginText.setText(mpc.name);
 
         title = (ImageView) findViewById(R.id.menu_title);
         title.setClickable(true);
@@ -138,20 +143,18 @@ public class MenuActivity extends MenuActivityAbstract implements
 
         connectionObserver = new InternetRecieverData(this);
         InternetReciever.addObserver(connectionObserver);
-
-
     }
 
     @Override
     protected void onPostCreate(final Bundle savedInstanceState) {
-//        scroller.startMarquee();
         super.onPostCreate(savedInstanceState);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        updateMargueeScroller(NetworkHelper.getConnectivityStatus(getApplicationContext()));
+        updateText = new UpdateText();
+        menuHandler.post(updateText);
         showAll();
         if (connectionObserver == null) {
             connectionObserver = new InternetRecieverData(this);
@@ -162,10 +165,8 @@ public class MenuActivity extends MenuActivityAbstract implements
 
     @Override
     protected void onPause() {
+        updateText = null;
         InternetReciever.removeObserver(connectionObserver);
-//        if (MusicPlay.lifecounter == 0) {
-//            stopService(MusicPlay.intent);
-//        }
         super.onPause();
     }
 
@@ -252,7 +253,7 @@ public class MenuActivity extends MenuActivityAbstract implements
     @SuppressWarnings("unused")
     private void showLogin() {
         if (NetworkHelper.getConnectivityStatus(getApplicationContext()) > -1) {
-            loginLayout.callOnClick();
+            textView_buttom.callOnClick();
         } else {
             showDialog("Fejl", "Ingen internetforbindelse tilstede.");
         }
@@ -345,7 +346,7 @@ public class MenuActivity extends MenuActivityAbstract implements
             buttons[BUTTON_LOGIN_OUT].setTag(true);
         }
         buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(mpc.name == null ? loginButtons[0] : loginButtons[1]));
-        updateMargueeScroller(NetworkHelper.getConnectivityStatus(getApplicationContext()));
+//        updateMargueeScroller(NetworkHelper.getConnectivityStatus(getApplicationContext()));
         showAll();
     }
 
@@ -477,15 +478,21 @@ public class MenuActivity extends MenuActivityAbstract implements
         public void onAnimationStart(final Animator animation) {
             final MenuActivity menuActivity = menuActivityWeakReference.get();
             if (menuActivity != null) {
-                YoYo.with(Techniques.Pulse).duration(800).playOn(menuActivity.title);
-                YoYo.with(Techniques.RotateInDownLeft).duration(900).playOn(menuActivity.buttons[0]);
-                YoYo.with(Techniques.RotateIn).duration(900).playOn(menuActivity.buttons[1]);
-                YoYo.with(Techniques.RotateInUpRight).duration(800).playOn(menuActivity.buttons[2]);
-                YoYo.with(Techniques.RotateInUpRight).duration(800).playOn(menuActivity.buttons[3]);
-                YoYo.with(Techniques.RotateInUpLeft).duration(700).playOn(menuActivity.buttons[4]);
-                YoYo.with(Techniques.RotateInUpLeft).duration(700).playOn(menuActivity.buttons[5]);
-                YoYo.with(Techniques.RotateInDownRight).duration(600).playOn(menuActivity.buttons[6]);
-                YoYo.with(Techniques.RotateInDownRight).duration(600).playOn(menuActivity.buttons[7]);
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        YoYo.with(Techniques.Pulse).duration(800).playOn(menuActivity.title);
+                        YoYo.with(Techniques.RotateInDownLeft).duration(900).playOn(menuActivity.buttons[0]);
+                        YoYo.with(Techniques.RotateIn).duration(900).playOn(menuActivity.buttons[1]);
+                        YoYo.with(Techniques.RotateInUpRight).duration(800).playOn(menuActivity.buttons[2]);
+                        YoYo.with(Techniques.RotateInUpRight).duration(800).playOn(menuActivity.buttons[3]);
+                        YoYo.with(Techniques.RotateInUpLeft).duration(700).playOn(menuActivity.buttons[4]);
+                        YoYo.with(Techniques.RotateInUpLeft).duration(700).playOn(menuActivity.buttons[5]);
+                        YoYo.with(Techniques.RotateInDownRight).duration(600).playOn(menuActivity.buttons[6]);
+                        YoYo.with(Techniques.RotateInDownRight).duration(600).playOn(menuActivity.buttons[7]);
+
+                    }
+                }.run();
                 menuActivity.click_status = true;
                 menuActivity.setMenuButtonsClickable(true);
             }
@@ -634,47 +641,66 @@ public class MenuActivity extends MenuActivityAbstract implements
         showAll();
     }
 
-    private void updateMargueeScroller(final int connectionState) {
-        final StringBuilder sb = new StringBuilder(50);
-        sb.append("Nuværende spil : ");
 
+
+
+    /* buttom text view configuration */
+
+    private int pos;
+    private final ArrayDeque<String> info = new ArrayDeque<>(5);
+    private final CharSequence NONE = "Ingen.";
+    private final CharSequence NOTHING = "Intet.";
+
+    private static final String INFO_GAME = "Nuværende spil: %s";
+    private static final String INFO_GUESS = "Dine gæt: %s";
+    private static final String INFO_LEFT = "Gæt tilbage: %d";
+    private static final String INFO_LOGGED_IN = "Logged ind: %s";
+    private static final String INFO_CONNECTION = "Forbindelse: %s";
+    private static final String INFO_BATTERY = "Batteriniveau : %s";
+
+    private void updateMargueeScroller() {
+        info.clear();
         // this is just a quick hack! but we need some basic info!
         final SaveGame sg;
         try {
             sg = (SaveGame) s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
             if (sg.getLogic() != null) {
-                sb.append(sg.getLogic().getVisibleWord());
-                sb.append(". Antal Gæt : ");
-                sb.append(sg.getLogic().getUsedLetters().isEmpty() ? "Ingen" : sg.getLogic().getUsedLetters());
-                sb.append(". Forsøg brugt : ");
-                sb.append(sg.getLogic().getNumWrongLetters() == 0 ? "Ingen" : sg.getLogic().getNumWrongLetters());
+                info.add(String.format(INFO_GAME, sg.getLogic().getVisibleWord()));
+                info.add(String.format(INFO_GUESS, sg.getLogic().getUsedLetters().isEmpty() ? NONE : sg.getLogic().getUsedLetters()));
+                info.add(String.format(INFO_LEFT, 7 - sg.getLogic().getNumWrongLetters()));
             } else {
-                sb.append("Intet");
+                info.add(String.format(INFO_GAME, NOTHING));
             }
         } catch (final Exception e) {
-            sb.append("Intet");
+            info.add(String.format(INFO_GAME, NOTHING));
         }
 
-        sb.append(". Logget ind : ");
         try {
-            sb.append(mpc != null && mpc.name != null ? mpc.name : "Nej");
+            info.add(String.format(INFO_LOGGED_IN, mpc != null && mpc.name != null ? mpc.name : "Nej"));
         } catch (final Exception e) {
             e.printStackTrace();
-            sb.append("Nej");
+            info.add("Nej");
         }
-        sb.append(". Forbindelse : ");
-        if (connectionState > -1) {
-            sb.append(InternetRecieverData.CONNECTION_INFO.get(connectionState));
-        } else {
-            sb.append("Ingen");
-        }
-        sb.append('.');
-        loginText.setText(sb.toString());
+        info.add(String.format(INFO_CONNECTION, NetworkHelper.getConnectivityStatusString(getApplicationContext())));
+        info.add(String.format(INFO_BATTERY, batteryLevelRecieverData.getData() != null ? Integer.toString(batteryLevelRecieverData.getData().getLevel()) : "Ukendt"));
     }
+
+    private class UpdateText implements Runnable {
+        @Override
+        public void run() {
+            if (info.isEmpty()) {
+                updateMargueeScroller();
+                YoYo.with(Techniques.Flash).duration(2000).playOn(title);
+            }
+            textView_buttom.animateText(info.poll());
+            menuHandler.postDelayed(updateText, 3000);
+        }
+    }
+
 
     @Override
     public void onInternetStatusChanged(final int connectionState) {
-        updateMargueeScroller(connectionState);
+//        updateMargueeScroller(connectionState);
         if (connectionState > -1) {
             // we have a connection now ! enable the firebase controller
 
