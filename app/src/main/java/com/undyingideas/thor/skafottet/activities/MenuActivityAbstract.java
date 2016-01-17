@@ -16,6 +16,8 @@ import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -38,7 +40,8 @@ import java.lang.ref.WeakReference;
  *     Contains :<br>
  *         - Starfield View<br>
  *         - Sensor<br>
- *         - Battery Check
+ *         - Battery Check<br>
+ *         - Menu Sounds
  * </p>
  * Uses WeakReferences to avoid having any loose ends where the GC can't collect the object.
  * @author rudz
@@ -46,16 +49,25 @@ import java.lang.ref.WeakReference;
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
 public abstract class MenuActivityAbstract extends AppCompatActivity implements BatteryLevelRecieverData.BatteryLevelRecieveDataInterface {
 
+    protected Handler menuHandler;
+
     /* star field stuff */
     @Nullable
     StarField sf;
-    private Handler starhandler;
     private UpdateStarfield updateStarfield;
 
     /* battery stuff */
     IntentFilter batteryLevelFilter;
     BatteryLevelReciever batteryLevelReciever;
     BatteryLevelRecieverData batteryLevelRecieverData;
+
+    /* sound stuff */
+    private SoundPool soundPool;
+    private float actVolume, maxVolume, volume;
+    private AudioManager audioManager;
+    private boolean isLoaded;
+    private int menuClick;
+    protected SoundPoolHelper soundPoolHelper;
 
     /* sensor stuff */
     @Nullable
@@ -81,9 +93,22 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
 
         updateStarfield = new UpdateStarfield(this);
 
-        starhandler = new Handler();
-        starhandler.post(updateStarfield);
+        menuHandler = new Handler();
+        menuHandler.post(updateStarfield);
 
+        /* set up the sound stuff */
+        audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        actVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        volume = actVolume / maxVolume;
+
+        soundPoolHelper = new SoundPoolHelper();
+
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+        soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+        soundPool.setOnLoadCompleteListener(soundPoolHelper);
+        menuClick = soundPool.load(this, R.raw.menu_click, 1);
 
         registerSensor();
 //        registerBatteryReciever();
@@ -94,15 +119,15 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
     protected void onResume() {
         super.onResume();
         if (mSensor != null && mSensorManager != null) mSensorManager.registerListener(sensorListener, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        if (starhandler != null) starhandler.removeCallbacksAndMessages(null);
-        else starhandler = new Handler();
+        if (menuHandler != null) menuHandler.removeCallbacksAndMessages(null);
+        else menuHandler = new Handler();
         if (sf == null) {
             sf = (StarField) findViewById(R.id.sf);
             sf.init(WindowLayout.screenDimension.x, WindowLayout.screenDimension.y, Color.RED);
         } else {
             sf.setRun(true);
         }
-        starhandler.post(updateStarfield);
+        menuHandler.post(updateStarfield);
         if (batteryLevelRecieverData == null) {
             batteryLevelRecieverData = new BatteryLevelRecieverData(this);
         }
@@ -113,7 +138,7 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
     protected void onStop() {
         super.onStop();
         if (sf != null) sf.setRun(false);
-        starhandler.removeCallbacksAndMessages(null);
+        menuHandler.removeCallbacksAndMessages(null);
         if (mSensor != null && mSensorManager != null) mSensorManager.unregisterListener(sensorListener, mSensor);
         if (batteryLevelReciever != null) {
             unregisterBatteryReciever();
@@ -137,6 +162,7 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
             sf.setRun(hasFocus);
         }
     }
+
     private void registerBatteryReciever() {
         if (batteryLevelRecieverData != null && BatteryLevelReciever.containsObserver(batteryLevelRecieverData)) {
             BatteryLevelReciever.removeObserver(batteryLevelRecieverData);
@@ -190,7 +216,7 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
             final MenuActivityAbstract menuActivityAbstract = menuActivityAbstractWeakReference.get();
             if (menuActivityAbstract != null && menuActivityAbstract.sf != null) {
                 menuActivityAbstract.sf.invalidate();
-                menuActivityAbstract.starhandler.postDelayed(menuActivityAbstract.updateStarfield, FPS);
+                menuActivityAbstract.menuHandler.postDelayed(menuActivityAbstract.updateStarfield, FPS);
             }
         }
     }
@@ -230,4 +256,22 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
             }
         }
     }
+
+    private class SoundPoolHelper implements SoundPool.OnLoadCompleteListener, Runnable {
+
+        private boolean isLoaded;
+
+        @Override
+        public void onLoadComplete(final SoundPool soundPool, final int sampleId, final int status) {
+            isLoaded = true;
+        }
+
+        @Override
+        public void run() {
+            if (isLoaded) {
+                soundPool.play(menuClick, volume, volume, 1, 0, 1f);
+            }
+        }
+    }
+
 }

@@ -6,7 +6,7 @@ package com.undyingideas.thor.skafottet.support.utility;
  * Copy from https://github.com/VerbalExpressions/JavaVerbalExpressions
  *
  * Modified to be a bit more Android friendly.
- *
+ * Currently not used
  * @author rudz
  */
 

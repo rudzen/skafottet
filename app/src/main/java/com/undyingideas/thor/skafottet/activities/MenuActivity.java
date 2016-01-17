@@ -136,6 +136,8 @@ public class MenuActivity extends MenuActivityAbstract implements
 
         connectionObserver = new InternetRecieverData(this);
         InternetReciever.addObserver(connectionObserver);
+
+
     }
 
     @Override
@@ -451,6 +453,9 @@ public class MenuActivity extends MenuActivityAbstract implements
                     menuActivity.showAll();
                     buttonStates = true;
 
+                }
+                if (menuActivity.button_clicked >= 0 && menuActivity.button_clicked < BUTTON_COUNT) {
+                    menuActivity.menuHandler.post(menuActivity.soundPoolHelper);
                 }
                 menuActivity.setMenuButtonsClickable(buttonStates);
             }

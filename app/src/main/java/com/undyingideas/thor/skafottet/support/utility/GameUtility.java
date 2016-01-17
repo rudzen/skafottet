@@ -30,6 +30,7 @@ public abstract class GameUtility {
     @SuppressWarnings("StaticVariableOfConcreteClass")
     public static TinyDB s_preferences;
 
+
     public static WordController s_wordController;
 
     public static @DrawableRes
