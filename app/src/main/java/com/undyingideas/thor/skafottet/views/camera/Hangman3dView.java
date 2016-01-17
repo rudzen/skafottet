@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -62,6 +63,7 @@ public class Hangman3dView extends View{
         buildOther();
     }
 
+
     @Override
     public boolean onTouchEvent(final MotionEvent e){
         final float x = e.getX(), y = e.getY();
@@ -92,6 +94,34 @@ public class Hangman3dView extends View{
         return true;
     }
 
+//    @Override
+//    public boolean onTouchEvent(MotionEvent e) {
+//        final float x = e.getX(), y = e.getY();
+//        switch (e.getAction()) {
+//            case ACTION_MOVE :
+//                float dx = x - mPreviousX;
+//                if (y > getHeight() / 2) {
+//                    dx *= -1 ;          // reverse direction of rotation above the mid-line
+//                }
+//                acc += dx;
+//                break;
+//            case ACTION_DOWN:
+//                mPreviousX = x;
+//                mPreviousY = y;
+//                break;
+//            case ACTION_UP :
+//                Log.d(TAG, "touchstopped");
+//                break;
+//            default:
+//                Log.d(TAG, "unaccounted event " +e.getAction());
+//        }
+//        return true;
+//    }
+//
+//    float acc = 0;
+
+
+
     private void buildGallow(){
         gallow = new Cube[8];
         gallow[0] = new Cube(new V3(-3f, -3f, 0.5f), 1f, 1f, 1f); // forhøjning
@@ -114,12 +144,27 @@ public class Hangman3dView extends View{
         body[2] = new Cube(new V3(1.5f, 0, 7.75f), 0.5f,0.5f,1); // arm
         body[3] = new Cube(new V3(0, 0, 7.75f), 0.5f,0.5f,1); // arm
         body[4] = new Cube(new V3(0.25f,0,4.75f),0.5f,2,0.5f); // leg
-        body[5] = new Cube(new V3(1.25f,0,4.75f),0.5f,2,0.5f); // leg
+        body[5] = new Cube(new V3(1.25f,0,4.75f),0.5f, 2, 0.5f); // leg
     }
 
     private void buildOther(){
         p.setStrokeWidth(10);
         p.setColor(Color.RED);
+//        final Handler h = new Handler();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while(true) {
+//                    if (acc < -0.01 || acc > 0.01) {
+//                        S.rotateLeft(acc * TOUCH_SCALE_FACTOR);
+//                        acc *= 0.75;
+//                        h.
+//                        h.invalidate();
+//                    } else acc = 0;
+//                }
+//            }
+//        }).start();
+
     }
 
     @Override
