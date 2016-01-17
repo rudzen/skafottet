@@ -23,16 +23,13 @@ public class SoundAbstract extends AppCompatActivity {
     private SoundPool soundPool;
     private float actVolume, maxVolume, volume;
     private AudioManager audioManager;
-    private boolean isLoaded;
     private SoundItem[] soundItems = new SoundItem[7];
-    private int[] sounds = new int[7];
-    protected SoundPoolHelper soundPoolHelper;
+//    protected SoundPoolHelper soundPoolHelper;
 
     private SoundThread soundThread;
 
-
-
-    private @RawRes final int[] sound_raw = {
+    private @RawRes
+    int[] sound_raw = {
             R.raw.game_wrong1,
             R.raw.game_wrong2,
             R.raw.game_right,
@@ -49,46 +46,59 @@ public class SoundAbstract extends AppCompatActivity {
         maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         volume = actVolume / maxVolume;
 
-        soundPoolHelper = new SoundPoolHelper();
+//        soundPoolHelper = new SoundPoolHelper();
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
-        soundPool.setOnLoadCompleteListener(soundPoolHelper);
+//        soundPool.setOnLoadCompleteListener(soundPoolHelper);
 
         loadSounds();
 
-        soundThread = new SoundThread(soundPool);
-
-
+        if (soundThread == null) {
+            soundThread = new SoundThread(soundPool);
+        }
         soundThread.start();
+    }
 
-        /* configure soundItems */
+    @Override
+    protected void onStop() {
+        soundThread.stop = true;
+        super.onStop();
+    }
 
+    @Override
+    protected void onDestroy() {
+        soundItems = null;
+        sound_raw = null;
+        soundThread = null;
+        super.onDestroy();
+    }
 
+    @Override
+    protected void onPause() {
+        soundThread.stop = true;
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        soundThread.stop = false;
+        try {
+            soundThread.start();
+        } catch (final IllegalThreadStateException itse) {
+            // it was already started.
+        }
+        super.onResume();
     }
 
     protected void loadSounds() {
         for (int i = 0; i < sound_raw.length; i++) {
             soundItems[i] = new SoundItem(soundPool.load(this, sound_raw[i], 1), volume);
-//            soundThread.sounds.add(new SoundItem(soundPool))
-//            sounds[i] = soundPool.load(this, sound_raw[i], 1);
         }
     }
 
     protected void playSound(final int index) {
         soundThread.sounds.add(soundItems[index]);
-//        if (isLoaded) {
-//            soundPool.play(sounds[index], volume, volume, 1, 0, 1f);
-//        }
     }
-
-    private class SoundPoolHelper implements SoundPool.OnLoadCompleteListener {
-        @Override
-        public void onLoadComplete(final SoundPool soundPool, final int sampleId, final int status) {
-            isLoaded = true;
-        }
-    }
-
-
 }

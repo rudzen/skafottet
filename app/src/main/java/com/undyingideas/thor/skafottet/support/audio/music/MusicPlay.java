@@ -50,6 +50,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
         if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_PLAY)) {
             Log.d("Player", "Filter was correct");
             mMediaPlayer = MediaPlayer.create(this, music); // initialize it here
+            mMediaPlayer.setVolume(0.2f, 0.2f);
             mMediaPlayer.setOnPreparedListener(this);
             mMediaPlayer.setOnErrorListener(this);
             mMediaPlayer.setLooping(true);

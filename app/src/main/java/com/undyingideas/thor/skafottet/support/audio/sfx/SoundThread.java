@@ -12,12 +12,9 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @author rudz
  */
 public class SoundThread extends Thread {
-
-
-
     private final SoundPool soundPool;
     public LinkedBlockingQueue<SoundItem> sounds = new LinkedBlockingQueue<>();
-    public boolean stop = false;
+    public volatile boolean stop;
 
     public SoundThread(final SoundPool soundPool) {
         this.soundPool = soundPool;
