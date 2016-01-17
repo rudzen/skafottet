@@ -116,8 +116,8 @@ public class SplashActivity extends AppCompatActivity {
             startService(MusicPlay.intent);
 
             // only for testing stuff!!!!
-            s_preferences.clear();
-            Log.d(TAG, "Wordlist deleted : " + ListFetcher.deleteList(getApplicationContext()));
+//            s_preferences.clear();
+//            Log.d(TAG, "Wordlist deleted : " + ListFetcher.deleteList(getApplicationContext()));
 
                 /* begin loading wordlist
                 * 1) Check if any existing word list exist already

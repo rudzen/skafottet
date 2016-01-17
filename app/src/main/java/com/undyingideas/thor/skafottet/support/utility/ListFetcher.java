@@ -2,6 +2,7 @@ package com.undyingideas.thor.skafottet.support.utility;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 
 import com.undyingideas.thor.skafottet.support.wordlist.WordController;
 
@@ -60,6 +61,7 @@ public final class ListFetcher {
                 buffer.write(data, 0, nRead);
             buffer.flush();
             final byte[] returnBytes = buffer.toByteArray();
+            Log.d(filename, filename + " file size (on disk) : " + buffer.size());
             buffer.close();
             return decompressWordList(returnBytes);
         } catch (IOException | ClassNotFoundException e) {
@@ -83,6 +85,10 @@ public final class ListFetcher {
 
     public static boolean deleteList(final Context context) {
         return context.deleteFile(filename);
+    }
+
+    public static String fileLocation(final Context context) {
+        return context.getFileStreamPath(filename).getAbsolutePath();
     }
 
     public static class ListSaver implements Runnable {
