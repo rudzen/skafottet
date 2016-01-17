@@ -54,7 +54,7 @@
             android:id="@+id/hangman_game_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/selector"
+            android:textColor="@color/colorAccent"
             android:layout_gravity="center"
             android:gravity="center"
             android:textSize="20sp"/>
@@ -103,7 +103,7 @@
             android:id="@+id/hangman_game_known_letters"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/selector"
+            android:textColor="@color/colorAccent"
             android:layout_gravity="center"
             android:gravity="center"
             android:textSize="25sp"/>

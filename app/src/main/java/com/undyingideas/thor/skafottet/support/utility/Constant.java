@@ -10,6 +10,7 @@ public final class Constant {
 
     public static final String FONT_BOLD = "fonts/Roboto-Bold.ttf";
     public static final String FONT_LIGHT = "fonts/Roboto-Light.ttf";
+    public static final String FONT_SERIF = "fonts/deathrattlebb_reg.ttf";
 
     /* preferences keys */
     public static final String KEY_WORDS_IS_LIST_LOCAL = "kwll";

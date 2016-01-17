@@ -32,6 +32,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.nineoldandroids.animation.Animator;
+import com.romainpiel.shimmer.Shimmer;
+import com.romainpiel.shimmer.ShimmerTextView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.StartGameAdapter;
 import com.undyingideas.thor.skafottet.adapters.StartGameItem;
@@ -69,7 +71,8 @@ public class MenuActivity extends MenuActivityAbstract implements
     private static final int BACK_PRESSED_DELAY = 2000;
 
     private static final int BUTTON_COUNT = 8;
-    private ImageView title;
+    private Shimmer shimmerTitle;
+    private ShimmerTextView title;
     private final ImageView[] buttons = new ImageView[BUTTON_COUNT];
     private LinearLayout loginLayout;
     private TextView loginText;
@@ -122,9 +125,15 @@ public class MenuActivity extends MenuActivityAbstract implements
 
         if (mpc != null &&  mpc.name != null) loginText.setText(mpc.name);
 
-        title = (ImageView) findViewById(R.id.menu_title);
+        title = (ShimmerTextView) findViewById(R.id.menu_title);
         title.setClickable(true);
         title.setOnClickListener(s_buttonListener);
+        shimmerTitle = new Shimmer();
+        shimmerTitle.setStartDelay(6000);
+        shimmerTitle.setDuration(4000);
+        shimmerTitle.start(title);
+
+
 
         buttons[BUTTON_PLAY] = (ImageView) findViewById(R.id.menu_button_play);
         buttons[BUTTON_HIGHSCORE] = (ImageView) findViewById(R.id.menu_button_highscore);
