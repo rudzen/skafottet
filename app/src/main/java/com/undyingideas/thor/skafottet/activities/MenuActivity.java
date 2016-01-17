@@ -691,6 +691,7 @@ public class MenuActivity extends MenuActivityAbstract implements
             if (info.isEmpty()) {
                 updateMargueeScroller();
                 YoYo.with(Techniques.Flash).duration(2000).playOn(title);
+//                YoYo.with(Techniques.RubberBand).duration(3000).playOn(sf);
             }
             textView_buttom.animateText(info.poll());
             menuHandler.postDelayed(updateText, 3000);
