@@ -108,7 +108,7 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
 
         soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
         soundPool.setOnLoadCompleteListener(soundPoolHelper);
-        menuClick = soundPool.load(this, R.raw.menu_click, 1);
+        menuClick = soundPool.load(this, R.raw.reign_supreme, 1);
 
         registerSensor();
 //        registerBatteryReciever();
