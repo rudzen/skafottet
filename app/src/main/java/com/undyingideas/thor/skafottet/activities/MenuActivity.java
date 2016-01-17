@@ -384,6 +384,7 @@ public class MenuActivity extends MenuActivityAbstract implements
             final Context context = view.getContext();
             if (context instanceof MenuActivity) {
                 final MenuActivity menuActivity = (MenuActivity) context;
+                menuActivity.menuHandler.post(menuActivity.soundPoolHelper);
                 menuActivity.md.dismiss();
                 Log.d(TAG, "New game mode selected : " + view.getTag());
                 menuActivity.newGameID = (int) view.getTag();

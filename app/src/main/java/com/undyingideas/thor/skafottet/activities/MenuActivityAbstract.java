@@ -257,6 +257,12 @@ public abstract class MenuActivityAbstract extends AppCompatActivity implements 
         }
     }
 
+    public void playSound() {
+        if (isLoaded) {
+            soundPool.play(menuClick, volume, volume, 1, 0, 1f);
+        }
+    }
+
     private class SoundPoolHelper implements SoundPool.OnLoadCompleteListener, Runnable {
 
         private boolean isLoaded;
