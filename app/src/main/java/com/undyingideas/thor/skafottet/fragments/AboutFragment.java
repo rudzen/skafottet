@@ -41,22 +41,58 @@ public class AboutFragment extends Fragment {
             "Skafottet - et 3-ugers projekt, af Gruppe 23" + SEP +
                     "Gruppe medlemmer der har tilføjet til projektet :" + SEP +
                     "s133235 Rudy Alex Kohn, s133235@student.dtu.dk" + SEP +
-                    "s144868 Adam Hammer Palmar, s144868@student.dtu.dk" + SEP +
                     "s130063 Theis Friis Strømming, s130063@student.dtu.dk" + SEP +
-            "Projekt ansvarlig : Rudy Alex Kohn" +
+                    "s144868 Adam Hammer Palmar, s144868@student.dtu.dk" + SEP +
+                    "Projekt ansvarlig : Rudy Alex Kohn" +
                     SEP + SEP +
                     "Overordnet Design / Grafik / Kode : " + RUDY + SEP +
                     "Menu Design / Kode : " + RUDY + SEP +
                     "Galge 3D Kode : " + THEIS + SEP +
                     "Firebase Design / Kode : " + THEIS + SEP +
-                    "Yderligere Firebase Design / Kode : " + ADAM + SEP + SEP + " " + SEP +
+                    "Yderligere Firebase Design / Kode : " + ADAM + SEP +
+                    "Yderligere Firebase Kode : " + RUDY + SEP + SEP + SEP +
                     "Baseret på originalt skafott design af Thor" + SEP + SEP + SEP + SEP +
                     "Dette projekt indeholder følgende : " + SEP +
-                    "Delvist fragment baseret design med parcel dataoverførsel, Ny Galgelogik, Savegame, Grafik (Herunder sensorstyret flertrådet stjernebaggrund samt 3D galge med touchevents), Animationer, Vibrator, Sensor (Tyngdekraft -> Accelerometer) (Benyttet til menu stjernebaggrund), " +
-                    "TextView med understreget tekst, AsyncTasks, Specielt designede Broadcast Recievers struktur med overtagelse af Runnable Interface (Internet adgang, batteri status),  Tråde (Via custom Observere til broadcast recievers), " +
-                    "Parcels, Serialiseret filgemning via GZIPstream (Ordlister), Ordliste tilføjelse (fra internet addresser), Ord-filtrering, Ordliste opdatering, Ordliste sletning, " +
-                    "Firebase forbindelse, Firebase opdateringer af informationer, Firebase Multiplayer funktionalitet (inkl. simpel login), Firebase highscore, Hjælpe funktion via asset html, " +
-                    "Programatisk opsætning af skærmen, Baggrundsmusik via forgrundsservice, Lydeffekter, Indstillingsmuligheder, Adaptere (Array, RecycleView, BaseAdapter) inkl. Viewholders." + SEP + SEP +
+                    "- Delvist fragment baseret design med parcel dataoverførsel." + SEP +
+                    "- Ny Galgelogik" + SEP +
+                    "- Savegame" + SEP +
+                    "- Grafik (Herunder sensorstyret flertrådet stjernebaggrund samt 3D galge med touchevents)" + SEP +
+                    "- Animationer (egne og 3. parts)" + SEP +
+                    "- Vibrator" + SEP +
+                    "- Sensor (Tyngdekraft -> Accelerometer) (Benyttet til menu stjernebaggrund)." + SEP +
+                    "- Specialt lavet TextView med understreget tekst til ordlisterne," + SEP +
+                    "- AsyncTasks" + SEP +
+                    "- Specielt designede Broadcast Recievers struktur med overtagelse af Runnable Interface (Internet adgang, batteri status)" + SEP +
+                    "- Tråde (Via custom Observere til broadcast recievers, og andre steder dømt brugbart)" + SEP +
+                    "- Parcel data objekt overførsel." + SEP +
+                    "- Serialiseret filgemning via GZIPstream (Ordlister)." + SEP +
+                    "- Ordliste tilføjelse (fra internet addresser)." + SEP +
+                    "- Korrekt Ord-filtrering." + SEP +
+                    "- Ordliste opdatering." + SEP +
+                    "- Ordliste sletning." + SEP +
+                    "- Firebase forbindelse." + SEP +
+                    "- Firebase opdateringer af informationer." + SEP +
+                    "- Firebase Multiplayer funktionalitet (inkl. simpel login)." + SEP +
+                    "- Firebase highscore." + SEP +
+                    "- Hjælpe funktion via asset html." + SEP +
+                    "- Programatisk opsætning af layout." + SEP +
+                    "- Baggrundsmusik via service." + SEP +
+                    "- Lydeffekter via trådet SoundPool afspilning." + SEP +
+                    "- Adaptere (Array, RecycleView, BaseAdapter) inkl. Viewholders." + SEP + SEP + SEP +
+
+                    "Følgende software er blevet brugt under udviklingen :" + SEP +
+                    "- Windows 10 Professional" + SEP +
+                    "- Android Studio v1.5.1" + SEP +
+                    "- Genymotion v2.6" + SEP +
+                    "- Adobe Photoshop CS5" + SEP +
+                    "- Audacity v2.1.1" + SEP +
+                    "- lamedropXPd v3.1" + SEP +
+                    "- Kompozer v0.8b3" + SEP + SEP + SEP +
+
+                    "Følgende er brugt som kilder :" + SEP +
+                    "- Musik af Kevin Macloud (https://incompetech.com/)." + SEP +
+                    "- Diverse lydstumper fra forskellige sider med gratis lydklip." + SEP + SEP + SEP +
+
 
             "Original galgelogik af Jakob Nordfalk." + SEP + "http://www.javabog.dk",
             "TinyDB preferences interface af kcochibili." + SEP + "https://github.com/kcochibili/TinyDB--Android-Shared-Preferences-Turbo" + SEP + SEP
