@@ -52,7 +52,7 @@ public final class JWTEncoder {
             final Mac sha256_HMAC = Mac.getInstance(HMAC_256);
             final SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes(UTF8_CHARSET), HMAC_256);
             sha256_HMAC.init(secret_key);
-            final byte sig[] = sha256_HMAC.doFinal(secureBits.getBytes(UTF8_CHARSET));
+            final byte[] sig = sha256_HMAC.doFinal(secureBits.getBytes(UTF8_CHARSET));
             return Base64.encodeToString(sig, Base64.DEFAULT);
         } catch (final Exception e) {
             throw new RuntimeException(e);
@@ -65,7 +65,7 @@ public final class JWTEncoder {
             headerJson.put("typ", "JWT");
             headerJson.put("alg", "HS256");
             return encodeJson(headerJson);
-        } catch (JSONException e) {
+        } catch (final JSONException e) {
             throw new RuntimeException(e);
         }
     }
