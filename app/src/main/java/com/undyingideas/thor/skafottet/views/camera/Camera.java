@@ -19,7 +19,7 @@ public class Camera {
 	public float pivor;
 
 	/** zoom **/
-	private float z = 4;
+	public float z = 4;
 
 	// display
 	private final S2 s2;
