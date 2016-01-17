@@ -40,6 +40,7 @@ import com.undyingideas.thor.skafottet.broadcastrecievers.InternetRecieverData;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.support.audio.music.MusicPlay;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
+import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 import com.undyingideas.thor.skafottet.support.utility.NetworkHelper;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
@@ -275,9 +276,9 @@ public class MenuActivity extends MenuActivityAbstract implements
         } finally {
             startGameItems.add(new StartGameItem(Constant.MODE_SINGLE_PLAYER, "Nyt singleplayer", "Tilfældigt ord.", imageRefs[0]));
             if (mpc.name != null && NetworkHelper.getConnectivityStatus(getApplicationContext()) > -1) {
-                startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER, getString(R.string.menu_new_multi_player_game), "Udfordring.", imageRefs[0]));
-                startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_2, getString(R.string.menu_new_multi_player_game), "Tværfaglig udfordring", imageRefs[0]));
-                startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_LOBBY, "Se spil lobbyer", "Ikke for sarte sjæle", imageRefs[0]));
+                startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER, "Næste multiplayer", "Kæmp imod", imageRefs[0]));
+                startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_2, "Vælg multiplayer", "Jægeren er den jagtede", imageRefs[0]));
+                startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_LOBBY, "Ny udfordring", "Udvælg dit offer", imageRefs[0]));
             }
 
             final StartGameAdapter adapter = new StartGameAdapter(this, R.layout.new_game_list_row, startGameItems);
@@ -595,7 +596,13 @@ public class MenuActivity extends MenuActivityAbstract implements
 
                         if (isValid(menuActivity, user, pass)) {
                             menuActivity.onFinishLoginDialog(user, pass);
+                            if (GameUtility.mpc.login(user, pass)) {
+                                Log.d("Login succes", " stuff");
+                            } else {
+                                Log.d("Login failure", " stuff");
+                            }
                         }
+
                     }
                 } else {
                     menuActivity.buttons[BUTTON_LOGIN_OUT].setBackground(menuActivity.getResources().getDrawable(mpc.name == null ? menuActivity.loginButtons[0] : menuActivity.loginButtons[1]));
