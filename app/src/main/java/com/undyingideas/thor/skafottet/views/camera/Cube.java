@@ -8,7 +8,7 @@ import android.graphics.Paint;
 public class Cube {
 	V3[] cube = new V3[8];
 	public V3 c = new V3(0,0,0);
-	public Cube(final V3[] cube){
+	public Cube(final V3... cube){
 		if (cube.length == 8) this.cube = cube;
 		for (final V3 aCube : cube) c = c.add(aCube);
 		c=c.mul(1f / cube.length);

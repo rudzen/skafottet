@@ -39,12 +39,14 @@ public class Hangman3dView extends View{
     V3 c = new V3(0,0,3);
     Cube[] gallow;
     Cube[] body;
+    Rope[] rope;
     int errors;
     Paint p = new Paint();
 
     public Hangman3dView(final Context context) {
         super(context);
         buildGallow();
+        buildRope();
         buildBody();
         buildOther();
     }
@@ -52,6 +54,7 @@ public class Hangman3dView extends View{
     public Hangman3dView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
         buildGallow();
+        buildRope();
         buildBody();
         buildOther();
     }
@@ -59,6 +62,7 @@ public class Hangman3dView extends View{
     public Hangman3dView(final Context context, final AttributeSet attrs, final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         buildGallow();
+        buildRope();
         buildBody();
         buildOther();
     }
@@ -133,18 +137,42 @@ public class Hangman3dView extends View{
 
         gallow[5] = new Cube(new V3(-3, 0, 6.5f), 1,10,1); // stolpe
         gallow[6] = new Cube(new V3(-0.75f, 0, 11), 1, 1, 3.5f); // bar
-
-        gallow[7] = new Cube(new V3(0.75f,0,9.75f), 0.25f,1.5f, 0.25f); // snor
+        float f1 = 0.2f, f2 = -0.2f, v1 = -2.5f, low = 10.5f, v2 = -2.2f;
+        gallow[7] = new Cube(new V3(v1, f1, 10f), new V3(v1, f2, 10f), new V3(v1, f1, 10.125f), new V3(v1, f2, 10.125f),
+                new V3(v2, f1, low), new V3(v2, f2, low), new V3(-2.3f, f1, low), new V3(-2.3f, f2, low));
+        //gallow[7] = new Cube(new V3(0.75f,0,9.75f), 0.25f,1.5f, 0.25f); // snor
     }
 
     private void buildBody(){
         body = new Cube[6];
         body[0] = new Cube(new V3(0.75f, 0, 8.75f), 1,1,1); // head
         body[1] = new Cube(new V3(0.75f, 0, 6.75f), 0.5f, 3, 0.5f); // body
-        body[2] = new Cube(new V3(1.5f, 0, 7.75f), 0.5f,0.5f,1); // arm
-        body[3] = new Cube(new V3(0, 0, 7.75f), 0.5f,0.5f,1); // arm
-        body[4] = new Cube(new V3(0.25f,0,4.75f),0.5f,2,0.5f); // leg
-        body[5] = new Cube(new V3(1.25f,0,4.75f),0.5f, 2, 0.5f); // leg
+        body[2] = new Cube(new V3(1, 0.25f, 7.65f), new V3(1, -0.25f, 7.65f), new V3(1, 0.25f, 8f), new V3(1,-0.25f, 8f),
+                new V3(2, 0.25f, 6.9f), new V3(2, -0.25f, 6.9f), new V3(2, 0.25f, 7.25f), new V3(2,-0.25f, 7.25f));
+        body[3] = new Cube(new V3(0.5f, 0.25f, 7.65f), new V3(0.5f, -0.25f, 7.65f), new V3(0.5f, 0.25f, 8f), new V3(0.5f,-0.25f, 8f),
+                new V3(-0.5f, 0.25f, 6.9f), new V3(-0.5f, -0.25f, 6.9f), new V3(-0.5f, 0.25f, 7.25f), new V3(-0.5f,-0.25f, 7.25f));
+
+        body[4] = new Cube(new V3(1, 0.25f, 5.25f), new V3(1, -0.25f, 5.25f), new V3(1, 0.25f, 5.8f), new V3(1,-0.25f, 5.8f),
+                new V3(2, 0.25f, 3.75f), new V3(2, -0.25f, 3.75f), new V3(2.3f, 0.25f, 3.75f), new V3(2.3f,-0.25f, 3.75f));// leg
+        body[5] = new Cube(new V3(0.5f, 0.25f, 5.25f), new V3(0.5f, -0.25f, 5.25f), new V3(0.5f, 0.25f, 5.8f), new V3(0.5f,-0.25f, 5.8f),
+                new V3(-0.6f, 0.25f, 3.75f), new V3(-0.6f, -0.25f, 3.75f), new V3(-0.8f, 0.25f, 3.75f), new V3(-0.8f,-0.25f, 3.75f));// leg
+
+    }
+
+    private void buildRope() {
+        rope = new Rope[9];
+        rope[0] = new Rope(new V3(0.80f, 0.5f, 10.5f), new V3(0.5f, 0.5f, 10.5f), new V3(0.80f, 0.5f, 11.5f), new V3(0.5f, 0.5f, 11.5f));
+        rope[1] = new Rope(new V3(0.80f, -0.5f, 10.5f), new V3(0.5f, -0.5f, 10.5f), new V3(0.80f, -0.5f, 11.5f), new V3(0.5f, -0.5f, 11.5f));
+        rope[2] = new Rope(new V3(0.80f, -0.5f, 11.5f), new V3(0.5f, -0.5f, 11.5f), new V3(0.80f, 0.5f, 11.5f), new V3(0.5f, 0.5f, 11.5f));
+
+        rope[3] = new Rope(new V3(0.775f, 0.1f, 10), new V3(0.525f, 0.1f, 10), new V3(0.8f, 0.5f, 10.5f), new V3(0.5f, 0.5f, 10.5f));
+        rope[4] = new Rope(new V3(0.775f, -0.1f, 10), new V3(0.525f, -0.1f, 10), new V3(0.8f, -0.5f, 10.5f), new V3(0.5f, -0.5f, 10.5f));
+
+        rope[5] = new Rope(new V3(0.775f, 0.1f, 10), new V3(0.525f, 0.1f, 10), new V3(0.775f, 0.1f, 9.25f), new V3(0.525f, 0.1f, 9.25f));
+        rope[6] = new Rope(new V3(0.775f, -0.1f, 10), new V3(0.525f, -0.1f, 10), new V3(0.775f, -0.1f, 9.25f), new V3(0.525f, -0.1f, 9.25f));
+
+        rope[7] = new Rope(new V3(0.775f, -0.1f, 10), new V3(0.525f, -0.1f, 10), new V3(0.775f, 0.1f, 9.25f), new V3(0.525f, 0.1f, 9.25f));
+        rope[8] = new Rope(new V3(0.775f, 0.1f, 10), new V3(0.525f, 0.1f, 10), new V3(0.775f, -0.1f, 9.25f), new V3(0.525f, -0.1f, 9.25f));
     }
 
     private void buildOther(){
@@ -173,6 +201,8 @@ public class Hangman3dView extends View{
         for(final Cube cu: gallow){
             cu.draw(S, canvas, p); // draw gallow
         }
+        for(final Rope r : rope)
+            r.draw(S, canvas, p);
         for(int i = 0; i < errors; i++) {
             body[i].draw(S, canvas, p); // draw inflicted bodyparts
         }
