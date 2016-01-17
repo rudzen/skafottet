@@ -194,7 +194,9 @@ public class CreateLobbyFragment extends Fragment {
                     dto.add(lps1); dto.add(lps2); dto.setWord(w);
                     GameUtility.mpc.createLobby(dto);
                     createLobbyFragmentWeakReference.get()
-                            .getActivity().onBackPressed();
+                            .getActivity().onBackPressed();// TODO design return
+                    //opponentName = null ;GameUtility.mpc.update();
+
                 } else {
                     opponentName = createLobbyFragment.players.get(position).getName();
                     GameUtility.mpc.update();
