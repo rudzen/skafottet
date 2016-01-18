@@ -132,12 +132,15 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     }
 
     public void startMusic() {
-        mMediaPlayer.start();
-        STATE = STATE_PLAYING;
-
-        // this guard is not needed for now in this app.
-
-//        if (mState != State.Preparing && mState != State.Retrieving) {
+        try {
+            mMediaPlayer.start();
+            STATE = STATE_PLAYING;
+        } catch (final Exception e) {
+            e.printStackTrace();
+            STATE = STATE_STOPPED;
+        }
+//        if (STATE != STATE_PREPARING && STATE != STATE_RETRIEVING) {
+//        } else {
 //        }
     }
 
