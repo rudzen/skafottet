@@ -46,8 +46,9 @@ public abstract class GameUtility {
     @SuppressWarnings("StaticVariableOfConcreteClass")
     public static TinyDB s_preferences;
 
-
+    @SuppressWarnings("StaticVariableOfConcreteClass")
     public static WordController s_wordController;
+
 
     public static final int SFX_GAME_WRONG_1 = 0;
     public static final int SFX_GAME_WRONG_2 = 1;

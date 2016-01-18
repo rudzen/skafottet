@@ -18,10 +18,12 @@ package com.undyingideas.thor.skafottet.activities;
 
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Handler;
 import android.support.annotation.RawRes;
 import android.support.v7.app.AppCompatActivity;
 
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.activities.support.Foreground;
 import com.undyingideas.thor.skafottet.support.sfx.SoundItem;
 import com.undyingideas.thor.skafottet.support.sfx.SoundThread;
 
@@ -31,21 +33,13 @@ import com.undyingideas.thor.skafottet.support.sfx.SoundThread;
  *
  * @author rudz
  */
-public class SoundAbstract extends AppCompatActivity {
+@SuppressWarnings("AbstractClassExtendsConcreteClass")
+public abstract class SoundAbstract extends AppCompatActivity implements Foreground.Listener {
 
-    // empty shell abstraction for sound playback
 
     /* sound stuff */
-    private SoundPool soundPool;
-    private float actVolume, maxVolume, volume;
-    private AudioManager audioManager;
-    private SoundItem[] soundItems = new SoundItem[7];
-//    protected SoundPoolHelper soundPoolHelper;
-
-    private SoundThread soundThread;
-
-    private @RawRes
-    int[] sound_raw = {
+    @RawRes final
+    private int[] sound_raw = {
             R.raw.game_wrong1,
             R.raw.game_wrong2,
             R.raw.game_right,
@@ -55,6 +49,19 @@ public class SoundAbstract extends AppCompatActivity {
             R.raw.challenge
     };
 
+    private SoundPool soundPool;
+    private float actVolume, maxVolume, volume;
+    private AudioManager audioManager;
+
+    private final static int SOUND_COUNT = 7;
+    private SoundItem[] soundItems = new SoundItem[SOUND_COUNT];
+
+    private SoundThread soundThread;
+
+    private Handler soundLoaderHandler;
+    private final static String KEY_LOAD_COMPLETE = "klc";
+    private final static byte LOAD_COMPLETE = 1;
+
     protected void initSound() {
         /* set up the sound stuff */
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
@@ -62,59 +69,45 @@ public class SoundAbstract extends AppCompatActivity {
         maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         volume = actVolume / maxVolume;
 
-//        soundPoolHelper = new SoundPoolHelper();
-
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
         soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
-//        soundPool.setOnLoadCompleteListener(soundPoolHelper);
+
+        Foreground.get(this).addListener(this);
 
         loadSounds();
 
         if (soundThread == null) {
             soundThread = new SoundThread(soundPool);
+            soundThread.start();
         }
-        soundThread.start();
-    }
-
-    @Override
-    protected void onStop() {
-        soundThread.stop = true;
-        super.onStop();
     }
 
     @Override
     protected void onDestroy() {
         soundItems = null;
-        sound_raw = null;
         soundThread = null;
         super.onDestroy();
     }
 
-    @Override
-    protected void onPause() {
-        soundThread.stop = true;
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        soundThread.stop = false;
-        try {
-            soundThread.start();
-        } catch (final IllegalThreadStateException itse) {
-            // it was already started.
-        }
-        super.onResume();
-    }
-
+    @SuppressWarnings("ObjectAllocationInLoop")
     protected void loadSounds() {
-        for (int i = 0; i < sound_raw.length; i++) {
+        for (int i = 0; i < SOUND_COUNT; i++) {
             soundItems[i] = new SoundItem(soundPool.load(this, sound_raw[i], 1), volume);
         }
     }
 
     protected void playSound(final int index) {
         soundThread.sounds.add(soundItems[index]);
+    }
+
+    @Override
+    public void onBecameForeground() {
+        soundThread = new SoundThread(soundPool);
+        soundThread.start();
+    }
+
+    @Override
+    public void onBecameBackground() {
+        soundThread.interrupt();
     }
 }

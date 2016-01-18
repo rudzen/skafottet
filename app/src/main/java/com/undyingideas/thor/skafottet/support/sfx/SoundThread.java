@@ -17,6 +17,7 @@
 package com.undyingideas.thor.skafottet.support.sfx;
 
 import android.media.SoundPool;
+import android.util.Log;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -31,6 +32,7 @@ public class SoundThread extends Thread {
     private final SoundPool soundPool;
     public LinkedBlockingQueue<SoundItem> sounds = new LinkedBlockingQueue<>();
     public volatile boolean stop;
+
 
     public SoundThread(final SoundPool soundPool) {
         this.soundPool = soundPool;
@@ -53,7 +55,8 @@ public class SoundThread extends Thread {
                 soundPool.play(item.id, item.volume, item.volume, 0, 0, 1);
             }
         } catch (final InterruptedException e) {
-            e.printStackTrace();
+            Log.d("SoundThread", "Interrupted");
+//            e.printStackTrace();
         }
     }
 }

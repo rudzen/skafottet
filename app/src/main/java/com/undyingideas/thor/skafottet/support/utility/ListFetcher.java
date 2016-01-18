@@ -81,7 +81,8 @@ public final class ListFetcher {
             buffer.close();
             return decompressWordList(returnBytes);
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            Log.d("ListFetcher", "Unable to load wordlist, perhaps it has been deleted from app data?");
+//            e.printStackTrace();
         }
         return null;
     }

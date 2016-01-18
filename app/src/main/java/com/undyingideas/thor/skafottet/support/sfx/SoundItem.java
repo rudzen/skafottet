@@ -16,6 +16,9 @@
 
 package com.undyingideas.thor.skafottet.support.sfx;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created on 17-01-2016, 17:32.
  * Project : skafottet
@@ -23,7 +26,7 @@ package com.undyingideas.thor.skafottet.support.sfx;
  *
  * @author rudz
  */
-public class SoundItem {
+public class SoundItem implements Parcelable {
 
     public int id;
     public float volume;
@@ -35,4 +38,31 @@ public class SoundItem {
     }
 
     public SoundItem(final boolean stop) { this.stop = stop; }
+
+
+    @Override
+    public int describeContents() { return 0; }
+
+    @Override
+    public void writeToParcel(final Parcel dest, final int flags) {
+        dest.writeInt(id);
+        dest.writeFloat(volume);
+        dest.writeByte(stop ? (byte) 1 : (byte) 0);
+    }
+
+    protected SoundItem(final Parcel in) {
+        id = in.readInt();
+        volume = in.readFloat();
+        stop = in.readByte() != 0;
+    }
+
+    public static final Parcelable.Creator<SoundItem> CREATOR = new SoundItemCreator();
+
+    private static class SoundItemCreator implements Creator<SoundItem> {
+        @Override
+        public SoundItem createFromParcel(final Parcel source) {return new SoundItem(source);}
+
+        @Override
+        public SoundItem[] newArray(final int size) {return new SoundItem[size];}
+    }
 }

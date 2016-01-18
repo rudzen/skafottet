@@ -32,6 +32,7 @@ import java.util.prefs.PreferenceChangeListener;
 public class StarField extends View implements PreferenceChangeListener {
 
     private static final float LOW_PASS_FILTER = 0.3f;
+    private static final float HIGH_PASS_FILTER = 3.0f;
     private static final int UPDATE_RATE = 1000 / 100;
 
     private final ArrayList<Star2D> stars = new ArrayList<>(75);

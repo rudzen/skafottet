@@ -18,6 +18,7 @@ package com.undyingideas.thor.skafottet.services;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.IBinder;
@@ -25,6 +26,8 @@ import android.util.Log;
 
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.activities.support.Foreground;
+
+import java.io.IOException;
 
 public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
 
@@ -61,6 +64,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
         Log.d("Player", "onStartCommand");
         if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_PLAY)) {
             Log.d("Player", "Filter was correct");
+//            InputStream inputStream = getResources().openRawResource(R.raw.reign_supreme);
             mMediaPlayer = MediaPlayer.create(this, music); // initialize it here
             mMediaPlayer.setVolume(0.3f, 0.3f);
             mMediaPlayer.setOnPreparedListener(this);
@@ -81,20 +85,13 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     }
 
     private void initMediaPlayer() {
-
-
-        // currently not used!
-
-//        try {
-//
-////            mMediaPlayer.setDataSource(mUrl);
-//        } catch (IllegalArgumentException | IOException | IllegalStateException e) {
-//            e.printStackTrace();
-//        }
-
         try {
+            final AssetFileDescriptor afd = getApplicationContext().getResources().openRawResourceFd(R.raw.reign_supreme);
+            if (afd == null) return;
+            mMediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+            afd.close();
             mMediaPlayer.prepareAsync(); // prepare async to not block main thread
-        } catch (final IllegalStateException e) {
+        } catch (final IllegalStateException | IOException e) {
             e.printStackTrace();
         }
         STATE = STATE_PREPARING;
