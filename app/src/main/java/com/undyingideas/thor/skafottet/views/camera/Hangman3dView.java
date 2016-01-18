@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -23,7 +22,7 @@ public class Hangman3dView extends View{
     public final static String TAG = "hangman3dview";
 
     private float mPreviousX, mPreviousY;
-    private final float TOUCH_SCALE_FACTOR = 2f / 180;
+    private static final float TOUCH_SCALE_FACTOR = 2f / 180;
     int framerate=25;
     int delay=1000/framerate;
 
@@ -137,7 +136,11 @@ public class Hangman3dView extends View{
 
         gallow[5] = new Cube(new V3(-3, 0, 6.5f), 1,10,1); // stolpe
         gallow[6] = new Cube(new V3(-0.5f, 0, 11), 1, 1, 4f); // bar
-        float f1 = 0.2f, f2 = -0.2f, v1 = -2.5f, low = 10.5f, v2 = -2.2f;
+        final float f1 = 0.2f;
+        final float f2 = -0.2f;
+        final float v1 = -2.5f;
+        final float low = 10.5f;
+        final float v2 = -2.2f;
         gallow[7] = new Cube(new V3(v1, f1, 10f), new V3(v1, f2, 10f), new V3(v1, f1, 10.125f), new V3(v1, f2, 10.125f),
                 new V3(v2, f1, low), new V3(v2, f2, low), new V3(-2.3f, f1, low), new V3(-2.3f, f2, low));
         //gallow[7] = new Cube(new V3(0.75f,0,9.75f), 0.25f,1.5f, 0.25f); // snor

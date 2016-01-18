@@ -130,17 +130,7 @@ public class HangedMan implements Parcelable {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("HangedMan{");
-        sb.append("usedLetters=").append(usedLetters);
-        sb.append(", theWord='").append(theWord).append('\'');
-        sb.append(", visibleWord='").append(visibleWord).append('\'');
-        sb.append(", numWrongLetters=").append(numWrongLetters);
-        sb.append(", numCorrectLettersLast=").append(numCorrectLettersLast);
-        sb.append(", lastLetterCorrect=").append(lastLetterCorrect);
-        sb.append(", isGameWon=").append(isGameWon);
-        sb.append(", isGameLost=").append(isGameLost);
-        sb.append('}');
-        return sb.toString();
+        return "HangedMan{" + "usedLetters=" + usedLetters + ", theWord='" + theWord + '\'' + ", visibleWord='" + visibleWord + '\'' + ", numWrongLetters=" + numWrongLetters + ", numCorrectLettersLast=" + numCorrectLettersLast + ", lastLetterCorrect=" + lastLetterCorrect + ", isGameWon=" + isGameWon + ", isGameLost=" + isGameLost + '}';
     }
 
     /* ************************************* */

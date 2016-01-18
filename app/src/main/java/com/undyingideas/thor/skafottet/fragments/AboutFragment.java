@@ -144,7 +144,7 @@ public class AboutFragment extends Fragment {
             t = new TextView(getContext());
             t.setPadding(padding, padding, padding, padding);
             t.setText(ROWS[i++]);
-            if (i < ROWS.length) t.setTextSize(COMPLEX_UNIT_SP, 20);
+            if (i < ROWS.length) t.setTextSize(COMPLEX_UNIT_SP, 15);
             else t.setTextSize(COMPLEX_UNIT_SP, 11);
             addLinks(t, WEB_URLS | EMAIL_ADDRESSES);
             ll.addView(t);
@@ -161,7 +161,7 @@ public class AboutFragment extends Fragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             onDestroy();
             return true;

@@ -95,7 +95,7 @@ public class WordListController {
             Log.e("firebaseerror", firebaseError.getDetails());
         }
 
-        private WordItem getDTO(final DataSnapshot dataSnapshot) {
+        private static WordItem getDTO(final DataSnapshot dataSnapshot) {
             final WordItem dto = new WordItem(dataSnapshot.getKey(), null);
             for(final DataSnapshot snapshot : dataSnapshot.getChildren()) dto.addWord(snapshot.getValue().toString());
             return dto;

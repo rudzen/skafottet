@@ -94,7 +94,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
 
         try {
             mMediaPlayer.prepareAsync(); // prepare async to not block main thread
-        } catch (IllegalStateException e) {
+        } catch (final IllegalStateException e) {
             e.printStackTrace();
         }
         STATE = STATE_PREPARING;
@@ -148,7 +148,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
         }
     }
 
-    public boolean isPlaying() {
+    public static boolean isPlaying() {
         return STATE == STATE_PLAYING;
     }
 

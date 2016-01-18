@@ -30,7 +30,7 @@ public class TokenGenerator {
      *
      * @param firebaseSecret
      */
-    public TokenGenerator(String firebaseSecret) {
+    public TokenGenerator(final String firebaseSecret) {
         super();
         this.firebaseSecret = firebaseSecret;
     }
@@ -99,7 +99,7 @@ public class TokenGenerator {
     }
 
     private static boolean isaBoolean(final Map<String, Object> data, final TokenOptions options) {
-        return (data == null || data.size() == 0) && (options == null || !options.isAdmin() && !options.isDebug());
+        return (data == null || data.isEmpty()) && (options == null || !options.isAdmin() && !options.isDebug());
     }
 
     private String computeToken(final JSONObject claims) {

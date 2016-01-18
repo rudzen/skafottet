@@ -87,7 +87,7 @@ public class TokenOptions implements Parcelable {
     /**
      * @param admin the admin to set
      */
-    public void setAdmin(boolean admin) { this.admin = admin; }
+    public void setAdmin(final boolean admin) { this.admin = admin; }
 
     /**
      * @return the debug
@@ -97,7 +97,7 @@ public class TokenOptions implements Parcelable {
     /**
      * @param debug the debug to set
      */
-    public void setDebug(boolean debug) { this.debug = debug; }
+    public void setDebug(final boolean debug) { this.debug = debug; }
 
 
     /* parcel code, by rudz */

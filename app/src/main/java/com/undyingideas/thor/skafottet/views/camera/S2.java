@@ -31,11 +31,11 @@ public class S2 {
 	public void drawLine(final Canvas g, final V2 p1, final V2 p2, final Paint p) {
 		final V2 p1w = transform(p1);
 		final V2 p2w = transform(p2);
-		g.drawLine((float) p1w.x, (float) p1w.y, (float) p2w.x, (float) p2w.y, p);
+		g.drawLine(p1w.x, p1w.y, p2w.x, p2w.y, p);
 	}
 	public void drawPoint(final Canvas c, final V2 point, final Paint p){
 		final V2 point1 = transform(point);
-		c.drawPoint((float) point1.x, (float) point1.y, p);
+		c.drawPoint(point1.x, point1.y, p);
 	}
 
 	public static void drawCube(final Canvas g, final Cube cube, final Camera camera){

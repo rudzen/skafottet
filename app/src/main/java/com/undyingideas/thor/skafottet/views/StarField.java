@@ -111,7 +111,7 @@ public class StarField extends View implements PreferenceChangeListener {
     }
 
     @Override
-    public void preferenceChange(PreferenceChangeEvent pce) {
+    public void preferenceChange(final PreferenceChangeEvent pce) {
         // do nothing for now
     }
 

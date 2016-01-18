@@ -24,6 +24,8 @@ public class VerbalExpression {
     public static class Builder {
 
         private static final Pattern patEndOfLine = Pattern.compile("$", Pattern.LITERAL);
+        private static final Pattern patSanitize = Pattern.compile("[\\W]");
+        private static final Pattern patStartOfLine = Pattern.compile("^", Pattern.LITERAL);
         private StringBuilder prefixes = new StringBuilder();
         private final StringBuilder source = new StringBuilder();
         private StringBuilder suffixes = new StringBuilder();
@@ -45,7 +47,7 @@ public class VerbalExpression {
          * @return sanitized string value
          */
         private static String sanitize(final String pValue) {
-            return pValue.replaceAll("[\\W]", "\\\\$0");
+            return patSanitize.matcher(pValue).replaceAll("\\\\$0");
         }
 
         /**
@@ -103,7 +105,7 @@ public class VerbalExpression {
         public Builder startOfLine(final boolean pEnable) {
             prefixes.append(pEnable ? "^" : "");
             if (!pEnable) {
-                prefixes = new StringBuilder(prefixes.toString().replace("^", ""));
+                prefixes = new StringBuilder(patStartOfLine.matcher(prefixes.toString()).replaceAll(""));
             }
             return this;
         }

@@ -36,7 +36,7 @@ public final class JWTEncoder {
      * @param secret
      * @return
      */
-    public static String encode(JSONObject claims, String secret) {
+    public static String encode(final JSONObject claims, final String secret) {
         final String encodedHeader = getCommonHeader();
         final String encodedClaims = encodeJson(claims);
 
