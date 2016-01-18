@@ -1,7 +1,6 @@
 package com.undyingideas.thor.skafottet.support.firebase.controller;
 
 import com.firebase.client.Firebase;
-import com.undyingideas.thor.skafottet.support.firebase.LobbyListener;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
 
