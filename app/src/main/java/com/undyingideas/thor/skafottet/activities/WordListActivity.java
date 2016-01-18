@@ -18,6 +18,7 @@ package com.undyingideas.thor.skafottet.activities;
 
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -45,13 +46,14 @@ import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.WordListAdapter;
 import com.undyingideas.thor.skafottet.adapters.WordTitleLocalAdapter;
 import com.undyingideas.thor.skafottet.adapters.WordTitleRemoteAdapter;
-import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
 import com.undyingideas.thor.skafottet.support.firebase.controller.WordListController;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 import com.undyingideas.thor.skafottet.support.utility.StringHelper;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
 import com.undyingideas.thor.skafottet.support.wordlist.WordListDownloader;
+
+import net.steamcrafted.loadtoast.LoadToast;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -73,10 +75,16 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_word
 public class WordListActivity extends AppCompatActivity implements
         AdapterView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener,
         StickyListHeadersListView.OnStickyHeaderOffsetChangedListener,
-        StickyListHeadersListView.OnStickyHeaderChangedListener,
-        ProgressBarInterface {
+        StickyListHeadersListView.OnStickyHeaderChangedListener {
 
     private static final String TAG = "WordListActicity";
+
+    public static final int MSG_COMPLETE = 1;
+    public static final int MSG_PROGRESS = 2;
+    public static final int MSG_ERROR = 3;
+    public static final String MSG_KEY_PROGRESS = "mkp";
+
+    public LoadToast loadToast;
 
     private WordListAdapter mAdapter;
     private DrawerLayout mDrawerLayout;
@@ -93,7 +101,7 @@ public class WordListActivity extends AppCompatActivity implements
     private WordTitleLocalAdapter adapterLocal;
     private WordTitleRemoteAdapter adapterRemote;
 
-    private Handler handler;
+    public static Handler handler;
     private Runnable refreshStopper;
 
     private int listCount; // for updating all lists.
@@ -165,7 +173,7 @@ public class WordListActivity extends AppCompatActivity implements
         stickyList.setStickyHeaderTopOffset(0);
 
         refreshStopper = new RefreshStopper();
-        handler = new Handler();
+        handler = new MessageReciever();
     }
 
     @Override
@@ -198,8 +206,8 @@ public class WordListActivity extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         final int id = item.getItemId();
-        boolean returnValue = false;
-        setProgressBar(true);
+        boolean returnValue;
+//        setProgressBar(true);
         if (id == R.id.action_word_list_add) {
                         /* show Yes/No dialog here! */
             new MaterialDialog.Builder(this)
@@ -211,7 +219,7 @@ public class WordListActivity extends AppCompatActivity implements
                     .title("Tilføj Ordliste")
                     .show();
             returnValue = true;
-            setProgressBar(false);
+//            setProgressBar(false);
         } else if (id == R.id.action_word_list_remove) {
             // TODO : Der er noget fisk med det her.. skal undersøges når der er tid (hvis :)
             final String oldListName = "'" + s_wordController.getLocalWords().get(s_wordController.getIndexLocale()).getTitle() + "' ";
@@ -222,7 +230,7 @@ public class WordListActivity extends AppCompatActivity implements
                 WindowLayout.showSnack(oldListName + "kunne ikke slettes", stickyList, false);
             }
             returnValue = true;
-            setProgressBar(false);
+//            setProgressBar(false);
         } else if (id == R.id.action_word_list_update) {
             updateCurrentList();
             returnValue = true;
@@ -283,10 +291,10 @@ public class WordListActivity extends AppCompatActivity implements
         header.setAlpha(1);
     }
 
-    @Override
-    public void setProgressBar(final boolean visible) {
-        progressBar.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
-    }
+//    @Override
+//    public void setProgressBar(final boolean visible) {
+//        progressBar.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+//    }
 
     /* ************************************************************************ */
     /* ************************************************************************ */
@@ -298,7 +306,8 @@ public class WordListActivity extends AppCompatActivity implements
      * Updates the lists, both the shown words and the drawer layouts..
      */
     public void refreshList() {
-        setProgressBar(true);
+//        setProgressBar(true);
+        ListFetcher.listHandler.post(ListFetcher.listSaver);
         adapterLocal = new WordTitleLocalAdapter(this, R.layout.word_list_nav_drawer_list, s_wordController.getLocalWords());
         adapterRemote = new WordTitleRemoteAdapter(this, R.layout.word_list_nav_drawer_list, WordListController.getKeyList());
         adapterLocal.notifyDataSetChanged();
@@ -306,7 +315,7 @@ public class WordListActivity extends AppCompatActivity implements
         toolbar.setSubtitle("Antal lister : " + s_wordController.getListCount());
         mAdapter.restore(s_wordController.getCurrentList());
         Log.d("Refresh", s_wordController.getCurrentList().toString());
-        setProgressBar(false);
+//        setProgressBar(false);
     }
 
     /**
@@ -330,9 +339,16 @@ public class WordListActivity extends AppCompatActivity implements
         Log.d("AddListFinished", "URL   : " + url);
         Log.d("AddListFinished", "Start Download : " + startDownload);
 
-        // this is where the list is initiated to be downloaded...
+        loadToast = new LoadToast(this);
+        loadToast.setProgressColor(Color.BLACK);
+        loadToast.setTextColor(Color.WHITE);
+        loadToast.setBackgroundColor(Color.RED);
+        loadToast.setTranslationY(WindowLayout.screenDimension.y / 3);
+        loadToast.show();
+
+//        // this is where the list is initiated to be downloaded...
         if (startDownload) {
-            setProgressBar(true);
+//            setProgressBar(true);
             new WordListDownloader(this, title, url).execute();
         } else {
             s_wordController.replaceLocalWordList(new WordItem(title, url, new ArrayList<String>()));
@@ -482,38 +498,23 @@ public class WordListActivity extends AppCompatActivity implements
 
     /* TEST ZONE - HANDLER <-> MESSAGE SYSTEM IN PROGRESS !!! */
 
-    public static final int MSG_ID_CLOSE_PD = 1;
-    public static final int MSG_ID_REFRESH = 2;
-    public static final int MSG_ID_OPEN_PD = 3;
-
-    public static final String MSG_KEY_PD_TITLE = "mpdti";
-    public static final String MSG_KEY_PD_TEXT = "mpdtx";
-
     private class MessageReciever extends Handler {
         private Bundle bundle;
 
         @Override
         public void handleMessage(final Message inputMessage) {
             if (inputMessage != null) {
-                if (inputMessage.what == MSG_ID_REFRESH) {
-                    bundle = inputMessage.getData();
-                    if (bundle.containsKey(MSG_KEY_PD_TITLE)) {
-                        md.setTitle(bundle.getString(MSG_KEY_PD_TITLE));
-                    }
-                    md.setContent(bundle.getString(MSG_KEY_PD_TEXT));
-                } else if (inputMessage.what == MSG_ID_CLOSE_PD) {
-                    md.dismiss();
-                } else if (inputMessage.what == MSG_ID_OPEN_PD) {
-                    bundle = inputMessage.getData();
-                    md = new MaterialDialog.Builder(getApplicationContext())
-                            .title(bundle.getString(MSG_KEY_PD_TITLE))
-                            .content(bundle.getString(MSG_KEY_PD_TEXT))
-                            .progress(true, 0)
-                            .progressIndeterminateStyle(true)
-                            .negativeText("Afbryd")
-                            .cancelable(true)
-                            .show();
+                Log.d(TAG, "Got Message!");
+                if (inputMessage.what == MSG_PROGRESS) {
+                    loadToast.setText(inputMessage.getData().getString(MSG_KEY_PROGRESS));
+                } else if (inputMessage.what == MSG_COMPLETE) {
+                    ListFetcher.listHandler.post(ListFetcher.listSaver);
+                    refreshList();
+                    loadToast.success();
+                } else if (inputMessage.what == MSG_ERROR) {
+                    loadToast.error();
                 }
+
             }
         }
     }

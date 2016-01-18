@@ -20,9 +20,7 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.undyingideas.thor.skafottet.activities.WordListActivity;
-import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 
 import org.jsoup.Jsoup;
 
@@ -46,7 +44,7 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_word
  *
  * @author rudz
  */
-public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> {
+public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
 
 //    private static final Pattern removeSpaces = Pattern.compile("  ");
     private static final Pattern removeNonDK = Pattern.compile("[^a-zæøå]");
@@ -75,7 +73,7 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
                 final String line = br.readLine();
                 if (line == null) break;
                 if (count++ % 10 == 0) {
-                    publishProgress(Integer.toString(count), "Downloader...");
+                    publishProgress("Downloader... " + Integer.toString(count));
                 }
                 sb.append(line);
             }
@@ -85,35 +83,15 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
             throw new IOException(e.getMessage());
         }
         publishProgress("Udfritter resultatet", "Vent...");
-        return Jsoup.parse(sb.toString()).text().toLowerCase();
-
-//        return removeSpaces.matcher(removeNonDK.matcher(removeTags.matcher(sb.toString()).replaceAll(" ").toLowerCase()).replaceAll(" ")).replaceAll("").trim();
-    }
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        wordListActivity = wordListActivityWeakReference.get();
-        if (wordListActivity != null) {
-            if (wordListActivity.md == null || !wordListActivity.md.isShowing()) {
-                wordListActivity.md = new MaterialDialog.Builder(wordListActivity)
-                        .title("Indhenter " + title)
-                        .content("Vent...")
-                        .progress(true, 0)
-                        .progressIndeterminateStyle(true)
-                        .negativeText("Afbryd")
-                        .cancelable(true)
-                        .cancelListener(new DownloaderOnCancelListener())
-                        .show();
-            }
-        }
+        return Jsoup.parse(sb.toString()).text();
     }
 
     @Override
     protected WordItem doInBackground(final Void... params) {
         wordListActivity = wordListActivityWeakReference.get();
         if (wordListActivity != null) {
-            publishProgress("Henter fra\n" + url, "Henter ordliste.");
+
+            publishProgress(title); //"Henter fra\n" + url, "Henter ordliste.");
             StringTokenizer stringTokenizer = null;
             try {
                 stringTokenizer = new StringTokenizer(downloadURL(), " ");
@@ -121,26 +99,27 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
                 e.printStackTrace();
             }
             if (stringTokenizer != null) {
-                publishProgress("Forbereder ordlisten..");
                 final ArrayList<String> words = new ArrayList<>();
                 int wordSize = 0;
                 while (stringTokenizer.hasMoreTokens()) {
-                    words.add(removeNonDK.matcher(stringTokenizer.nextToken()).replaceAll(""));
+                    words.add(removeNonDK.matcher(stringTokenizer.nextToken()).replaceAll("").toLowerCase());
                     wordSize = words.size() - 1;
                     if (words.get(wordSize).length() < 4 || words.get(wordSize).contains("w")) {
                         words.remove(wordSize);
                     }
-                    publishProgress(Integer.toString(wordSize), "Udfritter ord..");
+                    publishProgress("Antal ord : " + Integer.toString(wordSize));
+                    if (wordSize % 5 == 0) {
+                        publishProgress(Integer.toString(wordSize), "Udfritter ord..");
+                    }
                 }
 
                 final HashSet<String> dude = new HashSet<>(wordSize);
-                publishProgress("Fjerner duplanter og sorterer.");
+                publishProgress("Rydder op.");
                 dude.addAll(words);
                 final WordItem wordItem = new WordItem(title, url, dude.size());
                 wordItem.getWords().addAll(dude);
                 Collections.sort(wordItem.getWords());
                 s_wordController.replaceLocalWordList(wordItem);
-                ListFetcher.saveWordLists(s_wordController, wordListActivity.getApplicationContext());
                 return wordItem;
             } else {
                 wordListActivity.md.dismiss();
@@ -155,24 +134,21 @@ public class WordListDownloader extends AsyncTask<Void, CharSequence, WordItem> 
         wordListActivity = wordListActivityWeakReference.get();
         if (wordListActivity != null) {
             Log.d("Downloader", wordItem.toString());
-            if (wordListActivity.md != null && wordListActivity.md.isShowing()) {
-                wordListActivity.md.dismiss();
-            }
+            wordListActivity.loadToast.success();
             wordListActivity.refreshList();
-            wordListActivity.setProgressBar(false);
+            wordListActivity.onWindowFocusChanged(true);
+            wordListActivity.loadToast.success();
         }
-
         super.onPostExecute(wordItem);
     }
 
     @Override
-    protected void onProgressUpdate(final CharSequence... values) {
+    protected void onProgressUpdate(final String... values) {
         if (wordListActivity != null) {
             if (values.length == 2) {
-                wordListActivity.md.setContent(String.format("Indlæser ord [%s] :%s%s", values[0], System.lineSeparator(), values[1]));
+                wordListActivity.loadToast.setText(String.format("Indlæser ord [%s] :%s%s", values[0], System.lineSeparator(), values[1]));
             } else {
-                // values.length == 1
-                wordListActivity.md.setContent(values[0]);
+                wordListActivity.loadToast.setText(values[0]);
             }
         }
     }
