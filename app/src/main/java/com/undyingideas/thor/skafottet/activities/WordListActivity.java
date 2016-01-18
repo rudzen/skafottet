@@ -50,8 +50,8 @@ import com.undyingideas.thor.skafottet.support.firebase.controller.WordListContr
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 import com.undyingideas.thor.skafottet.support.utility.StringHelper;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
-import com.undyingideas.thor.skafottet.support.utility.WordListDownloader;
 import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
+import com.undyingideas.thor.skafottet.support.wordlist.WordListDownloader;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

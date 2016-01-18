@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.undyingideas.thor.skafottet.support.utility;
+package com.undyingideas.thor.skafottet.support.wordlist;
 
 import android.content.DialogInterface;
 import android.os.AsyncTask;
@@ -22,7 +22,7 @@ import android.util.Log;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.undyingideas.thor.skafottet.activities.WordListActivity;
-import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
+import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 
 import org.jsoup.Jsoup;
 

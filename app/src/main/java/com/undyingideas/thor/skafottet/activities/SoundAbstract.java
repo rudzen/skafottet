@@ -18,7 +18,6 @@ package com.undyingideas.thor.skafottet.activities;
 
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.os.Handler;
 import android.support.annotation.RawRes;
 import android.support.v7.app.AppCompatActivity;
 
@@ -35,7 +34,6 @@ import com.undyingideas.thor.skafottet.support.sfx.SoundThread;
  */
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
 public abstract class SoundAbstract extends AppCompatActivity implements Foreground.Listener {
-
 
     /* sound stuff */
     @RawRes final
@@ -57,10 +55,6 @@ public abstract class SoundAbstract extends AppCompatActivity implements Foregro
     private SoundItem[] soundItems = new SoundItem[SOUND_COUNT];
 
     private SoundThread soundThread;
-
-    private Handler soundLoaderHandler;
-    private final static String KEY_LOAD_COMPLETE = "klc";
-    private final static byte LOAD_COMPLETE = 1;
 
     protected void initSound() {
         /* set up the sound stuff */
