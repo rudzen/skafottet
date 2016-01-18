@@ -5,10 +5,10 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.firebase.client.Firebase;
-import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyDTO;
-import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyPlayerStatus;
-import com.undyingideas.thor.skafottet.support.firebase.DTO.PlayerDTO;
 import com.undyingideas.thor.skafottet.support.firebase.WordList.WordListController;
+import com.undyingideas.thor.skafottet.support.firebase.gufguf.LobbyDTO;
+import com.undyingideas.thor.skafottet.support.firebase.gufguf.LobbyPlayerStatus;
+import com.undyingideas.thor.skafottet.support.firebase.gufguf.PlayerDTO;
 import com.undyingideas.thor.skafottet.support.highscore.online.HighScoreContent;
 import com.undyingideas.thor.skafottet.support.highscore.online.HighScoreDTO;
 

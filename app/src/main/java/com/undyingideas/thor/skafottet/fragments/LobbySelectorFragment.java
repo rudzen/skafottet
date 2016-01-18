@@ -31,8 +31,8 @@ import android.widget.ListView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.MultiplayerLobbyAdapter;
 import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
-import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyDTO;
-import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyPlayerStatus;
+import com.undyingideas.thor.skafottet.support.firebase.gufguf.LobbyDTO;
+import com.undyingideas.thor.skafottet.support.firebase.gufguf.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 

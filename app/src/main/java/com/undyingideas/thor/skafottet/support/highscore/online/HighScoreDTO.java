@@ -2,8 +2,8 @@ package com.undyingideas.thor.skafottet.support.highscore.online;
 
 import android.support.annotation.NonNull;
 
-import com.undyingideas.thor.skafottet.support.firebase.DTO.LobbyPlayerStatus;
-import com.undyingideas.thor.skafottet.support.firebase.DTO.PlayerDTO;
+import com.undyingideas.thor.skafottet.support.firebase.gufguf.LobbyPlayerStatus;
+import com.undyingideas.thor.skafottet.support.firebase.gufguf.PlayerDTO;
 
 import java.util.ArrayList;
 

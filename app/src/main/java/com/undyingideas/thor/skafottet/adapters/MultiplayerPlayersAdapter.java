@@ -26,7 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.support.firebase.DTO.PlayerDTO;
+import com.undyingideas.thor.skafottet.support.firebase.gufguf.PlayerDTO;
 
 import java.util.ArrayList;
 

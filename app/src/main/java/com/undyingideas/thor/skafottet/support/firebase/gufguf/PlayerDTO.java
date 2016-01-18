@@ -1,4 +1,4 @@
-package com.undyingideas.thor.skafottet.support.firebase.DTO;
+package com.undyingideas.thor.skafottet.support.firebase.gufguf;
 
 import android.os.Parcel;
 import android.os.Parcelable;
