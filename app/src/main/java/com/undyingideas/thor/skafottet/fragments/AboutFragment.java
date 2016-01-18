@@ -1,10 +1,17 @@
 /*
- * ----------------------------------------------------------------------------
- * "THE BEER-WARE LICENSE" (Revision 42):
- * <s133235@student.dtu> wrote this file. As long as you retain this notice you
- * can do whatever you want with this stuff. If we meet some day, and you think
- * this stuff is worth it, you can buy me a beer in return - Rudy Alex Kohn
- * ----------------------------------------------------------------------------
+ * Copyright 2016 Rudy Alex Kohn
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.undyingideas.thor.skafottet.fragments;
@@ -99,10 +106,16 @@ public class AboutFragment extends Fragment {
             + SEP + SEP + "Ingen dyr led nød under udviklingen af denne app, ej heller under brugen af samme. Vi forventer en invasion af flok tapirer i nær fremtid, så det skal slås fast vi er dyrevenner!"
 
             ,
-            "\"THE BEER-WARE LICENSE\" (Revision 42):" + SEP +
-                    "  ~ <s133235@student.dtu> wrote this file. As long as you retain this notice you" + SEP +
-                    "  ~ can do whatever you want with this stuff. If we meet some day, and you think" + SEP +
-                    "  ~ this stuff is worth it, you can buy me a beer in return - Group 23"
+            "Copyright 2016 Rudy Alex Kohn" + SEP + SEP +
+            "Licensed under the Apache License, Version 2.0 (the \"License\")" + SEP +
+            "you may not use this file except in compliance with the License." + SEP +
+            "You may obtain a copy of the License at" + SEP + SEP +
+            "http://www.apache.org/licenses/LICENSE-2.0" + SEP + SEP +
+            "Unless required by applicable law or agreed to in writing, software" + SEP +
+            "distributed under the License is distributed on an \"AS IS\" BASIS," + SEP +
+            "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied." + SEP +
+            "See the License for the specific language governing permissions and" + SEP +
+            "limitations under the License."
     };
 
     @Nullable

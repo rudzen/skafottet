@@ -31,6 +31,16 @@ import com.undyingideas.thor.skafottet.views.camera.Hangman3dView;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+/**
+ * ??.??.2015, Thor
+ * - Created the first draft
+ *
+ * ??.??.2015-6, Theis
+ * - Modified the button management to be simpler
+ *
+ * ??.??.2016, rudz
+ * - Re-wrote some logic and added features.
+ */
 public class HangmanGameFragment extends Fragment {
 
     private final LinearLayout[] buttonRows = new LinearLayout[4];
