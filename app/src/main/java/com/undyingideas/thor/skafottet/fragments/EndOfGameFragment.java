@@ -36,8 +36,8 @@ import com.romainpiel.shimmer.ShimmerTextView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.interfaces.GameSoundNotifier;
-import com.undyingideas.thor.skafottet.support.firebase.gufguf.LobbyDTO;
-import com.undyingideas.thor.skafottet.support.firebase.gufguf.LobbyPlayerStatus;
+import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
+import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 

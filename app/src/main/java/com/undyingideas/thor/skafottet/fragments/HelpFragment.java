@@ -24,7 +24,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.support.firebase.gufguf.HelpFileDTO;
+import com.undyingideas.thor.skafottet.support.firebase.dto.HelpFileDTO;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 

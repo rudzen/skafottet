@@ -8,7 +8,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.MutableData;
 import com.firebase.client.Transaction;
-import com.undyingideas.thor.skafottet.support.firebase.gufguf.PlayerDTO;
+import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;
 
 import java.util.HashMap;
 
