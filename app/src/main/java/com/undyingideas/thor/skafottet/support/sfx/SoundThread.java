@@ -1,4 +1,4 @@
-package com.undyingideas.thor.skafottet.support.audio.sfx;
+package com.undyingideas.thor.skafottet.support.sfx;
 
 import android.media.SoundPool;
 

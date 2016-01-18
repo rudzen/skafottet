@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.support.audio.music.MusicPlay;
+import com.undyingideas.thor.skafottet.services.MusicPlay;
 import com.undyingideas.thor.skafottet.support.firebase.WordList.WordListController;
 import com.undyingideas.thor.skafottet.support.firebase.controller.MultiplayerController;
 import com.undyingideas.thor.skafottet.support.utility.Constant;

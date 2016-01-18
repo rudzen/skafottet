@@ -85,7 +85,7 @@
             </intent-filter>
         </service>
 
-        <service android:name=".support.audio.music.MusicPlay" >
+        <service android:name=".services.MusicPlay" >
 
         </service>
 

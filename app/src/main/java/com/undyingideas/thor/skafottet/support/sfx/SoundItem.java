@@ -1,4 +1,4 @@
-package com.undyingideas.thor.skafottet.support.audio.sfx;
+package com.undyingideas.thor.skafottet.support.sfx;
 
 /**
  * Created on 17-01-2016, 17:32.

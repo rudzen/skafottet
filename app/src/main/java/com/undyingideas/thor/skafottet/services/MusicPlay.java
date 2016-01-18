@@ -1,4 +1,4 @@
-package com.undyingideas.thor.skafottet.support.audio.music;
+package com.undyingideas.thor.skafottet.services;
 
 import android.app.Service;
 import android.content.Intent;
@@ -7,8 +7,9 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.activities.support.Foreground;
 
-public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
+public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, Foreground.Listener {
 
     public static Intent intent = new Intent();
 
@@ -16,20 +17,30 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     private static final int music = R.raw.reign_supreme;
     private static MusicPlay mInstance;
 
-    private MediaPlayer mMediaPlayer;    // The Media Player
+    private MediaPlayer mMediaPlayer;
 
     public static int lifecounter;
 
+    // interface implementation for fore/background detection
+    @Override
+    public void onBecameForeground() {
+
+    }
+
+    @Override
+    public void onBecameBackground() {
+
+    }
+
+
+
     // indicates the state our service:
     enum State {
-        Retrieving, // the MediaRetriever is retrieving music
-        Stopped, // media player is stopped and not prepared to play
-        Preparing, // media player is preparing...
-        Playing, // playback active (media player ready!). (but the media player may actually be
-        // paused in this state if we don't have audio focus. But we stay in this state
-        // so that we know we have to resume playback once we get focus back)
+        Retrieving,
+        Stopped,
+        Preparing,
+        Playing,
         Paused
-        // playback paused (media player ready!)
     }
 
     State mState = State.Retrieving;

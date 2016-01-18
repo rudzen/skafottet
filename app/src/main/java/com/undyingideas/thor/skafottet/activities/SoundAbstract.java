@@ -6,8 +6,8 @@ import android.support.annotation.RawRes;
 import android.support.v7.app.AppCompatActivity;
 
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.support.audio.sfx.SoundItem;
-import com.undyingideas.thor.skafottet.support.audio.sfx.SoundThread;
+import com.undyingideas.thor.skafottet.support.sfx.SoundItem;
+import com.undyingideas.thor.skafottet.support.sfx.SoundThread;
 
 /**
  * Created on 17-01-2016, 17:10.
