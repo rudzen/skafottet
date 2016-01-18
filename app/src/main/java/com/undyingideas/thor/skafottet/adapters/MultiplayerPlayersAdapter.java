@@ -63,9 +63,9 @@ public class MultiplayerPlayersAdapter extends ArrayAdapter<PlayerDTO> {
         if (view == null) {
             final LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
             view = inflater.inflate(layoutResourceId, parent, false);
-            viewHolder.textViewName = (TextView) view.findViewById(R.id.new_game_item);
-            viewHolder.textViewScore = (TextView) view.findViewById(R.id.new_game_description);
-            viewHolder.icon = (ImageView) view.findViewById(R.id.new_game_icon);
+            viewHolder.textViewName = (TextView) view.findViewById(R.id.multiplayer_player_title);
+            viewHolder.textViewScore = (TextView) view.findViewById(R.id.multiplayer_player_desc);
+            viewHolder.icon = (ImageView) view.findViewById(R.id.multiplayer_player_icon);
             viewHolder.icon.setImageResource(R.drawable.game_end_won);
         }
 
