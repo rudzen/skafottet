@@ -2,6 +2,7 @@ package com.undyingideas.thor.skafottet.services;
 
 import android.app.Service;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.util.Log;
@@ -9,7 +10,7 @@ import android.util.Log;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.activities.support.Foreground;
 
-public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, Foreground.Listener {
+public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
 
     public static Intent intent = new Intent();
 
@@ -19,39 +20,23 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
 
     private MediaPlayer mMediaPlayer;
 
-    public static int lifecounter;
+    private static byte STATE;
+    private static final byte STATE_RETRIEVING = 0;
+    private static final byte STATE_STOPPED = 1;
+    private static final byte STATE_PREPARING = 2;
+    private static final byte STATE_PLAYING = 3;
+    private static final byte STATE_PAUSED = 4;
 
-    // interface implementation for fore/background detection
-    @Override
-    public void onBecameForeground() {
-
-    }
-
-    @Override
-    public void onBecameBackground() {
-
-    }
-
-
-
-    // indicates the state our service:
-    enum State {
-        Retrieving,
-        Stopped,
-        Preparing,
-        Playing,
-        Paused
-    }
-
-    State mState = State.Retrieving;
+    Foreground.Listener myListener = new ForegroundListener();
 
     @Override
     public void onCreate() {
         mInstance = this;
+        Foreground.get(mInstance).addListener(myListener);
     }
 
     @Override
-    public IBinder onBind(Intent arg0) {
+    public IBinder onBind(final Intent intent) {
         return null;
     }
 
@@ -61,12 +46,11 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
         if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_PLAY)) {
             Log.d("Player", "Filter was correct");
             mMediaPlayer = MediaPlayer.create(this, music); // initialize it here
-            mMediaPlayer.setVolume(0.2f, 0.2f);
+            mMediaPlayer.setVolume(0.3f, 0.3f);
             mMediaPlayer.setOnPreparedListener(this);
             mMediaPlayer.setOnErrorListener(this);
             mMediaPlayer.setLooping(true);
-
-//            mMediaPlayer.setAudioStreamType(AudioManager.RES);
+            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             initMediaPlayer();
         } else {
             if (mMediaPlayer != null) {
@@ -81,6 +65,10 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     }
 
     private void initMediaPlayer() {
+
+
+        // currently not used!
+
 //        try {
 //
 ////            mMediaPlayer.setDataSource(mUrl);
@@ -93,7 +81,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
         } catch (IllegalStateException e) {
             e.printStackTrace();
         }
-        mState = State.Preparing;
+        STATE = STATE_PREPARING;
     }
 
     @Override
@@ -103,7 +91,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
 
     @Override
     public boolean onError(final MediaPlayer mp, final int what, final int extra) {
-        // TODO Auto-generated method stub
+        // not really used atm...
         return false;
     }
 
@@ -111,8 +99,9 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     public void onDestroy() {
         if (mMediaPlayer != null) {
             mMediaPlayer.release();
+            Foreground.get(mInstance).removeListener(myListener);
         }
-        mState = State.Retrieving;
+        STATE = STATE_RETRIEVING;
     }
 
     public MediaPlayer getMediaPlayer() {
@@ -120,25 +109,48 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     }
 
     public void pauseMusic() {
-        if (mState == State.Playing) {
+        if (STATE == STATE_PLAYING) {
             mMediaPlayer.pause();
-            mState = State.Paused;
+            STATE = STATE_PAUSED;
         }
     }
 
     public void startMusic() {
         mMediaPlayer.start();
-        mState = State.Playing;
+        STATE = STATE_PLAYING;
+
+        // this guard is not needed for now in this app.
+
 //        if (mState != State.Preparing && mState != State.Retrieving) {
 //        }
     }
 
+    public void stopMusic() {
+        if (STATE == STATE_PLAYING || STATE == STATE_PAUSED) {
+            mMediaPlayer.stop();
+            STATE = STATE_STOPPED;
+        }
+    }
+
     public boolean isPlaying() {
-        return mState == State.Playing;
+        return STATE == STATE_PLAYING;
     }
 
     public static MusicPlay getInstance() {
         return mInstance;
     }
 
+    private class ForegroundListener implements Foreground.Listener {
+        @Override
+        public void onBecameForeground() {
+            Log.d("Foreground" , "Became foreground!");
+            startMusic();
+        }
+
+        @Override
+        public void onBecameBackground() {
+            Log.d("Foreground" , "Became background!");
+            pauseMusic();
+        }
+    }
 }

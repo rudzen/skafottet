@@ -174,7 +174,7 @@ public class MenuActivity extends MenuActivityAbstract implements
     @Override
     protected void onDestroy() {
         for (int i = 0; i < buttons.length; i++) buttons[i] = null;
-        stopService(MusicPlay.intent);
+        stopService(MusicPlay.intent); // we want to stop the service here, as the acticity was destroyed
         super.onDestroy();
     }
 
