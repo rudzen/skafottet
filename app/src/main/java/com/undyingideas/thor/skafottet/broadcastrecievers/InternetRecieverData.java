@@ -118,6 +118,11 @@ public class InternetRecieverData implements Runnable {
         data = newData;
     }
 
+    public int  getData() {
+        return data;
+    }
+
+
     /**
      * Sets the keepInReciever feature
      * @param newValue If true, it will not be removed from the internet reciever.

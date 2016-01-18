@@ -237,8 +237,12 @@ public class MenuActivity extends MenuActivityAbstract implements
 
     @SuppressWarnings("unused")
     private void showHighScore() {
-        final Intent PlayerListActivity = new Intent(this, com.undyingideas.thor.skafottet.activities.PlayerListActivity.class);
-        startActivity(PlayerListActivity);
+        if (NetworkHelper.getConnectivityStatus(getApplicationContext()) > -1) {
+            final Intent PlayerListActivity = new Intent(this, com.undyingideas.thor.skafottet.activities.PlayerListActivity.class);
+            startActivity(PlayerListActivity);
+        } else {
+            showDialog("Fejl", "Ingen internetforbindelse tilstede.");
+        }
     }
 
     @SuppressWarnings("unused")
