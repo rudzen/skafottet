@@ -84,20 +84,20 @@ public class StarField extends View implements PreferenceChangeListener {
         width = w;
         height = h;
         if (p == null) {
-            p = new Paint(Paint.ANTI_ALIAS_FLAG);
+            p = new Paint();
             p.setColor(color);
-            p.setStrokeWidth(3f);
+            //p.setStrokeWidth(4f);
             //p.setShadowLayer(2f, 2f, 2f, Color.GRAY);
         }
         Log.d(TAG, "Width  : " + w);
         Log.d(TAG, "Height : " + h);
         if (!stars.isEmpty()) stars.clear();
         for (int i = 1; i <= 50; i += 5) {
-            addStar((float) Math.random() * w, (float) Math.random() * h, (float) Math.random() * 3);
-            addStar((float) Math.random() * w, (float) Math.random() * h, (float) Math.random() * 3);
-            addStar((float) Math.random() * w, (float) Math.random() * h, (float) Math.random() * 3);
-            addStar((float) Math.random() * w, (float) Math.random() * h, (float) Math.random() * 3);
-            addStar((float) Math.random() * w, (float) Math.random() * h, (float) Math.random() * 3);
+            addStar((float) Math.random() * w, (float) Math.random() * h, (float) Math.random() + 0.1f);
+            addStar((float) Math.random() * w, (float) Math.random() * h, (float) Math.random() + 0.1f);
+            addStar((float) Math.random() * w, (float) Math.random() * h, (float) Math.random() + 0.1f);
+            addStar((float) Math.random() * w, (float) Math.random() * h, (float) Math.random() + 0.1f);
+            addStar((float) Math.random() * w, (float) Math.random() * h, (float) Math.random() + 0.1f);
         }
         stars.trimToSize();
 
