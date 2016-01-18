@@ -1,4 +1,4 @@
-package com.undyingideas.thor.skafottet.support.firebase.WordList;
+package com.undyingideas.thor.skafottet.support.firebase.controller;
 
 import android.util.Log;
 

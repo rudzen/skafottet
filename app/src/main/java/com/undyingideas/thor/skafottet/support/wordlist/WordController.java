@@ -21,7 +21,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.undyingideas.thor.skafottet.support.firebase.WordList.WordListController;
+import com.undyingideas.thor.skafottet.support.firebase.controller.WordListController;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -16,7 +16,7 @@ import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.MultiplayerPlayersAdapter;
 import com.undyingideas.thor.skafottet.adapters.WordTitleLocalAdapter;
 import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
-import com.undyingideas.thor.skafottet.support.firebase.WordList.WordListController;
+import com.undyingideas.thor.skafottet.support.firebase.controller.WordListController;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;

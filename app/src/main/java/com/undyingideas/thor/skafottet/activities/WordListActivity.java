@@ -46,7 +46,7 @@ import com.undyingideas.thor.skafottet.adapters.WordListAdapter;
 import com.undyingideas.thor.skafottet.adapters.WordTitleLocalAdapter;
 import com.undyingideas.thor.skafottet.adapters.WordTitleRemoteAdapter;
 import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
-import com.undyingideas.thor.skafottet.support.firebase.WordList.WordListController;
+import com.undyingideas.thor.skafottet.support.firebase.controller.WordListController;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 import com.undyingideas.thor.skafottet.support.utility.StringHelper;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
