@@ -85,8 +85,10 @@ public class PlayerController {
 
         @Override
         public void onChildAdded(final DataSnapshot dataSnapshot, final String s) {
-            mpcref.pc.playerList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
-            mpcref.update();
+            if (dataSnapshot.exists() && dataSnapshot.hasChildren()) {
+                mpcref.pc.playerList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
+                mpcref.update();
+            }
         }
 
         @Override
@@ -109,13 +111,18 @@ public class PlayerController {
         public void onCancelled(final FirebaseError firebaseError) { }
 
         private static PlayerDTO getDTO(final DataSnapshot dataSnapshot) {
-            final PlayerDTO dto = new PlayerDTO(dataSnapshot.getKey());
-            dto.setScore(Integer.valueOf(dataSnapshot.child(SCORE).getValue().toString()));
-            dto.setPassword(dataSnapshot.child("pass").getValue().toString());
-            if (dataSnapshot.hasChild(GAME_LIST))
-                for (final DataSnapshot ds : dataSnapshot.child(GAME_LIST).getChildren())
-                    dto.getGameList().add(ds.getValue().toString());
-            return dto;
+            try {
+                final PlayerDTO dto = new PlayerDTO(dataSnapshot.getKey());
+                dto.setScore(Integer.valueOf(dataSnapshot.child(SCORE).getValue().toString()));
+                dto.setPassword(dataSnapshot.child("pass").getValue().toString());
+                if (dataSnapshot.hasChild(GAME_LIST))
+                    for (final DataSnapshot ds : dataSnapshot.child(GAME_LIST).getChildren())
+                        dto.getGameList().add(ds.getValue().toString());
+                return dto;
+            } catch (final Exception e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 

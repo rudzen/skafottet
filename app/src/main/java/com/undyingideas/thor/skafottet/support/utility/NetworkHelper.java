@@ -46,9 +46,9 @@ public final class NetworkHelper {
     public static String getConnectivityStatusString(final Context context) {
         final int conn = getConnectivityStatus(context);
         final String status;
-        if (conn == TYPE_WIFI) status = "Wifi tilgængelig";
-        else if (conn == TYPE_MOBILE) status = "Mobil data tilgængelig";
-        else status = conn == TYPE_NOT_CONNECTED ? "Ingen forbindelse til internettet." : null;
+        if (conn == TYPE_WIFI) status = "Wifi";
+        else if (conn == TYPE_MOBILE) status = "Mobil";
+        else status = conn == TYPE_NOT_CONNECTED ? "Ingen" : null;
         return status;
     }
 }

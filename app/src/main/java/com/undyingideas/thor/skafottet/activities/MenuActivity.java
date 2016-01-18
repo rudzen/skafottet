@@ -657,12 +657,12 @@ public class MenuActivity extends MenuActivityAbstract implements
     private final CharSequence NONE = "Ingen.";
     private final CharSequence NOTHING = "Intet.";
 
-    private static final String INFO_GAME = "Nuværende spil: %s";
-    private static final String INFO_GUESS = "Dine gæt: %s";
-    private static final String INFO_LEFT = "Gæt tilbage: %d";
-    private static final String INFO_LOGGED_IN = "Logged ind: %s";
-    private static final String INFO_CONNECTION = "Forbindelse: %s";
-    private static final String INFO_BATTERY = "Batteriniveau : %s";
+    private static final String INFO_GAME = "Spil: %s.";
+    private static final String INFO_GUESS = "Dine gæt: %s.";
+    private static final String INFO_LEFT = "Gæt tilbage: %d.";
+    private static final String INFO_LOGGED_IN = "Logged ind: %s.";
+    private static final String INFO_CONNECTION = "Forbindelse: %s.";
+    private static final String INFO_BATTERY = "Batteriniveau: %s";
 
     private void updateMargueeScroller() {
         info.clear();
@@ -671,7 +671,7 @@ public class MenuActivity extends MenuActivityAbstract implements
         try {
             sg = (SaveGame) s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
             if (sg.getLogic() != null) {
-                info.add(String.format(INFO_GAME, sg.getLogic().getVisibleWord()));
+                info.add(String.format(INFO_GAME, "Igang"));
                 info.add(String.format(INFO_GUESS, sg.getLogic().getUsedLetters().isEmpty() ? NONE : sg.getLogic().getUsedLetters()));
                 info.add(String.format(INFO_LEFT, 7 - sg.getLogic().getNumWrongLetters()));
             } else {
@@ -688,7 +688,7 @@ public class MenuActivity extends MenuActivityAbstract implements
             info.add("Nej");
         }
         info.add(String.format(INFO_CONNECTION, NetworkHelper.getConnectivityStatusString(getApplicationContext())));
-        info.add(String.format(INFO_BATTERY, batteryLevelRecieverData.getData() != null ? Integer.toString(batteryLevelRecieverData.getData().getLevel()) : "Ukendt"));
+        info.add(String.format(INFO_BATTERY, batteryLevelRecieverData.getData() != null ? Integer.toString(batteryLevelRecieverData.getData().getLevel()) : "Ukendt") + '%');
     }
 
     private class UpdateText implements Runnable {
@@ -709,6 +709,7 @@ public class MenuActivity extends MenuActivityAbstract implements
     public void onInternetStatusChanged(final int connectionState) {
 //        updateMargueeScroller(connectionState);
         if (connectionState > -1) {
+
             // we have a connection now ! enable the firebase controller
 
         } else {

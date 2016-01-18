@@ -114,28 +114,32 @@ public class MultiplayerController {
         final ArrayList<LobbyPlayerStatus> gameStatus = new ArrayList<>();
 
         for (final PlayerDTO player : players) {
-            //Make a HighScoreDTO
-            final HighScoreDTO highScoreDTO = new HighScoreDTO(player);
+            try {
+                //Make a HighScoreDTO
+                final HighScoreDTO highScoreDTO = new HighScoreDTO(player);
 
-            //Clear the list
-            gameStatus.clear();
+                //Clear the list
+                gameStatus.clear();
 
-            //Look at all lobbys where the player has a key to
-            for (final String gamekey : player.getGameList()) {
-                //I get the correct lobby status in the lobby with the key
-                //Make sure not to get null into loop
-                if (!lc.lobbyList.isEmpty()) {
-                    for (final LobbyPlayerStatus status : lc.lobbyList.get(gamekey).getPlayerList()) {
-                        //I then look at all playerStatus in the lobby and compare it with the name im looking for.
-                        if (status.getName().equals(player.getName())) {
-                            gameStatus.add(status);
+                //Look at all lobbys where the player has a key to
+                for (final String gamekey : player.getGameList()) {
+                    //I get the correct lobby status in the lobby with the key
+                    //Make sure not to get null into loop
+                    if (!lc.lobbyList.isEmpty()) {
+                        for (final LobbyPlayerStatus status : lc.lobbyList.get(gamekey).getPlayerList()) {
+                            //I then look at all playerStatus in the lobby and compare it with the name im looking for.
+                            if (status.getName().equals(player.getName())) {
+                                gameStatus.add(status);
+                            }
                         }
                     }
-                }
 
+                }
+                highScoreDTO.setLobbyList(gameStatus);
+                playerHighScoreList.add(highScoreDTO);
+            } catch (final Exception e) {
+                e.printStackTrace();
             }
-            highScoreDTO.setLobbyList(gameStatus);
-            playerHighScoreList.add(highScoreDTO);
         }
 
         //Now we have a arraylist of playerHighScoreDTOs with the matching name and lobbystatus.
