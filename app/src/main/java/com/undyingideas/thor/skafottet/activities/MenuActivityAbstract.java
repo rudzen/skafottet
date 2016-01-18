@@ -58,7 +58,6 @@ public abstract class MenuActivityAbstract extends SoundAbstract implements Batt
     /* star field stuff */
     @Nullable
     StarField sf;
-//    private UpdateStarfield updateStarfield;
 
     /* battery stuff */
     IntentFilter batteryLevelFilter;
@@ -88,8 +87,6 @@ public abstract class MenuActivityAbstract extends SoundAbstract implements Batt
         sf.init(WindowLayout.screenDimension.x, WindowLayout.screenDimension.y, Color.RED);
 
         registerSensor();
-//        registerBatteryReciever();
-
     }
 
     @Override
@@ -104,7 +101,6 @@ public abstract class MenuActivityAbstract extends SoundAbstract implements Batt
         } else {
             sf.setRun(true);
         }
-//        menuHandler.post(updateStarfield);
         if (batteryLevelRecieverData == null) {
             batteryLevelRecieverData = new BatteryLevelRecieverData(this);
         }
@@ -112,14 +108,17 @@ public abstract class MenuActivityAbstract extends SoundAbstract implements Batt
     }
 
     @Override
+    protected void onPause() {
+        unregisterBatteryReciever();
+        if (sf != null) sf.setRun(false);
+        super.onPause();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
-        if (sf != null) sf.setRun(false);
         menuHandler.removeCallbacksAndMessages(null);
         if (mSensor != null && mSensorManager != null) mSensorManager.unregisterListener(sensorListener, mSensor);
-        if (batteryLevelReciever != null) {
-            unregisterBatteryReciever();
-        }
     }
 
     @Override

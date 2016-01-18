@@ -651,9 +651,6 @@ public class MenuActivity extends MenuActivityAbstract implements
         showAll();
     }
 
-
-
-
     /* buttom text view configuration */
 
     private int pos;
@@ -708,19 +705,14 @@ public class MenuActivity extends MenuActivityAbstract implements
         }
     }
 
-
     @Override
     public void onInternetStatusChanged(final int connectionState) {
 //        updateMargueeScroller(connectionState);
         if (connectionState > -1) {
-
             // we have a connection now ! enable the firebase controller
-
         } else {
             // kill the firebase controller
-
         }
-
     }
 
     @Override
@@ -728,5 +720,4 @@ public class MenuActivity extends MenuActivityAbstract implements
         // string version... could be displayed along the way..
         WindowLayout.showSnack(connectionState, sf, true);
     }
-
 }
