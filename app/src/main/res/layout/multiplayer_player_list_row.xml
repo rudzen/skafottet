@@ -10,33 +10,37 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
               android:padding="10dp"
-              android:weightSum="5">
+              android:weightSum="5"
+              android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/new_game_item"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:textColor="#ffffff"
-        android:textSize="25sp"
-        />
+        android:layout_weight="4"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/new_game_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#c1bfbe"
-        android:textSize="15sp"/>
+        <TextView
+            android:id="@+id/multiplayer_player_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="25sp"/>
+
+        <TextView
+            android:id="@+id/multiplayer_player_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#c1bfbe"
+            android:textSize="15sp"/>
+    </LinearLayout>
 
     <ImageView
-        android:id="@+id/new_game_icon"
+        android:id="@+id/multiplayer_player_icon"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="48dp"
         android:layout_weight="1"/>
-
 </LinearLayout>
