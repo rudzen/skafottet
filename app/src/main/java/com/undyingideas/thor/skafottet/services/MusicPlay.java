@@ -93,7 +93,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
 //        }
 
         try {
-//            mMediaPlayer.prepareAsync(); // prepare async to not block main thread
+            mMediaPlayer.prepareAsync(); // prepare async to not block main thread
         } catch (final IllegalStateException e) {
             e.printStackTrace();
         }
