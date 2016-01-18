@@ -43,9 +43,22 @@ public class LobbyListener implements ChildEventListener {
 
     @Override
     public void onChildChanged(final DataSnapshot dataSnapshot, final String s) {
+
         if (mpc.lc != null) {
-            mpc.lc.lobbyList.remove(dataSnapshot.getRef().getParent().getKey());
-            mpc.lc.lobbyList.put(dataSnapshot.getRef().getParent().getKey(), getDTO(dataSnapshot));
+            final LobbyDTO dto;
+            final String key = dataSnapshot.getRef().getParent().getKey();
+            mpc.lc.lobbyList.remove(key);
+            if (! mpc.lc.lobbyList.containsKey(key)){
+                dto = new LobbyDTO();
+                mpc.lc.lobbyList.put(key, dto);
+            } else {
+                dto = mpc.lc.lobbyList.get(key);
+            }
+
+            if ("word".equals(dataSnapshot.getKey())) dto.setWord(dataSnapshot.getValue(String.class));
+            else dto.put(dataSnapshot.getKey(),new LobbyPlayerStatus(dataSnapshot.getKey(), dataSnapshot.getValue(Integer.class)));
+
+            Log.d("firebase lobbylis", key + " " + dto.toString() + "   " + mpc.lc.lobbyList.get(key).toString());
         }
         mpc.lobbyUpdate();
     }
