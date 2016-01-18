@@ -147,7 +147,6 @@ public class SplashActivity extends AppCompatActivity {
 //                    ListFetcher.saveWordLists(s_wordController, loadingActivity.getApplicationContext());
             }
 
-
             try {
 //                TinyDB.checkForNullKey(Constant.KEY_WORDS_FIREBASE);
                 WordListController.wordList = (HashMap<String, WordItem>) s_preferences.getObject(Constant.KEY_WORDS_FIREBASE, HashMap.class);

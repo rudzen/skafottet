@@ -565,6 +565,7 @@ public class MenuActivity extends MenuActivityAbstract implements
         public void onClick(final View v) {
             final MenuActivity menuActivity = menuActivityWeakReference.get();
             if (menuActivity != null) {
+                menuActivity.sf.setRun(false);
                 menuActivity.md = new MaterialDialog.Builder(menuActivity)
                         .customView(R.layout.login, false)
                         .cancelable(true)
@@ -627,7 +628,7 @@ public class MenuActivity extends MenuActivityAbstract implements
                     menuActivity.callMethod("showAll");
                 }
                 dialog.dismiss();
-                menuActivity.onWindowFocusChanged(true);
+                menuActivity.sf.setRun(true);
             }
         }
     }
@@ -713,8 +714,13 @@ public class MenuActivity extends MenuActivityAbstract implements
     public void onInternetStatusChanged(final int connectionState) {
 //        updateMargueeScroller(connectionState);
         if (connectionState > -1) {
+//            GameUtility.firebase = ;
+//            GameUtility.mpc = null;
+
             // we have a connection now ! enable the firebase controller
         } else {
+//            GameUtility.firebase = null;
+//            GameUtility.mpc = null;
             // kill the firebase controller
         }
     }

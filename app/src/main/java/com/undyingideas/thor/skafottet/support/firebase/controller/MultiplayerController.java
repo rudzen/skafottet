@@ -54,7 +54,7 @@ public class MultiplayerController {
     public void setRunnable(final Runnable r) {
         if(updateHandler == null) updateHandler = new Handler();
         playerUpdater = r;
-        update();
+        updateHandler.post(r);
     }
 
     public void createLobby(final LobbyDTO dto) {

@@ -49,7 +49,6 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable, P
         setContentView(R.layout.activity_player_list);
 
         GameUtility.mpc.setRunnable(this);
-        GameUtility.mpc.pc.createPlayer("Thor", "Kuss3");
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
