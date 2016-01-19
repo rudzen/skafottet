@@ -17,12 +17,10 @@
 package com.undyingideas.thor.skafottet.activities;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.fragments.AboutFragment;
@@ -44,8 +42,6 @@ import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import java.util.ArrayList;
 import java.util.Set;
 
-import asia.ivity.android.marqueeview.MarqueeView;
-
 /**
  * The main game activity.
  * It has the responsibility of showing the game itself and the end game display to the user.
@@ -64,12 +60,15 @@ public class GameActivity extends SoundAbstract implements
     private static String s_possibleWord;
     private Fragment currentFragment;
 
-    private ProgressBar topProgressBar;
+    private HangmanGameFragment hangmanGameFragment;
+    private EndOfGameFragment endOfGameFragment;
 
-    private MarqueeView mv;
-    private TextView tv;
-    private Handler handler;
-    private Runnable mvReset;
+//    private ProgressBar topProgressBar;
+//
+//    private MarqueeView mv;
+//    private TextView tv;
+//    private Handler handler;
+//    private Runnable mvReset;
 
     public static String getS_possibleWord() {
         return s_possibleWord;
@@ -91,12 +90,12 @@ public class GameActivity extends SoundAbstract implements
 
         initSound();
 
-//        final Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(tb);
-//        if (getSupportActionBar() != null) {
-//            tb.setLogo(R.drawable.icon);
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        }
+        final Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(tb);
+        if (getSupportActionBar() != null) {
+            tb.setLogo(R.drawable.icon);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         /* configure the custom marquee view linked with a textview */
 //        mvReset = new StartMarquee();
@@ -199,12 +198,12 @@ public class GameActivity extends SoundAbstract implements
         playSound(sound);
     }
 
-    private class StartMarquee implements Runnable {
-        @Override
-        public void run() {
-            mv.startMarquee();
-        }
-    }
+//    private class StartMarquee implements Runnable {
+//        @Override
+//        public void run() {
+//            mv.startMarquee();
+//        }
+//    }
 
     @Override
     public void onPlayerClicked(final String playerName) {

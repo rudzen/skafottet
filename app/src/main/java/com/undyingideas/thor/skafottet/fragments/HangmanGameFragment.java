@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -134,6 +135,10 @@ public class HangmanGameFragment extends Fragment {
             readFromBundle(getArguments());
         }
 
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new OnBackKeyListener());
+
         applySaveGameStatus();
 
         // testing :
@@ -183,6 +188,7 @@ public class HangmanGameFragment extends Fragment {
 
     @Override
     public void onResume() {
+
         super.onResume();
         if (shimmerWord == null) {
             shimmerWord = new Shimmer();
@@ -354,5 +360,16 @@ public class HangmanGameFragment extends Fragment {
 
         @Override
         public void onAnimationRepeat(final Animator animation) { }
+    }
+
+    private class OnBackKeyListener implements View.OnKeyListener {
+        @Override
+        public boolean onKey(final View v, final int keyCode, final KeyEvent event) {
+            if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                getActivity().finish();
+                return true;
+            }
+            return false;
+        }
     }
 }

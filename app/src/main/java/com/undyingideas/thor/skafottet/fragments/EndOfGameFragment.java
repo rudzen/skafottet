@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -155,6 +156,11 @@ public class EndOfGameFragment extends Fragment {
 
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new OnBackKeyListener());
+
         if (shimmerTop == null) {
             setShimmer();
         }
@@ -358,6 +364,16 @@ public class EndOfGameFragment extends Fragment {
         public void onAnimationRepeat(final Animator animation) { }
     }
 
+    private class OnBackKeyListener implements View.OnKeyListener {
+        @Override
+        public boolean onKey(final View v, final int keyCode, final KeyEvent event) {
+            if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                getActivity().finish();
+                return true;
+            }
+            return false;
+        }
+    }
 //    private class StartMarquee implements Runnable {
 //        @Override
 //        public void run() {
