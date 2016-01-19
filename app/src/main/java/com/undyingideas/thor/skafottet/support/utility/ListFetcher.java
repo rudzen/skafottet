@@ -120,7 +120,7 @@ public final class ListFetcher {
         public void run() {
             final Context context = contextWeakReference.get();
             if (context != null) {
-                saveWordLists(GameUtility.s_wordController, context);
+                Log.d("ListSaver", String.valueOf(saveWordLists(GameUtility.s_wordController, context)));
             }
         }
     }

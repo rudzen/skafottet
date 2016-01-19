@@ -24,12 +24,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
 import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.firebase.client.Firebase;
+import com.nineoldandroids.animation.Animator;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.services.MusicPlay;
 import com.undyingideas.thor.skafottet.support.firebase.controller.MultiplayerController;
@@ -100,8 +102,11 @@ public class SplashActivity extends AppCompatActivity {
 
     private void endSplash() {
         logo.setAnimation(null);
-        animation = AnimationUtils.loadAnimation(this, R.anim.step_number_back);
-        logo.startAnimation(animation);
+        // just use YoYo for the nice rotate out :-)
+        YoYo.with(Techniques.FlipOutY).duration(400).withListener(new SplashEndAnimatorListener(this)).playOn(logo);
+
+//        animation = AnimationUtils.loadAnimation(this, R.anim.step_number_back);
+//        logo.startAnimation(animation);
 
 //        animation = AnimationUtils.loadAnimation(this, R.anim.logo_animation_back);
 //        logo.startAnimation(animation);
@@ -112,7 +117,7 @@ public class SplashActivity extends AppCompatActivity {
         animation = AnimationUtils.loadAnimation(this, R.anim.pro_animation_back);
         title2.startAnimation(animation);
 
-        animation.setAnimationListener(new MyEndAnimationListener(this));
+//        animation.setAnimationListener(new SplashEndAnimationListener(this));
     }
 
     private class LoadHandler extends Handler {
@@ -147,17 +152,22 @@ public class SplashActivity extends AppCompatActivity {
             // only for testing stuff!!!!
 //            s_preferences.clear();
 //            Log.d(TAG, "Wordlist deleted : " + ListFetcher.deleteList(getApplicationContext()));
+            ListFetcher.listHandler = new Handler();
+            ListFetcher.listSaver = new ListFetcher.ListSaver(getApplicationContext());
+
+
+
 
                 /* begin loading wordlist
                 * 1) Check if any existing word list exist already
                 * 2) If so, load the list and continue to next list loading.
                 * 3) If not, reset the list to default build in list.
                 */
-            s_wordController = ListFetcher.loadWordList(getApplicationContext());
+            s_wordController = ListFetcher.loadWordList(getBaseContext());
             if (s_wordController == null || s_wordController.getCurrentList() == null) {
                 s_wordController = new WordController(getResources().getStringArray(R.array.lande));
                 ListFetcher.listHandler.post(ListFetcher.listSaver);
-//                    ListFetcher.saveWordLists(s_wordController, loadingActivity.getApplicationContext());
+//                 ListFetcher.saveWordLists(s_wordController, getApplicationContext());
             }
 
             try {
@@ -199,31 +209,34 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
-    private class MyEndAnimationListener implements AnimationListener {
+    private static class SplashEndAnimatorListener implements Animator.AnimatorListener {
 
         private final WeakReference<SplashActivity> splashActivityWeakReference;
 
-        public MyEndAnimationListener(final SplashActivity splashActivity) {
+        public SplashEndAnimatorListener(final SplashActivity splashActivity) {
             splashActivityWeakReference = new WeakReference<>(splashActivity);
         }
 
         @Override
-        public void onAnimationEnd(final Animation arg0) {
+        public void onAnimationStart(final Animator animation) { }
+
+        @Override
+        public void onAnimationEnd(final Animator animation) {
             final SplashActivity splashActivity = splashActivityWeakReference.get();
             if (splashActivity != null) {
                 final Intent intent = new Intent(splashActivity, MenuActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 splashActivity.overridePendingTransition(R.anim.holder_top_fast, R.anim.holder_bottom_back_fast);
                 splashActivity.startActivity(intent);
-                finish();
+                splashActivity.finish();
             }
         }
 
         @Override
-        public void onAnimationRepeat(final Animation arg0) { }
+        public void onAnimationCancel(final Animator animation) { }
 
         @Override
-        public void onAnimationStart(final Animation arg0) { }
+        public void onAnimationRepeat(final Animator animation) { }
     }
 
     private class EndSplash implements Runnable {

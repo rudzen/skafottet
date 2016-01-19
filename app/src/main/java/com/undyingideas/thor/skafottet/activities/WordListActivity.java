@@ -21,7 +21,6 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -78,11 +77,6 @@ public class WordListActivity extends AppCompatActivity implements
         StickyListHeadersListView.OnStickyHeaderChangedListener {
 
     private static final String TAG = "WordListActicity";
-
-    public static final int MSG_COMPLETE = 1;
-    public static final int MSG_PROGRESS = 2;
-    public static final int MSG_ERROR = 3;
-    public static final String MSG_KEY_PROGRESS = "mkp";
 
     public LoadToast loadToast;
 
@@ -173,7 +167,7 @@ public class WordListActivity extends AppCompatActivity implements
         stickyList.setStickyHeaderTopOffset(0);
 
         refreshStopper = new RefreshStopper();
-        handler = new MessageReciever();
+        handler = new Handler();
     }
 
     @Override
@@ -324,8 +318,8 @@ public class WordListActivity extends AppCompatActivity implements
      * Updates the lists, both the shown words and the drawer layouts..
      */
     public void refreshList() {
-//        setProgressBar(true);
         ListFetcher.listHandler.post(ListFetcher.listSaver);
+//        ListFetcher.saveWordLists(s_wordController, this);
         adapterLocal = new WordTitleLocalAdapter(this, R.layout.word_list_nav_drawer_list, s_wordController.getLocalWords());
         adapterRemote = new WordTitleRemoteAdapter(this, R.layout.word_list_nav_drawer_list, WordListController.getKeyList());
         adapterLocal.notifyDataSetChanged();
@@ -333,7 +327,6 @@ public class WordListActivity extends AppCompatActivity implements
         toolbar.setSubtitle("Antal lister : " + s_wordController.getListCount());
         mAdapter.restore(s_wordController.getCurrentList());
         Log.d("Refresh", s_wordController.getCurrentList().toString());
-//        setProgressBar(false);
     }
 
     /**
@@ -370,6 +363,7 @@ public class WordListActivity extends AppCompatActivity implements
             new WordListDownloader(this, title, url).execute();
         } else {
             s_wordController.replaceLocalWordList(new WordItem(title, url, new ArrayList<String>()));
+//            ListFetcher.saveWordLists(s_wordController, getApplicationContext());
             ListFetcher.listHandler.post(ListFetcher.listSaver);
         }
     }
@@ -511,41 +505,4 @@ public class WordListActivity extends AppCompatActivity implements
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
     }
-
-
-
-    /* TEST ZONE - HANDLER <-> MESSAGE SYSTEM IN PROGRESS !!! */
-
-    private class MessageReciever extends Handler {
-        private Bundle bundle;
-
-        @Override
-        public void handleMessage(final Message inputMessage) {
-            if (inputMessage != null) {
-                Log.d(TAG, "Got Message!");
-                if (inputMessage.what == MSG_PROGRESS) {
-                    loadToast.setText(inputMessage.getData().getString(MSG_KEY_PROGRESS));
-                } else if (inputMessage.what == MSG_COMPLETE) {
-                    ListFetcher.listHandler.post(ListFetcher.listSaver);
-                    refreshList();
-                    loadToast.success();
-                } else if (inputMessage.what == MSG_ERROR) {
-                    loadToast.error();
-                }
-
-            }
-        }
-    }
-
-    private class WordUpdater implements Runnable {
-
-        private Bundle bundle;
-
-        @Override
-        public void run() {
-            final Message msg = handler.obtainMessage();
-        }
-    }
-
-
 }

@@ -102,6 +102,8 @@ public abstract class SoundAbstract extends AppCompatActivity implements Foregro
 
     @Override
     public void onBecameBackground() {
-        soundThread.interrupt();
+        if (soundThread != null) {
+            soundThread.interrupt();
+        }
     }
 }

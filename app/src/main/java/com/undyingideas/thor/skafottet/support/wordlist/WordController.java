@@ -25,7 +25,6 @@ import com.undyingideas.thor.skafottet.support.firebase.controller.WordListContr
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Random;
@@ -61,7 +60,7 @@ public final class WordController implements Serializable, Parcelable {
 
     private void reset() {
         localWords = new ArrayList<>();
-        wordItemComparator = new WordItemComparator();
+//        wordItemComparator = new WordItemComparator();
         indexLocale = 0;
         isLocal = true;
     }
@@ -146,25 +145,25 @@ public final class WordController implements Serializable, Parcelable {
         return false;
     }
 
-    /**
-     * Sorts the current local lists, the build-in default list is not sorted, and thus will always be the first.
-     */
-    public void sortLocalLists() {
-        Collections.sort(localWords, wordItemComparator);
-    }
-
-    /**
-     *  comparator for sorting the local list */
-    private static class WordItemComparator implements Comparator<WordItem> {
-        @Override
-        public int compare(final WordItem lhs, final WordItem rhs) {
-            /* avoid sorting the local list(s) */
-            if (!Objects.equals(lhs.getUrl(), "Lokal") && !Objects.equals(rhs.getUrl(), "Lokal")) {
-                return lhs.getTitle().compareToIgnoreCase(rhs.getTitle());
-            }
-            return 0;
-        }
-    }
+//    /**
+//     * Sorts the current local lists, the build-in default list is not sorted, and thus will always be the first.
+//     */
+//    public void sortLocalLists() {
+//        Collections.sort(localWords, wordItemComparator);
+//    }
+//
+//    /**
+//     *  comparator for sorting the local list */
+//    private static class WordItemComparator implements Comparator<WordItem> {
+//        @Override
+//        public int compare(final WordItem lhs, final WordItem rhs) {
+//            /* avoid sorting the local list(s) */
+//            if (!Objects.equals(lhs.getUrl(), "Lokal") && !Objects.equals(rhs.getUrl(), "Lokal")) {
+//                return lhs.getTitle().compareToIgnoreCase(rhs.getTitle());
+//            }
+//            return 0;
+//        }
+//    }
 
     /* getters and setters */
 

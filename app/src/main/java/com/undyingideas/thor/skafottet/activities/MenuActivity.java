@@ -326,7 +326,8 @@ public class MenuActivity extends MenuActivityAbstract implements
     private void callMethod(final String method_name) {
         if (FINISH.equals(method_name)) {
             ListFetcher.listHandler.post(ListFetcher.listSaver);
-            overridePendingTransition(0, 0);
+//            ListFetcher.saveWordLists(s_wordController, getApplicationContext());
+//            overridePendingTransition(0, 0);
             finish();
         } else {
             try {

@@ -72,9 +72,9 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
             while (true) {
                 final String line = br.readLine();
                 if (line == null) break;
-                if (count++ % 10 == 0) {
-                    publishProgress("Downloader... " + Integer.toString(count));
-                }
+//                if (count++ % 10 == 0) {
+//                    publishProgress("Downloader... " + Integer.toString(count));
+//                }
                 sb.append(line);
             }
         } catch (final Exception e) {
@@ -94,6 +94,11 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
             publishProgress(title); //"Henter fra\n" + url, "Henter ordliste.");
             StringTokenizer stringTokenizer = null;
             try {
+
+
+
+
+
                 stringTokenizer = new StringTokenizer(downloadURL(), " ");
             } catch (final IOException e) {
                 e.printStackTrace();
@@ -120,6 +125,7 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
                 wordItem.getWords().addAll(dude);
                 Collections.sort(wordItem.getWords());
                 s_wordController.replaceLocalWordList(wordItem);
+//                ListFetcher.saveWordLists(s_wordController, wordListActivity);
                 return wordItem;
             } else {
                 wordListActivity.md.dismiss();
