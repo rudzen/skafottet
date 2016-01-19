@@ -97,6 +97,12 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void finish() {
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        super.finish();
+    }
+
     private void flyIn() {
         animation = AnimationUtils.loadAnimation(this, R.anim.app_name_animation);
         title1.startAnimation(animation);
@@ -108,7 +114,7 @@ public class SplashActivity extends AppCompatActivity {
     private void endSplash() {
         logo.setAnimation(null);
         // just use YoYo for the nice animation :-)
-        YoYo.with(Techniques.ZoomIn).duration(400).withListener(new SplashEndAnimatorListener(this)).playOn(logo);
+        YoYo.with(Techniques.Pulse).duration(700).withListener(new SplashEndAnimatorListener(this)).playOn(logo);
 
         animation = AnimationUtils.loadAnimation(this, R.anim.app_name_animation_back);
         title1.startAnimation(animation);
@@ -232,7 +238,6 @@ public class SplashActivity extends AppCompatActivity {
             if (splashActivity != null) {
                 final Intent intent = new Intent(splashActivity, MenuActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                splashActivity.overridePendingTransition(R.anim.step_number_fader, R.anim.step_number_fader);
                 splashActivity.startActivity(intent);
                 splashActivity.finish();
             }
