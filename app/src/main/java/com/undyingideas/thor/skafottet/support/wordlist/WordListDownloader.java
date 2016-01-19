@@ -16,7 +16,6 @@
 
 package com.undyingideas.thor.skafottet.support.wordlist;
 
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -78,7 +77,6 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
             } catch (final InterruptedException e) {
                 e.printStackTrace();
             }
-
             final StringBuilder sb = new StringBuilder(500);
             int count = 1;
             try (final BufferedReader br = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
@@ -99,38 +97,33 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
             sb.trimToSize();
             final StringTokenizer stringTokenizer = new StringTokenizer(Jsoup.parse(sb.toString()).text(), " ");
             sb.setLength(0);
-            if (stringTokenizer != null) {
-                final ArrayList<String> words = new ArrayList<>();
-                int wordSize = 0;
-                publishProgress("Diskripanterer..");
-                try {
-                    Thread.sleep(300);
-                } catch (final InterruptedException e) {
-                    e.printStackTrace();
-                }
-                while (stringTokenizer.hasMoreTokens()) {
-                    words.add(removeNonDK.matcher(stringTokenizer.nextToken().toLowerCase()).replaceAll(""));
-                    wordSize = words.size() - 1;
-                    if (words.get(wordSize).length() < 4 || words.get(wordSize).contains("w")) {
-                        words.remove(wordSize);
-                    }
-                    if (wordSize % 25 == 0) {
-                        publishProgress(Integer.toString(wordSize));
-                    }
-                }
-
-                final HashSet<String> dude = new HashSet<>(wordSize);
-                publishProgress("Rydder op.");
-                dude.addAll(words);
-                final WordItem wordItem = new WordItem(title, url, dude.size());
-                wordItem.getWords().addAll(dude);
-                Collections.sort(wordItem.getWords());
-                s_wordController.replaceLocalWordList(wordItem);
-                return wordItem;
-            } else {
-                wordListActivity.loadToast.error();
-                cancel(true);
+            final ArrayList<String> words = new ArrayList<>();
+            int wordSize = 0;
+            publishProgress("Diskripanterer..");
+            try {
+                Thread.sleep(300);
+            } catch (final InterruptedException e) {
+                e.printStackTrace();
             }
+            while (stringTokenizer.hasMoreTokens()) {
+                words.add(removeNonDK.matcher(stringTokenizer.nextToken().toLowerCase()).replaceAll(""));
+                wordSize = words.size() - 1;
+                if (words.get(wordSize).length() < 4 || words.get(wordSize).contains("w")) {
+                    words.remove(wordSize);
+                }
+                if (wordSize % 25 == 0) {
+                    publishProgress(Integer.toString(wordSize));
+                }
+            }
+
+            final HashSet<String> dude = new HashSet<>(wordSize);
+            publishProgress("Rydder op.");
+            dude.addAll(words);
+            final WordItem wordItem = new WordItem(title, url, dude.size());
+            wordItem.getWords().addAll(dude);
+            Collections.sort(wordItem.getWords());
+            s_wordController.replaceLocalWordList(wordItem);
+            return wordItem;
         }
         return null;
     }
@@ -157,28 +150,6 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
     protected void onProgressUpdate(final String... values) {
         if (wordListActivity != null) {
             wordListActivity.loadToast.setText(values[0]);
-        }
-//        if (wordListActivity != null) {
-//            if (values.length == 2) {
-//                wordListActivity.loadToast.setText(String.format("Indlæser ord [%s] :%s%s", values[0], System.lineSeparator(), values[1]));
-//            } else {
-//                wordListActivity.loadToast.setText(values[0]);
-//            }
-//        }
-    }
-
-    @Override
-    protected void onCancelled() {
-//        final AppCompatActivity appCompatActivity = wordListActivityWeakReference.get();
-//        if (appCompatActivity != null && pd != null && pd.isShowing()) pd.dismiss();
-//        Toast.makeText(appCompatActivity, "Download afbrudt.", Toast.LENGTH_SHORT).show();
-//        super.onCancelled();
-    }
-
-    private static class DownloaderOnCancelListener implements DialogInterface.OnCancelListener {
-        @Override
-        public void onCancel(final DialogInterface dialog) {
-//            pd.dismiss();
         }
     }
 }
