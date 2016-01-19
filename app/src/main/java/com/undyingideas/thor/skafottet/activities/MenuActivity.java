@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -167,6 +166,7 @@ public class MenuActivity extends MenuActivityAbstract implements
         }
         onInternetStatusChanged(NetworkHelper.getConnectivityStatus(getApplicationContext()));
         InternetReciever.addObserver(connectionObserver);
+        updateMargueeScroller();
     }
 
     @Override
@@ -217,7 +217,7 @@ public class MenuActivity extends MenuActivityAbstract implements
 
     private void endMenu(final String method_name, final ImageView clickedImageView) {
         if (click_status) {
-            clickedImageView.setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+            GameUtility.writeNullGame();
             click_status = false;
             for (final ImageView iv : buttons) if (iv != clickedImageView) YoYo.with(Techniques.FadeOut).duration(100).playOn(iv);
             YoYo.with(Techniques.RotateOut).duration(500).withListener(new ExitAnimatorHandler(this, method_name)).playOn(clickedImageView);
@@ -672,7 +672,7 @@ public class MenuActivity extends MenuActivityAbstract implements
         final SaveGame sg;
         try {
             sg = (SaveGame) s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
-            if (sg.getLogic() != null) {
+            if (sg.getLogic() != null && !sg.getLogic().isGameOver()) {
                 info.add(String.format(INFO_GAME, "Igang"));
                 info.add(String.format(INFO_GUESS, sg.getLogic().getUsedLetters().isEmpty() ? NONE : sg.getLogic().getUsedLetters()));
                 info.add(String.format(INFO_LEFT, 7 - sg.getLogic().getNumWrongLetters()));

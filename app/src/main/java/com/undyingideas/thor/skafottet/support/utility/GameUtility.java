@@ -27,6 +27,7 @@ import android.support.annotation.DrawableRes;
 
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.support.firebase.controller.MultiplayerController;
 import com.undyingideas.thor.skafottet.support.wordlist.WordController;
 
@@ -94,6 +95,11 @@ public abstract class GameUtility {
         canvas.drawBitmap(bm, 0, 0, paint);
 
         return ret;
+    }
+
+    @SuppressWarnings("AnonymousInnerClass")
+    public static void writeNullGame() {
+        s_preferences.putObject(Constant.KEY_SAVE_GAME, new SaveGame(null, false, null));
     }
 
 }

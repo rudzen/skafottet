@@ -84,7 +84,6 @@ public class HangmanGameFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         onCreate(savedInstanceState);
         final View root = inflater.inflate(R.layout.fragment_hangman_game, container, false);
-        GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, new SaveGame(null, false, null)); // hmmm
 
         noose = (Hangman3dView) root.findViewById(R.id.imageView);
 
@@ -310,7 +309,6 @@ public class HangmanGameFragment extends Fragment {
             } else {
                 gameSoundNotifier.playGameSound(GameUtility.SFX_LOST);
             }
-            GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, new SaveGame(null, false, null)); // hmmm
             startEndgame();
         } else {
             updateScreen();
