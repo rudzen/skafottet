@@ -219,18 +219,36 @@ public class WordListActivity extends AppCompatActivity implements
                     .title("Tilføj Ordliste")
                     .show();
             returnValue = true;
-//            setProgressBar(false);
         } else if (id == R.id.action_word_list_remove) {
-            // TODO : Der er noget fisk med det her.. skal undersøges når der er tid (hvis :)
-            final String oldListName = "'" + s_wordController.getLocalWords().get(s_wordController.getIndexLocale()).getTitle() + "' ";
+
+            final StringBuilder oldListName = new StringBuilder(50);
+            oldListName.append('\'');
+            if (s_wordController.isLocal()) {
+                oldListName.append(s_wordController.getLocalWords().get(s_wordController.getIndexLocale()).getTitle());
+            } else {
+                oldListName.append(s_wordController.getIndexRemote());
+            }
+
+            oldListName.append("' ");
+
             if (s_wordController.removeCurrentList()) {
                 refreshList();
-                WindowLayout.showSnack(oldListName + "er slettet, liste sat til " + s_wordController.getLocalWords().get(s_wordController.getIndexLocale()).getTitle(), stickyList, false);
+                oldListName.append("er slettet, liste sat til ");
+                oldListName.append(s_wordController.getLocalWords().get(s_wordController.getIndexLocale()).getTitle());
             } else {
-                WindowLayout.showSnack(oldListName + "kunne ikke slettes", stickyList, false);
+                oldListName.append("kunne ikke slettes");
+                if (s_wordController.isLocal()) {
+                    if (s_wordController.getIndexLocale() == 0) {
+                        oldListName.append(", da det er en indbygget liste.");
+                    } else {
+                        oldListName.append('.');
+                    }
+                } else {
+                    oldListName.append(", da det er en firebase liste.");
+                }
             }
+            WindowLayout.showSnack(oldListName, stickyList, false);
             returnValue = true;
-//            setProgressBar(false);
         } else if (id == R.id.action_word_list_update) {
             updateCurrentList();
             returnValue = true;
