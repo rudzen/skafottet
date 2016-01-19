@@ -19,8 +19,10 @@ package com.undyingideas.thor.skafottet.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Display;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
@@ -62,6 +64,8 @@ public class SplashActivity extends AppCompatActivity {
     private Animation animation;
     private RelativeLayout logo;
     private TextView title1, title2;
+    private Handler loadHandler;
+    private static final int MSG_LOAD_COMPLETE = 1;
 
     private static final String TAG = "SplashActivity";
 
@@ -69,24 +73,18 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        FontUtils.setDefaultFont(getApplicationContext(), "DEFAULT", Constant.FONT_BOLD);
-        FontUtils.setDefaultFont(getApplicationContext(), "MONOSPACE", Constant.FONT_BOLD);
-        FontUtils.setDefaultFont(getApplicationContext(), "SERIF", Constant.FONT_LIGHT);
-        FontUtils.setDefaultFont(getApplicationContext(), "SANS_SERIF", Constant.FONT_BOLD);
 
-        new Handler().post(new LoadConfig());
+        loadHandler = new LoadHandler();
+
+        loadHandler.post(new LoadConfig());
 
         logo = (RelativeLayout) findViewById(R.id.splash_center_circle);
+        logo.startAnimation(AnimationUtils.loadAnimation(this, R.anim.step_number_fader));
         title2 = (TextView) findViewById(R.id.splash_text_left);
         title1 = (TextView) findViewById(R.id.splash_text_right);
 
-        logo.startAnimation(AnimationUtils.loadAnimation(this, R.anim.step_number_fader));
-
-
-
         if (savedInstanceState == null) flyIn();
 
-        new Handler().postDelayed(new EndSplash(), 3000);
     }
 
     private void flyIn() {
@@ -117,19 +115,34 @@ public class SplashActivity extends AppCompatActivity {
         animation.setAnimationListener(new MyEndAnimationListener(this));
     }
 
+    private class LoadHandler extends Handler {
+        @Override
+        public void handleMessage(final Message msg) {
+            super.handleMessage(msg);
+            if (msg != null && msg.what == MSG_LOAD_COMPLETE) {
+                loadHandler.postDelayed(new EndSplash(), 1000);
+            }
+        }
+    }
+
     private class LoadConfig implements Runnable {
 
         @Override
         public void run() {
             /* This is the first code executed, thus some configuration of the application takes place.. */
+            MusicPlay.intent = new Intent(getApplicationContext(), MusicPlay.class);
+            MusicPlay.intent.setAction("SKAFOTMUSIK");
+            startService(MusicPlay.intent);
+
+            FontUtils.setDefaultFont(getApplicationContext(), "DEFAULT", Constant.FONT_BOLD);
+            FontUtils.setDefaultFont(getApplicationContext(), "MONOSPACE", Constant.FONT_BOLD);
+            FontUtils.setDefaultFont(getApplicationContext(), "SERIF", Constant.FONT_LIGHT);
+            FontUtils.setDefaultFont(getApplicationContext(), "SANS_SERIF", Constant.FONT_BOLD);
 
             if (s_preferences == null) {
                 s_preferences = new TinyDB(getApplicationContext());
             }
 
-            MusicPlay.intent = new Intent(getApplicationContext(), MusicPlay.class);
-            MusicPlay.intent.setAction("SKAFOTMUSIK");
-            startService(MusicPlay.intent);
 
             // only for testing stuff!!!!
 //            s_preferences.clear();
@@ -172,6 +185,8 @@ public class SplashActivity extends AppCompatActivity {
 
             Log.d(TAG, s_wordController.toString());
 
+            final Message message = loadHandler.obtainMessage(MSG_LOAD_COMPLETE);
+            message.sendToTarget();
         }
     }
 
@@ -179,7 +194,7 @@ public class SplashActivity extends AppCompatActivity {
     public void onWindowFocusChanged(final boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
-            WindowLayout.setScreenDimension(this);
+            setScreenDimension(this);
             WindowLayout.setImmersiveMode(getWindow());
         }
     }
@@ -214,6 +229,11 @@ public class SplashActivity extends AppCompatActivity {
     private class EndSplash implements Runnable {
         @Override
         public void run() { endSplash(); }
+    }
+
+    private static void setScreenDimension(final AppCompatActivity appCompatActivity) {
+        final Display display = appCompatActivity.getWindowManager().getDefaultDisplay();
+        display.getSize(WindowLayout.screenDimension);
     }
 }
 
