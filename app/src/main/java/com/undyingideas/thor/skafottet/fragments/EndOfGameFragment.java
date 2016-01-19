@@ -157,9 +157,13 @@ public class EndOfGameFragment extends Fragment {
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
 
-        getView().setFocusableInTouchMode(true);
-        getView().requestFocus();
-        getView().setOnKeyListener(new OnBackKeyListener());
+        /* workaround for handling back pressed in fragments */
+        final View v = getView();
+        if (v != null) {
+            v.setFocusableInTouchMode(true);
+            v.requestFocus();
+            v.setOnKeyListener(new OnBackKeyListener());
+        }
 
         if (shimmerTop == null) {
             setShimmer();

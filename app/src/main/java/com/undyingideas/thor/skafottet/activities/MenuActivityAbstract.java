@@ -130,6 +130,10 @@ public abstract class MenuActivityAbstract extends SoundAbstract implements Batt
     @Override
     public void onWindowFocusChanged(final boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            sf = (StarField) findViewById(R.id.sf);
+            sf.init(WindowLayout.screenDimension.x, WindowLayout.screenDimension.y, Color.RED);
+        }
         if (sf != null) {
             // this SHOULD fix idiotic apps like facebook messenger messing with my starfield!
             // it also stops the animation when a dialog is showing (which is quite okay!)

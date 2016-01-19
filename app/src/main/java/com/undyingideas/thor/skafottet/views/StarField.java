@@ -18,6 +18,7 @@ package com.undyingideas.thor.skafottet.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.os.Handler;
@@ -112,6 +113,14 @@ public class StarField extends View implements PreferenceChangeListener {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+//        setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
+//        width = widthMeasureSpec;
+//        height = heightMeasureSpec;
+    }
+
+    @Override
     public void preferenceChange(final PreferenceChangeEvent pce) {
         // do nothing for now
     }
@@ -147,6 +156,10 @@ public class StarField extends View implements PreferenceChangeListener {
         @Override
         public void run() {
             invalidate();
+            if (getMeasuredHeight() > height && getMeasuredWidth() > width) {
+                init(getMeasuredWidth(), getMeasuredHeight(), Color.RED);
+                return;
+            }
             handleUpdate.postDelayed(updater, FPS);
         }
     }
