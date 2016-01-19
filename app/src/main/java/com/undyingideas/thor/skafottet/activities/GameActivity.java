@@ -37,10 +37,15 @@ import com.undyingideas.thor.skafottet.game.HangedMan;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.interfaces.GameSoundNotifier;
 import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
+import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
+import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.FontUtils;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
+
+import java.util.ArrayList;
+import java.util.Set;
 
 import asia.ivity.android.marqueeview.MarqueeView;
 
@@ -114,23 +119,56 @@ public class GameActivity extends SoundAbstract implements
         if (getIntent() != null) {
             final Bundle bundle = getIntent().getExtras();
             final int gameMode = bundle.getInt(Constant.KEY_MODE);
-            if (gameMode == Constant.MODE_CONT_GAME) {
+            switch (gameMode){
+            case Constant.MODE_CONT_GAME:
                 // throw in the game from the preferences
                 addFragment(HangmanGameFragment.newInstance((SaveGame) GameUtility.s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class)));
-            } else if (gameMode == Constant.MODE_SINGLE_PLAYER) {
+                break;
+                case Constant.MODE_SINGLE_PLAYER :
                 addFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(), false, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du")));
-            } else if (gameMode == Constant.MODE_MULTI_PLAYER || gameMode == Constant.MODE_MULTI_PLAYER_2) {
+                break;
+                case Constant.MODE_MULTI_PLAYER:
+                    getFirstActiveGame();
+                    break;
+                case Constant.MODE_MULTI_PLAYER_2:
                 addFragment(LobbySelectorFragment.newInstance(true));
-            } else if (gameMode == Constant.MODE_MULTI_PLAYER_LOBBY) {
+                    break;
+                case Constant.MODE_MULTI_PLAYER_LOBBY:
                 addFragment(CreateLobbyFragment.newInstance(true));
-            } else if (gameMode == Constant.MODE_ABOUT) {
+                    break;
+                case Constant.MODE_ABOUT:
                 addFragment(new AboutFragment());
-            } else if (gameMode == Constant.MODE_HELP) {
+                    break;
+                case Constant.MODE_HELP:
                 addFragment(new HelpFragment());
+                    break;
             }
         } else {
             addFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(), false, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du")));
         }
+    }
+
+    private void getFirstActiveGame(){
+        if(GameUtility.mpc.name != null){
+            ArrayList<LobbyDTO> dtolist = new ArrayList<>();
+            dtolist.addAll(GameUtility.mpc.lc.lobbyList.values());
+            for (LobbyDTO dto : dtolist)
+                for(LobbyPlayerStatus status : dto.getPlayerList())
+                    if (status.getName().equals(GameUtility.mpc.name) && status.getScore() == -1){
+                        String k = "";
+                        final Set<String> keys = GameUtility.mpc.lc.lobbyList.keySet();
+                        for (final String key : keys)
+                            if (dto.equals(GameUtility.mpc.lc.lobbyList.get(key)))
+                                { k = key; break; }
+                        currentFragment = HangmanGameFragment.newInstance(new SaveGame(new HangedMan(dto.getWord()), true, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du", k));
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content, currentFragment).commit(); // custom commit without backstack
+                    }
+
+        } else {
+            Log.e("GameActivity 168", "not logged in error");
+            onBackPressed();
+        }
+        // TODO no games found
     }
 
     @Override
