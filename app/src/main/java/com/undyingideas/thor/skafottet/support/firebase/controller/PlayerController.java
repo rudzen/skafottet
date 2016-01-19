@@ -1,5 +1,8 @@
 package com.undyingideas.thor.skafottet.support.firebase.controller;
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.firebase.client.ChildEventListener;
@@ -8,6 +11,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.MutableData;
 import com.firebase.client.Transaction;
+import com.undyingideas.thor.skafottet.activities.MenuActivity;
 import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;
 
 import java.util.HashMap;
@@ -37,9 +41,9 @@ public class PlayerController {
         this.ref.child(PLAYERS).addChildEventListener(new NameGetter(mpcRef));
     }
 
-    public void createPlayer(final String name, final String password) {
+    public void createPlayer(final String name, final String password, final MenuActivity menuActivity) {
         final Firebase playersRef = ref.child(PLAYERS).child(name);
-        final FireBaseCreate h = new FireBaseCreate(name, password);
+        final FireBaseCreate h = new FireBaseCreate(name, password, menuActivity);
         playersRef.runTransaction(h);
     }
 
@@ -53,13 +57,14 @@ public class PlayerController {
 
 
     static class FireBaseCreate implements Transaction.Handler {
-        private boolean succes;
         private final String name;
         private final String password;
+        private final MenuActivity menuActivity;
 
-        FireBaseCreate(final String name, final String password) {
+        FireBaseCreate(final String name, final String password, final MenuActivity menuActivity) {
             this.password = password;
             this.name = name;
+            this.menuActivity = menuActivity;
         }
 
         @Override
@@ -74,7 +79,7 @@ public class PlayerController {
 
         @Override
         public void onComplete(final FirebaseError firebaseError, final boolean b, final DataSnapshot dataSnapshot) {
-            succes = b;
+           menuActivity.postCreateResult(b);
         }
     }
 

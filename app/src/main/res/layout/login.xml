@@ -19,6 +19,13 @@
         android:id="@+id/loginPass"
         android:hint="Kodeord"/>
 
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create User"
+        android:id="@+id/createUserCheckBox"
+        android:checked="false" />
+
     <!--<Button-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->

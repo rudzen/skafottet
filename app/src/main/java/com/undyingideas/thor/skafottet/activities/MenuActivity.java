@@ -22,10 +22,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -50,6 +52,8 @@ import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 import com.undyingideas.thor.skafottet.support.utility.NetworkHelper;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
+
+import net.steamcrafted.loadtoast.LoadToast;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayDeque;
@@ -111,6 +115,7 @@ public class MenuActivity extends MenuActivityAbstract implements
     private final int[] loginButtons = new int[2];
 
     private InternetRecieverData connectionObserver;
+    private static LoadToast lt;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -118,7 +123,7 @@ public class MenuActivity extends MenuActivityAbstract implements
         // contentView is set in super class..
 
         initSound();
-
+        lt = new LoadToast(this);
         if (s_buttonListener == null) {
             s_buttonListener = new MenuButtonClickHandler(this);
         }
@@ -609,16 +614,24 @@ public class MenuActivity extends MenuActivityAbstract implements
                         final EditText editTextURL = (EditText) dialogCustomView.findViewById(R.id.loginPass);
                         final String user = editTextTitle.getText().toString().trim();
                         final String pass = editTextURL.getText().toString().trim();
+                        final CheckBox check = (CheckBox)( dialogCustomView.findViewById(R.id.createUserCheckBox));
+                        final boolean isChecked = check.isChecked();
+                        Log.d("login", "isChecked " + isChecked);
                         Log.d("Login", user);
                         Log.d("Login", pass);
                         Log.d("Login", String.valueOf(isValid(menuActivity, user, pass)));
 
                         if (isValid(menuActivity, user, pass)) {
                             menuActivity.onFinishLoginDialog(user, pass);
-                            if (GameUtility.mpc.login(user, pass)) {
-                                Log.d("Login succes", " stuff");
+                            if (isChecked) {
+                                GameUtility.mpc.pc.createPlayer(user, pass, menuActivity);
+                                lt.show();
                             } else {
-                                Log.d("Login failure", " stuff");
+                                if (GameUtility.mpc.login(user, pass)) {
+                                    Log.d("Login succes", " stuff");
+                                } else {
+                                    Log.d("Login failure", " stuff");
+                                }
                             }
                         }
 
@@ -633,6 +646,9 @@ public class MenuActivity extends MenuActivityAbstract implements
         }
     }
 
+    public void postCreateResult(boolean b) {
+        if (b) lt.success(); else lt.error();
+    }
 
     private class NewGameCancelListener implements DialogInterface.OnCancelListener {
         @Override
