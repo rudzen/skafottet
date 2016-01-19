@@ -211,6 +211,7 @@ public class MenuActivity extends MenuActivityAbstract implements
     }
 
     private void showAll() {
+        Log.d("login showall", ""+(mpc.name == null));
         buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(loginButtons[mpc.name == null ? 0 : 1]));
         YoYo.with(Techniques.FadeIn).duration(1000).withListener(new EnterAnimatorHandler(this)).playOn(title);
         for (final ImageView button : buttons) {
@@ -362,6 +363,8 @@ public class MenuActivity extends MenuActivityAbstract implements
         }
         buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(mpc.name == null ? loginButtons[0] : loginButtons[1]));
 //        updateMargueeScroller(NetworkHelper.getConnectivityStatus(getApplicationContext()));
+        Log.d("login", "before show all");
+
         showAll();
     }
 
@@ -616,7 +619,6 @@ public class MenuActivity extends MenuActivityAbstract implements
                         Log.d("Login", String.valueOf(isValid(menuActivity, user, pass)));
 
                         if (isValid(menuActivity, user, pass)) {
-                            menuActivity.onFinishLoginDialog(user, pass);
                             if (isChecked) {
                                 GameUtility.mpc.pc.createPlayer(user, pass, menuActivity);
                                 lt.show();
@@ -627,6 +629,7 @@ public class MenuActivity extends MenuActivityAbstract implements
                                     Log.d("Login failure", " stuff");
                                 }
                             }
+                            menuActivity.onFinishLoginDialog(user, pass);
                         }
 
                     }
@@ -642,6 +645,7 @@ public class MenuActivity extends MenuActivityAbstract implements
 
     public void postCreateResult(boolean b) {
         if (b) lt.success(); else lt.error();
+
     }
 
     private class NewGameCancelListener implements DialogInterface.OnCancelListener {
