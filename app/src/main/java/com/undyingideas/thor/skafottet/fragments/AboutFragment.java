@@ -97,7 +97,8 @@ public class AboutFragment extends Fragment {
                     "- Kompozer v0.8b3" + SEP + SEP + SEP +
 
                     "Følgende er brugt som kilder :" + SEP +
-                    "- Musik af Kevin Macloud (https://incompetech.com/)." + SEP +
+                    "- Musik af : http://www.purple-planet.com/horror/4583971268" + SEP +
+//                    "- Musik af Kevin Macloud (https://incompetech.com/)." + SEP +
                     "- Diverse lydstumper fra forskellige sider med gratis lydklip." + SEP + SEP + SEP +
 
 

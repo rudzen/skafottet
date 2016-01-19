@@ -296,7 +296,7 @@ public class HangmanGameFragment extends Fragment {
         if (currentGame.getLogic().isGameOver()) {
             GameUtility.writeNullGame();
             if (currentGame.getLogic().isGameWon()) {
-                gameSoundNotifier.playGameSound(GameUtility.SFX_WON);
+                gameSoundNotifier.playGameSound(GameUtility.SFX_INTRO);
             } else {
                 gameSoundNotifier.playGameSound(GameUtility.SFX_LOST);
             }
@@ -305,11 +305,11 @@ public class HangmanGameFragment extends Fragment {
             // save the game status!
             GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, currentGame);
             if (!currentGame.getLogic().isLastLetterCorrect()) {
-                gameSoundNotifier.playGameSound(GameUtility.SFX_GAME_WRONG_1);
+                gameSoundNotifier.playGameSound(GameUtility.SFX_GUESS_WRONG);
                 if (vibrator != null) vibrator.vibrate(50);
                 YoYo.with(Techniques.Flash).duration(300).playOn(textViewWord);
             } else {
-                gameSoundNotifier.playGameSound(GameUtility.SFX_GAME_RIGHT);
+                gameSoundNotifier.playGameSound(GameUtility.SFX_GUESS_RIGHT);
             }
             updateScreen();
         }

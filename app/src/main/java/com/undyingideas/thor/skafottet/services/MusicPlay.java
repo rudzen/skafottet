@@ -34,7 +34,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     public static Intent intent = new Intent();
 
     private static final String ACTION_PLAY = "SKAFOTMUSIK";
-    private static final int music = R.raw.reign_supreme;
+    private static final int music = R.raw.insidious;
     private static MusicPlay mInstance;
 
     private MediaPlayer mMediaPlayer;
@@ -86,7 +86,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
 
     private void initMediaPlayer() {
         try {
-            final AssetFileDescriptor afd = getApplicationContext().getResources().openRawResourceFd(R.raw.reign_supreme);
+            final AssetFileDescriptor afd = getApplicationContext().getResources().openRawResourceFd(music);
             if (afd == null) return;
             mMediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
             afd.close();
@@ -159,13 +159,11 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     private class ForegroundListener implements Foreground.Listener {
         @Override
         public void onBecameForeground() {
-            Log.d("Foreground" , "Became foreground!");
             startMusic();
         }
 
         @Override
         public void onBecameBackground() {
-            Log.d("Foreground" , "Became background!");
             pauseMusic();
         }
     }

@@ -79,8 +79,6 @@ public abstract class MenuActivityAbstract extends SoundAbstract implements Batt
         /* whoop */
         setContentView(R.layout.activity_menu);
 
-        // TODO : Insert battery level check and disable background animation and sensor if <= low
-
         /* begin configuration for starfield and sensor */
         sf = (StarField) findViewById(R.id.sf);
 

@@ -38,9 +38,9 @@ public abstract class SoundAbstract extends AppCompatActivity implements Foregro
     /* sound stuff */
     @RawRes final
     private int[] sound_raw = {
-            R.raw.game_wrong1,
-            R.raw.game_wrong2,
-            R.raw.game_right,
+            R.raw.guess_wrong,
+            R.raw.guess_right,
+            R.raw.intro,
             R.raw.menu_click,
             R.raw.won,
             R.raw.lost,

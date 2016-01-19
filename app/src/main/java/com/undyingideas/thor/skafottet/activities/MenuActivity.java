@@ -157,6 +157,7 @@ public class MenuActivity extends MenuActivityAbstract implements
     @Override
     protected void onPostCreate(final Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+//        playSound(GameUtility.SFX_INTRO);
     }
 
     @Override
@@ -223,8 +224,8 @@ public class MenuActivity extends MenuActivityAbstract implements
     private void endMenu(final String method_name, final ImageView clickedImageView) {
         if (click_status) {
             click_status = false;
-            for (final ImageView iv : buttons) if (iv != clickedImageView) YoYo.with(Techniques.FadeOut).duration(100).playOn(iv);
-            YoYo.with(Techniques.RotateOut).duration(500).withListener(new ExitAnimatorHandler(this, method_name)).playOn(clickedImageView);
+            for (final ImageView iv : buttons) if (iv != clickedImageView) YoYo.with(Techniques.ZoomOut).duration(100).playOn(iv);
+            YoYo.with(Techniques.Pulse).duration(500).withListener(new ExitAnimatorHandler(this, method_name)).playOn(clickedImageView);
         }
     }
 
@@ -242,7 +243,7 @@ public class MenuActivity extends MenuActivityAbstract implements
     @SuppressWarnings("unused")
     private void showHighScore() {
         if (NetworkHelper.getConnectivityStatus(getApplicationContext()) > -1) {
-            final Intent PlayerListActivity = new Intent(this, com.undyingideas.thor.skafottet.activities.PlayerListActivity.class);
+            final Intent PlayerListActivity = new Intent(this, PlayerListActivity.class);
             startActivity(PlayerListActivity);
         } else {
             showDialog("Fejl", "Ingen internetforbindelse tilstede.");
