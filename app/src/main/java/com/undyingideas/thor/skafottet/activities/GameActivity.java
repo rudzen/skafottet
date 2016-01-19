@@ -98,7 +98,7 @@ public class GameActivity extends SoundAbstract implements
         final Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(tb);
         if (getSupportActionBar() != null) {
-            tb.setLogo(R.mipmap.ic_launcher);
+            tb.setLogo(R.drawable.icon);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 

@@ -21,7 +21,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -57,8 +56,6 @@ import net.steamcrafted.loadtoast.LoadToast;
 import java.lang.ref.WeakReference;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.prefs.PreferenceChangeEvent;
-import java.util.prefs.PreferenceChangeListener;
 
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.imageRefs;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.mpc;
@@ -71,8 +68,7 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_pref
  * @author rudz
  */
 public class MenuActivity extends MenuActivityAbstract implements
-        InternetRecieverData.InternetRecieverInterface,
-        PreferenceChangeListener
+        InternetRecieverData.InternetRecieverInterface
 {
 
     private static final String FINISH = "finish";
@@ -121,6 +117,8 @@ public class MenuActivity extends MenuActivityAbstract implements
         super.onCreate(savedInstanceState);
         // contentView is set in super class..
 
+        WindowLayout.hideStatusBar(getWindow(), null);
+
         initSound();
         lt = new LoadToast(this);
         if (s_buttonListener == null) {
@@ -153,6 +151,7 @@ public class MenuActivity extends MenuActivityAbstract implements
 
         connectionObserver = new InternetRecieverData(this);
         InternetReciever.addObserver(connectionObserver);
+
     }
 
     @Override
@@ -365,11 +364,6 @@ public class MenuActivity extends MenuActivityAbstract implements
         showAll();
     }
 
-    @Override
-    public void preferenceChange(final PreferenceChangeEvent pce) {
-        // do nothing for now.
-    }
-
     @SuppressWarnings("AccessStaticViaInstance")
     static class QuitDialogCallback implements MaterialDialog.SingleButtonCallback {
 
@@ -497,15 +491,14 @@ public class MenuActivity extends MenuActivityAbstract implements
                     @Override
                     public void run() {
                         YoYo.with(Techniques.Pulse).duration(800).playOn(menuActivity.title);
-                        YoYo.with(Techniques.RotateInDownLeft).duration(900).playOn(menuActivity.buttons[0]);
-                        YoYo.with(Techniques.RotateIn).duration(900).playOn(menuActivity.buttons[1]);
-                        YoYo.with(Techniques.RotateInUpRight).duration(800).playOn(menuActivity.buttons[2]);
-                        YoYo.with(Techniques.RotateInUpRight).duration(800).playOn(menuActivity.buttons[3]);
-                        YoYo.with(Techniques.RotateInUpLeft).duration(700).playOn(menuActivity.buttons[4]);
-                        YoYo.with(Techniques.RotateInUpLeft).duration(700).playOn(menuActivity.buttons[5]);
-                        YoYo.with(Techniques.RotateInDownRight).duration(600).playOn(menuActivity.buttons[6]);
-                        YoYo.with(Techniques.RotateInDownRight).duration(600).playOn(menuActivity.buttons[7]);
-
+                        YoYo.with(Techniques.FadeIn).duration(900).playOn(menuActivity.buttons[0]);
+                        YoYo.with(Techniques.FadeIn).duration(900).playOn(menuActivity.buttons[1]);
+                        YoYo.with(Techniques.FadeIn).duration(800).playOn(menuActivity.buttons[2]);
+                        YoYo.with(Techniques.FadeIn).duration(800).playOn(menuActivity.buttons[3]);
+                        YoYo.with(Techniques.FadeIn).duration(700).playOn(menuActivity.buttons[4]);
+                        YoYo.with(Techniques.FadeIn).duration(700).playOn(menuActivity.buttons[5]);
+                        YoYo.with(Techniques.FadeIn).duration(600).playOn(menuActivity.buttons[6]);
+                        YoYo.with(Techniques.FadeIn).duration(600).playOn(menuActivity.buttons[7]);
                     }
                 }.run();
                 menuActivity.click_status = true;
@@ -745,5 +738,19 @@ public class MenuActivity extends MenuActivityAbstract implements
     public void onInternetStatusChanged(final String connectionState) {
         // string version... could be displayed along the way..
         WindowLayout.showSnack(connectionState, sf, true);
+    }
+
+    @Override
+    public void onBecameForeground() {
+        if (sf != null) {
+            sf.setRun(true);
+        }
+        super.onBecameForeground();
+    }
+
+    @Override
+    public void onBecameBackground() {
+        sf.setRun(false);
+        super.onBecameBackground();
     }
 }

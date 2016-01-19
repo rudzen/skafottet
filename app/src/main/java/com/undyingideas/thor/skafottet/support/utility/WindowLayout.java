@@ -17,14 +17,17 @@
 package com.undyingideas.thor.skafottet.support.utility;
 
 import android.app.ActionBar;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 /**
  * Created on 22-12-2015, 11:46.
@@ -36,7 +39,14 @@ public abstract class WindowLayout {
 
     public static final Point screenDimension = new Point();
 
-    public static void hideStatusBar(final Window w, final ActionBar ab) {
+    private static Snackbar snackbar;
+
+    /**
+     * Hides the statusbar of the window
+     * @param w The window to hide the statusbar in
+     * @param ab The actionbar (can be null if no actionbar)
+     */
+    public static void hideStatusBar(final Window w, @Nullable final ActionBar ab) {
         if (Build.VERSION.SDK_INT >= 16) { //ye olde method
             final View decorView = w.getDecorView();
 
@@ -49,8 +59,34 @@ public abstract class WindowLayout {
         } else w.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
+    /**
+     * Shows a snackbar with custom colours and clickhandler set.
+     * @param text The main message of the snackbar
+     * @param buttonText The text of the close button
+     * @param v The root view
+     * @param brief if true, lenght is short, otherwise lenght is long.
+     */
+    public static void showSnack(final CharSequence text, final CharSequence buttonText, View v, final boolean brief) {
+        // convoluted, but neccesary.
+        snackbar = Snackbar.make(v, text,  brief ? Snackbar.LENGTH_SHORT : Snackbar.LENGTH_LONG);
+        snackbar.setAction(buttonText, new OnSnackBarClick());
+        final View snackView = snackbar.getView();
+        snackView.setBackgroundColor(Color.BLACK);
+        final TextView snackText = (TextView) snackView.findViewById(android.support.design.R.id.snackbar_text);
+        snackText.setTextColor(Color.WHITE);
+        snackText.setMaxLines(4);
+        snackbar.show();
+    }
+
     public static void showSnack(final CharSequence text, final View v, final boolean brief) {
-        Snackbar.make(v, text, brief ? Snackbar.LENGTH_SHORT : Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        showSnack(text, "Luk", v, brief);
+    }
+
+    private static class OnSnackBarClick implements View.OnClickListener {
+        @Override
+        public void onClick(final View v) {
+            snackbar.dismiss();
+        }
     }
 
     public static void setImmersiveMode(final Window w) {
