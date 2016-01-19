@@ -64,7 +64,7 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_pref
 /**
  * The main menu activity.
  * Quite large, but contains only relevant code.
- *
+ * The Class metric is high here, but this is just a quick hack to make the SoundPool work.
  * @author rudz
  */
 public class MenuActivity extends MenuActivityAbstract implements

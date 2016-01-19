@@ -97,8 +97,8 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
                 return null;
             }
             sb.trimToSize();
-//            sb.append(Jsoup.parse(sb.toString()).text());
             final StringTokenizer stringTokenizer = new StringTokenizer(Jsoup.parse(sb.toString()).text(), " ");
+            sb.setLength(0);
             if (stringTokenizer != null) {
                 final ArrayList<String> words = new ArrayList<>();
                 int wordSize = 0;
@@ -114,7 +114,7 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
                     if (words.get(wordSize).length() < 4 || words.get(wordSize).contains("w")) {
                         words.remove(wordSize);
                     }
-                    if (wordSize % 50 == 0) {
+                    if (wordSize % 25 == 0) {
                         publishProgress(Integer.toString(wordSize));
                     }
                 }
