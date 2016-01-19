@@ -40,6 +40,7 @@ import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.FontUtils;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
+import com.undyingideas.thor.skafottet.support.utility.NetworkHelper;
 import com.undyingideas.thor.skafottet.support.utility.TinyDB;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.support.wordlist.WordController;
@@ -125,6 +126,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private class LoadConfig implements Runnable {
 
+        @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
         @Override
         public void run() {
             /* This is the first code executed, thus some configuration of the application takes place.. */
@@ -134,6 +136,9 @@ public class SplashActivity extends AppCompatActivity {
             MusicPlay.intent = new Intent(getApplicationContext(), MusicPlay.class);
             MusicPlay.intent.setAction("SKAFOTMUSIK");
             startService(MusicPlay.intent);
+
+            GameUtility.connectionStatus = NetworkHelper.getConnectivityStatus(getApplicationContext());
+            GameUtility.connectionStatusName = NetworkHelper.getConnectivityStatusStringFromStatus(GameUtility.connectionStatus);
 
             FontUtils.setDefaultFont(getApplicationContext(), "DEFAULT", Constant.FONT_BOLD);
             FontUtils.setDefaultFont(getApplicationContext(), "MONOSPACE", Constant.FONT_BOLD);

@@ -318,17 +318,21 @@ public class EndOfGameFragment extends Fragment {
             endOfGameFragmentWeakReference = new WeakReference<>(endOfGameFragment);
         }
 
+        @SuppressWarnings("ConstantConditions")
         @Override
         public void onClick(final View v) {
             final EndOfGameFragment endOfGameFragment = endOfGameFragmentWeakReference.get();
             if (endOfGameFragment != null) {
+                v.setClickable(false);
                 endOfGameFragment.gameSoundNotifier.playGameSound(GameUtility.SFX_MENU_CLICK);
                 YoYo.with(Techniques.ZoomOut).duration(300).playOn(endOfGameFragment.imageViewResult);
                 YoYo.with(Techniques.ZoomOut).duration(400).playOn(endOfGameFragment.textViewTop);
                 if (v == endOfGameFragment.buttonMenu) {
                     YoYo.with(Techniques.FadeOut).duration(300).playOn(endOfGameFragment.buttonNewGame);
+                    endOfGameFragment.buttonNewGame.setClickable(false);
                 } else {
                     YoYo.with(Techniques.FadeOut).duration(300).playOn(endOfGameFragment.buttonMenu);
+                    endOfGameFragment.buttonMenu.setClickable(false);
                 }
                 YoYo.with(Techniques.Pulse).duration(400).withListener(new ExitAnimatorHandler(endOfGameFragment, (ImageView) v)).playOn(v);
             }

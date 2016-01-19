@@ -49,6 +49,8 @@ public abstract class GameUtility {
     @SuppressWarnings("StaticVariableOfConcreteClass")
     public static WordController s_wordController;
 
+    public static int connectionStatus;
+    public static String connectionStatusName;
 
     public static final int SFX_GUESS_WRONG = 0;
     public static final int SFX_GUESS_RIGHT = 1;

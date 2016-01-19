@@ -48,7 +48,6 @@ import com.undyingideas.thor.skafottet.services.MusicPlay;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
-import com.undyingideas.thor.skafottet.support.utility.NetworkHelper;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import net.steamcrafted.loadtoast.LoadToast;
@@ -133,8 +132,6 @@ public class MenuActivity extends MenuActivityAbstract implements
         textView_buttom.setOnClickListener(new OnLoginClickListener(this));
         updateText = new UpdateText();
 
-        onInternetStatusChanged(NetworkHelper.getConnectivityStatus(getApplicationContext()));
-
         title = (ImageView) findViewById(R.id.menu_title);
         title.setClickable(true);
         title.setOnClickListener(s_buttonListener);
@@ -169,7 +166,6 @@ public class MenuActivity extends MenuActivityAbstract implements
         if (connectionObserver == null) {
             connectionObserver = new InternetRecieverData(this);
         }
-        onInternetStatusChanged(NetworkHelper.getConnectivityStatus(getApplicationContext()));
         InternetReciever.addObserver(connectionObserver);
         updateMargueeScroller();
     }
@@ -242,7 +238,7 @@ public class MenuActivity extends MenuActivityAbstract implements
 
     @SuppressWarnings("unused")
     private void showHighScore() {
-        if (NetworkHelper.getConnectivityStatus(getApplicationContext()) > -1) {
+        if (GameUtility.connectionStatus > -1) {
             final Intent PlayerListActivity = new Intent(this, PlayerListActivity.class);
             startActivity(PlayerListActivity);
         } else {
@@ -267,7 +263,7 @@ public class MenuActivity extends MenuActivityAbstract implements
 
     @SuppressWarnings("unused")
     private void showLogin() {
-        if (NetworkHelper.getConnectivityStatus(getApplicationContext()) > -1) {
+        if (GameUtility.connectionStatus > -1) {
             textView_buttom.callOnClick();
         } else {
             showDialog("Fejl", "Ingen internetforbindelse tilstede.");
@@ -291,7 +287,7 @@ public class MenuActivity extends MenuActivityAbstract implements
             // nothing happends here, its just for not adding the option to continue a game.
         } finally {
             startGameItems.add(new StartGameItem(Constant.MODE_SINGLE_PLAYER, "Nyt singleplayer", "Tilfældigt ord.", imageRefs[0]));
-            if (mpc.name != null && NetworkHelper.getConnectivityStatus(getApplicationContext()) > -1) {
+            if (mpc.name != null && GameUtility.connectionStatus > -1) {
                 startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER, "Næste multiplayer", "Kæmp imod", imageRefs[0]));
                 startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_2, "Vælg multiplayer", "Jægeren er den jagtede", imageRefs[0]));
                 startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_LOBBY, "Ny udfordring", "Udvælg dit offer", imageRefs[0]));
@@ -633,14 +629,15 @@ public class MenuActivity extends MenuActivityAbstract implements
                             }
                             menuActivity.onFinishLoginDialog(user, pass);
                         }
-
                     }
                 } else {
                     menuActivity.buttons[BUTTON_LOGIN_OUT].setBackground(menuActivity.getResources().getDrawable(mpc.name == null ? menuActivity.loginButtons[0] : menuActivity.loginButtons[1]));
                     menuActivity.callMethod("showAll");
                 }
                 dialog.dismiss();
-                menuActivity.sf.setRun(true);
+                if (menuActivity.sf != null) {
+                    menuActivity.sf.setRun(true);
+                }
             }
         }
     }
@@ -705,7 +702,7 @@ public class MenuActivity extends MenuActivityAbstract implements
             e.printStackTrace();
             info.add("Nej");
         }
-        info.add(String.format(INFO_CONNECTION, NetworkHelper.getConnectivityStatusString(getApplicationContext())));
+        info.add(String.format(INFO_CONNECTION, GameUtility.connectionStatusName));
         try {
             info.add(String.format(INFO_BATTERY, Integer.toString(batteryLevelRecieverData.getData().getLevel())));
         } catch (final Exception e) {
@@ -726,23 +723,21 @@ public class MenuActivity extends MenuActivityAbstract implements
         }
     }
 
+    @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
     @Override
     public void onInternetStatusChanged(final int connectionState) {
-//        updateMargueeScroller(connectionState);
+        GameUtility.connectionStatus = connectionState;
         if (connectionState > -1) {
-//            GameUtility.firebase = ;
-//            GameUtility.mpc = null;
-
-            // we have a connection now ! enable the firebase controller
+            // there is internet
         } else {
-//            GameUtility.firebase = null;
-//            GameUtility.mpc = null;
-            // kill the firebase controller
+            // nope, no connection!
         }
     }
 
+    @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
     @Override
     public void onInternetStatusChanged(final String connectionState) {
+        GameUtility.connectionStatusName = connectionState;
         // string version... could be displayed along the way..
         WindowLayout.showSnack(connectionState, sf, true);
     }

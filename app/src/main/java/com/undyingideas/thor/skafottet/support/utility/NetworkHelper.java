@@ -51,4 +51,12 @@ public final class NetworkHelper {
         else status = conn == TYPE_NOT_CONNECTED ? "Ingen" : null;
         return status;
     }
+
+    public static String getConnectivityStatusStringFromStatus(final int connectionStatus) {
+        final String status;
+        if (connectionStatus == TYPE_WIFI) status = "Wifi";
+        else status = connectionStatus == TYPE_MOBILE ? "Mobil" : "Ingen";
+        return status;
+    }
+
 }
