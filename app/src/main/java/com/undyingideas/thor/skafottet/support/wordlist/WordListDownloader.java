@@ -109,7 +109,7 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
                     e.printStackTrace();
                 }
                 while (stringTokenizer.hasMoreTokens()) {
-                    words.add(removeNonDK.matcher(stringTokenizer.nextToken()).replaceAll("").toLowerCase());
+                    words.add(removeNonDK.matcher(stringTokenizer.nextToken().toLowerCase()).replaceAll(""));
                     wordSize = words.size() - 1;
                     if (words.get(wordSize).length() < 4 || words.get(wordSize).contains("w")) {
                         words.remove(wordSize);
