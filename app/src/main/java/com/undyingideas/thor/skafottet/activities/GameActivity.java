@@ -160,12 +160,15 @@ public class GameActivity extends SoundAbstract implements
                         for (final String key : keys)
                             if (dto.equals(GameUtility.mpc.lc.lobbyList.get(key)))
                                 { k = key; break; }
-                        startNewMultiplayerGame(k, dto.getWord());
+                        currentFragment = HangmanGameFragment.newInstance(new SaveGame(new HangedMan(dto.getWord()), true, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du", k));
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content, currentFragment).commit(); // custom commit without backstack
                     }
 
         } else {
-            // TODO
+            Log.e("GameActivity 168", "not logged in error");
+            onBackPressed();
         }
+        // TODO no games found
     }
 
     @Override
