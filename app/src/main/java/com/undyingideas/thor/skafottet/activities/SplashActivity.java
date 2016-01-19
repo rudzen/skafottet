@@ -76,8 +76,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        loadHandler = new LoadHandler();
-
+        loadHandler = new LoadHandler(this);
         loadHandler.post(new LoadConfig());
 
         logo = (RelativeLayout) findViewById(R.id.splash_center_circle);
@@ -86,13 +85,19 @@ public class SplashActivity extends AppCompatActivity {
         title1 = (TextView) findViewById(R.id.splash_text_right);
 
         if (savedInstanceState == null) flyIn();
+    }
 
+    @Override
+    public void onWindowFocusChanged(final boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            WindowLayout.setImmersiveMode(getWindow());
+            final Display display = getWindowManager().getDefaultDisplay();
+            display.getSize(WindowLayout.screenDimension);
+        }
     }
 
     private void flyIn() {
-//        animation = AnimationUtils.loadAnimation(this, R.anim.logo_animation);
-//        logo.startAnimation(animation);
-
         animation = AnimationUtils.loadAnimation(this, R.anim.app_name_animation);
         title1.startAnimation(animation);
 
@@ -102,32 +107,14 @@ public class SplashActivity extends AppCompatActivity {
 
     private void endSplash() {
         logo.setAnimation(null);
-        // just use YoYo for the nice rotate out :-)
-        YoYo.with(Techniques.FlipOutY).duration(400).withListener(new SplashEndAnimatorListener(this)).playOn(logo);
-
-//        animation = AnimationUtils.loadAnimation(this, R.anim.step_number_back);
-//        logo.startAnimation(animation);
-
-//        animation = AnimationUtils.loadAnimation(this, R.anim.logo_animation_back);
-//        logo.startAnimation(animation);
+        // just use YoYo for the nice animation :-)
+        YoYo.with(Techniques.ZoomIn).duration(400).withListener(new SplashEndAnimatorListener(this)).playOn(logo);
 
         animation = AnimationUtils.loadAnimation(this, R.anim.app_name_animation_back);
         title1.startAnimation(animation);
 
         animation = AnimationUtils.loadAnimation(this, R.anim.pro_animation_back);
         title2.startAnimation(animation);
-
-//        animation.setAnimationListener(new SplashEndAnimationListener(this));
-    }
-
-    private class LoadHandler extends Handler {
-        @Override
-        public void handleMessage(final Message msg) {
-            super.handleMessage(msg);
-            if (msg != null && msg.what == MSG_LOAD_COMPLETE) {
-                loadHandler.postDelayed(new EndSplash(), 1000);
-            }
-        }
     }
 
     private class LoadConfig implements Runnable {
@@ -135,6 +122,9 @@ public class SplashActivity extends AppCompatActivity {
         @Override
         public void run() {
             /* This is the first code executed, thus some configuration of the application takes place.. */
+
+            // advarsel, dette er en test-zone.. alt hvad der reelt foregår her er udsat for underlige fremgangsmåder!..
+
             MusicPlay.intent = new Intent(getApplicationContext(), MusicPlay.class);
             MusicPlay.intent.setAction("SKAFOTMUSIK");
             startService(MusicPlay.intent);
@@ -148,21 +138,17 @@ public class SplashActivity extends AppCompatActivity {
                 s_preferences = new TinyDB(getApplicationContext());
             }
 
-
             // only for testing stuff!!!!
 //            s_preferences.clear();
-            Log.d(TAG, "Wordlist deleted : " + ListFetcher.deleteList(getApplicationContext()));
+//            Log.d(TAG, "Wordlist deleted : " + ListFetcher.deleteList(getApplicationContext()));
             ListFetcher.listHandler = new Handler();
             ListFetcher.listSaver = new ListFetcher.ListSaver(getApplicationContext());
 
-
-
-
-                /* begin loading wordlist
-                * 1) Check if any existing word list exist already
-                * 2) If so, load the list and continue to next list loading.
-                * 3) If not, reset the list to default build in list.
-                */
+            /* begin loading wordlist
+             * 1) Check if any existing word list exist already
+             * 2) If so, load the list and continue to next list loading.
+             * 3) If not, reset the list to default build in list.
+            */
             s_wordController = ListFetcher.loadWordList(getBaseContext());
             if (s_wordController == null || s_wordController.getCurrentList() == null) {
                 s_wordController = new WordController(getResources().getStringArray(R.array.lande));
@@ -200,15 +186,35 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onWindowFocusChanged(final boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            setScreenDimension(this);
-            WindowLayout.setImmersiveMode(getWindow());
+    private static class LoadHandler extends Handler {
+
+        private final WeakReference<SplashActivity> splashActivityWeakReference;
+
+        public LoadHandler(final SplashActivity splashActivity) {
+            splashActivityWeakReference = new WeakReference<>(splashActivity);
+        }
+
+        @SuppressWarnings("AnonymousInnerClass")
+        @Override
+        public void handleMessage(final Message msg) {
+            super.handleMessage(msg);
+            if (msg != null && msg.what == MSG_LOAD_COMPLETE) {
+                final SplashActivity splashActivity = splashActivityWeakReference.get();
+                if (splashActivity != null) {
+                    splashActivity.loadHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            splashActivity.endSplash();
+                        }
+                    }, 1000);
+                }
+            }
         }
     }
 
+    /**
+     * Class to execute code when a specific animation ends.
+     */
     private static class SplashEndAnimatorListener implements Animator.AnimatorListener {
 
         private final WeakReference<SplashActivity> splashActivityWeakReference;
@@ -226,7 +232,7 @@ public class SplashActivity extends AppCompatActivity {
             if (splashActivity != null) {
                 final Intent intent = new Intent(splashActivity, MenuActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                splashActivity.overridePendingTransition(R.anim.holder_top_fast, R.anim.holder_bottom_back_fast);
+                splashActivity.overridePendingTransition(R.anim.step_number_fader, R.anim.step_number_fader);
                 splashActivity.startActivity(intent);
                 splashActivity.finish();
             }
@@ -239,14 +245,5 @@ public class SplashActivity extends AppCompatActivity {
         public void onAnimationRepeat(final Animator animation) { }
     }
 
-    private class EndSplash implements Runnable {
-        @Override
-        public void run() { endSplash(); }
-    }
-
-    private static void setScreenDimension(final AppCompatActivity appCompatActivity) {
-        final Display display = appCompatActivity.getWindowManager().getDefaultDisplay();
-        display.getSize(WindowLayout.screenDimension);
-    }
 }
 
