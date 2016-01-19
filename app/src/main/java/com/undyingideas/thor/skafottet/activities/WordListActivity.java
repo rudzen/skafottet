@@ -168,6 +168,7 @@ public class WordListActivity extends AppCompatActivity implements
 
         refreshStopper = new RefreshStopper();
         handler = new Handler();
+
     }
 
     @Override
@@ -181,6 +182,11 @@ public class WordListActivity extends AppCompatActivity implements
     @Override
     protected void onPostCreate(final Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        loadToast = new LoadToast(this);
+        loadToast.setProgressColor(Color.BLACK);
+        loadToast.setTextColor(Color.WHITE);
+        loadToast.setBackgroundColor(Color.RED);
+        loadToast.setTranslationY(WindowLayout.screenDimension.y / 3);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
     }
@@ -254,6 +260,7 @@ public class WordListActivity extends AppCompatActivity implements
 
     private boolean updateCurrentList() {
         if (s_wordController.isLocal() && s_wordController.getIndexLocale() > 0) {
+            loadToast.show();
             new WordListDownloader(this, s_wordController.getLocalWords().get(s_wordController.getIndexLocale()).getTitle(), s_wordController.getLocalWords().get(s_wordController.getIndexLocale()).getUrl()).execute();
             return true;
         }
@@ -318,14 +325,17 @@ public class WordListActivity extends AppCompatActivity implements
      * Updates the lists, both the shown words and the drawer layouts..
      */
     public void refreshList() {
-        ListFetcher.listHandler.post(ListFetcher.listSaver);
-//        ListFetcher.saveWordLists(s_wordController, this);
         adapterLocal = new WordTitleLocalAdapter(this, R.layout.word_list_nav_drawer_list, s_wordController.getLocalWords());
         adapterRemote = new WordTitleRemoteAdapter(this, R.layout.word_list_nav_drawer_list, WordListController.getKeyList());
         adapterLocal.notifyDataSetChanged();
         adapterRemote.notifyDataSetChanged();
         toolbar.setSubtitle("Antal lister : " + s_wordController.getListCount());
-        mAdapter.restore(s_wordController.getCurrentList());
+        if (!s_wordController.getCurrentList().isEmpty()) {
+            mAdapter.restore(s_wordController.getCurrentList());
+        } else {
+            mAdapter.clear();
+            WindowLayout.showSnack("Listen er tom fætter.", refreshLayout, false);
+        }
         Log.d("Refresh", s_wordController.getCurrentList().toString());
     }
 
@@ -350,11 +360,6 @@ public class WordListActivity extends AppCompatActivity implements
         Log.d("AddListFinished", "URL   : " + url);
         Log.d("AddListFinished", "Start Download : " + startDownload);
 
-        loadToast = new LoadToast(this);
-        loadToast.setProgressColor(Color.BLACK);
-        loadToast.setTextColor(Color.WHITE);
-        loadToast.setBackgroundColor(Color.RED);
-        loadToast.setTranslationY(WindowLayout.screenDimension.y / 3);
         loadToast.show();
 
 //        // this is where the list is initiated to be downloaded...

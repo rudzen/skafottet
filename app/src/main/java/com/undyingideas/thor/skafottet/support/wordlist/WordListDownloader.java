@@ -21,6 +21,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.undyingideas.thor.skafottet.activities.WordListActivity;
+import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
+import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import org.jsoup.Jsoup;
 
@@ -46,9 +48,9 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_word
  */
 public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
 
-//    private static final Pattern removeSpaces = Pattern.compile("  ");
+    //    private static final Pattern removeSpaces = Pattern.compile("  ");
     private static final Pattern removeNonDK = Pattern.compile("[^a-zæøå]");
-//    private static final Pattern removeTags = Pattern.compile(".<+?>");
+    //    private static final Pattern removeTags = Pattern.compile(".<+?>");
     private final WeakReference<WordListActivity> wordListActivityWeakReference;
     private final String title, url;
     private WordListActivity wordListActivity;
@@ -65,56 +67,55 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
         this.multi = multi;
     }
 
-    private String downloadURL() throws IOException {
-        final StringBuilder sb = new StringBuilder(500);
-        int count = 1;
-        try (final BufferedReader br = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
-            while (true) {
-                final String line = br.readLine();
-                if (line == null) break;
-//                if (count++ % 10 == 0) {
-//                    publishProgress("Downloader... " + Integer.toString(count));
-//                }
-                sb.append(line);
-            }
-        } catch (final Exception e) {
-            // meh
-            e.printStackTrace();
-            throw new IOException(e.getMessage());
-        }
-        publishProgress("Udfritter resultatet", "Vent...");
-        return Jsoup.parse(sb.toString()).text();
-    }
-
     @Override
     protected WordItem doInBackground(final Void... params) {
         wordListActivity = wordListActivityWeakReference.get();
         if (wordListActivity != null) {
 
-            publishProgress(title); //"Henter fra\n" + url, "Henter ordliste.");
-            StringTokenizer stringTokenizer = null;
+            publishProgress("Henter fra " + url); //"Henter fra\n" + url, "Henter ordliste.");
             try {
-
-
-
-
-
-                stringTokenizer = new StringTokenizer(downloadURL(), " ");
-            } catch (final IOException e) {
+                Thread.sleep(300);
+            } catch (final InterruptedException e) {
                 e.printStackTrace();
             }
+
+            final StringBuilder sb = new StringBuilder(500);
+            int count = 1;
+            try (final BufferedReader br = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
+                while (true) {
+                    final String line = br.readLine();
+                    if (line == null) break;
+                    if (count++ % 50 == 0) {
+                        publishProgress(Integer.toString(count));
+                    }
+                    sb.append(line);
+                }
+            } catch (final IOException e) {
+                // meh
+                wordListActivity.loadToast.error();
+                e.printStackTrace();
+                return null;
+            }
+            sb.trimToSize();
+//            sb.append(Jsoup.parse(sb.toString()).text());
+            final StringTokenizer stringTokenizer = new StringTokenizer(Jsoup.parse(sb.toString()).text(), " ");
             if (stringTokenizer != null) {
                 final ArrayList<String> words = new ArrayList<>();
                 int wordSize = 0;
+                publishProgress("Diskripanterer..");
+                try {
+                    Thread.sleep(300);
+                } catch (final InterruptedException e) {
+                    e.printStackTrace();
+                }
                 while (stringTokenizer.hasMoreTokens()) {
                     words.add(removeNonDK.matcher(stringTokenizer.nextToken()).replaceAll("").toLowerCase());
                     wordSize = words.size() - 1;
                     if (words.get(wordSize).length() < 4 || words.get(wordSize).contains("w")) {
                         words.remove(wordSize);
                     }
-                    publishProgress("Antal ord : " + Integer.toString(wordSize));
-                    if (wordSize % 5 == 0) {
-                        publishProgress(Integer.toString(wordSize), "Udfritter ord..");
+                    if (wordSize % 50 == 0) {
+                        publishProgress(Integer.toString(wordSize));
                     }
                 }
 
@@ -125,10 +126,9 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
                 wordItem.getWords().addAll(dude);
                 Collections.sort(wordItem.getWords());
                 s_wordController.replaceLocalWordList(wordItem);
-//                ListFetcher.saveWordLists(s_wordController, wordListActivity);
                 return wordItem;
             } else {
-                wordListActivity.md.dismiss();
+                wordListActivity.loadToast.error();
                 cancel(true);
             }
         }
@@ -139,11 +139,16 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
     protected void onPostExecute(final WordItem wordItem) {
         wordListActivity = wordListActivityWeakReference.get();
         if (wordListActivity != null) {
-            Log.d("Downloader", wordItem.toString());
-            wordListActivity.loadToast.success();
-            wordListActivity.refreshList();
-            wordListActivity.onWindowFocusChanged(true);
-            wordListActivity.loadToast.success();
+            WindowLayout.hideStatusBar(wordListActivity.getWindow(), null); // sometimes the system just won't do as i ask!
+            if (wordItem != null) {
+                Log.d("Downloader", wordItem.toString());
+                ListFetcher.listHandler.post(ListFetcher.listSaver);
+                wordListActivity.refreshList();
+//                wordListActivity.onWindowFocusChanged(true);
+                wordListActivity.loadToast.success();
+            } else {
+                wordListActivity.loadToast.error();
+            }
         }
         super.onPostExecute(wordItem);
     }
@@ -151,12 +156,15 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
     @Override
     protected void onProgressUpdate(final String... values) {
         if (wordListActivity != null) {
-            if (values.length == 2) {
-                wordListActivity.loadToast.setText(String.format("Indlæser ord [%s] :%s%s", values[0], System.lineSeparator(), values[1]));
-            } else {
-                wordListActivity.loadToast.setText(values[0]);
-            }
+            wordListActivity.loadToast.setText(values[0]);
         }
+//        if (wordListActivity != null) {
+//            if (values.length == 2) {
+//                wordListActivity.loadToast.setText(String.format("Indlæser ord [%s] :%s%s", values[0], System.lineSeparator(), values[1]));
+//            } else {
+//                wordListActivity.loadToast.setText(values[0]);
+//            }
+//        }
     }
 
     @Override
