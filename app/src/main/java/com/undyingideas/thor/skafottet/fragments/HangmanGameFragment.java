@@ -196,12 +196,6 @@ public class HangmanGameFragment extends Fragment {
         shimmerStatus.start(textViewStatus);
         sepKnown.setAnimation(sepAnimation);
         sepStatus.setAnimation(sepAnimation2);
-
-//        if (getView() != null) {
-//            getView().setFocusableInTouchMode(true);
-//            getView().requestFocus();
-//            getView().setOnKeyListener(new OnBackPressedSimulator());
-//        }
     }
 
     private static String getOppNames(final String lobbykey, final String yourname) {
@@ -247,8 +241,6 @@ public class HangmanGameFragment extends Fragment {
             if (bundle.containsKey(Constant.KEY_SAVE_GAME)) {
                 // restore complete game state!!
                 currentGame = bundle.getParcelable(Constant.KEY_SAVE_GAME);
-                // and save the game!
-                GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, currentGame);
             }
         }
     }
@@ -257,10 +249,10 @@ public class HangmanGameFragment extends Fragment {
         new Runnable() {
             @Override
             public void run() {
-                YoYo.with(Techniques.Pulse).duration(400).playOn(buttonRows[0]);
-                YoYo.with(Techniques.Pulse).duration(400).playOn(buttonRows[1]);
-                YoYo.with(Techniques.Pulse).duration(400).playOn(buttonRows[2]);
-                YoYo.with(Techniques.Pulse).duration(400).playOn(buttonRows[3]);
+                YoYo.with(Techniques.FadeIn).duration(400).playOn(buttonRows[0]);
+                YoYo.with(Techniques.FadeIn).duration(400).playOn(buttonRows[1]);
+                YoYo.with(Techniques.FadeIn).duration(400).playOn(buttonRows[2]);
+                YoYo.with(Techniques.FadeIn).duration(400).playOn(buttonRows[3]);
                 YoYo.with(Techniques.FadeIn).duration(400).playOn(noose);
                 for (final Button button : listOfButtons) {
                     YoYo.with(Techniques.FadeIn).duration(400).playOn(button);
@@ -295,15 +287,8 @@ public class HangmanGameFragment extends Fragment {
         currentGame.getLogic().guessLetter(guess);
         shimmerWord.start(textViewWord);
         textViewWord.setText(currentGame.getLogic().getVisibleWord());
-        if (!currentGame.getLogic().isLastLetterCorrect()) {
-            gameSoundNotifier.playGameSound(GameUtility.SFX_GAME_WRONG_1);
-            if (vibrator != null) vibrator.vibrate(50);
-            YoYo.with(Techniques.Flash).duration(300).playOn(textViewWord);
-        } else {
-            gameSoundNotifier.playGameSound(GameUtility.SFX_GAME_RIGHT);
-        }
-
         if (currentGame.getLogic().isGameOver()) {
+            GameUtility.writeNullGame();
             if (currentGame.getLogic().isGameWon()) {
                 gameSoundNotifier.playGameSound(GameUtility.SFX_WON);
             } else {
@@ -311,6 +296,15 @@ public class HangmanGameFragment extends Fragment {
             }
             startEndgame();
         } else {
+            // save the game status!
+            GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, currentGame);
+            if (!currentGame.getLogic().isLastLetterCorrect()) {
+                gameSoundNotifier.playGameSound(GameUtility.SFX_GAME_WRONG_1);
+                if (vibrator != null) vibrator.vibrate(50);
+                YoYo.with(Techniques.Flash).duration(300).playOn(textViewWord);
+            } else {
+                gameSoundNotifier.playGameSound(GameUtility.SFX_GAME_RIGHT);
+            }
             updateScreen();
         }
     }

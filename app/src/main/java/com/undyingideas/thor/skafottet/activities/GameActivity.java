@@ -19,10 +19,8 @@ package com.undyingideas.thor.skafottet.activities;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -36,7 +34,6 @@ import com.undyingideas.thor.skafottet.fragments.LobbySelectorFragment;
 import com.undyingideas.thor.skafottet.game.HangedMan;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.interfaces.GameSoundNotifier;
-import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
@@ -59,7 +56,6 @@ import asia.ivity.android.marqueeview.MarqueeView;
 public class GameActivity extends SoundAbstract implements
         LobbySelectorFragment.OnMultiPlayerPlayerFragmentInteractionListener,
         EndOfGameFragment.OnEndGameButtonClickListenerInterface,
-        ProgressBarInterface,
         CreateLobbyFragment.OnCreateLobbyFragmentInteractionListener,
         GameSoundNotifier
 {
@@ -95,26 +91,26 @@ public class GameActivity extends SoundAbstract implements
 
         initSound();
 
-        final Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(tb);
-        if (getSupportActionBar() != null) {
-            tb.setLogo(R.drawable.icon);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+//        final Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(tb);
+//        if (getSupportActionBar() != null) {
+//            tb.setLogo(R.drawable.icon);
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        }
 
         /* configure the custom marquee view linked with a textview */
-        mvReset = new StartMarquee();
-        handler = new Handler();
+//        mvReset = new StartMarquee();
+//        handler = new Handler();
 
-        mv = (MarqueeView) findViewById(R.id.game_marqueeView);
-        tv = (TextView) findViewById(R.id.game_text_view_marq);
-        tv.setText(GameUtility.mpc.name == null ? "Du er ikke logget ind, log ind for at hænge andre." : "Du er logget ind som " + GameUtility.mpc.name);
-        mv.setPauseBetweenAnimations(500);
-        mv.setSpeed(10);
-        handler.postDelayed(mvReset, 500);
+//        mv = (MarqueeView) findViewById(R.id.game_marqueeView);
+//        tv = (TextView) findViewById(R.id.game_text_view_marq);
+//        tv.setText(GameUtility.mpc.name == null ? "Du er ikke logget ind, log ind for at hænge andre." : "Du er logget ind som " + GameUtility.mpc.name);
+//        mv.setPauseBetweenAnimations(500);
+//        mv.setSpeed(10);
+//        handler.postDelayed(mvReset, 500);
 
-        topProgressBar = (ProgressBar) findViewById(R.id.topProgressBar);
-        topProgressBar.setVisibility(View.INVISIBLE);
+//        topProgressBar = (ProgressBar) findViewById(R.id.topProgressBar);
+//        topProgressBar.setVisibility(View.INVISIBLE);
 
         if (getIntent() != null) {
             final Bundle bundle = getIntent().getExtras();
@@ -122,7 +118,7 @@ public class GameActivity extends SoundAbstract implements
             switch (gameMode){
             case Constant.MODE_CONT_GAME:
                 // throw in the game from the preferences
-                addFragment(HangmanGameFragment.newInstance((SaveGame) GameUtility.s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class)));
+                addFragment(HangmanGameFragment.newInstance((SaveGame) bundle.getParcelable(Constant.KEY_SAVE_GAME))); //  (SaveGame) GameUtility.s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class)));
                 break;
                 case Constant.MODE_SINGLE_PLAYER :
                 addFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(), false, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du")));
@@ -230,11 +226,5 @@ public class GameActivity extends SoundAbstract implements
             finish();
         }
     }
-
-    @Override
-    public void setProgressBar(final boolean visible) {
-        topProgressBar.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
-    }
-
 }
 

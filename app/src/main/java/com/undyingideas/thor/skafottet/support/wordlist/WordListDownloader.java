@@ -63,7 +63,7 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
     public WordListDownloader(final WordListActivity wordListActivity, final String title, final String url, final boolean multi) {
         wordListActivityWeakReference = new WeakReference<>(wordListActivity);
         this.title = title;
-        this.url = url;
+        this.url = url.toLowerCase();
         this.multi = multi;
     }
 

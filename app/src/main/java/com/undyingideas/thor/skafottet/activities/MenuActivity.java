@@ -222,7 +222,6 @@ public class MenuActivity extends MenuActivityAbstract implements
 
     private void endMenu(final String method_name, final ImageView clickedImageView) {
         if (click_status) {
-            GameUtility.writeNullGame();
             click_status = false;
             for (final ImageView iv : buttons) if (iv != clickedImageView) YoYo.with(Techniques.FadeOut).duration(100).playOn(iv);
             YoYo.with(Techniques.RotateOut).duration(500).withListener(new ExitAnimatorHandler(this, method_name)).playOn(clickedImageView);
@@ -282,9 +281,8 @@ public class MenuActivity extends MenuActivityAbstract implements
 
         try {
             // If previous game is found, add it to list :-)
-            s_preferences.checkForNullKey(Constant.KEY_SAVE_GAME);
             final SaveGame saveGame = (SaveGame) s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
-            Log.d(TAG, saveGame.toString());
+//            Log.d(TAG, saveGame.getLogic().toString());
             if (saveGame.getLogic() != null && !saveGame.getLogic().isGameOver()) {
                 startGameItems.add(new StartGameItem(Constant.MODE_CONT_GAME, "Fortsæt sidste spil", "Type : " + (saveGame.isMultiPlayer() ? "Multi" : "Single") + "player / Gæt : " + saveGame.getLogic().getVisibleWord(), imageRefs[saveGame.getLogic().getNumWrongLetters()]));
             }
@@ -317,6 +315,9 @@ public class MenuActivity extends MenuActivityAbstract implements
     private void startNewGame() {
         if (newGameID != Constant.MODE_MULTI_PLAYER_LOGIN) {
             final Intent intent = new Intent(this, GameActivity.class).putExtra(Constant.KEY_MODE, newGameID);
+            if (newGameID == Constant.MODE_CONT_GAME) {
+                intent.putExtra(Constant.KEY_SAVE_GAME, (SaveGame) s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class));
+            }
             if (sf != null) sf.setRun(false);
             startActivity(intent);
         } else {

@@ -151,7 +151,7 @@ public class SplashActivity extends AppCompatActivity {
 
             // only for testing stuff!!!!
 //            s_preferences.clear();
-//            Log.d(TAG, "Wordlist deleted : " + ListFetcher.deleteList(getApplicationContext()));
+            Log.d(TAG, "Wordlist deleted : " + ListFetcher.deleteList(getApplicationContext()));
             ListFetcher.listHandler = new Handler();
             ListFetcher.listSaver = new ListFetcher.ListSaver(getApplicationContext());
 
@@ -183,9 +183,9 @@ public class SplashActivity extends AppCompatActivity {
 
             Log.d(TAG, String.valueOf(s_wordController.isLocal()));
 
-            s_wordController.setIndexLocale(s_preferences.getInt(Constant.KEY_WORDS_LIST_LOCAL_INDEX, 0));
-            s_wordController.setIsLocal(s_preferences.getBoolean(Constant.KEY_WORDS_IS_LIST_LOCAL));
-            s_wordController.setIndexRemote(s_preferences.getString(Constant.KEY_WORDS_LIST_FIREBASE_KEY));
+//            s_wordController.setIndexLocale(s_preferences.getInt(Constant.KEY_WORDS_LIST_LOCAL_INDEX, 0));
+//            s_wordController.setIsLocal(s_preferences.getBoolean(Constant.KEY_WORDS_IS_LIST_LOCAL));
+//            s_wordController.setIndexRemote(s_preferences.getString(Constant.KEY_WORDS_LIST_FIREBASE_KEY));
 
             s_wordController.setIsLocal(true);
 
