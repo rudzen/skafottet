@@ -87,7 +87,7 @@ public class StarField extends View implements PreferenceChangeListener {
         if (p == null) {
             p = new Paint();
             p.setColor(color);
-            //p.setStrokeWidth(4f);
+            p.setStrokeWidth(3f);
             //p.setShadowLayer(2f, 2f, 2f, Color.GRAY);
         }
         Log.d(TAG, "Width  : " + w);
@@ -161,7 +161,7 @@ public class StarField extends View implements PreferenceChangeListener {
         super.onDraw(canvas);
         for (final Star2D star : stars) {
             p.setAlpha(star.fade);
-            canvas.drawCircle(star.xy.x, star.xy.y, 5, p);
+            canvas.drawCircle(star.xy.x, star.xy.y, 7, p);
         }
     }
 }
