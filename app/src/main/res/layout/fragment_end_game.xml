@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2016 Rudy Alex Kohn
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
@@ -7,8 +23,6 @@
                 android:focusableInTouchMode="false"
                 android:orientation="vertical"
                 android:weightSum="10">
-
-    <!--android:background="@android:color/black"-->
 
     <ImageView
         android:id="@+id/end_game_image_view"
@@ -35,9 +49,10 @@
         android:id="@+id/end_game_lower_status_marquee_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/end_game_text_view_top"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/end_game_text_view_top">
     </TextView>
+
     <TextView
         android:id="@+id/end_game_lower_status_text_view"
         android:layout_width="wrap_content"
@@ -46,10 +61,9 @@
         android:layout_alignParentEnd="true"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textSize="15sp"
         android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do."
+        android:textSize="15sp"
         tools:ignore="HardcodedText"/>
-
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -85,5 +99,4 @@
         </ImageView>
 
     </LinearLayout>
-
 </RelativeLayout>

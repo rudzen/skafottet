@@ -1,21 +1,21 @@
-<LinearLayout android:id="@+id/what"
-              xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:background="@drawable/background"
-              tools:context=".activities.GameActivity"
-              android:weightSum="12.4"
+<LinearLayout
+    android:id="@+id/what"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical"
+    android:weightSum="12.4"
+    tools:context=".activities.GameActivity"
+    tools:ignore="HardcodedText"
     >
-
-    <!--android:background="#000000"-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        android:layout_weight="6">
+        android:layout_weight="6"
+        android:orientation="vertical">
 
         <com.undyingideas.thor.skafottet.views.camera.Hangman3dView
             android:id="@+id/imageView"
@@ -27,100 +27,73 @@
 
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/linearLayoutStatus"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:padding="3dp"
-        android:id="@+id/linearLayoutStatus"
-        android:layout_weight="1.2">
+        android:layout_weight="1.2"
+        android:orientation="vertical"
+        android:padding="3dp">
 
         <TextView
+            android:id="@+id/textViewStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewStatus"
-            android:textStyle="bold|italic"
+            android:layout_marginTop="3dp"
+            android:alpha="100"
             android:text="Spilstatus"
             android:textSize="10sp"
-            android:layout_marginTop="3dp"
-            android:alpha="100"/>
+            android:textStyle="bold|italic"/>
 
         <View
-            android:layout_width="match_parent"
-            android:background="@drawable/line_seperator_gradient"
-            android:layout_height="1dp"
             android:id="@+id/sepStatus"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/line_seperator_gradient"
             />
 
         <com.romainpiel.shimmer.ShimmerTextView
             android:id="@+id/hangman_game_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
             android:layout_gravity="center"
             android:gravity="center"
+            android:textColor="@color/colorAccent"
             android:textSize="20sp"/>
-
-        <!--<TextView-->
-            <!--android:freezesText="true"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
-            <!--android:id="@+id/hangman_game_status"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:singleLine="false"-->
-            <!--android:textColor="@color/selector"-->
-            <!--android:gravity="center"-->
-            <!--android:layout_weight="1"-->
-            <!--/>-->
-
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/linearLayoutKnownWords"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:padding="3dp"
-        android:id="@+id/linearLayoutKnownWords"
-        android:layout_weight="1.2">
+        android:layout_weight="1.2"
+        android:orientation="vertical"
+        android:padding="3dp">
 
         <TextView
+            android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/textView"
-            android:textStyle="bold|italic"
+            android:layout_marginTop="3dp"
+            android:alpha="100"
             android:text="Kendte bogstaver"
             android:textSize="10sp"
-            android:layout_marginTop="3dp"
-            android:alpha="100"/>
+            android:textStyle="bold|italic"/>
 
         <View
-            android:layout_width="match_parent"
-            android:background="@drawable/line_seperator_gradient"
-            android:layout_height="1dp"
             android:id="@+id/sepKnown"
-        />
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/line_seperator_gradient"
+            />
 
         <com.romainpiel.shimmer.ShimmerTextView
             android:id="@+id/hangman_game_known_letters"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
             android:layout_gravity="center"
             android:gravity="center"
+            android:textColor="@color/colorAccent"
             android:textSize="25sp"/>
-
-        <!--<TextView-->
-            <!--android:freezesText="true"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="0dp"-->
-            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
-            <!--android:id="@+id/hangman_game_known_letters"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:singleLine="false"-->
-            <!--android:textColor="@color/selector"-->
-            <!--android:gravity="center"-->
-            <!--android:layout_weight="1"-->
-            <!--/>-->
     </LinearLayout>
 
     <LinearLayout
@@ -180,8 +153,8 @@
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:layout_gravity="bottom"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <Button
@@ -232,8 +205,8 @@
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:layout_gravity="bottom"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <Button
@@ -283,8 +256,8 @@
         android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:layout_gravity="bottom"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <Button

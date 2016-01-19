@@ -9,8 +9,7 @@
     <include
         layout="@layout/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
     </include>
 
     <android.support.v4.widget.DrawerLayout
@@ -35,8 +34,8 @@
                     android:layout_height="match_parent"
                     android:clipToPadding="false"
                     android:drawSelectorOnTop="true"
-                    android:fastScrollEnabled="true"
                     android:fadingEdge="vertical"
+                    android:fastScrollEnabled="true"
                     android:overScrollMode="never"
                     android:padding="10dp"
                     android:scrollbarStyle="outsideOverlay"/>
@@ -59,10 +58,10 @@
             android:layout_width="240dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:background="@android:color/black"
+            android:background="@drawable/black_trans_black"
             android:clickable="true"
-            android:padding="5dp"
             android:orientation="vertical"
+            android:padding="5dp"
             android:scrollbars="none">
 
             <include layout="@layout/word_list_nav_drawer">
@@ -71,5 +70,3 @@
         </LinearLayout>
     </android.support.v4.widget.DrawerLayout>
 </LinearLayout>
-
-
