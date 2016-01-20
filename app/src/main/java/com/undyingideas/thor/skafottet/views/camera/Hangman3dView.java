@@ -197,8 +197,14 @@ public class Hangman3dView extends View {
 
     }
 
+    boolean firstrun = true;
+
     @Override
     protected void onDraw(final Canvas canvas) {
+        if (firstrun) {
+            S = new Camera(150, 150, getWidth()/2, getHeight()/2+getHeight()/8);
+            firstrun = false;
+        }
         S.focus(c);
         for (final Cube cu : gallow) {
             cu.draw(S, canvas, p); // draw gallow
