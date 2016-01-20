@@ -101,4 +101,5 @@ public abstract class GameUtility {
     public static void writeNullGame() {
         s_preferences.remove(Constant.KEY_SAVE_GAME);
     }
+
 }

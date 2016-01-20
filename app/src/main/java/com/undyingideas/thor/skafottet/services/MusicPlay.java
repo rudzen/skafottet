@@ -34,6 +34,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     public static Intent intent = new Intent();
 
     private static final String ACTION_PLAY = "SKAFOTMUSIK";
+    private static final String ACTION_STOP = "STOPSKAFOTT";
     private static final int music = R.raw.insidious;
     private static MusicPlay mInstance;
 
@@ -63,22 +64,21 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     public int onStartCommand(final Intent intent, final int flags, final int startId) {
         Log.d("Player", "onStartCommand");
         if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_PLAY)) {
-            Log.d("Player", "Filter was correct");
+                Log.d("Player", "Filter was correct");
 //            InputStream inputStream = getResources().openRawResource(R.raw.reign_supreme);
-            mMediaPlayer = MediaPlayer.create(this, music); // initialize it here
-            mMediaPlayer.setVolume(0.3f, 0.3f);
-            mMediaPlayer.setOnPreparedListener(this);
-            mMediaPlayer.setOnErrorListener(this);
-            mMediaPlayer.setLooping(true);
-            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            initMediaPlayer();
+                mMediaPlayer = MediaPlayer.create(this, music); // initialize it here
+                mMediaPlayer.setVolume(0.3f, 0.3f);
+                mMediaPlayer.setOnPreparedListener(this);
+                mMediaPlayer.setOnErrorListener(this);
+                mMediaPlayer.setLooping(true);
+                mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                initMediaPlayer();
         } else {
-            if (mMediaPlayer != null) {
-                mMediaPlayer.stop();
-                mMediaPlayer.release();
-                mMediaPlayer = null;
-            }
-            return -1;
+//            if (mMediaPlayer != null) {
+//                mMediaPlayer.stop();
+//                mMediaPlayer.release();
+//            }
+//            return -1;
         }
 
         return START_STICKY;

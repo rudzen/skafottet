@@ -56,6 +56,17 @@
         <item name="android:textColorPrimaryInverse">@color/primary_text_material_light</item>
     </style>
 
+    <style name="PrefsTheme" parent="@android:style/Theme.Black.NoTitleBar">
+        <item name="android:windowBackground">@drawable/black_trans_black</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:listViewStyle">@style/listViewPrefs</item>
+    </style>
+
+    <style name="listViewPrefs" parent="@android:style/Widget.ListView">
+        <item name="android:background">@drawable/black_trans_black</item>
+        <item name="android:cacheColorHint">@color/colorAccent</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

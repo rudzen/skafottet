@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -67,6 +66,7 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_pref
  * The main menu activity.
  * Quite large, but contains only relevant code.
  * The Class metric is high here, but this is just a quick hack to make the SoundPool work.
+ *
  * @author rudz
  */
 public class MenuActivity extends MenuActivityAbstract implements
@@ -82,7 +82,7 @@ public class MenuActivity extends MenuActivityAbstract implements
     private ImageView title;
     private final ImageView[] buttons = new ImageView[BUTTON_COUNT];
     private HTextView textView_buttom;
-//    private static final String INFO_GAME = "Nuværende spil: %s";
+    //    private static final String INFO_GAME = "Nuværende spil: %s";
 //    private static final String INFO_GUESS = "Dine gæt: %s";
 //    private static final String INFO_LEFT = "Gæt tilbage: %i";
 //    private static final String INFO_LOGGED_IN = "Logged ind: %s";
@@ -114,6 +114,7 @@ public class MenuActivity extends MenuActivityAbstract implements
     private final int[] loginButtons = new int[2];
 
     private InternetRecieverData connectionObserver;
+    @SuppressWarnings("StaticVariableNamingConvention")
     private static LoadToast lt;
 
     @Override
@@ -124,6 +125,7 @@ public class MenuActivity extends MenuActivityAbstract implements
         WindowLayout.hideStatusBar(getWindow(), null);
 
         initSound();
+        //noinspection AssignmentToStaticFieldFromInstanceMethod
         lt = new LoadToast(this);
         if (s_buttonListener == null) {
             s_buttonListener = new MenuButtonClickHandler(this);
@@ -193,6 +195,7 @@ public class MenuActivity extends MenuActivityAbstract implements
     protected void onDestroy() {
         for (int i = 0; i < buttons.length; i++) buttons[i] = null;
         stopService(MusicPlay.intent); // we want to stop the service here, as the acticity was destroyed
+//        GameUtility.stopMusic(getApplicationContext());
         super.onDestroy();
     }
 
@@ -244,7 +247,7 @@ public class MenuActivity extends MenuActivityAbstract implements
 
     @SuppressWarnings("unused")
     private void showHelp() {
-        if (sf != null) sf.setRun(false);
+//        if (sf != null) sf.setRun(false);
         startActivity(new Intent(this, GameActivity.class).putExtra(Constant.KEY_MODE, Constant.MODE_HELP));
     }
 
@@ -264,9 +267,8 @@ public class MenuActivity extends MenuActivityAbstract implements
 
     @SuppressWarnings("unused")
     private void showSettings() {
-
-        startActivity(new Intent(this, PreferenceActivity.class));
-//        showDialog("Hov!", "Denne funktion mangler stadig.");
+//        startActivity(new Intent(this, PrefsActivity.class));
+        showDialog("Hov!", "Denne funktion er ikke klar endnu.");
     }
 
     @SuppressWarnings("unused")
@@ -338,8 +340,6 @@ public class MenuActivity extends MenuActivityAbstract implements
     private void callMethod(final String method_name) {
         if (FINISH.equals(method_name)) {
             ListFetcher.listHandler.post(ListFetcher.listSaver);
-//            ListFetcher.saveWordLists(s_wordController, getApplicationContext());
-//            overridePendingTransition(0, 0);
             finish();
         } else {
             try {
@@ -385,6 +385,18 @@ public class MenuActivity extends MenuActivityAbstract implements
             SettingsDTO.PREFS_BLOOD = s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD);
             sf.setRun(SettingsDTO.PREFS_BLOOD);
         }
+//        if (key.equals(Constant.KEY_PREFS_MUSIC)) {
+            SettingsDTO.PREFS_MUSIC = s_preferences.getBoolean(Constant.KEY_PREFS_MUSIC);
+            if (SettingsDTO.PREFS_MUSIC) {
+                if (!MusicPlay.isPlaying()) {
+                    MusicPlay.intent = new Intent(getApplicationContext(), MusicPlay.class);
+                    MusicPlay.intent.setAction("SKAFOTMUSIK");
+                    startService(MusicPlay.intent);
+                }
+            } else {
+                stopService(MusicPlay.intent);
+            }
+//        }
 
     }
 
@@ -587,7 +599,7 @@ public class MenuActivity extends MenuActivityAbstract implements
         public void onClick(final View v) {
             final MenuActivity menuActivity = menuActivityWeakReference.get();
             if (menuActivity != null) {
-                menuActivity.sf.setRun(false);
+                if (menuActivity.sf != null) menuActivity.sf.setRun(false);
                 menuActivity.md = new MaterialDialog.Builder(menuActivity)
                         .customView(R.layout.login, false)
                         .cancelable(true)
@@ -631,7 +643,7 @@ public class MenuActivity extends MenuActivityAbstract implements
                         final EditText editTextURL = (EditText) dialogCustomView.findViewById(R.id.loginPass);
                         final String user = editTextTitle.getText().toString().trim();
                         final String pass = editTextURL.getText().toString().trim();
-                        final CheckBox check = (CheckBox)( dialogCustomView.findViewById(R.id.createUserCheckBox));
+                        final CheckBox check = (CheckBox) (dialogCustomView.findViewById(R.id.createUserCheckBox));
                         final boolean isChecked = check.isChecked();
                         Log.d("login", "isChecked " + isChecked);
                         Log.d("Login", user);
@@ -666,7 +678,8 @@ public class MenuActivity extends MenuActivityAbstract implements
     }
 
     public void postCreateResult(boolean b) {
-        if (b) lt.success(); else lt.error();
+        if (b) lt.success();
+        else lt.error();
 
     }
 
@@ -780,7 +793,9 @@ public class MenuActivity extends MenuActivityAbstract implements
 
     @Override
     public void onBecameBackground() {
-        sf.setRun(false);
+        if (sf != null) {
+            sf.setRun(false);
+        }
         super.onBecameBackground();
     }
 

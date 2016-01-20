@@ -18,14 +18,31 @@ package com.undyingideas.thor.skafottet.activities;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.view.MenuItem;
 
 import com.undyingideas.thor.skafottet.R;
 
-public class PreferencesActivity extends PreferenceActivity {
+public class PrefsActivity extends PreferenceActivity {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.skafottet_preferences);
+    }
+
+    @Override
+    public boolean onMenuItemSelected(final int featureId, final MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onMenuItemSelected(featureId, item);
+    }
+
+    @Override
+    public void onBackPressed() {
+//        startActivity(new Intent(this, MenuActivity.class));
+//        finish();
+        super.onBackPressed();
     }
 }

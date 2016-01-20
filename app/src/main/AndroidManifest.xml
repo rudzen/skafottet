@@ -57,6 +57,12 @@
                 android:value=".activities.PlayerListActivity"/>
         </activity>
 
+        <activity android:name=".activities.PrefsActivity"
+            android:parentActivityName=".activities.MenuActivity"
+            >
+
+        </activity>
+
         <receiver
             android:name=".broadcastrecievers.InternetReciever"
             android:enabled="true"
@@ -88,8 +94,6 @@
         <service android:name=".services.MusicPlay">
         </service>
 
-        <activity android:name=".activities.PreferencesActivity">
-        </activity>
     </application>
 
 </manifest>

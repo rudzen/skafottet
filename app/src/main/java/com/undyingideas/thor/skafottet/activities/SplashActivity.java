@@ -139,9 +139,18 @@ public class SplashActivity extends AppCompatActivity {
 
             // advarsel, dette er en test-zone.. alt hvad der reelt foregår her er udsat for underlige fremgangsmåder!..
 
+            if (s_preferences == null) {
+                s_preferences = new TinyDB(getApplicationContext());
+            }
+
             MusicPlay.intent = new Intent(getApplicationContext(), MusicPlay.class);
             MusicPlay.intent.setAction("SKAFOTMUSIK");
             startService(MusicPlay.intent);
+
+//            if (SettingsDTO.PREFS_MUSIC) {
+//                startService(MusicPlay.intent);
+//            }
+
 
             GameUtility.connectionStatus = NetworkHelper.getConnectivityStatus(getApplicationContext());
             GameUtility.connectionStatusName = NetworkHelper.getConnectivityStatusStringFromStatus(GameUtility.connectionStatus);
@@ -151,9 +160,7 @@ public class SplashActivity extends AppCompatActivity {
             FontUtils.setDefaultFont(getApplicationContext(), "SERIF", Constant.FONT_LIGHT);
             FontUtils.setDefaultFont(getApplicationContext(), "SANS_SERIF", Constant.FONT_BOLD);
 
-            if (s_preferences == null) {
-                s_preferences = new TinyDB(getApplicationContext());
-            }
+
 
             // only for testing stuff!!!!
 //            s_preferences.clear();
