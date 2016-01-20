@@ -63,12 +63,18 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.mpc;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_preferences;
 
 /**
- * The main menu activity.
- * Quite large, but contains only relevant code.
- * The Class metric is high here, but this is just a quick hack to make the SoundPool work.
- *
+ * The main menu activity.<br>
+ * Quite large, but contains only relevant code.<br>
+ * The Class metric is high here, but this is just a quick hack to make the SoundPool work.<br>
+ * The refactoring of this class is imminent.<br>
+ * <li>It's TOO big.</li>
+ * <li>Has too many responsibilities</li>
+ * <li>Difficult to figure out what's going on where! (luckily search works!)</li>
+ * <p>Animation support classes needs to be generalised</p>
+ * <p>Private classes should use abstraction to save a lot of valuable space</p>
  * @author rudz
  */
+@SuppressWarnings({"ClassTooDeepInInheritanceTree", "ClassWithTooManyMethods"})
 public class MenuActivity extends MenuActivityAbstract implements
         InternetRecieverData.InternetRecieverInterface,
         SharedPreferences.OnSharedPreferenceChangeListener
@@ -400,13 +406,19 @@ public class MenuActivity extends MenuActivityAbstract implements
 
     }
 
-    @SuppressWarnings("AccessStaticViaInstance")
-    static class QuitDialogCallback implements MaterialDialog.SingleButtonCallback {
+    private static class WeakReferenceAbstraction {
+        protected final WeakReference<MenuActivity> menuActivityWeakReference;
 
-        private final WeakReference<MenuActivity> menuActivityWeakReference;
+        public WeakReferenceAbstraction(final MenuActivity menuActivity) {
+            menuActivityWeakReference = new WeakReference<>(menuActivity);
+        }
+    }
+
+    @SuppressWarnings("AccessStaticViaInstance")
+    static class QuitDialogCallback extends WeakReferenceAbstraction implements MaterialDialog.SingleButtonCallback {
 
         public QuitDialogCallback(final MenuActivity menuActivity) {
-            menuActivityWeakReference = new WeakReference<>(menuActivity);
+            super(menuActivity);
         }
 
         @Override
@@ -441,14 +453,12 @@ public class MenuActivity extends MenuActivityAbstract implements
         }
     }
 
-    private static class MenuButtonClickHandler implements View.OnClickListener {
-
-        private final WeakReference<MenuActivity> menuActivityWeakReference;
+    private static class MenuButtonClickHandler extends WeakReferenceAbstraction implements View.OnClickListener {
 
         @SuppressWarnings("NonConstantFieldWithUpperCaseName")
 
         public MenuButtonClickHandler(final MenuActivity menuActivity) {
-            menuActivityWeakReference = new WeakReference<>(menuActivity);
+            super(menuActivity);
         }
 
         @Override
@@ -511,12 +521,10 @@ public class MenuActivity extends MenuActivityAbstract implements
         }
     }
 
-    private static class EnterAnimatorHandler implements Animator.AnimatorListener {
-
-        private final WeakReference<MenuActivity> menuActivityWeakReference;
+    private static class EnterAnimatorHandler extends WeakReferenceAbstraction implements Animator.AnimatorListener {
 
         public EnterAnimatorHandler(final MenuActivity menuActivity) {
-            menuActivityWeakReference = new WeakReference<>(menuActivity);
+            super(menuActivity);
         }
 
         @Override
@@ -538,33 +546,34 @@ public class MenuActivity extends MenuActivityAbstract implements
         @Override
         public void onAnimationRepeat(final Animator animation) { }
 
-        private static class AllFadeIn implements Runnable {
-            private final MenuActivity menuActivity;
+        private static class AllFadeIn extends WeakReferenceAbstraction implements Runnable {
 
-            public AllFadeIn(final MenuActivity menuActivity) {this.menuActivity = menuActivity;}
+            public AllFadeIn(final MenuActivity menuActivity) { super(menuActivity); }
 
             @Override
             public void run() {
-                YoYo.with(Techniques.Pulse).duration(800).playOn(menuActivity.title);
-                YoYo.with(Techniques.FadeIn).duration(900).playOn(menuActivity.buttons[0]);
-                YoYo.with(Techniques.FadeIn).duration(900).playOn(menuActivity.buttons[1]);
-                YoYo.with(Techniques.FadeIn).duration(800).playOn(menuActivity.buttons[2]);
-                YoYo.with(Techniques.FadeIn).duration(800).playOn(menuActivity.buttons[3]);
-                YoYo.with(Techniques.FadeIn).duration(700).playOn(menuActivity.buttons[4]);
-                YoYo.with(Techniques.FadeIn).duration(700).playOn(menuActivity.buttons[5]);
-                YoYo.with(Techniques.FadeIn).duration(600).playOn(menuActivity.buttons[6]);
-                YoYo.with(Techniques.FadeIn).duration(600).playOn(menuActivity.buttons[7]);
+                final MenuActivity menuActivity = menuActivityWeakReference.get();
+                if (menuActivity != null) {
+                    YoYo.with(Techniques.Pulse).duration(800).playOn(menuActivity.title);
+                    YoYo.with(Techniques.FadeIn).duration(900).playOn(menuActivity.buttons[0]);
+                    YoYo.with(Techniques.FadeIn).duration(900).playOn(menuActivity.buttons[1]);
+                    YoYo.with(Techniques.FadeIn).duration(800).playOn(menuActivity.buttons[2]);
+                    YoYo.with(Techniques.FadeIn).duration(800).playOn(menuActivity.buttons[3]);
+                    YoYo.with(Techniques.FadeIn).duration(700).playOn(menuActivity.buttons[4]);
+                    YoYo.with(Techniques.FadeIn).duration(700).playOn(menuActivity.buttons[5]);
+                    YoYo.with(Techniques.FadeIn).duration(600).playOn(menuActivity.buttons[6]);
+                    YoYo.with(Techniques.FadeIn).duration(600).playOn(menuActivity.buttons[7]);
+                }
             }
         }
     }
 
-    private static class ExitAnimatorHandler implements Animator.AnimatorListener {
+    private static class ExitAnimatorHandler extends WeakReferenceAbstraction implements Animator.AnimatorListener {
 
-        private final WeakReference<MenuActivity> menuActivityWeakReference;
         private final String methodToCall;
 
         public ExitAnimatorHandler(final MenuActivity menuActivity, final String methodToCall) {
-            menuActivityWeakReference = new WeakReference<>(menuActivity);
+            super(menuActivity);
             this.methodToCall = methodToCall;
         }
 
@@ -593,12 +602,10 @@ public class MenuActivity extends MenuActivityAbstract implements
         public void onAnimationRepeat(final Animator animation) { }
     }
 
-    private static class OnLoginClickListener implements View.OnClickListener {
-
-        private final WeakReference<MenuActivity> menuActivityWeakReference;
+    private static class OnLoginClickListener extends WeakReferenceAbstraction implements View.OnClickListener {
 
         public OnLoginClickListener(final MenuActivity menuActivity) {
-            menuActivityWeakReference = new WeakReference<>(menuActivity);
+            super(menuActivity);
         }
 
         @Override
@@ -622,12 +629,10 @@ public class MenuActivity extends MenuActivityAbstract implements
     /**
      * Listener for adding list dialog !
      */
-    private static class OnLoginClickResponse implements MaterialDialog.SingleButtonCallback {
-
-        private final WeakReference<MenuActivity> menuActivityWeakReference;
+    private static class OnLoginClickResponse extends WeakReferenceAbstraction implements MaterialDialog.SingleButtonCallback {
 
         public OnLoginClickResponse(final MenuActivity menuActivity) {
-            menuActivityWeakReference = new WeakReference<>(menuActivity);
+            super(menuActivity);
         }
 
         private static boolean isValid(final Context context, @NonNull final String title, @NonNull final String url) {
@@ -807,7 +812,7 @@ public class MenuActivity extends MenuActivityAbstract implements
     private void setLoginButton() {
         /* make sure the right button is set for the login/logout status */
         if (GameUtility.connectionStatus > -1) {
-            if (buttons[BUTTON_LOGIN_OUT] != null) {
+            if (buttons[BUTTON_LOGIN_OUT] != null) { // guard for when application first comes into foreground
                 buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(mpc.name == null ? loginButtons[0] : loginButtons[1]));
             }
         } else {

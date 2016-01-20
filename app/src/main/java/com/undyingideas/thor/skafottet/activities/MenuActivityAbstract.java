@@ -39,7 +39,7 @@ import java.lang.ref.WeakReference;
  *     Contains :<br>
  *         - Starfield View<br>
  *         - Sensor<br>
- *         - Battery Check<br>
+ *         - Battery Check (Disabled until further notice)<br>
  *         - Menu Sounds
  * </p>
  * Uses WeakReferences to avoid having any loose ends where the GC can't collect the object.
@@ -52,8 +52,7 @@ public abstract class MenuActivityAbstract extends SoundAbstract {
     protected Handler menuHandler;
 
     /* star field stuff */
-    @Nullable
-    StarField sf;
+    protected StarField sf;
 
     /* battery stuff - currently disabled !!! */
 
@@ -118,6 +117,7 @@ public abstract class MenuActivityAbstract extends SoundAbstract {
 
     @Override
     protected void onDestroy() {
+        //noinspection AssignmentToNull
         sf = null;
         mSensor = null;
         mSensorManager = null;
