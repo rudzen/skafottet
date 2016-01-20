@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 
 import static android.view.MotionEvent.ACTION_DOWN;
 import static android.view.MotionEvent.ACTION_MOVE;
@@ -29,7 +30,7 @@ public class Hangman3dView extends View {
     double ts;
     double t;     // simulation time in sec.
     // App
-    Camera S = new Camera(150, 150, 400, 400);
+    Camera S = new Camera(150, 150, 500, 600);
     V3 u = new V3(0, 1, 1).unit();
     double phi = Math.PI / 100;
     M3 Rz = M3.inverse.add(M3.sZ.mul((float) Math.sin(phi))).add(M3.sZ.mul(M3.sZ).mul((float) (1 - Math.cos(phi))));

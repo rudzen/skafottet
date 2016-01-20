@@ -36,7 +36,7 @@ public class Camera {
         moveCameraTo(cameraCenter);
         focusPoint = new V3(9, 9, 6);
         focus(focusPoint);
-        z = 4.5f;
+        z = 6f;
 
         u = new V3(0, 1, 1).unit();
         Su = new M3(0, -u.z, u.y,
