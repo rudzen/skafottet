@@ -125,6 +125,7 @@
     <orderEntry type="library" exported="" name="commons-0.8.5.3" level="project" />
     <orderEntry type="library" exported="" name="tubesock-0.0.12" level="project" />
     <orderEntry type="library" exported="" name="marqueeview-1.1.5" level="project" />
+    <orderEntry type="library" exported="" name="mint-4.4.0" level="project" />
   </component>
   <component name="org.twodividedbyzero.idea.findbugs">
     <option name="_basePreferences">

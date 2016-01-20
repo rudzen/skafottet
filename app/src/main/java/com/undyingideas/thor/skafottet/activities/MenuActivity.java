@@ -19,8 +19,10 @@ package com.undyingideas.thor.skafottet.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -48,6 +50,7 @@ import com.undyingideas.thor.skafottet.services.MusicPlay;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
+import com.undyingideas.thor.skafottet.support.utility.SettingsDTO;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import net.steamcrafted.loadtoast.LoadToast;
@@ -67,7 +70,9 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_pref
  * @author rudz
  */
 public class MenuActivity extends MenuActivityAbstract implements
-        InternetRecieverData.InternetRecieverInterface
+        InternetRecieverData.InternetRecieverInterface,
+        SharedPreferences.OnSharedPreferenceChangeListener
+
 {
 
     private static final String FINISH = "finish";
@@ -214,7 +219,7 @@ public class MenuActivity extends MenuActivityAbstract implements
     }
 
     private void showAll() {
-        Log.d("login showall", ""+(mpc.name == null));
+        Log.d("login showall", "" + (mpc.name == null));
         setLoginButton();
 //        buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(loginButtons[mpc.name == null ? 0 : 1]));
         YoYo.with(Techniques.FadeIn).duration(1000).withListener(new EnterAnimatorHandler(this)).playOn(title);
@@ -246,8 +251,7 @@ public class MenuActivity extends MenuActivityAbstract implements
     @SuppressWarnings("unused")
     private void showHighScore() {
         if (GameUtility.connectionStatus > -1) {
-            final Intent PlayerListActivity = new Intent(this, PlayerListActivity.class);
-            startActivity(PlayerListActivity);
+            startActivity(new Intent(this, PlayerListActivity.class));
         } else {
             showDialog("Fejl", "Ingen internetforbindelse tilstede.");
         }
@@ -260,7 +264,9 @@ public class MenuActivity extends MenuActivityAbstract implements
 
     @SuppressWarnings("unused")
     private void showSettings() {
-        showDialog("Hov!", "Denne funktion mangler stadig.");
+
+        startActivity(new Intent(this, PreferenceActivity.class));
+//        showDialog("Hov!", "Denne funktion mangler stadig.");
     }
 
     @SuppressWarnings("unused")
@@ -371,6 +377,15 @@ public class MenuActivity extends MenuActivityAbstract implements
         Log.d("login", "before show all");
 
         showAll();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
+        if (key.equals(Constant.KEY_PREFS_BLOOD) && sf != null) {
+            SettingsDTO.PREFS_BLOOD = s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD);
+            sf.setRun(SettingsDTO.PREFS_BLOOD);
+        }
+
     }
 
     @SuppressWarnings("AccessStaticViaInstance")
