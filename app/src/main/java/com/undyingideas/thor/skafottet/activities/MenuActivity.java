@@ -158,6 +158,12 @@ public class MenuActivity extends MenuActivityAbstract implements
     }
 
     @Override
+    public void finish() {
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        super.finish();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         updateText = new UpdateText();

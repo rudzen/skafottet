@@ -205,7 +205,12 @@ public abstract class MenuActivityAbstract extends SoundAbstract implements Batt
     @Override
     public void onBatteryStatusChanged(final BatteryDTO batteryInformation) {
         Log.d(TAG, String.valueOf(batteryInformation.getLevel()));
-        BatteryLevelReciever.addObserver(batteryLevelRecieverData);
+        menuHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                BatteryLevelReciever.addObserver(batteryLevelRecieverData);
+            }
+        }, 20000);
 
         if (sf != null) {
             // turn off the starfield if lower than 25% battery

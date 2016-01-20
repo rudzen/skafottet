@@ -167,6 +167,12 @@ public class GameActivity extends SoundAbstract implements
     }
 
     @Override
+    public void finish() {
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        super.finish();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();

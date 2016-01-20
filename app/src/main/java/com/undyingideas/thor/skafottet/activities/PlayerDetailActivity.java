@@ -73,4 +73,12 @@ public class PlayerDetailActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void finish() {
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        super.finish();
+    }
+
+
+
 }

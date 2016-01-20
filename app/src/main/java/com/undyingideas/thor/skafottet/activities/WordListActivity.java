@@ -94,11 +94,8 @@ public class WordListActivity extends AppCompatActivity implements
     private WordTitleLocalAdapter adapterLocal;
     private WordTitleRemoteAdapter adapterRemote;
 
-    public static Handler handler;
+    private Handler handler;
     private Runnable refreshStopper;
-
-    private int listCount; // for updating all lists.
-
 
     @SuppressLint("InflateParams")
     @Override
@@ -175,7 +172,14 @@ public class WordListActivity extends AppCompatActivity implements
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
             WindowLayout.setImmersiveMode(getWindow());
+            WindowLayout.hideStatusBar(getWindow(), null);
         }
+    }
+
+    @Override
+    public void finish() {
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        super.finish();
     }
 
     @Override

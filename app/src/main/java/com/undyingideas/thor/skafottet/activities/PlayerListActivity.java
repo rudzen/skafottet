@@ -11,12 +11,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.fragments.PlayerDetailFragment;
-import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
 import com.undyingideas.thor.skafottet.support.highscore.online.HighScoreContent;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
@@ -34,7 +32,7 @@ import java.util.List;
  * @author adam
  * @author rudz
  */
-public class PlayerListActivity extends AppCompatActivity implements Runnable, ProgressBarInterface {
+public class PlayerListActivity extends AppCompatActivity implements Runnable {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -42,7 +40,7 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable, P
      */
     private boolean mTwoPane;
     private View recyclerView;
-    private ProgressBar topProgressBar;
+//    private ProgressBar topProgressBar;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -68,8 +66,8 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable, P
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new FloaterClickHandler());
 
-        topProgressBar = (ProgressBar) findViewById(R.id.topProgressBar);
-        topProgressBar.setVisibility(View.INVISIBLE);
+//        topProgressBar = (ProgressBar) findViewById(R.id.topProgressBar);
+//        topProgressBar.setVisibility(View.INVISIBLE);
 
         recyclerView = findViewById(R.id.player_list);
         assert recyclerView != null;
@@ -88,15 +86,21 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable, P
     //This method is called on update
     @Override
     public void run() {
-        setProgressBar(true);
+//        setProgressBar(true);
         setupRecyclerView((RecyclerView) recyclerView, GameUtility.mpc.getHighScoreItems());
-        setProgressBar(false);
+//        setProgressBar(false);
     }
 
     @Override
-    public void setProgressBar(final boolean visible) {
-        topProgressBar.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+    public void finish() {
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        super.finish();
     }
+
+//    @Override
+//    public void setProgressBar(final boolean visible) {
+//        topProgressBar.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+//    }
 
     private static class FloaterClickHandler implements View.OnClickListener {
         @Override
