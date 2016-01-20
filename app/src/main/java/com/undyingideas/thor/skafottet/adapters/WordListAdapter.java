@@ -145,8 +145,7 @@ public class WordListAdapter extends BaseAdapter implements StickyListHeadersAda
      */
     @Override
     public long getHeaderId(final int position) {
-        // return the first character of the country as ID because this is what
-        // headers are based upon
+        // return the first character
         return mItems.get(position).subSequence(0, 1).charAt(0);
     }
 
