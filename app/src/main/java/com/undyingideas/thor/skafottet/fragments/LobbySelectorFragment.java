@@ -150,6 +150,7 @@ public class LobbySelectorFragment extends Fragment {
         listView.setAdapter(lobbyAdapter);
         listView.setOnItemClickListener(new OnLobbyClick(this));
         lobbyAdapter.notifyDataSetChanged();
+        if(lobbys.isEmpty()) WindowLayout.showSnack("Du har ingen udfordringer klar", listView, false);
     }
 
     private void updateList() {
