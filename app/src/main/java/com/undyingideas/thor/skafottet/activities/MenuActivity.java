@@ -215,7 +215,8 @@ public class MenuActivity extends MenuActivityAbstract implements
 
     private void showAll() {
         Log.d("login showall", ""+(mpc.name == null));
-        buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(loginButtons[mpc.name == null ? 0 : 1]));
+        setLoginButton();
+//        buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(loginButtons[mpc.name == null ? 0 : 1]));
         YoYo.with(Techniques.FadeIn).duration(1000).withListener(new EnterAnimatorHandler(this)).playOn(title);
         for (final ImageView button : buttons) {
             button.setClickable(true);
@@ -632,12 +633,13 @@ public class MenuActivity extends MenuActivityAbstract implements
                                 } else {
                                     Log.d("Login failure", " stuff");
                                 }
+                                menuActivity.setLoginButton();
                             }
                             menuActivity.onFinishLoginDialog(user, pass);
                         }
                     }
                 } else {
-                    menuActivity.buttons[BUTTON_LOGIN_OUT].setBackground(menuActivity.getResources().getDrawable(mpc.name == null ? menuActivity.loginButtons[0] : menuActivity.loginButtons[1]));
+//                    menuActivity.setLoginButton();
                     menuActivity.callMethod("showAll");
                 }
                 dialog.dismiss();
@@ -735,8 +737,11 @@ public class MenuActivity extends MenuActivityAbstract implements
         GameUtility.connectionStatus = connectionState;
         if (connectionState > -1) {
             // there is internet
+            setLoginButton();
         } else {
             // nope, no connection!
+            mpc.name = null;
+            setLoginButton();
         }
     }
 
@@ -753,6 +758,8 @@ public class MenuActivity extends MenuActivityAbstract implements
         if (sf != null) {
             sf.setRun(true);
         }
+        mpc.name = null;
+        setLoginButton();
         super.onBecameForeground();
     }
 
@@ -760,5 +767,16 @@ public class MenuActivity extends MenuActivityAbstract implements
     public void onBecameBackground() {
         sf.setRun(false);
         super.onBecameBackground();
+    }
+
+    private void setLoginButton() {
+        /* make sure the right button is set for the login/logout status */
+        if (GameUtility.connectionStatus > -1) {
+            buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(mpc.name == null ? loginButtons[0] : loginButtons[1]));
+        } else {
+            buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(loginButtons[0]));
+            mpc.name = null;
+        }
+        YoYo.with(Techniques.Pulse).duration(300).playOn(buttons[BUTTON_LOGIN_OUT]);
     }
 }
