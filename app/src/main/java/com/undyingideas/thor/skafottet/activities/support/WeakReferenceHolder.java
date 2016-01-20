@@ -26,7 +26,7 @@ import java.lang.ref.WeakReference;
  */
 public class WeakReferenceHolder<E> {
 
-    private final WeakReference<E> weakReference;
+    protected final WeakReference<E> weakReference;
 
     public WeakReferenceHolder(final E objectReference) {
         weakReference = new WeakReference<>(objectReference);

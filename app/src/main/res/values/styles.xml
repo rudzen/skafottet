@@ -112,4 +112,10 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <!-- Standard configuration for the AutoScaleTextView -->
+    <style name="autoScaleTextView">
+        <!-- use the next line to alter the minimum text size (uncomment first)-->
+        <!-- <item name="@attr/minTextSize">10dp</item> -->
+    </style>
+
 </resources>

@@ -29,13 +29,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.activities.support.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.adapters.MultiplayerLobbyAdapter;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -172,17 +172,15 @@ public class LobbySelectorFragment extends Fragment {
         }
     }
 
-    private static class OnLobbyClick implements AdapterView.OnItemClickListener {
-
-        private final WeakReference<LobbySelectorFragment> lobbySelectorFragmentWeakReference;
+    private static class OnLobbyClick extends WeakReferenceHolder<LobbySelectorFragment> implements AdapterView.OnItemClickListener {
 
         public OnLobbyClick(final LobbySelectorFragment lobbySelectorFragment) {
-            lobbySelectorFragmentWeakReference = new WeakReference<>(lobbySelectorFragment);
+            super(lobbySelectorFragment);
         }
 
         @Override
         public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-            final LobbySelectorFragment lobbySelectorFragment =  lobbySelectorFragmentWeakReference.get();
+            final LobbySelectorFragment lobbySelectorFragment =  weakReference.get();
             if (lobbySelectorFragment != null) {
                 Log.d("NG", String.valueOf(id));
                 // do stuff!!!

@@ -32,7 +32,7 @@
         android:contentDescription="@string/contentDescriptionEndResultImage"
         android:layout_weight="5"/>
 
-    <com.romainpiel.shimmer.ShimmerTextView
+    <TextView
         android:id="@+id/end_game_text_view_top"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -45,17 +45,17 @@
         android:textIsSelectable="false"
         android:gravity="center"/>
 
-    <TextView
-        android:id="@+id/end_game_lower_status_marquee_view"
+    <com.undyingideas.thor.skafottet.views.AutoScaleTextView
+        android:id="@+id/end_game_middle_status_text_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:textSize="15sp"
         android:gravity="center"
         android:text="AAA">
-    </TextView>
+    </com.undyingideas.thor.skafottet.views.AutoScaleTextView>
 
-    <TextView
+    <com.undyingideas.thor.skafottet.views.AutoScaleTextView
         android:id="@+id/end_game_lower_status_text_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"

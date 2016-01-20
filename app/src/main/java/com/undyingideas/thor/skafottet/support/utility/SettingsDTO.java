@@ -24,14 +24,14 @@ package com.undyingideas.thor.skafottet.support.utility;
  */
 public final class SettingsDTO {
 
-    public static boolean PREFS_MUSIC;
-    public static boolean PREFS_SFX;
-    public static boolean PREFS_BLOOD;
-
-    static {
-        PREFS_MUSIC = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_MUSIC);
-        PREFS_SFX = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_SFX);
-        PREFS_BLOOD = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD);
-    }
+//    public static boolean PREFS_MUSIC;
+//    public static boolean PREFS_SFX;
+//    public static boolean PREFS_BLOOD;
+//
+//    static {
+//        PREFS_MUSIC = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_MUSIC);
+//        PREFS_SFX = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_SFX);
+//        PREFS_BLOOD = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD);
+//    }
 
 }

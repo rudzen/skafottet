@@ -20,6 +20,7 @@ import com.nineoldandroids.animation.Animator;
 import com.romainpiel.shimmer.Shimmer;
 import com.romainpiel.shimmer.ShimmerTextView;
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.activities.GameActivity;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.interfaces.GameSoundNotifier;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
@@ -35,10 +36,10 @@ import java.util.ArrayList;
 /**
  * ??.??.2015, Thor
  * - Created the first draft
- *
+ * <p/>
  * ??.??.2015-6, Theis
  * - Modified the button management to be simpler
- *
+ * <p/>
  * ??.??.2016, rudz
  * - Re-wrote some logic and added features.
  */
@@ -67,7 +68,11 @@ public class HangmanGameFragment extends Fragment {
         final Bundle args = new Bundle();
         args.putParcelable(Constant.KEY_SAVE_GAME, saveGame);
         hangmanGameFragment.setArguments(args);
-        try { GameUtility.mpc.setRunnable(null); } catch (Exception e) { Log.e("starthangman", "remove runnable "+e.getMessage()); }
+        try {
+            GameUtility.mpc.setRunnable(null);
+        } catch (Exception e) {
+            Log.e("starthangman", "remove runnable " + e.getMessage());
+        }
         return hangmanGameFragment;
     }
 
@@ -79,6 +84,7 @@ public class HangmanGameFragment extends Fragment {
         } catch (final Exception e) {
             e.printStackTrace();
         }
+        ((GameActivity) getActivity()).getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
     }
 

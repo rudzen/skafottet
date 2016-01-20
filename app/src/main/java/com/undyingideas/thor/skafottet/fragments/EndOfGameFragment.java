@@ -18,7 +18,6 @@ package com.undyingideas.thor.skafottet.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -32,23 +31,22 @@ import android.widget.TextView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.nineoldandroids.animation.Animator;
-import com.romainpiel.shimmer.Shimmer;
-import com.romainpiel.shimmer.ShimmerTextView;
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.activities.GameActivity;
+import com.undyingideas.thor.skafottet.activities.support.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.interfaces.GameSoundNotifier;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
-
-import java.lang.ref.WeakReference;
+import com.undyingideas.thor.skafottet.views.AutoScaleTextView;
 
 /**
  * Created on 17-11-2015, 08:39.
  * Project : skafottet
  * This fragment is responsible for delivering end game result to the player.
- *
+ * <p/>
  * ??.01.2016, Theis
  * - Added multiplayer information retrievel.
  *
@@ -60,19 +58,14 @@ public class EndOfGameFragment extends Fragment {
 
     @Nullable
     private ImageView imageViewResult, buttonNewGame, buttonMenu;
-    private ShimmerTextView textViewTop;
+
+    private TextView textViewTop;
+    private TextView textViewMiddle;
+    private TextView textViewLower;
 
     private SaveGame endGame;
 
-    @Nullable
-    private Shimmer shimmerTop;
     private EndGameClickListener endGameClickListener;
-
-    private TextView marqueeViewLower;
-    private TextView textViewLower;
-
-    private Handler handler;
-    private Runnable startMarquee;
 
     @Nullable
     private OnEndGameButtonClickListenerInterface onEndGameButtonClickListenerInterface;
@@ -81,7 +74,9 @@ public class EndOfGameFragment extends Fragment {
 
     /**
      * Constructs a new EndOfGameFragment.
-     * @param saveGame The savegame from game which was just finished.
+     *
+     * @param saveGame
+     *         The savegame from game which was just finished.
      * @return The fragment
      */
     public static EndOfGameFragment newInstance(final SaveGame saveGame) {
@@ -122,7 +117,7 @@ public class EndOfGameFragment extends Fragment {
         final View root = inflater.inflate(R.layout.fragment_end_game, container, false);
 
         imageViewResult = (ImageView) root.findViewById(R.id.end_game_image_view);
-        textViewTop = (ShimmerTextView) root.findViewById(R.id.end_game_text_view_top);
+        textViewTop = (TextView) root.findViewById(R.id.end_game_text_view_top);
 
         buttonNewGame = (ImageView) root.findViewById(R.id.end_game_button_new_game);
         buttonMenu = (ImageView) root.findViewById(R.id.end_game_button_main_menu);
@@ -139,15 +134,8 @@ public class EndOfGameFragment extends Fragment {
             buttonMenu.setOnClickListener(endGameClickListener);
         }
 
-        marqueeViewLower = (TextView) root.findViewById(R.id.end_game_lower_status_marquee_view);
-        textViewLower = (TextView) root.findViewById(R.id.end_game_lower_status_text_view);
-
-//        marqueeViewLower.setPauseBetweenAnimations(500);
-//        marqueeViewLower.setSpeed(10);
-
-//        startMarquee = new StartMarquee();
-//        handler = new Handler();
-
+        textViewMiddle = (AutoScaleTextView) root.findViewById(R.id.end_game_middle_status_text_view);
+        textViewLower = (AutoScaleTextView) root.findViewById(R.id.end_game_lower_status_text_view);
 
         displayResults(getArguments());
 
@@ -163,10 +151,6 @@ public class EndOfGameFragment extends Fragment {
             v.setFocusableInTouchMode(true);
             v.requestFocus();
             v.setOnKeyListener(new OnBackKeyListener());
-        }
-
-        if (shimmerTop == null) {
-            setShimmer();
         }
     }
 
@@ -184,6 +168,7 @@ public class EndOfGameFragment extends Fragment {
         Log.d(TAG, "SaveGame was loaded OK.");
 
         final CharSequence lowerText;
+        CharSequence middleText = "";
 
         // WARNING .. NEEDS TO BE CLEANED UP!
 
@@ -191,60 +176,67 @@ public class EndOfGameFragment extends Fragment {
         if (!endGame.isMultiPlayer()) {
             if (endGame.getLogic().isGameLost()) {
                 imageViewResult.setImageResource(R.drawable.reaper);
-                lowerText = "Ordet var " + endGame.getLogic().getTheWord() + ".\nDine gæt var : " + endGame.getLogic().getUsedLetters();
                 textViewTop.setText(R.string.game_lost);
+                lowerText = "Ordet var " + endGame.getLogic().getTheWord();
+                middleText = "Dine gæt : " + endGame.getLogic().getUsedLetters();
             } else {
                 imageViewResult.setImageResource(R.drawable.trophy);
                 textViewTop.setText(R.string.game_won);
-                lowerText = "Ordet var " + endGame.getLogic().getTheWord() + ".\nDine gæt var : " + endGame.getLogic().getUsedLetters() + " og du gættede forkert " + endGame.getLogic().getNumWrongLetters() + " gange. tsktsk.";
+                middleText = "Dine gæt var : " + endGame.getLogic().getUsedLetters() + " og du gættede forkert " + endGame.getLogic().getNumWrongLetters() + " gange. tsktsk.";
+                lowerText = "Ordet var " + endGame.getLogic().getTheWord();
             }
         } else {
             GameUtility.mpc.lc.updateLobby(endGame.getNames()[1], GameUtility.mpc.name, endGame.getLogic().getNumWrongLetters());
             final LobbyDTO dto = GameUtility.mpc.lc.lobbyList.get(endGame.getNames()[1]);
             boolean gameisDone = true;
-            for(final LobbyPlayerStatus lps : dto.getPlayerList())
+            for (final LobbyPlayerStatus lps : dto.getPlayerList())
                 if (!lps.getName().equals(GameUtility.mpc.name) && lps.getScore() == -1)
                     gameisDone = false;
             if (gameisDone) {
-                String winnerName = getWinner(dto);
-                for (final LobbyPlayerStatus lps : dto.getPlayerList()){
-                    if (!lps.getName().equals(GameUtility.mpc.name))
-                        if (lps.getScore() < endGame.getLogic().getNumWrongLetters())
-                            GameUtility.mpc.pc.updatePlayerScore(lps.getName(), 1) ;
-                        else
+                for (final LobbyPlayerStatus lps : dto.getPlayerList()) {
+                    if (!lps.getName().equals(GameUtility.mpc.name)) {
+                        if (lps.getScore() < endGame.getLogic().getNumWrongLetters()) {
+                            GameUtility.mpc.pc.updatePlayerScore(lps.getName(), 1);
+                        } else {
                             GameUtility.mpc.pc.updatePlayerScore(GameUtility.mpc.name, 1);
+                        }
+                    }
                 }
 
                 if (endGame.getLogic().isGameLost()) {
                     imageViewResult.setImageResource(R.drawable.reaper);
-                    textViewTop.setText("Du er blever henrettet af " + getWinner(dto));
+                    textViewTop.setText("Du er blever henrettet af");
+                    middleText = getWinner(dto);
                     lowerText = "Ordet var " + endGame.getLogic().getTheWord();
                 } else {
                     imageViewResult.setImageResource(R.drawable.trophy);
-                    textViewTop.setText("Du undslap galgen! - Triumf over " + getOther(dto, GameUtility.mpc.name));
+                    textViewTop.setText("Du undslap galgen! - Triumf over ");
+                    middleText = getOther(dto, GameUtility.mpc.name);
                     lowerText = "Du gættede ordet " + endGame.getLogic().getTheWord() + ", derved har du undgået at blive klynget op";
                 }
             } else {
                 if (endGame.getLogic().isGameLost()) {
                     imageViewResult.setImageResource(R.drawable.reaper);
-                    textViewTop.setText("Du er blevet hængt\nmen din modstander kan også nå at blive det.\n");
+                    textViewTop.setText("Du er blevet hængt");
+                    middleText = "men din modstander kan også nå at blive det";
                     lowerText = "Ordet var " + endGame.getLogic().getTheWord();
                 } else {
                     imageViewResult.setImageResource(R.drawable.trophy);
-                    textViewTop.setText("Du undslap galgen! - Din modstander kan dog stadig nå at gøre det bedre.");
-                    lowerText = "Du gættede ordet " + endGame.getLogic().getTheWord() + ", derved har du undgået at blive klynget op" ;
+                    textViewTop.setText("Du undslap galgen!");
+                    middleText = "Din modstander kan dog stadig nå at gøre det bedre.";
+                    lowerText = "Du gættede ordet " + endGame.getLogic().getTheWord() + ", derved har du undgået at blive klynget op";
                 }
             }
         }
+        textViewMiddle.setText(middleText);
         textViewLower.setText(lowerText);
-//        handler.postDelayed(startMarquee, 500);
         YoYo.with(Techniques.ZoomInDown).duration(700).playOn(imageViewResult);
         YoYo.with(Techniques.ZoomInUp).duration(700).playOn(textViewTop);
         YoYo.with(Techniques.SlideInLeft).duration(700).playOn(textViewLower);
     }
 
     private static String getWinner(final LobbyDTO dto) {
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             for (final LobbyPlayerStatus lps : dto.getPlayerList()) {
                 Log.d("getWinner", lps.toString() + " , score = " + lps.getScore());
                 if (lps.getScore() == i) return lps.getName();
@@ -255,29 +247,23 @@ public class EndOfGameFragment extends Fragment {
 
     private static String getOther(final LobbyDTO dto, final String name) {
         String s = "";
-        for(final LobbyPlayerStatus lps : dto.getPlayerList()) {
-            if (! lps.getName().equals(name)) s += lps.getName() + " , ";
+        for (final LobbyPlayerStatus lps : dto.getPlayerList()) {
+            if (!lps.getName().equals(name)) s += lps.getName() + " , ";
         }
-        return s.substring(0, s.length()-3);
+        return s.substring(0, s.length() - 3);
+    }
+
+    @Override
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
+        ((GameActivity) getActivity()).getSupportActionBar().hide();
+        super.onCreate(savedInstanceState);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (shimmerTop == null) {
-            setShimmer();
-        }
         if (endGameClickListener == null) {
             endGameClickListener = new EndGameClickListener(this);
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (shimmerTop != null) {
-            shimmerTop.cancel();
-            shimmerTop = null;
         }
     }
 
@@ -311,50 +297,41 @@ public class EndOfGameFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    private void setShimmer() {
-        shimmerTop = new Shimmer();
-        shimmerTop.setDuration(800);
-        shimmerTop.setRepeatCount(0);
-        shimmerTop.start(textViewTop);
-        Log.d(TAG, "Shimmer Configured");
-    }
-
-    private static class EndGameClickListener implements View.OnClickListener {
-
-        private final WeakReference<EndOfGameFragment> endOfGameFragmentWeakReference;
+    private static class EndGameClickListener extends WeakReferenceHolder<EndOfGameFragment> implements View.OnClickListener {
 
         public EndGameClickListener(final EndOfGameFragment endOfGameFragment) {
-            endOfGameFragmentWeakReference = new WeakReference<>(endOfGameFragment);
+            super(endOfGameFragment);
         }
 
         @SuppressWarnings("ConstantConditions")
         @Override
         public void onClick(final View v) {
-            final EndOfGameFragment endOfGameFragment = endOfGameFragmentWeakReference.get();
+            final EndOfGameFragment endOfGameFragment = weakReference.get();
             if (endOfGameFragment != null) {
                 v.setClickable(false);
+                if (v == endOfGameFragment.buttonMenu) {
+                    endOfGameFragment.buttonNewGame.setClickable(false);
+                    YoYo.with(Techniques.FadeOut).duration(300).playOn(endOfGameFragment.buttonNewGame);
+                } else {
+                    endOfGameFragment.buttonMenu.setClickable(false);
+                    YoYo.with(Techniques.FadeOut).duration(300).playOn(endOfGameFragment.buttonMenu);
+                }
                 endOfGameFragment.gameSoundNotifier.playGameSound(GameUtility.SFX_MENU_CLICK);
                 YoYo.with(Techniques.ZoomOut).duration(300).playOn(endOfGameFragment.imageViewResult);
                 YoYo.with(Techniques.ZoomOut).duration(400).playOn(endOfGameFragment.textViewTop);
-                if (v == endOfGameFragment.buttonMenu) {
-                    YoYo.with(Techniques.FadeOut).duration(300).playOn(endOfGameFragment.buttonNewGame);
-                    endOfGameFragment.buttonNewGame.setClickable(false);
-                } else {
-                    YoYo.with(Techniques.FadeOut).duration(300).playOn(endOfGameFragment.buttonMenu);
-                    endOfGameFragment.buttonMenu.setClickable(false);
-                }
+                YoYo.with(Techniques.ZoomOut).duration(400).playOn(endOfGameFragment.textViewMiddle);
+                YoYo.with(Techniques.ZoomOut).duration(400).playOn(endOfGameFragment.textViewLower);
                 YoYo.with(Techniques.Pulse).duration(400).withListener(new ExitAnimatorHandler(endOfGameFragment, (ImageView) v)).playOn(v);
             }
         }
     }
 
-    private static class ExitAnimatorHandler implements Animator.AnimatorListener {
+    private static class ExitAnimatorHandler extends WeakReferenceHolder<EndOfGameFragment> implements Animator.AnimatorListener {
 
-        private final WeakReference<EndOfGameFragment> endOfGameFragmentWeakReference;
         private final ImageView clickedImageView;
 
         public ExitAnimatorHandler(final EndOfGameFragment endOfGameFragment, final ImageView clickedImageView) {
-            endOfGameFragmentWeakReference = new WeakReference<>(endOfGameFragment);
+            super(endOfGameFragment);
             this.clickedImageView = clickedImageView;
         }
 
@@ -364,7 +341,7 @@ public class EndOfGameFragment extends Fragment {
         @SuppressWarnings("ConstantConditions")
         @Override
         public void onAnimationEnd(final Animator animation) {
-            final EndOfGameFragment endOfGameFragment = endOfGameFragmentWeakReference.get();
+            final EndOfGameFragment endOfGameFragment = weakReference.get();
             if (endOfGameFragment != null) {
                 endOfGameFragment.onEndGameButtonClickListenerInterface.onEndGameButtonClicked(clickedImageView == endOfGameFragment.buttonNewGame);
             }
@@ -387,11 +364,4 @@ public class EndOfGameFragment extends Fragment {
             return false;
         }
     }
-//    private class StartMarquee implements Runnable {
-//        @Override
-//        public void run() {
-//            marqueeViewLower.startMarquee();
-//        }
-//    }
-
 }

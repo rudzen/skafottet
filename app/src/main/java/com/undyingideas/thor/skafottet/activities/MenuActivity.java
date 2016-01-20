@@ -19,7 +19,6 @@ package com.undyingideas.thor.skafottet.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -40,6 +39,7 @@ import com.hanks.htextview.HTextView;
 import com.hanks.htextview.HTextViewType;
 import com.nineoldandroids.animation.Animator;
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.activities.support.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.adapters.StartGameAdapter;
 import com.undyingideas.thor.skafottet.adapters.StartGameItem;
 import com.undyingideas.thor.skafottet.broadcastrecievers.InternetReciever;
@@ -49,12 +49,10 @@ import com.undyingideas.thor.skafottet.services.MusicPlay;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
-import com.undyingideas.thor.skafottet.support.utility.SettingsDTO;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import net.steamcrafted.loadtoast.LoadToast;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
@@ -76,10 +74,9 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_pref
  */
 @SuppressWarnings({"ClassTooDeepInInheritanceTree", "ClassWithTooManyMethods"})
 public class MenuActivity extends MenuActivityAbstract implements
-        InternetRecieverData.InternetRecieverInterface,
-        SharedPreferences.OnSharedPreferenceChangeListener
-
+        InternetRecieverData.InternetRecieverInterface
 {
+//    SharedPreferences.OnSharedPreferenceChangeListener
 
     private static final String FINISH = "finish";
     private static final int BACK_PRESSED_DELAY = 2000;
@@ -385,37 +382,29 @@ public class MenuActivity extends MenuActivityAbstract implements
         showAll();
     }
 
-    @Override
-    public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
-        if (key.equals(Constant.KEY_PREFS_BLOOD) && sf != null) {
-            SettingsDTO.PREFS_BLOOD = s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD);
-            sf.setRun(SettingsDTO.PREFS_BLOOD);
-        }
-//        if (key.equals(Constant.KEY_PREFS_MUSIC)) {
-            SettingsDTO.PREFS_MUSIC = s_preferences.getBoolean(Constant.KEY_PREFS_MUSIC);
-            if (SettingsDTO.PREFS_MUSIC) {
-                if (!MusicPlay.isPlaying()) {
-                    MusicPlay.intent = new Intent(getApplicationContext(), MusicPlay.class);
-                    MusicPlay.intent.setAction("SKAFOTMUSIK");
-                    startService(MusicPlay.intent);
-                }
-            } else {
-                stopService(MusicPlay.intent);
-            }
+//    @Override
+//    public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
+//        if (key.equals(Constant.KEY_PREFS_BLOOD) && sf != null) {
+//            SettingsDTO.PREFS_BLOOD = s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD);
+//            sf.setRun(SettingsDTO.PREFS_BLOOD);
 //        }
-
-    }
-
-    private static class WeakReferenceAbstraction {
-        protected final WeakReference<MenuActivity> menuActivityWeakReference;
-
-        public WeakReferenceAbstraction(final MenuActivity menuActivity) {
-            menuActivityWeakReference = new WeakReference<>(menuActivity);
-        }
-    }
+////        if (key.equals(Constant.KEY_PREFS_MUSIC)) {
+//            SettingsDTO.PREFS_MUSIC = s_preferences.getBoolean(Constant.KEY_PREFS_MUSIC);
+//            if (SettingsDTO.PREFS_MUSIC) {
+//                if (!MusicPlay.isPlaying()) {
+//                    MusicPlay.intent = new Intent(getApplicationContext(), MusicPlay.class);
+//                    MusicPlay.intent.setAction("SKAFOTMUSIK");
+//                    startService(MusicPlay.intent);
+//                }
+//            } else {
+//                stopService(MusicPlay.intent);
+//            }
+////        }
+//
+//    }
 
     @SuppressWarnings("AccessStaticViaInstance")
-    static class QuitDialogCallback extends WeakReferenceAbstraction implements MaterialDialog.SingleButtonCallback {
+    static class QuitDialogCallback extends WeakReferenceHolder<MenuActivity> implements MaterialDialog.SingleButtonCallback {
 
         public QuitDialogCallback(final MenuActivity menuActivity) {
             super(menuActivity);
@@ -423,7 +412,7 @@ public class MenuActivity extends MenuActivityAbstract implements
 
         @Override
         public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
-            final MenuActivity menuActivity = menuActivityWeakReference.get();
+            final MenuActivity menuActivity = weakReference.get();
             if (menuActivity != null) {
                 if (which == DialogAction.POSITIVE) {
                     menuActivity.endMenu(FINISH, menuActivity.buttons[menuActivity.BUTTON_QUIT]);
@@ -453,7 +442,7 @@ public class MenuActivity extends MenuActivityAbstract implements
         }
     }
 
-    private static class MenuButtonClickHandler extends WeakReferenceAbstraction implements View.OnClickListener {
+    private static class MenuButtonClickHandler extends WeakReferenceHolder<MenuActivity> implements View.OnClickListener {
 
         @SuppressWarnings("NonConstantFieldWithUpperCaseName")
 
@@ -463,7 +452,7 @@ public class MenuActivity extends MenuActivityAbstract implements
 
         @Override
         public void onClick(final View v) {
-            final MenuActivity menuActivity = menuActivityWeakReference.get();
+            final MenuActivity menuActivity = weakReference.get();
             if (menuActivity != null) {
                 boolean buttonStates = false;
                 if (v == menuActivity.buttons[BUTTON_PLAY]) {
@@ -521,7 +510,7 @@ public class MenuActivity extends MenuActivityAbstract implements
         }
     }
 
-    private static class EnterAnimatorHandler extends WeakReferenceAbstraction implements Animator.AnimatorListener {
+    private static class EnterAnimatorHandler extends WeakReferenceHolder<MenuActivity> implements Animator.AnimatorListener {
 
         public EnterAnimatorHandler(final MenuActivity menuActivity) {
             super(menuActivity);
@@ -529,7 +518,7 @@ public class MenuActivity extends MenuActivityAbstract implements
 
         @Override
         public void onAnimationStart(final Animator animation) {
-            final MenuActivity menuActivity = menuActivityWeakReference.get();
+            final MenuActivity menuActivity = weakReference.get();
             if (menuActivity != null) {
                 new AllFadeIn(menuActivity).run();
                 menuActivity.click_status = true;
@@ -546,13 +535,13 @@ public class MenuActivity extends MenuActivityAbstract implements
         @Override
         public void onAnimationRepeat(final Animator animation) { }
 
-        private static class AllFadeIn extends WeakReferenceAbstraction implements Runnable {
+        private static class AllFadeIn extends WeakReferenceHolder<MenuActivity> implements Runnable {
 
             public AllFadeIn(final MenuActivity menuActivity) { super(menuActivity); }
 
             @Override
             public void run() {
-                final MenuActivity menuActivity = menuActivityWeakReference.get();
+                final MenuActivity menuActivity = weakReference.get();
                 if (menuActivity != null) {
                     YoYo.with(Techniques.Pulse).duration(800).playOn(menuActivity.title);
                     YoYo.with(Techniques.FadeIn).duration(900).playOn(menuActivity.buttons[0]);
@@ -568,7 +557,7 @@ public class MenuActivity extends MenuActivityAbstract implements
         }
     }
 
-    private static class ExitAnimatorHandler extends WeakReferenceAbstraction implements Animator.AnimatorListener {
+    private static class ExitAnimatorHandler extends WeakReferenceHolder<MenuActivity> implements Animator.AnimatorListener {
 
         private final String methodToCall;
 
@@ -579,7 +568,7 @@ public class MenuActivity extends MenuActivityAbstract implements
 
         @Override
         public void onAnimationStart(final Animator animation) {
-            final MenuActivity menuActivity = menuActivityWeakReference.get();
+            final MenuActivity menuActivity = weakReference.get();
             if (menuActivity != null) {
                 if (menuActivity.button_clicked >= 0 && menuActivity.button_clicked < menuActivity.buttons.length) {
                     menuActivity.buttons[menuActivity.button_clicked].setColorFilter(null);
@@ -589,7 +578,7 @@ public class MenuActivity extends MenuActivityAbstract implements
 
         @Override
         public void onAnimationEnd(final Animator animation) {
-            final MenuActivity menuActivity = menuActivityWeakReference.get();
+            final MenuActivity menuActivity = weakReference.get();
             if (menuActivity != null && methodToCall != null) {
                 menuActivity.callMethod(methodToCall);
             }
@@ -602,7 +591,7 @@ public class MenuActivity extends MenuActivityAbstract implements
         public void onAnimationRepeat(final Animator animation) { }
     }
 
-    private static class OnLoginClickListener extends WeakReferenceAbstraction implements View.OnClickListener {
+    private static class OnLoginClickListener extends WeakReferenceHolder<MenuActivity> implements View.OnClickListener {
 
         public OnLoginClickListener(final MenuActivity menuActivity) {
             super(menuActivity);
@@ -610,7 +599,7 @@ public class MenuActivity extends MenuActivityAbstract implements
 
         @Override
         public void onClick(final View v) {
-            final MenuActivity menuActivity = menuActivityWeakReference.get();
+            final MenuActivity menuActivity = weakReference.get();
             if (menuActivity != null) {
                 if (menuActivity.sf != null) menuActivity.sf.setRun(false);
                 menuActivity.md = new MaterialDialog.Builder(menuActivity)
@@ -629,7 +618,7 @@ public class MenuActivity extends MenuActivityAbstract implements
     /**
      * Listener for adding list dialog !
      */
-    private static class OnLoginClickResponse extends WeakReferenceAbstraction implements MaterialDialog.SingleButtonCallback {
+    private static class OnLoginClickResponse extends WeakReferenceHolder<MenuActivity> implements MaterialDialog.SingleButtonCallback {
 
         public OnLoginClickResponse(final MenuActivity menuActivity) {
             super(menuActivity);
@@ -644,7 +633,7 @@ public class MenuActivity extends MenuActivityAbstract implements
 
         @Override
         public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
-            final MenuActivity menuActivity = menuActivityWeakReference.get();
+            final MenuActivity menuActivity = weakReference.get();
             if (menuActivity != null) {
                 if (which == DialogAction.POSITIVE) {
                     /* let's inflate the dialog view... */

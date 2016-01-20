@@ -34,6 +34,7 @@ import com.firebase.client.Firebase;
 import com.nineoldandroids.animation.Animator;
 import com.splunk.mint.Mint;
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.activities.support.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.services.MusicPlay;
 import com.undyingideas.thor.skafottet.support.firebase.controller.MultiplayerController;
 import com.undyingideas.thor.skafottet.support.firebase.controller.WordListController;
@@ -248,12 +249,10 @@ public class SplashActivity extends AppCompatActivity {
     /**
      * Class to execute code when a specific animation ends.
      */
-    private static class SplashEndAnimatorListener implements Animator.AnimatorListener {
-
-        private final WeakReference<SplashActivity> splashActivityWeakReference;
+    private static class SplashEndAnimatorListener extends WeakReferenceHolder<SplashActivity> implements Animator.AnimatorListener {
 
         public SplashEndAnimatorListener(final SplashActivity splashActivity) {
-            splashActivityWeakReference = new WeakReference<>(splashActivity);
+            super(splashActivity);
         }
 
         @Override
@@ -261,7 +260,7 @@ public class SplashActivity extends AppCompatActivity {
 
         @Override
         public void onAnimationEnd(final Animator animation) {
-            final SplashActivity splashActivity = splashActivityWeakReference.get();
+            final SplashActivity splashActivity = weakReference.get();
             if (splashActivity != null) {
                 final Intent intent = new Intent(splashActivity, MenuActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

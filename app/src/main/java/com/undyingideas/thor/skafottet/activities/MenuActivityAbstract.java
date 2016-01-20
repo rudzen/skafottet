@@ -27,10 +27,9 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.activities.support.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.views.StarField;
-
-import java.lang.ref.WeakReference;
 
 /**
  * Created on 28-12-2015, 13:07.
@@ -178,17 +177,15 @@ public abstract class MenuActivityAbstract extends SoundAbstract {
         }
     }
 
-    private static class MenuSensorEventListener implements android.hardware.SensorEventListener {
-
-        final WeakReference<MenuActivityAbstract> menuActivityAbstractWeakReference;
+    private static class MenuSensorEventListener extends WeakReferenceHolder<MenuActivityAbstract> implements android.hardware.SensorEventListener {
 
         public MenuSensorEventListener(final MenuActivityAbstract menuActivityAbstract) {
-            menuActivityAbstractWeakReference = new WeakReference<>(menuActivityAbstract);
+            super(menuActivityAbstract);
         }
 
         @Override
         public void onSensorChanged(final SensorEvent event) {
-            final MenuActivityAbstract menuActivityAbstract = menuActivityAbstractWeakReference.get();
+            final MenuActivityAbstract menuActivityAbstract = weakReference.get();
             if (menuActivityAbstract != null && menuActivityAbstract.sf != null) {
                 menuActivityAbstract.sf.setGravity(event.values[0], event.values[1]);
 //                Log.d("GRAV", "Starfield gravity updated to x: " + event.values[0] + ", y: " + event.values[1]);
