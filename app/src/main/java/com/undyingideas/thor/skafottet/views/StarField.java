@@ -38,7 +38,7 @@ public class StarField extends View implements PreferenceChangeListener {
     private static final float HIGH_PASS_FILTER = 3.0f;
     private static final int UPDATE_RATE = 1000 / 100;
 
-    private final ArrayList<Star2D> stars = new ArrayList<>(75);
+    private final ArrayList<Star2D> stars = new ArrayList<>(50);
     private Paint p;
     private Handler handleCalculate, handleUpdate;
     private volatile boolean run;
@@ -64,6 +64,7 @@ public class StarField extends View implements PreferenceChangeListener {
             handleCalculate.post(updater);
         } else {
             handleCalculate.removeCallbacksAndMessages(null);
+            handleUpdate.removeCallbacksAndMessages(null);
         }
     }
 
@@ -103,7 +104,7 @@ public class StarField extends View implements PreferenceChangeListener {
             addStar((float) Math.random() * w, (float) Math.random() * h, (float) Math.random() + 0.1f);
             addStar((float) Math.random() * w, (float) Math.random() * h, (float) Math.random() + 0.1f);
         }
-        stars.trimToSize();
+//        stars.trimToSize();
 
         run = SettingsDTO.PREFS_BLOOD;
         handleCalculate = new Handler();
@@ -112,14 +113,6 @@ public class StarField extends View implements PreferenceChangeListener {
         updater = new UpdateStarfield();
         handleCalculate.post(calculator);
         handleUpdate.post(updater);
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-//        setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
-//        width = widthMeasureSpec;
-//        height = heightMeasureSpec;
     }
 
     @Override

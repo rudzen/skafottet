@@ -17,6 +17,7 @@
 package com.undyingideas.thor.skafottet.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import android.webkit.WebView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.activities.GameActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -72,5 +74,9 @@ public class HelpFragment extends Fragment {
         return fragmentView;
     }
 
-
+    @Override
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
+        ((GameActivity) getActivity()).getSupportActionBar().hide();
+        super.onCreate(savedInstanceState);
+    }
 }

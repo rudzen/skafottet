@@ -16,10 +16,10 @@
 
 package com.undyingideas.thor.skafottet.fragments;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +27,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import com.undyingideas.thor.skafottet.activities.GameActivity;
 
 import static android.text.util.Linkify.EMAIL_ADDRESSES;
 import static android.text.util.Linkify.WEB_URLS;
@@ -153,6 +155,12 @@ public class AboutFragment extends Fragment {
         tv = null;
         sv.addView(ll);
         return sv;
+    }
+
+    @Override
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
+        ((GameActivity) getActivity()).getSupportActionBar().hide();
+        super.onCreate(savedInstanceState);
     }
 
     @Override
