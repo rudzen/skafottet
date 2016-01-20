@@ -141,10 +141,12 @@ public class HangmanGameFragment extends Fragment {
         if (getArguments() != null) {
             readFromBundle(getArguments());
         }
-
-        getView().setFocusableInTouchMode(true);
-        getView().requestFocus();
-        getView().setOnKeyListener(new OnBackKeyListener());
+        final View v = getView();
+        if (v != null) {
+            v.setFocusableInTouchMode(true);
+            v.requestFocus();
+            v.setOnKeyListener(new OnBackKeyListener());
+        }
 
         applySaveGameStatus();
 
