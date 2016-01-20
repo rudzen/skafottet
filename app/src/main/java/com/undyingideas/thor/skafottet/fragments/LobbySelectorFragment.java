@@ -30,7 +30,6 @@ import android.widget.ListView;
 
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.MultiplayerLobbyAdapter;
-import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
@@ -57,8 +56,8 @@ public class LobbySelectorFragment extends Fragment {
 
     @Nullable
     private OnMultiPlayerPlayerFragmentInteractionListener mListener;
-    @Nullable
-    private ProgressBarInterface setProgressListener;
+//    @Nullable
+//    private ProgressBarInterface setProgressListener;
 
     /**
      * Use this method to create a new instance of * this fragment using the provided parameters.
@@ -110,18 +109,18 @@ public class LobbySelectorFragment extends Fragment {
         } else {
             throw new RuntimeException(context.toString() + " must implement OnMultiPlayerPlayerFragmentInteractionListener");
         }
-        if (context instanceof ProgressBarInterface) {
-            setProgressListener = (ProgressBarInterface) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement ProgressBarInterface");
-        }
+//        if (context instanceof ProgressBarInterface) {
+//            setProgressListener = (ProgressBarInterface) context;
+//        } else {
+//            throw new RuntimeException(context.toString() + " must implement ProgressBarInterface");
+//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        setProgressListener = null;
+//        setProgressListener = null;
     }
 
     /**
@@ -159,7 +158,7 @@ public class LobbySelectorFragment extends Fragment {
 
         configureAdapter();
 
-        setProgressListener.setProgressBar(true);
+//        setProgressListener.setProgressBar(true);
         GameUtility.mpc.setRunnable(updater);
     }
 
@@ -235,7 +234,7 @@ public class LobbySelectorFragment extends Fragment {
                 listView.setAdapter(lobbyAdapter);
                 lobbyAdapter.notifyDataSetChanged();
             }
-            setProgressListener.setProgressBar(false);
+//            setProgressListener.setProgressBar(false);
         }
     }
 

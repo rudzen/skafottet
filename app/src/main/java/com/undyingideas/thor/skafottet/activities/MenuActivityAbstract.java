@@ -17,8 +17,6 @@
 
 package com.undyingideas.thor.skafottet.activities;
 
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -29,9 +27,6 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.broadcastrecievers.BatteryDTO;
-import com.undyingideas.thor.skafottet.broadcastrecievers.BatteryLevelReciever;
-import com.undyingideas.thor.skafottet.broadcastrecievers.BatteryLevelRecieverData;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.views.StarField;
 
@@ -51,7 +46,8 @@ import java.lang.ref.WeakReference;
  * @author rudz
  */
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
-public abstract class MenuActivityAbstract extends SoundAbstract implements BatteryLevelRecieverData.BatteryLevelRecieveDataInterface {
+public abstract class MenuActivityAbstract extends SoundAbstract {
+//    BatteryLevelRecieverData.BatteryLevelRecieveDataInterface
 
     protected Handler menuHandler;
 
@@ -59,10 +55,11 @@ public abstract class MenuActivityAbstract extends SoundAbstract implements Batt
     @Nullable
     StarField sf;
 
-    /* battery stuff */
-    IntentFilter batteryLevelFilter;
-    BatteryLevelReciever batteryLevelReciever;
-    BatteryLevelRecieverData batteryLevelRecieverData;
+    /* battery stuff - currently disabled !!! */
+
+//    IntentFilter batteryLevelFilter;
+//    BatteryLevelReciever batteryLevelReciever;
+//    BatteryLevelRecieverData batteryLevelRecieverData;
 
     /* sensor stuff */
     @Nullable
@@ -99,15 +96,15 @@ public abstract class MenuActivityAbstract extends SoundAbstract implements Batt
         } else {
             sf.setRun(true);
         }
-        if (batteryLevelRecieverData == null) {
-            batteryLevelRecieverData = new BatteryLevelRecieverData(this);
-        }
-        registerBatteryReciever();
+//        if (batteryLevelRecieverData == null) {
+//            batteryLevelRecieverData = new BatteryLevelRecieverData(this);
+//        }
+//        registerBatteryReciever();
     }
 
     @Override
     protected void onPause() {
-        unregisterBatteryReciever();
+//        unregisterBatteryReciever();
         if (sf != null) sf.setRun(false);
         super.onPause();
     }
@@ -141,24 +138,24 @@ public abstract class MenuActivityAbstract extends SoundAbstract implements Batt
         }
     }
 
-    private void registerBatteryReciever() {
-        if (batteryLevelRecieverData != null && BatteryLevelReciever.containsObserver(batteryLevelRecieverData)) {
-            BatteryLevelReciever.removeObserver(batteryLevelRecieverData);
-        }
-        batteryLevelRecieverData = new BatteryLevelRecieverData(this, false);
-        batteryLevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        BatteryLevelReciever.addObserver(batteryLevelRecieverData);
-        batteryLevelReciever = new BatteryLevelReciever();
-        registerReceiver(batteryLevelReciever, batteryLevelFilter);
-    }
+//    private void registerBatteryReciever() {
+//        if (batteryLevelRecieverData != null && BatteryLevelReciever.containsObserver(batteryLevelRecieverData)) {
+//            BatteryLevelReciever.removeObserver(batteryLevelRecieverData);
+//        }
+//        batteryLevelRecieverData = new BatteryLevelRecieverData(this, false);
+//        batteryLevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+//        BatteryLevelReciever.addObserver(batteryLevelRecieverData);
+//        batteryLevelReciever = new BatteryLevelReciever();
+//        registerReceiver(batteryLevelReciever, batteryLevelFilter);
+//    }
 
-    private void unregisterBatteryReciever() {
-        BatteryLevelReciever.removeObserver(batteryLevelRecieverData);
-        unregisterReceiver(batteryLevelReciever);
-        batteryLevelRecieverData = null;
-        batteryLevelFilter = null;
-        batteryLevelReciever = null;
-    }
+//    private void unregisterBatteryReciever() {
+//        BatteryLevelReciever.removeObserver(batteryLevelRecieverData);
+//        unregisterReceiver(batteryLevelReciever);
+//        batteryLevelRecieverData = null;
+//        batteryLevelFilter = null;
+//        batteryLevelReciever = null;
+//    }
 
     private void registerSensor() {
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -202,25 +199,25 @@ public abstract class MenuActivityAbstract extends SoundAbstract implements Batt
         public void onAccuracyChanged(final Sensor sensor, final  int accuracy) { }
     }
 
-    @Override
-    public void onBatteryStatusChanged(final BatteryDTO batteryInformation) {
-        Log.d(TAG, String.valueOf(batteryInformation.getLevel()));
-        menuHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                BatteryLevelReciever.addObserver(batteryLevelRecieverData);
-            }
-        }, 20000);
-
-        if (sf != null) {
-            // turn off the starfield if lower than 25% battery
-            if (sf.isRun() && batteryInformation.getLevel() < 25) {
-                sf.setRun(false);
-            } else if (!sf.isRun() && batteryInformation.getLevel() > 25) {
-                sf.setRun(true);
-            }
-        }
-    }
+//    @Override
+//    public void onBatteryStatusChanged(final BatteryDTO batteryInformation) {
+//        Log.d(TAG, String.valueOf(batteryInformation.getLevel()));
+//        menuHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                BatteryLevelReciever.addObserver(batteryLevelRecieverData);
+//            }
+//        }, 20000);
+//
+//        if (sf != null) {
+//            // turn off the starfield if lower than 25% battery
+//            if (sf.isRun() && batteryInformation.getLevel() < 25) {
+//                sf.setRun(false);
+//            } else if (!sf.isRun() && batteryInformation.getLevel() > 25) {
+//                sf.setRun(true);
+//            }
+//        }
+//    }
 
 
 }

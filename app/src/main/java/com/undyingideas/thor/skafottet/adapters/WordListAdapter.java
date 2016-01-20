@@ -31,13 +31,12 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
 
 import java.util.ArrayList;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
-public class WordListAdapter extends BaseAdapter implements StickyListHeadersAdapter, SectionIndexer, ProgressBarInterface {
+public class WordListAdapter extends BaseAdapter implements StickyListHeadersAdapter, SectionIndexer {
 
     protected static final int[] INTS = new int[0];
     protected static final Character[] CHARACTERS = new Character[0];
@@ -194,10 +193,10 @@ public class WordListAdapter extends BaseAdapter implements StickyListHeadersAda
         notifyDataSetChanged();
     }
 
-    @Override
-    public void setProgressBar(final boolean visible) {
-        // TODO : handle future progressbar linked with the toolbar
-    }
+//    @Override
+//    public void setProgressBar(final boolean visible) {
+//        // TODO : handle future progressbar linked with the toolbar
+//    }
 
     static class HeaderViewHolder {
         TextView text;

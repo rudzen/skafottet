@@ -39,16 +39,13 @@ public class MultiplayerController {
         pc = new PlayerController(this, ref);
         lc = new LobbyController(this,ref);
         wlc = new WordListController(ref);
-        Log.d("firebaseMulti", "hej");
+        Log.d("firebaseMulti", playerUpdater == null ? "No Runnable parsed" : "Runnable parsed");
         updateHandler = new Handler();
         this.playerUpdater = playerUpdater;
     }
 
     public MultiplayerController(final Firebase fb) {
-        ref = fb;
-        pc = new PlayerController(this, ref);
-        lc = new LobbyController(this,ref);
-        wlc = new WordListController(ref);
+        this(fb, null);
     }
 
     public void setRunnable(final Runnable r) {
@@ -158,4 +155,5 @@ public class MultiplayerController {
         }
         return list;
     }
+
 }

@@ -709,11 +709,11 @@ public class MenuActivity extends MenuActivityAbstract implements
             info.add("Nej");
         }
         info.add(String.format(INFO_CONNECTION, GameUtility.connectionStatusName));
-        try {
-            info.add(String.format(INFO_BATTERY, Integer.toString(batteryLevelRecieverData.getData().getLevel())));
-        } catch (final Exception e) {
-            info.add("Ukendt %");
-        }
+//        try {
+//            info.add(String.format(INFO_BATTERY, Integer.toString(batteryLevelRecieverData.getData().getLevel())));
+//        } catch (final Exception e) {
+//            info.add("Ukendt %");
+//        }
     }
 
     private class UpdateText implements Runnable {

@@ -15,7 +15,6 @@ import android.widget.ListView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.MultiplayerPlayersAdapter;
 import com.undyingideas.thor.skafottet.adapters.WordTitleLocalAdapter;
-import com.undyingideas.thor.skafottet.interfaces.ProgressBarInterface;
 import com.undyingideas.thor.skafottet.support.firebase.controller.WordListController;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
@@ -49,8 +48,8 @@ public class CreateLobbyFragment extends Fragment {
 
     @Nullable
     private OnCreateLobbyFragmentInteractionListener mListener;
-    @Nullable
-    private ProgressBarInterface setProgressListener;
+//    @Nullable
+//    private ProgressBarInterface setProgressListener;
 
     public static CreateLobbyFragment newInstance(final boolean isOnline) {
         final CreateLobbyFragment fragment = new CreateLobbyFragment();
@@ -103,18 +102,18 @@ public class CreateLobbyFragment extends Fragment {
         } else {
             throw new RuntimeException(context.toString() + " must implement OnCreateLobbyFragmentInteractionListener");
         }
-        if (context instanceof ProgressBarInterface) {
-            setProgressListener = (ProgressBarInterface) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement ProgressBarInterface");
-        }
+//        if (context instanceof ProgressBarInterface) {
+//            setProgressListener = (ProgressBarInterface) context;
+//        } else {
+//            throw new RuntimeException(context.toString() + " must implement ProgressBarInterface");
+//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        setProgressListener = null;
+//        setProgressListener = null;
         opponentName = null;
     }
 
@@ -153,7 +152,7 @@ public class CreateLobbyFragment extends Fragment {
 //        Firebase.setAndroidContext(getActivity());
 //        multiplayerController = new MultiplayerController(new Firebase("https://hangmandtu.firebaseio.com"), updater);
 
-        setProgressListener.setProgressBar(true);
+//        setProgressListener.setProgressBar(true);
         GameUtility.mpc.setRunnable(updater);
     }
 
@@ -241,7 +240,7 @@ public class CreateLobbyFragment extends Fragment {
                 playerAdapter.notifyDataSetChanged();
                 GameUtility.s_preferences.putObject(KEY_LAST_PLAYER_LIST, players);
             }
-            setProgressListener.setProgressBar(false);
+//            setProgressListener.setProgressBar(false);
         }
     }
 }

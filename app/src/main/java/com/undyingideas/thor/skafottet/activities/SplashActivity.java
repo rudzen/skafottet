@@ -49,6 +49,7 @@ import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.firebase;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_preferences;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_wordController;
 
@@ -188,7 +189,10 @@ public class SplashActivity extends AppCompatActivity {
 
             Firebase.setAndroidContext(getApplicationContext());
             GameUtility.firebase = new Firebase(Constant.HANGMANDTU_FIREBASEIO);
+            firebase.keepSynced(true);
+//            GameUtility.firebase.keepSynced(false);
             GameUtility.mpc = new MultiplayerController(GameUtility.firebase);
+
 
             Log.d(TAG, s_wordController.toString());
 
