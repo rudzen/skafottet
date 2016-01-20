@@ -208,7 +208,7 @@ public class EndOfGameFragment extends Fragment {
             if (gameisDone) {
                 for (final LobbyPlayerStatus lps : dto.getPlayerList()){
                     if (lps.getName().equals(getWinner(dto)))
-                        GameUtility.mpc.pc.updatePlayerScore(lps.getName(), lps.getScore()+1);
+                        GameUtility.mpc.pc.updatePlayerScore(lps.getName(), 1);
                 }
 
                 if (endGame.getLogic().isGameLost()) {
