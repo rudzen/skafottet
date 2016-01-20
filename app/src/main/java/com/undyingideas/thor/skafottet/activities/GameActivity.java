@@ -21,6 +21,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.fragments.AboutFragment;
@@ -62,6 +63,7 @@ public class GameActivity extends SoundAbstract implements
 
     private HangmanGameFragment hangmanGameFragment;
     private EndOfGameFragment endOfGameFragment;
+    private Toolbar toolbar;
 
 //    private ProgressBar topProgressBar;
 //
@@ -90,10 +92,10 @@ public class GameActivity extends SoundAbstract implements
 
         initSound();
 
-        final Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(tb);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-            tb.setLogo(R.drawable.icon);
+            toolbar.setLogo(R.drawable.icon);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
@@ -163,7 +165,7 @@ public class GameActivity extends SoundAbstract implements
             Log.e("GameActivity 168", "not logged in error");
             onBackPressed();
         }
-        // TODO no games found
+        WindowLayout.showSnack("Du har ingen spil klar", toolbar.getRootView(), false);
     }
 
     @Override
