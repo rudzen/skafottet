@@ -75,6 +75,7 @@ public class MultiplayerController {
 
     private void logout() {
         if (name == null) return;
+        setRunnable(null);
         name = null;
         lc = null;
     }
