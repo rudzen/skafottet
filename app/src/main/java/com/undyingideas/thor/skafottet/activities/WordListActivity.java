@@ -224,7 +224,7 @@ public class WordListActivity extends AppCompatActivity implements
             returnValue = true;
         } else if (id == R.id.action_word_list_remove) {
 
-            final StringBuilder oldListName = new StringBuilder(50);
+            final StringBuilder oldListName = new StringBuilder(20);
             oldListName.append('\'');
             if (s_wordController.isLocal()) {
                 oldListName.append(s_wordController.getLocalWords().get(s_wordController.getIndexLocale()).getTitle());
@@ -235,9 +235,9 @@ public class WordListActivity extends AppCompatActivity implements
             oldListName.append("' ");
 
             if (s_wordController.removeCurrentList()) {
-                refreshList();
                 oldListName.append("er slettet, liste sat til ");
                 oldListName.append(s_wordController.getLocalWords().get(s_wordController.getIndexLocale()).getTitle());
+                refreshList();
             } else {
                 oldListName.append("kunne ikke slettes");
                 if (s_wordController.isLocal()) {

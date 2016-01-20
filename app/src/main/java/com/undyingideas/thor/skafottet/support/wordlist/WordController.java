@@ -178,11 +178,7 @@ public final class WordController implements Serializable, Parcelable {
 
     public int getIndexLocale() { return indexLocale; }
 
-    public void setIndexLocale(final int indexLocale) {
-        if (indexLocale > -1) {
-            this.indexLocale = indexLocale;
-        }
-    }
+    public void setIndexLocale(final int indexLocale) { this.indexLocale = indexLocale; }
 
     public String getIndexRemote() { return indexRemote; }
 

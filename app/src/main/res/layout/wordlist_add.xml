@@ -27,11 +27,10 @@
         android:layout_height="wrap_content"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:hint="Ordliste titel"
+        android:hint="Titel"
         android:padding="10dp"
         android:singleLine="true"
-        android:textStyle="italic"
-        android:typeface="sans"/>
+        />
 
     <EditText
         android:id="@+id/dialog_add_word_list_edit_url"
@@ -39,14 +38,13 @@
         android:layout_height="wrap_content"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:hint="Ordliste webaddresse"
+        android:hint="Adresse"
         android:inputType="textUri"
         android:padding="10dp"
         android:selectAllOnFocus="false"
         android:singleLine="true"
         android:text="http://"
-        android:textStyle="italic"
-        android:typeface="sans"/>
+        />
 
     <CheckBox
         android:id="@+id/dialog_add_word_list_chk_download"
