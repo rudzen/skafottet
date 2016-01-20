@@ -222,7 +222,7 @@ public class MenuActivity extends MenuActivityAbstract implements
     }
 
     private void showAll() {
-        Log.d("login showall", "" + (mpc.name == null));
+        Log.d("login showall", String.valueOf(mpc.name == null));
         setLoginButton();
 //        buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(loginButtons[mpc.name == null ? 0 : 1]));
         YoYo.with(Techniques.FadeIn).duration(1000).withListener(new EnterAnimatorHandler(this)).playOn(title);
@@ -523,20 +523,7 @@ public class MenuActivity extends MenuActivityAbstract implements
         public void onAnimationStart(final Animator animation) {
             final MenuActivity menuActivity = menuActivityWeakReference.get();
             if (menuActivity != null) {
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        YoYo.with(Techniques.Pulse).duration(800).playOn(menuActivity.title);
-                        YoYo.with(Techniques.FadeIn).duration(900).playOn(menuActivity.buttons[0]);
-                        YoYo.with(Techniques.FadeIn).duration(900).playOn(menuActivity.buttons[1]);
-                        YoYo.with(Techniques.FadeIn).duration(800).playOn(menuActivity.buttons[2]);
-                        YoYo.with(Techniques.FadeIn).duration(800).playOn(menuActivity.buttons[3]);
-                        YoYo.with(Techniques.FadeIn).duration(700).playOn(menuActivity.buttons[4]);
-                        YoYo.with(Techniques.FadeIn).duration(700).playOn(menuActivity.buttons[5]);
-                        YoYo.with(Techniques.FadeIn).duration(600).playOn(menuActivity.buttons[6]);
-                        YoYo.with(Techniques.FadeIn).duration(600).playOn(menuActivity.buttons[7]);
-                    }
-                }.run();
+                new AllFadeIn(menuActivity).run();
                 menuActivity.click_status = true;
                 menuActivity.setMenuButtonsClickable(true);
             }
@@ -550,6 +537,25 @@ public class MenuActivity extends MenuActivityAbstract implements
 
         @Override
         public void onAnimationRepeat(final Animator animation) { }
+
+        private static class AllFadeIn implements Runnable {
+            private final MenuActivity menuActivity;
+
+            public AllFadeIn(final MenuActivity menuActivity) {this.menuActivity = menuActivity;}
+
+            @Override
+            public void run() {
+                YoYo.with(Techniques.Pulse).duration(800).playOn(menuActivity.title);
+                YoYo.with(Techniques.FadeIn).duration(900).playOn(menuActivity.buttons[0]);
+                YoYo.with(Techniques.FadeIn).duration(900).playOn(menuActivity.buttons[1]);
+                YoYo.with(Techniques.FadeIn).duration(800).playOn(menuActivity.buttons[2]);
+                YoYo.with(Techniques.FadeIn).duration(800).playOn(menuActivity.buttons[3]);
+                YoYo.with(Techniques.FadeIn).duration(700).playOn(menuActivity.buttons[4]);
+                YoYo.with(Techniques.FadeIn).duration(700).playOn(menuActivity.buttons[5]);
+                YoYo.with(Techniques.FadeIn).duration(600).playOn(menuActivity.buttons[6]);
+                YoYo.with(Techniques.FadeIn).duration(600).playOn(menuActivity.buttons[7]);
+            }
+        }
     }
 
     private static class ExitAnimatorHandler implements Animator.AnimatorListener {
@@ -677,10 +683,9 @@ public class MenuActivity extends MenuActivityAbstract implements
         }
     }
 
-    public void postCreateResult(boolean b) {
+    public static void postCreateResult(boolean b) {
         if (b) lt.success();
         else lt.error();
-
     }
 
     private class NewGameCancelListener implements DialogInterface.OnCancelListener {

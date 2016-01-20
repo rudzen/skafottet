@@ -1,5 +1,6 @@
 package com.undyingideas.thor.skafottet.views.camera;
 
+@SuppressWarnings("SuspiciousNameCombination")
 public class V2 {
     public float x, y;
 

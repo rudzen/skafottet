@@ -62,8 +62,8 @@ public class FontUtils {
 
     /**
      * Creates Roboto typeface and puts it into cache
-     * @param context
-     * @param fontType
+     * @param context The context
+     * @param fontType The font type, as complete asset path
      * @return
      */
     private static Typeface getRobotoTypeface(final Context context, final String fontType) {
@@ -78,8 +78,8 @@ public class FontUtils {
      * Gets roboto typeface according to passed typeface style settings.
      * Will get Roboto-Bold for Typeface.BOLD etc
      *
-     * @param context
-     * @param originalTypeface
+     * @param context The context
+     * @param originalTypeface The original typeface
      * @return
      */
     private static Typeface getRobotoTypeface(final Context context, final Typeface originalTypeface) {

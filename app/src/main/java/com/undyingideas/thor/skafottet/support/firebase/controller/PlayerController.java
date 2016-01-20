@@ -1,8 +1,5 @@
 package com.undyingideas.thor.skafottet.support.firebase.controller;
 
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
 import com.firebase.client.ChildEventListener;
@@ -81,7 +78,7 @@ public class PlayerController {
 
         @Override
         public void onComplete(final FirebaseError firebaseError, final boolean b, final DataSnapshot dataSnapshot) {
-           menuActivity.postCreateResult(b);
+           MenuActivity.postCreateResult(b);
         }
     }
 

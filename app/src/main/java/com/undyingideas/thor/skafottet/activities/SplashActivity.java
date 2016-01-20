@@ -228,13 +228,19 @@ public class SplashActivity extends AppCompatActivity {
             if (msg != null && msg.what == MSG_LOAD_COMPLETE) {
                 final SplashActivity splashActivity = splashActivityWeakReference.get();
                 if (splashActivity != null) {
-                    splashActivity.loadHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            splashActivity.endSplash();
-                        }
-                    }, 1000);
+                    splashActivity.loadHandler.postDelayed(new EndSplash(splashActivity), 1000);
                 }
+            }
+        }
+
+        private static class EndSplash implements Runnable {
+            private final SplashActivity splashActivity;
+
+            public EndSplash(final SplashActivity splashActivity) {this.splashActivity = splashActivity;}
+
+            @Override
+            public void run() {
+                splashActivity.endSplash();
             }
         }
     }
