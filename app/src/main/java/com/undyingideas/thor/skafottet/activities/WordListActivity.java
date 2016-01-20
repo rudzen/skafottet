@@ -36,7 +36,6 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -88,7 +87,7 @@ public class WordListActivity extends AppCompatActivity implements
     private SwipeRefreshLayout refreshLayout;
 
     private Toolbar toolbar;
-    private ProgressBar progressBar;
+//    private ProgressBar progressBar;
 
     public MaterialDialog md; // for add list
 
@@ -135,8 +134,8 @@ public class WordListActivity extends AppCompatActivity implements
         toolbar.setNavigationContentDescription("Home icon");
         setSupportActionBar(toolbar);
 
-        progressBar = (ProgressBar) findViewById(R.id.topProgressBar);
-        progressBar.setVisibility(View.INVISIBLE); // it's GONE by default
+//        progressBar = (ProgressBar) findViewById(R.id.topProgressBar);
+//        progressBar.setVisibility(View.INVISIBLE); // it's GONE by default
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.word_item_drawer_layout);
 
@@ -353,7 +352,7 @@ public class WordListActivity extends AppCompatActivity implements
         /* the recieved input from the dual-edittext dialog fragment */
         /* this function is only triggered if the user input was valid */
 
-        if (md != null && md.isShowing()) md.dismiss();
+//        if (md != null && md.isShowing()) md.dismiss();
         onWindowFocusChanged(true);
 
         Log.d("AddListFinished", "Title : " + title);

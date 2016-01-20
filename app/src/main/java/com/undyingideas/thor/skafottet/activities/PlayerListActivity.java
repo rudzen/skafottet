@@ -23,6 +23,7 @@ import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import java.util.List;
 
+
 /**
  * An activity representing a list of Players. This activity
  * has different presentations for handset and tablet-size devices. On
@@ -54,6 +55,12 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable, P
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
         if (getSupportActionBar() != null) {
+            toolbar.setSubtitle("Eksisterende spillere");
+            toolbar.setCollapsible(false);
+            toolbar.setLogo(R.mipmap.ic_launcher);
+            toolbar.setLogoDescription("Applikations logo");
+            toolbar.setNavigationContentDescription("Home icon");
+
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
         }
@@ -94,7 +101,7 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable, P
     private static class FloaterClickHandler implements View.OnClickListener {
         @Override
         public void onClick(final View view) {
-            WindowLayout.showSnack("Replace with your own action", view, false);
+            WindowLayout.showSnack("Denne funktionalitet er ikke indlagt her endnu", view, false);
         }
     }
 

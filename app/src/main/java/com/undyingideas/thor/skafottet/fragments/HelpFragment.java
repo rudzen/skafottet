@@ -23,15 +23,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.support.firebase.dto.HelpFileDTO;
-import com.undyingideas.thor.skafottet.support.utility.Constant;
-import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import static com.undyingideas.thor.skafottet.support.utility.TinyDB.checkForNullKey;
 
 /**
  * Simple help fragment with a webview
@@ -39,30 +36,39 @@ import static com.undyingideas.thor.skafottet.support.utility.TinyDB.checkForNul
  */
 public class HelpFragment extends Fragment {
 
+    private static final byte[] emptyBytes = new byte[0];
+
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View fragmentView = inflater.inflate(R.layout.fragment_help, container, false);
         final WebView wv = (WebView) fragmentView.findViewById(R.id.wv);
-        final HelpFileDTO help = new HelpFileDTO();
-        try {
-            checkForNullKey(Constant.KEY_PREF_HELP);
-            help.addStringData((HelpFileDTO) GameUtility.s_preferences.getObject(Constant.KEY_PREF_HELP, HelpFileDTO.class));
-        } catch (final NullPointerException npe) {
+//        final HelpFileDTO help = new HelpFileDTO();
+//        try {
+//            checkForNullKey(Constant.KEY_PREF_HELP);
+//            help.addStringData((HelpFileDTO) GameUtility.s_preferences.getObject(Constant.KEY_PREF_HELP, HelpFileDTO.class));
+//            WindowLayout.showSnack("Gemt tekst hentet.", wv, true);
+//        } catch (final NullPointerException npe) {
+        String theText;
             try {
                 final InputStream input = getResources().openRawResource(R.raw.skafottet);
                 final int size = input.available();
-                final byte[] buffer = new byte[size];
+                byte[] buffer = new byte[size];
 
                 //noinspection ResultOfMethodCallIgnored
                 input.read(buffer);
                 input.close();
-
-                help.addStringData(new String(buffer));
+//                help.addStringData(new String(buffer, "UTF-8"));
+//                buffer = emptyBytes; // clear it right away..
+//                GameUtility.s_preferences.putObject(Constant.KEY_PREF_HELP, help);
+//                WindowLayout.showSnack("Standard tekst hentet.", wv, true);
+                theText = new String(buffer, "UTF-8");
             } catch (final IOException e) {
                 e.printStackTrace();
+                theText = "Fejl ved indhentning af fil.";
             }
-        }
-        wv.loadDataWithBaseURL("file:///android_res/raw/", help.getStringData(), "text/html", "UTF-8", null);
+//        }
+        wv.loadDataWithBaseURL("file:///android_res/raw/", theText, "text/html", "UTF-8", null);
+        YoYo.with(Techniques.FadeIn).duration(2000).playOn(wv);
         return fragmentView;
     }
 
