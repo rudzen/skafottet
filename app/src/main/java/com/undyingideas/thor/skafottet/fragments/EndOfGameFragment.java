@@ -206,9 +206,13 @@ public class EndOfGameFragment extends Fragment {
                 if (!lps.getName().equals(GameUtility.mpc.name) && lps.getScore() == -1)
                     gameisDone = false;
             if (gameisDone) {
+                String winnerName = getWinner(dto);
                 for (final LobbyPlayerStatus lps : dto.getPlayerList()){
-                    if (lps.getName().equals(getWinner(dto)))
-                        GameUtility.mpc.pc.updatePlayerScore(lps.getName(), 1);
+                    if (!lps.getName().equals(GameUtility.mpc.name))
+                        if (lps.getScore() < endGame.getLogic().getNumWrongLetters())
+                            GameUtility.mpc.pc.updatePlayerScore(lps.getName(), 1) ;
+                        else
+                            GameUtility.mpc.pc.updatePlayerScore(GameUtility.mpc.name, 1);
                 }
 
                 if (endGame.getLogic().isGameLost()) {
@@ -242,6 +246,7 @@ public class EndOfGameFragment extends Fragment {
     private static String getWinner(final LobbyDTO dto) {
         for(int i = 0; i < 10; i++) {
             for (final LobbyPlayerStatus lps : dto.getPlayerList()) {
+                Log.d("getWinner", lps.toString() + " , score = " + lps.getScore());
                 if (lps.getScore() == i) return lps.getName();
             }
         }
