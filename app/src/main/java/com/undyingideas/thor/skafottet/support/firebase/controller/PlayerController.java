@@ -53,7 +53,8 @@ public class PlayerController {
     }
 
     public void updatePlayerScore(final String name, final int newScore) {
-        ref.child(PLAYERS).child(name).child(SCORE).setValue(newScore);
+        int old = playerList.get(name).getScore();
+        ref.child(PLAYERS).child(name).child(SCORE).setValue(old + newScore);
     }
 
 

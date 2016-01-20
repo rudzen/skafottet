@@ -67,6 +67,7 @@ public class HangmanGameFragment extends Fragment {
         final Bundle args = new Bundle();
         args.putParcelable(Constant.KEY_SAVE_GAME, saveGame);
         hangmanGameFragment.setArguments(args);
+        try { GameUtility.mpc.setRunnable(null); } catch (Exception e) { Log.e("starthangman", "remove runnable "+e.getMessage()); }
         return hangmanGameFragment;
     }
 

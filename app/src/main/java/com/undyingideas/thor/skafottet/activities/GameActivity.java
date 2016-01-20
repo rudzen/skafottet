@@ -221,6 +221,7 @@ public class GameActivity extends SoundAbstract implements
     @Override
     public void startNewMultiplayerGame(final String opponentName, final String theWord) {
         Log.d(TAG, "Want to start new game against : " + opponentName + " with word : " + theWord);
+        GameUtility.mpc.setRunnable(null); // hack til at fjerne updaterings fejl
         replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(theWord), true, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du", opponentName)));
     }
 
