@@ -35,6 +35,10 @@ public final class Constant {
     public static final String KEY_WORDS_LOCAL = "lcw";
     public static final String KEY_WORDS_FIREBASE = "fbw";
 
+    public static final String KEY_PREFS_MUSIC = "kpmusic";
+    public static final String KEY_PREFS_SFX   = "kpsfx";
+    public static final String KEY_PREFS_BLOOD = "kpblood";
+
     /* instance keys */
 
     /* game mode keys */

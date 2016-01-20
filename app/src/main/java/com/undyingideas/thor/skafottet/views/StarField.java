@@ -26,6 +26,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import com.undyingideas.thor.skafottet.support.utility.SettingsDTO;
+
 import java.util.ArrayList;
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
@@ -103,7 +105,7 @@ public class StarField extends View implements PreferenceChangeListener {
         }
         stars.trimToSize();
 
-        run = true;
+        run = SettingsDTO.PREFS_BLOOD;
         handleCalculate = new Handler();
         handleUpdate = new Handler();
         calculator = new CalculateStarfield();
