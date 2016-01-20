@@ -270,16 +270,17 @@ public class EndOfGameFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        imageViewResult = null;
-        buttonMenu = null;
-        buttonNewGame = null;
-        Log.d(TAG, "Image objects destroyed.");
+        // something could be done here, but what? :-)
     }
 
     @Override
     public void onDetach() {
+        imageViewResult = null;
+        buttonMenu = null;
+        buttonNewGame = null;
+        Log.d(TAG, "Image objects destroyed.");
         super.onDetach();
-        // something could be done here, but what? :-)
+
     }
 
     @Override

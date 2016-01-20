@@ -2,6 +2,7 @@ package com.undyingideas.thor.skafottet.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -62,6 +63,10 @@ public class HangmanGameFragment extends Fragment {
     private OnButtonClickListener onButtonClickListener;
 
     private GameSoundNotifier gameSoundNotifier;
+
+    private Runnable resetAnimation;
+
+    private Handler resetHandler;
 
     public static HangmanGameFragment newInstance(final SaveGame saveGame) {
         final HangmanGameFragment hangmanGameFragment = new HangmanGameFragment();
@@ -261,21 +266,16 @@ public class HangmanGameFragment extends Fragment {
     }
 
     private void resetButtons() {
-        new Runnable() {
-            @Override
-            public void run() {
-                YoYo.with(Techniques.FadeIn).duration(400).playOn(buttonRows[0]);
-                YoYo.with(Techniques.FadeIn).duration(400).playOn(buttonRows[1]);
-                YoYo.with(Techniques.FadeIn).duration(400).playOn(buttonRows[2]);
-                YoYo.with(Techniques.FadeIn).duration(400).playOn(buttonRows[3]);
-                YoYo.with(Techniques.FadeIn).duration(400).playOn(noose);
-                for (final Button button : listOfButtons) {
-                    YoYo.with(Techniques.FadeIn).duration(400).playOn(button);
-                    button.setVisibility(View.VISIBLE);
-                    button.setOnClickListener(onButtonClickListener);
-                }
-            }
-        }.run();
+        YoYo.with(Techniques.FadeIn).duration(400).playOn(buttonRows[0]);
+        YoYo.with(Techniques.FadeIn).duration(400).playOn(buttonRows[1]);
+        YoYo.with(Techniques.FadeIn).duration(400).playOn(buttonRows[2]);
+        YoYo.with(Techniques.FadeIn).duration(400).playOn(buttonRows[3]);
+        YoYo.with(Techniques.FadeIn).duration(400).playOn(noose);
+        for (final Button button : listOfButtons) {
+            YoYo.with(Techniques.FadeIn).duration(400).playOn(button);
+            button.setVisibility(View.VISIBLE);
+            button.setOnClickListener(onButtonClickListener);
+        }
     }
 
     private static ArrayList<Button> getChildren(final ViewGroup vg) {
@@ -381,4 +381,5 @@ public class HangmanGameFragment extends Fragment {
             return false;
         }
     }
+
 }
