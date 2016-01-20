@@ -1,7 +1,2 @@
-- Firebase opret bruger
-
 - Layouts
-
-- Lydeffekter
-
-- Listegemning skal foregå i seperat tråd (eller ej)
+- Oprydning og abstraction af store aktiviteter (virker dog pt som de skal, men der er KLART plads til forbedringer!)
