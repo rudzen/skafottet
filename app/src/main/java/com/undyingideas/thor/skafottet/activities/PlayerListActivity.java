@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -53,7 +55,7 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
         if (getSupportActionBar() != null) {
-            toolbar.setSubtitle("Eksisterende spillere");
+            toolbar.setSubtitle("Hvem er størst?");
             toolbar.setCollapsible(false);
             toolbar.setLogo(R.mipmap.ic_launcher);
             toolbar.setLogoDescription("Applikations logo");
@@ -79,6 +81,28 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
         }
     }
 
+    @Override
+    public void finish() {
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        super.finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        final int index = item.getItemId();
+        if (index == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        // not used atm, but planned for future update.
+        return super.onCreateOptionsMenu(menu);
+    }
+
     private void setupRecyclerView(@NonNull final RecyclerView recyclerView, final List<HighScoreContent.HighScoreItem> items) {
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(items));
     }
@@ -101,6 +125,8 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
 //    public void setProgressBar(final boolean visible) {
 //        topProgressBar.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
 //    }
+
+
 
     private static class FloaterClickHandler implements View.OnClickListener {
         @Override
