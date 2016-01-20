@@ -31,7 +31,7 @@ import java.util.Collections;
 @SuppressWarnings("ClassWithTooManyConstructors")
 public class WordItem implements Parcelable, Serializable {
 
-    private static final long serialVersionUID = 4;
+    private static final long serialVersionUID = 3211;
 
     private String title;
     private String url;

@@ -39,6 +39,7 @@ import java.util.Set;
 public final class WordController implements Serializable, Parcelable {
 
     private static final long serialVersionUID = 321;
+
     private ArrayList<WordItem> localWords;
     private boolean isLocal;
     private int indexLocale;

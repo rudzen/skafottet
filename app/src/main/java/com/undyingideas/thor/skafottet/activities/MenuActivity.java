@@ -807,10 +807,14 @@ public class MenuActivity extends MenuActivityAbstract implements
     private void setLoginButton() {
         /* make sure the right button is set for the login/logout status */
         if (GameUtility.connectionStatus > -1) {
-            buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(mpc.name == null ? loginButtons[0] : loginButtons[1]));
+            if (buttons[BUTTON_LOGIN_OUT] != null) {
+                buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(mpc.name == null ? loginButtons[0] : loginButtons[1]));
+            }
         } else {
-            buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(loginButtons[0]));
-            mpc.name = null;
+            if (buttons[BUTTON_LOGIN_OUT] != null) {
+                buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(loginButtons[0]));
+                mpc.name = null;
+            }
         }
         YoYo.with(Techniques.Pulse).duration(300).playOn(buttons[BUTTON_LOGIN_OUT]);
     }
