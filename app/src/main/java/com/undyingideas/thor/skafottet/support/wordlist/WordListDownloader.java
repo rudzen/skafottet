@@ -90,7 +90,6 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
                 }
             } catch (final IOException e) {
                 // meh
-                wordListActivity.loadToast.error();
                 e.printStackTrace();
                 return null;
             }
@@ -140,6 +139,7 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
 //                wordListActivity.onWindowFocusChanged(true);
                 wordListActivity.loadToast.success();
             } else {
+                WindowLayout.showSnack("Fejl ved indhentning af listen", wordListActivity.getWindow().getDecorView(), true);
                 wordListActivity.loadToast.error();
             }
         }
