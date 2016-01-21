@@ -115,6 +115,7 @@ public class CreateLobbyFragment extends Fragment {
         mListener = null;
 //        setProgressListener = null;
         opponentName = null;
+        GameUtility.mpc.setRunnable(null);
     }
 
     /**
@@ -192,6 +193,7 @@ public class CreateLobbyFragment extends Fragment {
                     final LobbyDTO dto = new LobbyDTO();
                     dto.add(lps1); dto.add(lps2); dto.setWord(w);
                     GameUtility.mpc.createLobby(dto);
+                    GameUtility.mpc.setRunnable(null);
                     createLobbyFragmentWeakReference.get()
                             .getActivity().onBackPressed();// TODO design return
                     //opponentName = null ;GameUtility.mpc.update();
