@@ -69,24 +69,61 @@ public class Hangman3dView extends View {
 
     @Override
     public boolean onTouchEvent(final MotionEvent e) {
-        final float x = e.getX(), y = e.getY();
+        if (e.getPointerCount() == 1) {
+            final float x = e.getX(), y = e.getY();
+            switch (e.getAction()) {
+                case ACTION_MOVE:
+                    float dx = x - mPreviousX;
+                    float dy = y - mPreviousY;
+                    if (y > getHeight() / 2) {
+                        dx *= -1;          // reverse direction of rotation above the mid-line
+                    }
+                    if (x < getWidth() / 2) {
+                        dy *= -1;           // reverse direction of rotation to left of the mid-line
+                    }
+                    S.rotateLeft(dx * TOUCH_SCALE_FACTOR);
+                    invalidate();
+                    //noinspection fallthrough
+                case ACTION_DOWN:
+                    if (e.getAction() != ACTION_MOVE) Log.d(TAG, "touchstarted");
+                    mPreviousX = x;
+                    mPreviousY = y;
+                    break;
+                case ACTION_UP:
+                    Log.d(TAG, "touchstopped");
+                    break;
+                default:
+                    Log.d(TAG, "unaccounted event " + e.getAction());
+            }
+        } else multiTouch(e);
+        return true;
+    }
+    int x1, x2, y1, y2;
+    float mPreviousX1, mPreviousX2, mPreviousY1,mPreviousY2;
+    final float ZOOM_SCALE_FACTOR = 1f / 180;
+    public void multiTouch(final MotionEvent e) {
+        final float x1 = e.getX(0), y1 = e.getY(0), x2 = e.getX(1), y2 = e.getY(1);
         switch (e.getAction()) {
             case ACTION_MOVE:
-                float dx = x - mPreviousX;
-                float dy = y - mPreviousY;
-                if (y > getHeight() / 2) {
-                    dx *= -1;          // reverse direction of rotation above the mid-line
-                }
-                if (x < getWidth() / 2) {
-                    dy *= -1;           // reverse direction of rotation to left of the mid-line
-                }
-                S.rotateLeft(dx * TOUCH_SCALE_FACTOR);
+                float dx1 = x1 - mPreviousX1;
+                float dx2 = x2 - mPreviousX2;
+                float dy1 = y1 - mPreviousY1;
+                float dy2 = y2 - mPreviousY2;
+                //Log.d("hangman", "x1 "+dx1+ " x2 "+dx2+" y1 "+dy1+" y2 "+dy2);
+                float z = S.z + ((dx2 - dx1 + dy2 - dy1) * ZOOM_SCALE_FACTOR);
+                if (z > 1 || z < 20) S.setZoom(z); else if (z > 20) S.setZoom(20); else S.setZoom(1);
                 invalidate();
                 //noinspection fallthrough
             case ACTION_DOWN:
+                //noinspection fallthrough
+            case 261:
+                //noinspection fallthrough
+            case 262:
                 if (e.getAction() != ACTION_MOVE) Log.d(TAG, "touchstarted");
-                mPreviousX = x;
-                mPreviousY = y;
+                mPreviousX1 = x1;
+                mPreviousX2 = x2;
+                mPreviousY1 = y1;
+                mPreviousY2 = y2;
                 break;
             case ACTION_UP:
                 Log.d(TAG, "touchstopped");
@@ -94,7 +131,6 @@ public class Hangman3dView extends View {
             default:
                 Log.d(TAG, "unaccounted event " + e.getAction());
         }
-        return true;
     }
 
 //    @Override
