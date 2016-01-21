@@ -32,7 +32,7 @@
         android:contentDescription="@string/contentDescriptionEndResultImage"
         android:layout_weight="5"/>
 
-    <TextView
+    <com.undyingideas.thor.skafottet.views.AutoScaleTextView
         android:id="@+id/end_game_text_view_top"
         android:layout_width="match_parent"
         android:layout_height="0dp"
