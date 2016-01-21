@@ -16,6 +16,7 @@
 
 package com.undyingideas.thor.skafottet.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
@@ -158,7 +159,6 @@ public class GameActivity extends SoundAbstract implements
                         Fragment currentFragment = HangmanGameFragment.newInstance(new SaveGame(new HangedMan(dto.getWord()), true, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du", k));
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content, currentFragment).commit(); // custom commit without backstack
                     }
-
         } else {
             Log.e("GameActivity 168", "not logged in error");
             onBackPressed();
@@ -168,7 +168,11 @@ public class GameActivity extends SoundAbstract implements
 
     @Override
     public void finish() {
+        if (currentFragment != null) {
+            getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
+        }
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        startActivity(new Intent(this, MenuActivity.class));
         super.finish();
     }
 
@@ -221,7 +225,7 @@ public class GameActivity extends SoundAbstract implements
         if (newGame) {
             replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(), false, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du")));
         } else {
-            getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
+//            getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
 //             go back to the menu
 //            startActivity(new Intent(this, MenuActivity.class));
             finish();

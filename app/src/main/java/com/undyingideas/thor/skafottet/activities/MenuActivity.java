@@ -45,7 +45,6 @@ import com.undyingideas.thor.skafottet.adapters.StartGameItem;
 import com.undyingideas.thor.skafottet.broadcastrecievers.InternetReciever;
 import com.undyingideas.thor.skafottet.broadcastrecievers.InternetRecieverData;
 import com.undyingideas.thor.skafottet.game.SaveGame;
-import com.undyingideas.thor.skafottet.services.MusicPlay;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
@@ -62,6 +61,7 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_pref
 
 /**
  * The main menu activity.<br>
+ * *FLAGGED FOR RECODING AS FRAGMENT*
  * Quite large, but contains only relevant code.<br>
  * The Class metric is high here, but this is just a quick hack to make the SoundPool work.<br>
  * The refactoring of this class is imminent.<br>
@@ -70,12 +70,12 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_pref
  * <li>Difficult to figure out what's going on where! (luckily search works!)</li>
  * <p>Animation support classes needs to be generalised</p>
  * <p>Private classes should use abstraction to save a lot of valuable space</p>
+ *
  * @author rudz
  */
 @SuppressWarnings({"ClassTooDeepInInheritanceTree", "ClassWithTooManyMethods"})
 public class MenuActivity extends MenuActivityAbstract implements
-        InternetRecieverData.InternetRecieverInterface
-{
+        InternetRecieverData.InternetRecieverInterface {
 //    SharedPreferences.OnSharedPreferenceChangeListener
 
     private static final String FINISH = "finish";
@@ -197,8 +197,6 @@ public class MenuActivity extends MenuActivityAbstract implements
     @Override
     protected void onDestroy() {
         for (int i = 0; i < buttons.length; i++) buttons[i] = null;
-        stopService(MusicPlay.intent); // we want to stop the service here, as the acticity was destroyed
-//        GameUtility.stopMusic(getApplicationContext());
         super.onDestroy();
     }
 
@@ -246,18 +244,21 @@ public class MenuActivity extends MenuActivityAbstract implements
     @SuppressWarnings("unused")
     private void showMultiplayer() {
         startActivity(new Intent(this, GameActivity.class).putExtra(Constant.KEY_MODE, Constant.MODE_MULTI_PLAYER));
+        finish();
     }
 
     @SuppressWarnings("unused")
     private void showHelp() {
 //        if (sf != null) sf.setRun(false);
         startActivity(new Intent(this, GameActivity.class).putExtra(Constant.KEY_MODE, Constant.MODE_HELP));
+        finish();
     }
 
     @SuppressWarnings("unused")
     private void showHighScore() {
         if (GameUtility.connectionStatus > -1) {
             startActivity(new Intent(this, PlayerListActivity.class));
+            finish();
         } else {
             showDialog("Fejl", "Ingen internetforbindelse tilstede.");
         }
@@ -266,17 +267,20 @@ public class MenuActivity extends MenuActivityAbstract implements
     @SuppressWarnings("unused")
     private void showAbout() {
         startActivity(new Intent(this, GameActivity.class).putExtra(Constant.KEY_MODE, Constant.MODE_ABOUT));
+        finish();
     }
 
     @SuppressWarnings("unused")
     private void showSettings() {
 //        startActivity(new Intent(this, PrefsActivity.class));
         showDialog("Hov!", "Denne funktion er ikke klar endnu.");
+        finish();
     }
 
     @SuppressWarnings("unused")
     private void showWordList() {
         startActivity(new Intent(this, WordListActivity.class));
+        finish();
     }
 
     @SuppressWarnings("unused")
@@ -335,6 +339,7 @@ public class MenuActivity extends MenuActivityAbstract implements
             }
             if (sf != null) sf.setRun(false);
             startActivity(intent);
+            finish();
         } else {
             showLogin();
         }
@@ -800,16 +805,14 @@ public class MenuActivity extends MenuActivityAbstract implements
 
     private void setLoginButton() {
         /* make sure the right button is set for the login/logout status */
-        if (GameUtility.connectionStatus > -1) {
-            if (buttons[BUTTON_LOGIN_OUT] != null) { // guard for when application first comes into foreground
+        if (buttons[BUTTON_LOGIN_OUT] != null) { // guard for when application first comes into foreground
+            if (GameUtility.connectionStatus > -1) {
                 buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(mpc.name == null ? loginButtons[0] : loginButtons[1]));
-            }
-        } else {
-            if (buttons[BUTTON_LOGIN_OUT] != null) {
+            } else {
                 buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(loginButtons[0]));
                 mpc.name = null;
             }
+            YoYo.with(Techniques.Pulse).duration(300).playOn(buttons[BUTTON_LOGIN_OUT]);
         }
-        YoYo.with(Techniques.Pulse).duration(300).playOn(buttons[BUTTON_LOGIN_OUT]);
     }
 }
