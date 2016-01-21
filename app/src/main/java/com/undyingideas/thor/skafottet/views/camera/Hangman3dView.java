@@ -112,11 +112,11 @@ public class Hangman3dView extends View {
                 float dy2 = y2 - mPreviousY2;
                 //Log.d("hangman", "x1 "+dx1+ " x2 "+dx2+" y1 "+dy1+" y2 "+dy2);
                 float z;
-                if (startleft)
+                if (!startleft)
                     z = S.z + ((dx1 - dx2) * ZOOM_SCALE_FACTOR);
                 else
                     z = S.z + ((dx2 - dx1) * ZOOM_SCALE_FACTOR);
-                if (startdown)
+                if (!startdown)
                     z = z + ((dy1 - dy2) * ZOOM_SCALE_FACTOR);
                 else
                     z = z + ((dy2 - dy1) * ZOOM_SCALE_FACTOR);
@@ -159,33 +159,6 @@ public class Hangman3dView extends View {
                 Log.d(TAG, "unaccounted event " + e.getAction());
         }
     }
-
-//    @Override
-//    public boolean onTouchEvent(MotionEvent e) {
-//        final float x = e.getX(), y = e.getY();
-//        switch (e.getAction()) {
-//            case ACTION_MOVE :
-//                float dx = x - mPreviousX;
-//                if (y > getHeight() / 2) {
-//                    dx *= -1 ;          // reverse direction of rotation above the mid-line
-//                }
-//                acc += dx;
-//                break;
-//            case ACTION_DOWN:
-//                mPreviousX = x;
-//                mPreviousY = y;
-//                break;
-//            case ACTION_UP :
-//                Log.d(TAG, "touchstopped");
-//                break;
-//            default:
-//                Log.d(TAG, "unaccounted event " +e.getAction());
-//        }
-//        return true;
-//    }
-//
-//    float acc = 0;
-
 
     private void buildGallow() {
         gallow = new Cube[8];
