@@ -16,6 +16,7 @@
 
 package com.undyingideas.thor.skafottet.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.view.MenuItem;
@@ -37,6 +38,13 @@ public class PrefsActivity extends PreferenceActivity {
             return true;
         }
         return super.onMenuItemSelected(featureId, item);
+    }
+
+    @Override
+    public void finish() {
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        startActivity(new Intent(this, MenuActivity.class));
+        super.finish();
     }
 
     @Override

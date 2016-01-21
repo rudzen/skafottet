@@ -1,0 +1,49 @@
+{
+  "Lobby" : {
+    "-K8TLYJnFxKJAbGhT-ID" : {
+      "Adam" : 1,
+      "Theis" : 0,
+      "word" : "pudel"
+    },
+    "-K8TNG25_KMXXhQSGvB3" : {
+      "Adam" : 7,
+      "Theis" : 4,
+      "word" : "ppois"
+    },
+    "-K8TS3tj1_j6dAGNuEzG" : {
+      "Adam" : 2,
+      "Theis" : 0,
+      "word" : "pudel"
+    }
+  },
+  "Players" : {
+    "Adam" : {
+      "gameList" : {
+        "-K8TLYK2KTu16S5JRMiu" : "-K8TLYJnFxKJAbGhT-ID",
+        "-K8TNG2KFL49EelEFzdJ" : "-K8TNG25_KMXXhQSGvB3",
+        "-K8TS3uGsNTj0CqCIaLr" : "-K8TS3tj1_j6dAGNuEzG"
+      },
+      "name" : "Adam",
+      "password" : "a",
+      "score" : 3
+    },
+    "Theis" : {
+      "gameList" : {
+        "-K8TLYK4Yveetnj2Ny0m" : "-K8TLYJnFxKJAbGhT-ID",
+        "-K8TNG2NQ7OGW_De2HPU" : "-K8TNG25_KMXXhQSGvB3",
+        "-K8TS3uHl1BGl9HZ85g_" : "-K8TS3tj1_j6dAGNuEzG"
+      },
+      "name" : "Theis",
+      "password" : "t",
+      "score" : 1
+    }
+  },
+  "Wordlist" : {
+    "Hunde" : {
+      "pudel" : "pudel"
+    },
+    "Statistik" : {
+      "ppois" : "ppois"
+    }
+  }
+}

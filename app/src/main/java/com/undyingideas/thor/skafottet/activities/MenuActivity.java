@@ -274,7 +274,7 @@ public class MenuActivity extends MenuActivityAbstract implements
     private void showSettings() {
 //        startActivity(new Intent(this, PrefsActivity.class));
         showDialog("Hov!", "Denne funktion er ikke klar endnu.");
-        finish();
+//        finish();
     }
 
     @SuppressWarnings("unused")

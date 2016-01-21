@@ -50,6 +50,7 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
         setContentView(R.layout.activity_player_list);
 
         GameUtility.mpc.setRunnable(this);
+        WindowLayout.hideStatusBar(getWindow(), null);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -84,6 +85,7 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
     @Override
     public void finish() {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        startActivity(new Intent(this, MenuActivity.class));
         super.finish();
     }
 

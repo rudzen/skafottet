@@ -17,6 +17,7 @@
 package com.undyingideas.thor.skafottet.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -179,6 +180,7 @@ public class WordListActivity extends AppCompatActivity implements
     @Override
     public void finish() {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        startActivity(new Intent(this, MenuActivity.class));
         super.finish();
     }
 
