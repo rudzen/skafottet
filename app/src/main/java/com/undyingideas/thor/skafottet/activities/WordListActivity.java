@@ -45,7 +45,10 @@ import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.WordListAdapter;
 import com.undyingideas.thor.skafottet.adapters.WordTitleLocalAdapter;
 import com.undyingideas.thor.skafottet.adapters.WordTitleRemoteAdapter;
+import com.undyingideas.thor.skafottet.broadcastrecievers.InternetReciever;
+import com.undyingideas.thor.skafottet.broadcastrecievers.InternetRecieverData;
 import com.undyingideas.thor.skafottet.support.firebase.controller.WordListController;
+import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 import com.undyingideas.thor.skafottet.support.utility.StringHelper;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
@@ -74,7 +77,9 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_word
 public class WordListActivity extends AppCompatActivity implements
         AdapterView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener,
         StickyListHeadersListView.OnStickyHeaderOffsetChangedListener,
-        StickyListHeadersListView.OnStickyHeaderChangedListener {
+        StickyListHeadersListView.OnStickyHeaderChangedListener,
+        InternetRecieverData.InternetRecieverInterface
+{
 
     private static final String TAG = "WordListActicity";
 
@@ -98,11 +103,16 @@ public class WordListActivity extends AppCompatActivity implements
     private Handler handler;
     private Runnable refreshStopper;
 
+    private InternetRecieverData internetRecieverData;
+
     @SuppressLint("InflateParams")
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acticity_word_list);
+
+        internetRecieverData = new InternetRecieverData(this);
+        InternetReciever.addObserver(internetRecieverData);
 
         /* long arsed onCreate, but unfortunatly it's the min. req code */
 
@@ -214,15 +224,19 @@ public class WordListActivity extends AppCompatActivity implements
         boolean returnValue;
 //        setProgressBar(true);
         if (id == R.id.action_word_list_add) {
-                        /* show Yes/No dialog here! */
-            new MaterialDialog.Builder(this)
-                    .content("Vil du tilføje en ordliste?")
-                    .cancelable(true)
-                    .onAny(new AddWordListDialogListener(this))
-                    .positiveText(R.string.dialog_yes)
-                    .negativeText(R.string.dialog_no)
-                    .title("Tilføj Ordliste")
-                    .show();
+            if (GameUtility.connectionStatus > -1) {
+            /* show Yes/No dialog here! */
+                new MaterialDialog.Builder(this)
+                        .content("Vil du tilføje en ordliste?")
+                        .cancelable(true)
+                        .onAny(new AddWordListDialogListener(this))
+                        .positiveText(R.string.dialog_yes)
+                        .negativeText(R.string.dialog_no)
+                        .title("Tilføj Ordliste")
+                        .show();
+            } else {
+                WindowLayout.showSnack("Ingen forbindelse til internettet.", stickyList, true);
+            }
             returnValue = true;
         } else if (id == R.id.action_word_list_remove) {
 
@@ -375,6 +389,19 @@ public class WordListActivity extends AppCompatActivity implements
             s_wordController.replaceLocalWordList(new WordItem(title, url, new ArrayList<String>()));
 //            ListFetcher.saveWordLists(s_wordController, getApplicationContext());
             ListFetcher.listHandler.post(ListFetcher.listSaver);
+        }
+    }
+
+    @Override
+    public void onInternetStatusChanged(final  int connectionState) {
+        GameUtility.connectionStatus = connectionState;
+    }
+
+    @Override
+    public void onInternetStatusChanged(final String connectionState) {
+        GameUtility.connectionStatusName = connectionState;
+        if (stickyList != null) {
+            WindowLayout.showSnack(connectionState + " forbindelse oprettet.", stickyList, true);
         }
     }
 

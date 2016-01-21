@@ -70,6 +70,7 @@ public abstract class SoundAbstract extends AppCompatActivity implements Foregro
 
         loadSounds();
 
+        // If the thread isnt initialized or it was accidently GC'd..
         if (soundThread == null) {
             soundThread = new SoundThread(soundPool);
             soundThread.start();
@@ -78,8 +79,6 @@ public abstract class SoundAbstract extends AppCompatActivity implements Foregro
 
     @Override
     protected void onDestroy() {
-        soundItems = null;
-        soundThread = null;
         super.onDestroy();
     }
 
@@ -96,8 +95,12 @@ public abstract class SoundAbstract extends AppCompatActivity implements Foregro
 
     @Override
     public void onBecameForeground() {
-        soundThread = new SoundThread(soundPool);
-        soundThread.start();
+        if (soundThread == null) {
+            soundThread = new SoundThread(soundPool);
+        }
+        if (soundThread.isInterrupted() || !soundThread.isAlive()) {
+            soundThread.start();
+        }
     }
 
     @Override
