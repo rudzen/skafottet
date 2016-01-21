@@ -302,8 +302,12 @@ public class MenuActivity extends MenuActivityAbstract implements
             // If previous game is found, add it to list :-)
             final SaveGame saveGame = (SaveGame) s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
 //            Log.d(TAG, saveGame.getLogic().toString());
-            if (saveGame.getLogic() != null && !saveGame.getLogic().isGameOver() && (mpc.name == null && saveGame.isMultiPlayer())) {
-                startGameItems.add(new StartGameItem(Constant.MODE_CONT_GAME, "Fortsæt sidste spil", "Type : " + (saveGame.isMultiPlayer() ? "Multi" : "Single") + "player / Gæt : " + saveGame.getLogic().getVisibleWord(), imageRefs[saveGame.getLogic().getNumWrongLetters()]));
+            if (saveGame.getLogic() != null && !saveGame.getLogic().isGameOver()) {
+                if (mpc.name != null && saveGame.isMultiPlayer() && mpc.name.equals(saveGame.getNames()[0])) {
+                    startGameItems.add(new StartGameItem(Constant.MODE_CONT_GAME, "Fortsæt sidste spil", "Type : Multiplayer / Modstander : " + saveGame.getNames()[1], imageRefs[saveGame.getLogic().getNumWrongLetters()]));
+                } else {
+                    startGameItems.add(new StartGameItem(Constant.MODE_CONT_GAME, "Fortsæt sidste spil", "Type : Singleplayer / Gæt : " + saveGame.getLogic().getVisibleWord(), imageRefs[saveGame.getLogic().getNumWrongLetters()]));
+                }
             }
         } catch (final NullPointerException npe) {
             // nothing happends here, its just for not adding the option to continue a game.
