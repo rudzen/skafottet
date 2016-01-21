@@ -4,6 +4,8 @@ package com.undyingideas.thor.skafottet.views.camera;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import com.undyingideas.thor.skafottet.support.utility.GameUtility;
+
 public class Camera {
 
     // base vectors
@@ -31,12 +33,13 @@ public class Camera {
     public float northDegree;
 
     public Camera(final float sx, final float sy, final int ox, final int oy) {
+        z = GameUtility.s_preferences.getFloat("zoom", 6);
         s2 = new S2(sx, sy, ox, oy);
         cameraCenter = new V3(12, 12, 6);
         moveCameraTo(cameraCenter);
         focusPoint = new V3(9, 9, 6);
         focus(focusPoint);
-        z = 6f;
+
 
         u = new V3(0, 1, 1).unit();
         Su = new M3(0, -u.z, u.y,
@@ -122,6 +125,7 @@ public class Camera {
 
     public void setZoom(final float zoom) {
         z = zoom;
+        GameUtility.s_preferences.putFloat("zoom", z);
     }
 
     public void drawLine(final Canvas c, final V3 v1, final V3 v2, final Paint paint) {
