@@ -21,6 +21,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -636,6 +637,7 @@ public class MenuActivity extends MenuActivityAbstract implements
             return false;
         }
 
+
         @Override
         public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
             final MenuActivity menuActivity = weakReference.get();
@@ -646,8 +648,8 @@ public class MenuActivity extends MenuActivityAbstract implements
                     if (dialogCustomView != null) {
                         final EditText editTextTitle = (EditText) dialogCustomView.findViewById(R.id.loginName);
                         final EditText editTextURL = (EditText) dialogCustomView.findViewById(R.id.loginPass);
-                        final String user = editTextTitle.getText().toString().trim();
-                        final String pass = editTextURL.getText().toString().trim();
+                        user = editTextTitle.getText().toString().trim();
+                        pass = editTextURL.getText().toString().trim();
                         final CheckBox check = (CheckBox) (dialogCustomView.findViewById(R.id.createUserCheckBox));
                         final boolean isChecked = check.isChecked();
                         Log.d("login", "isChecked " + isChecked);
@@ -681,11 +683,22 @@ public class MenuActivity extends MenuActivityAbstract implements
             }
         }
     }
-
+    static String user, pass;
     public static void postCreateResult(boolean b) {
         if (b) lt.success();
         else lt.error();
+        Handler h = new Handler();
+        h.postDelayed(new postCreateLoginRunnable(), 150);
     }
+
+    private static class postCreateLoginRunnable implements Runnable{
+        @Override
+        public void run() {
+            GameUtility.mpc.login(user, pass);
+
+        }
+    }
+
 
     private class NewGameCancelListener implements DialogInterface.OnCancelListener {
         @Override
