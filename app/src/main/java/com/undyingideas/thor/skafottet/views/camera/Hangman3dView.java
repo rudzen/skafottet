@@ -110,17 +110,9 @@ public class Hangman3dView extends View {
                 float dx2 = x2 - mPreviousX2;
                 float dy1 = y1 - mPreviousY1;
                 float dy2 = y2 - mPreviousY2;
-                //Log.d("hangman", "x1 "+dx1+ " x2 "+dx2+" y1 "+dy1+" y2 "+dy2);
                 float z;
-                if (!startleft)
-                    z = S.z + ((dx1 - dx2) * ZOOM_SCALE_FACTOR);
-                else
-                    z = S.z + ((dx2 - dx1) * ZOOM_SCALE_FACTOR);
-                if (!startdown)
-                    z = z + ((dy1 - dy2) * ZOOM_SCALE_FACTOR);
-                else
-                    z = z + ((dy2 - dy1) * ZOOM_SCALE_FACTOR);
-
+                z = startleft ? S.z + ((dx1 - dx2) * ZOOM_SCALE_FACTOR) : S.z + ((dx2 - dx1) * ZOOM_SCALE_FACTOR);
+                z += startdown ? ((dy1 - dy2) * ZOOM_SCALE_FACTOR) : ((dy2 - dy1) * ZOOM_SCALE_FACTOR);
                 if (z > 1 && z < 20) S.setZoom(z); else if (z > 20) S.setZoom(20); else S.setZoom(1);
                 invalidate();
                 //noinspection fallthrough
@@ -133,8 +125,8 @@ public class Hangman3dView extends View {
             case 261:
                 if (e.getAction() == 261) {
                     Log.d(TAG, "touchstarted261");
-                    if(x1 < x2) startleft = true; else startleft = false;
-                    if(y1 < y2) startdown = true; else startdown = false;
+                    startleft = x1 > x2;
+                    startdown = y1 > y2;
                 }
                 mPreviousX1 = x1;
                 mPreviousX2 = x2;
