@@ -50,7 +50,6 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
         setContentView(R.layout.activity_player_list);
 
         GameUtility.mpc.setRunnable(this);
-        WindowLayout.hideStatusBar(getWindow(), null);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -80,6 +79,14 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
         if (findViewById(R.id.player_detail_container) != null) {
             mTwoPane = true;
         }
+    }
+
+    @Override
+    protected void onPostCreate(final Bundle savedInstanceState) {
+        if (getWindow() != null) {
+            WindowLayout.hideStatusBar(getWindow(), null);
+        }
+        super.onPostCreate(savedInstanceState);
     }
 
     @Override
