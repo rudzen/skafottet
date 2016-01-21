@@ -101,6 +101,7 @@ public class Hangman3dView extends View {
     int x1, x2, y1, y2;
     float mPreviousX1, mPreviousX2, mPreviousY1,mPreviousY2;
     final float ZOOM_SCALE_FACTOR = 1f / 180;
+    boolean startleft, startdown;
     public void multiTouch(final MotionEvent e) {
         final float x1 = e.getX(0), y1 = e.getY(0), x2 = e.getX(1), y2 = e.getY(1);
         switch (e.getAction()) {
@@ -110,23 +111,49 @@ public class Hangman3dView extends View {
                 float dy1 = y1 - mPreviousY1;
                 float dy2 = y2 - mPreviousY2;
                 //Log.d("hangman", "x1 "+dx1+ " x2 "+dx2+" y1 "+dy1+" y2 "+dy2);
-                float z = S.z + ((dx2 - dx1 + dy2 - dy1) * ZOOM_SCALE_FACTOR);
-                if (z > 1 || z < 20) S.setZoom(z); else if (z > 20) S.setZoom(20); else S.setZoom(1);
+                float z;
+                if (startleft)
+                    z = S.z + ((dx1 - dx2) * ZOOM_SCALE_FACTOR);
+                else
+                    z = S.z + ((dx2 - dx1) * ZOOM_SCALE_FACTOR);
+                if (startdown)
+                    z = z + ((dy1 - dy2) * ZOOM_SCALE_FACTOR);
+                else
+                    z = z + ((dy2 - dy1) * ZOOM_SCALE_FACTOR);
+
+                if (z > 1 && z < 20) S.setZoom(z); else if (z > 20) S.setZoom(20); else S.setZoom(1);
                 invalidate();
                 //noinspection fallthrough
             case ACTION_DOWN:
+                if (e.getAction() == ACTION_DOWN) Log.d("Hangman", "action down");
+                //noinspection fallthrough
+            case 5:
+                if (e.getAction() == 5) Log.d("Hangman", "5");
                 //noinspection fallthrough
             case 261:
-                //noinspection fallthrough
-            case 262:
-                if (e.getAction() != ACTION_MOVE) Log.d(TAG, "touchstarted");
+                if (e.getAction() == 261) {
+                    Log.d(TAG, "touchstarted261");
+                    if(x1 < x2) startleft = true; else startleft = false;
+                    if(y1 < y2) startdown = true; else startdown = false;
+                }
                 mPreviousX1 = x1;
                 mPreviousX2 = x2;
                 mPreviousY1 = y1;
                 mPreviousY2 = y2;
+
                 break;
             case ACTION_UP:
-                Log.d(TAG, "touchstopped");
+                Log.d(TAG, "touchstopped multi");
+                break;
+            case 262:
+                Log.d("hangman", "262");
+                mPreviousX = e.getX(0);
+                mPreviousY = e.getY(0);
+                break;
+            case 6:
+                Log.d("hangman", "6");
+                mPreviousX = e.getX(1);
+                mPreviousY = e.getY(1);
                 break;
             default:
                 Log.d(TAG, "unaccounted event " + e.getAction());
