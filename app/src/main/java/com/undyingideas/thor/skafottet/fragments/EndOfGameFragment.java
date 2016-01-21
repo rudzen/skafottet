@@ -117,7 +117,6 @@ public class EndOfGameFragment extends Fragment {
         final View root = inflater.inflate(R.layout.fragment_end_game, container, false);
 
         imageViewResult = (ImageView) root.findViewById(R.id.end_game_image_view);
-        textViewTop = (TextView) root.findViewById(R.id.end_game_text_view_top);
 
         buttonNewGame = (ImageView) root.findViewById(R.id.end_game_button_new_game);
         buttonMenu = (ImageView) root.findViewById(R.id.end_game_button_main_menu);
@@ -134,6 +133,7 @@ public class EndOfGameFragment extends Fragment {
             buttonMenu.setOnClickListener(endGameClickListener);
         }
 
+        textViewTop = (AutoScaleTextView) root.findViewById(R.id.end_game_text_view_top);
         textViewMiddle = (AutoScaleTextView) root.findViewById(R.id.end_game_middle_status_text_view);
         textViewLower = (AutoScaleTextView) root.findViewById(R.id.end_game_lower_status_text_view);
 
