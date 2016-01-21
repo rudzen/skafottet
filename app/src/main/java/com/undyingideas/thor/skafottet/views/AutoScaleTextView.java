@@ -13,6 +13,7 @@ import com.undyingideas.thor.skafottet.R;
  * A custom Text View that lowers the text size when the text is to big for the TextView. Modified version of one found on stackoverflow
  *
  * @author Andreas Krings - www.ankri.de
+ *
  * @author rudz
  * @version 1.1
  *          Cleanup of the mess.
