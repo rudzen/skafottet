@@ -46,12 +46,12 @@
         android:text="http://"
         />
 
-    <CheckBox
-        android:id="@+id/dialog_add_word_list_chk_download"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:checked="true"
-        android:text="Hent liste nu"
-        />
+    <!--<CheckBox-->
+        <!--android:id="@+id/dialog_add_word_list_chk_download"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:checked="true"-->
+        <!--android:text="Hent liste nu"-->
+        <!--/>-->
 
 </LinearLayout>

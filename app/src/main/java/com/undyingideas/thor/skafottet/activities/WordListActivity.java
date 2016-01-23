@@ -34,7 +34,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -49,16 +48,13 @@ import com.undyingideas.thor.skafottet.broadcastrecievers.InternetRecieverData;
 import com.undyingideas.thor.skafottet.support.firebase.controller.WordListController;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
-import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 import com.undyingideas.thor.skafottet.support.utility.StringHelper;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
-import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
 import com.undyingideas.thor.skafottet.support.wordlist.WordListDownloader;
 
 import net.steamcrafted.loadtoast.LoadToast;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -91,7 +87,6 @@ public class WordListActivity extends AppCompatActivity implements
     private SwipeRefreshLayout refreshLayout;
 
     private Toolbar toolbar;
-//    private ProgressBar progressBar;
 
     public MaterialDialog md; // for add list
 
@@ -137,9 +132,6 @@ public class WordListActivity extends AppCompatActivity implements
         toolbar.setNavigationContentDescription("Home icon");
         setSupportActionBar(toolbar);
 
-//        progressBar = (ProgressBar) findViewById(R.id.topProgressBar);
-//        progressBar.setVisibility(View.INVISIBLE); // it's GONE by default
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.word_item_drawer_layout);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.word_list_drawer_open, R.string.word_list_drawer_close);
@@ -184,7 +176,12 @@ public class WordListActivity extends AppCompatActivity implements
 
     @Override
     public void finish() {
-        final Bundle bundle = new Bundle();
+//        /* make sure user hasn't selected an empty list! */
+//        if (s_wordController.getLocalWords().get(s_wordController.getIndexLocale()).getWords().isEmpty()) {
+//            s_wordController.setIndexLocale(0);
+//            WindowLayout.showSnack("Du kan ikke benytte en tom liste, liste sat til 'Lande'", stickyList, true);
+//        }
+            final Bundle bundle = new Bundle();
         // TODO : This can be fittet to support multiplayer word selection challenge.
         bundle.putInt(Constant.KEY_MODE, Constant.MODE_MENU);
 
@@ -223,8 +220,7 @@ public class WordListActivity extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         final int id = item.getItemId();
-        boolean returnValue;
-//        setProgressBar(true);
+        final boolean returnValue;
         if (id == R.id.action_word_list_add) {
             if (GameUtility.connectionStatus > -1) {
             /* show Yes/No dialog here! */
@@ -289,7 +285,6 @@ public class WordListActivity extends AppCompatActivity implements
         return false;
     }
 
-
     @Override
     public void onBackPressed() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -319,23 +314,14 @@ public class WordListActivity extends AppCompatActivity implements
     }
 
     @Override
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onStickyHeaderOffsetChanged(final StickyListHeadersListView l, final View header, final int offset) {
-        //noinspection PointlessBooleanExpression,ConstantConditions
-//        if (fadeHeader && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
         header.setAlpha(1 - offset / (float) header.getMeasuredHeight());
-//        }
     }
 
     @Override
     public void onStickyHeaderChanged(final StickyListHeadersListView l, final View header, final int itemPosition, final long headerId) {
         header.setAlpha(1);
     }
-
-//    @Override
-//    public void setProgressBar(final boolean visible) {
-//        progressBar.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
-//    }
 
     /* ************************************************************************ */
     /* ************************************************************************ */
@@ -368,31 +354,19 @@ public class WordListActivity extends AppCompatActivity implements
      *         The title of the list
      * @param url
      *         The URL of the list (guarenteed VALID web address!
-     * @param startDownload
-     *         Initiate the download right away?
      */
-    private void onFinishAddWordDialog(final String title, final String url, final boolean startDownload) {
+    private void onFinishAddWordDialog(final String title, final String url) {
         /* the recieved input from the dual-edittext dialog fragment */
         /* this function is only triggered if the user input was valid */
 
-//        if (md != null && md.isShowing()) md.dismiss();
         onWindowFocusChanged(true);
 
         Log.d("AddListFinished", "Title : " + title);
         Log.d("AddListFinished", "URL   : " + url);
-        Log.d("AddListFinished", "Start Download : " + startDownload);
 
         WindowLayout.s_LoadToast.show();
 
-//        // this is where the list is initiated to be downloaded...
-        if (startDownload) {
-//            setProgressBar(true);
-            new WordListDownloader(this, title, url).execute();
-        } else {
-            s_wordController.replaceLocalWordList(new WordItem(title, url, new ArrayList<String>()));
-//            ListFetcher.saveWordLists(s_wordController, getApplicationContext());
-            ListFetcher.listHandler.post(ListFetcher.listSaver);
-        }
+        new WordListDownloader(this, title, url).execute();
     }
 
     @Override
@@ -474,8 +448,7 @@ public class WordListActivity extends AppCompatActivity implements
                         Log.d("DL DIAG", String.valueOf(isValid(title, url)));
 
                         if (isValid(title, url)) {
-                            final CheckBox downloadNow = (CheckBox) dialogCustomView.findViewById(R.id.dialog_add_word_list_chk_download);
-                            wordListActivity.onFinishAddWordDialog(title, url, downloadNow.isChecked());
+                            wordListActivity.onFinishAddWordDialog(title, url);
                         } else {
                             Toast.makeText(wordListActivity, "Forkert indtastede informationer.", Toast.LENGTH_SHORT).show();
                         }

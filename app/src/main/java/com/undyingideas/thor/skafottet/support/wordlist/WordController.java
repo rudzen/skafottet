@@ -72,9 +72,17 @@ public final class WordController implements Serializable, Parcelable {
         return returnList;
     }
 
+    @SuppressWarnings("MethodWithMultipleReturnPoints")
     public ArrayList<String> getCurrentList() {
         Log.d("WordController", String.valueOf(isLocal));
-        return isLocal ? localWords.get(indexLocale).getWords() : WordListController.wordList.get(indexRemote).getWords();
+        if (isLocal) {
+            if (indexLocale > 0 && localWords.get(indexLocale).getWords().isEmpty()) {
+                indexLocale = 0;
+            }
+            return localWords.get(indexLocale).getWords();
+        } else {
+            return WordListController.wordList.get(indexRemote).getWords();
+        }
     }
 
     public void addLocalWordList(final String title, final String url, final ArrayList<String> theList) {
@@ -97,7 +105,8 @@ public final class WordController implements Serializable, Parcelable {
         random = new Random(System.currentTimeMillis());
         final String returnString;
         if (isLocal || WordListController.wordList == null || WordListController.wordList.isEmpty()) {
-            returnString = localWords.get(indexLocale).getWords().get(random.nextInt(localWords.get(indexLocale).getWordListSize()));
+            // using inlined method for empty list fix..
+            returnString = getCurrentList().get(random.nextInt(localWords.get(indexLocale).getWordListSize()));
         } else {
             returnString = WordListController.wordList.get(indexRemote).getWords().get(random.nextInt(WordListController.wordList.get(indexRemote).getWordListSize()));
         }
