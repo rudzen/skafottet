@@ -122,7 +122,7 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
             wordItem.getWords().addAll(dude);
             Collections.sort(wordItem.getWords());
             s_wordController.replaceLocalWordList(wordItem);
-            return wordItem;
+            return wordItem.getWords().isEmpty() ? null : wordItem;
         }
         return null;
     }
