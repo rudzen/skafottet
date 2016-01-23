@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.undyingideas.thor.skafottet.support.highscore;
+package com.undyingideas.thor.skafottet.support.highscore.local;
 
 /**
  * @author rudz

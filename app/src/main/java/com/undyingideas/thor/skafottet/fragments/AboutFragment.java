@@ -16,19 +16,23 @@
 
 package com.undyingideas.thor.skafottet.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.undyingideas.thor.skafottet.activities.GameActivity;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
+import com.undyingideas.thor.skafottet.support.abstractions.FragmentOnBackClickListener;
+import com.undyingideas.thor.skafottet.support.utility.Constant;
 
 import static android.text.util.Linkify.EMAIL_ADDRESSES;
 import static android.text.util.Linkify.WEB_URLS;
@@ -39,12 +43,15 @@ import static android.util.TypedValue.applyDimension;
 
 /**
  * Simple fragment to display some information about the app
+ *
  * @author rudz
  */
 public class AboutFragment extends Fragment {
 
     private static final String SEP = System.lineSeparator();
     private static final String RUDY = "Rudy", ADAM = "Adam", THEIS = "Theis";
+    @Nullable
+    private IFragmentFlipper iFragmentFlipper;
 
     private static final String[] ROWS = {
             "Skafottet - et 3-ugers projekt, af Gruppe 23" + SEP +
@@ -104,21 +111,21 @@ public class AboutFragment extends Fragment {
                     "- Diverse lydstumper fra forskellige sider med gratis lydklip." + SEP + SEP + SEP +
 
 
-            "Original galgelogik af Jakob Nordfalk." + SEP + "http://www.javabog.dk",
+                    "Original galgelogik af Jakob Nordfalk." + SEP + "http://www.javabog.dk",
             "TinyDB preferences interface af kcochibili." + SEP + "https://github.com/kcochibili/TinyDB--Android-Shared-Preferences-Turbo" + SEP + SEP
-            + SEP + SEP + "Ingen dyr led nød under udviklingen af denne app, ej heller under brugen af samme. Vi forventer en invasion af flok tapirer i nær fremtid, så det skal slås fast vi er dyrevenner!"
+                    + SEP + SEP + "Ingen dyr led nød under udviklingen af denne app, ej heller under brugen af samme. Vi forventer en invasion af flok tapirer i nær fremtid, så det skal slås fast vi er dyrevenner!"
 
             ,
             "Copyright 2016 Rudy Alex Kohn" + SEP + SEP +
-            "Licensed under the Apache License, Version 2.0 (the \"License\")" + SEP +
-            "you may not use this file except in compliance with the License." + SEP +
-            "You may obtain a copy of the License at" + SEP + SEP +
-            "http://www.apache.org/licenses/LICENSE-2.0" + SEP + SEP +
-            "Unless required by applicable law or agreed to in writing, software" + SEP +
-            "distributed under the License is distributed on an \"AS IS\" BASIS," + SEP +
-            "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied." + SEP +
-            "See the License for the specific language governing permissions and" + SEP +
-            "limitations under the License."
+                    "Licensed under the Apache License, Version 2.0 (the \"License\")" + SEP +
+                    "you may not use this file except in compliance with the License." + SEP +
+                    "You may obtain a copy of the License at" + SEP + SEP +
+                    "http://www.apache.org/licenses/LICENSE-2.0" + SEP + SEP +
+                    "Unless required by applicable law or agreed to in writing, software" + SEP +
+                    "distributed under the License is distributed on an \"AS IS\" BASIS," + SEP +
+                    "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied." + SEP +
+                    "See the License for the specific language governing permissions and" + SEP +
+                    "limitations under the License."
     };
 
     @Nullable
@@ -154,27 +161,40 @@ public class AboutFragment extends Fragment {
         }
         tv = null;
         sv.addView(ll);
+        YoYo.with(Techniques.FadeIn).duration(1000).playOn(sv);
         return sv;
     }
 
     @Override
-    public void onCreate(@Nullable final Bundle savedInstanceState) {
-        ((GameActivity) getActivity()).getSupportActionBar().hide();
-        super.onCreate(savedInstanceState);
+    public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
+        final View v = getView();
+        if (v != null) {
+            v.setFocusableInTouchMode(true);
+            v.requestFocus();
+            v.setOnKeyListener(new FragmentOnBackClickListener(iFragmentFlipper, Constant.MODE_MENU));
+        }
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        if (context instanceof IFragmentFlipper) {
+            iFragmentFlipper = (IFragmentFlipper) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement IFragmentFlipper");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        iFragmentFlipper = null;
+        super.onDetach();
     }
 
     @Override
     public void onDestroy() {
         tv = null;
         super.onDestroy();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onDestroy();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

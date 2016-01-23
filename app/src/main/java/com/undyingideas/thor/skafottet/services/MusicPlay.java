@@ -29,9 +29,11 @@ import com.undyingideas.thor.skafottet.activities.support.Foreground;
 
 import java.io.IOException;
 
-public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
+public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, Foreground.Listener {
 
     public static Intent intent = new Intent();
+
+    private final static String TAG = "MusicPlayService";
 
     private static final String ACTION_PLAY = "SKAFOTMUSIK";
     private static final String ACTION_STOP = "STOPSKAFOTT";
@@ -47,12 +49,9 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     private static final byte STATE_PLAYING = 3;
     private static final byte STATE_PAUSED = 4;
 
-    Foreground.Listener myListener = new ForegroundListener();
-
     @Override
     public void onCreate() {
         mInstance = this;
-        Foreground.get(mInstance).addListener(myListener);
     }
 
     @Override
@@ -63,7 +62,8 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     @Override
     public int onStartCommand(final Intent intent, final int flags, final int startId) {
         Log.d("Player", "onStartCommand");
-        if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_PLAY)) {
+        if (intent != null && intent.getAction() != null) {
+            if (intent.getAction().equals(ACTION_PLAY)) {
                 Log.d("Player", "Filter was correct");
 //            InputStream inputStream = getResources().openRawResource(R.raw.reign_supreme);
                 mMediaPlayer = MediaPlayer.create(this, music); // initialize it here
@@ -72,7 +72,13 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
                 mMediaPlayer.setOnErrorListener(this);
                 mMediaPlayer.setLooping(true);
                 mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                Foreground.get(mInstance).addListener(this);
                 initMediaPlayer();
+            } else if (intent.getAction().equals(ACTION_STOP)) {
+                if (isPlaying()) {
+                    mMediaPlayer.stop();
+                }
+            }
         } else {
 //            if (mMediaPlayer != null) {
 //                mMediaPlayer.stop();
@@ -112,7 +118,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     public void onDestroy() {
         if (mMediaPlayer != null) {
             mMediaPlayer.release();
-            Foreground.get(mInstance).removeListener(myListener);
+            Foreground.get(mInstance).removeListener(this);
         }
         STATE = STATE_RETRIEVING;
     }
@@ -156,15 +162,16 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
         return mInstance;
     }
 
-    private class ForegroundListener implements Foreground.Listener {
-        @Override
-        public void onBecameForeground() {
-            startMusic();
-        }
-
-        @Override
-        public void onBecameBackground() {
-            pauseMusic();
-        }
+    @Override
+    public void onBecameForeground() {
+        Log.d(TAG, "Music started");
+        startMusic();
     }
+
+    @Override
+    public void onBecameBackground() {
+        Log.d(TAG, "Music stopped");
+        pauseMusic();
+    }
+
 }

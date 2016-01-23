@@ -24,10 +24,10 @@
               android:orientation="vertical"
               tools:context=".activities.GameActivity">
 
-    <include
-        layout="@layout/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+    <!--<include-->
+        <!--layout="@layout/toolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"/>-->
 
     <LinearLayout
         android:id="@+id/fragment_content"

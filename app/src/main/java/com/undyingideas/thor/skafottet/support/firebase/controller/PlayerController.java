@@ -1,5 +1,6 @@
 package com.undyingideas.thor.skafottet.support.firebase.controller;
 
+import android.os.Handler;
 import android.util.Log;
 
 import com.firebase.client.ChildEventListener;
@@ -8,8 +9,8 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.MutableData;
 import com.firebase.client.Transaction;
-import com.undyingideas.thor.skafottet.activities.MenuActivity;
 import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;
+import com.undyingideas.thor.skafottet.support.firebase.observer.FireBaseLoginData;
 
 import java.util.HashMap;
 
@@ -39,9 +40,9 @@ public class PlayerController {
         this.ref.child(PLAYERS).addChildEventListener(new NameGetter(mpcRef));
     }
 
-    public void createPlayer(final String name, final String password, final MenuActivity menuActivity) {
+    public void createPlayer(final String name, final String password, final FireBaseLoginData observer) {
         final Firebase playersRef = ref.child(PLAYERS).child(name);
-        final FireBaseCreate h = new FireBaseCreate(name, password, menuActivity);
+        final FireBaseCreate h = new FireBaseCreate(name, password, observer);
         playersRef.runTransaction(h);
     }
 
@@ -58,12 +59,12 @@ public class PlayerController {
     static class FireBaseCreate implements Transaction.Handler {
         private final String name;
         private final String password;
-        private final MenuActivity menuActivity;
+        private final FireBaseLoginData observer;
 
-        FireBaseCreate(final String name, final String password, final MenuActivity menuActivity) {
+        FireBaseCreate(final String name, final String password, final FireBaseLoginData observer) {
             this.password = password;
             this.name = name;
-            this.menuActivity = menuActivity;
+            this.observer = observer;
         }
 
         @Override
@@ -78,7 +79,7 @@ public class PlayerController {
 
         @Override
         public void onComplete(final FirebaseError firebaseError, final boolean b, final DataSnapshot dataSnapshot) {
-           MenuActivity.postCreateResult(b);
+            new Handler().post(observer);
         }
     }
 

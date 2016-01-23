@@ -45,9 +45,9 @@ import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.WordListAdapter;
 import com.undyingideas.thor.skafottet.adapters.WordTitleLocalAdapter;
 import com.undyingideas.thor.skafottet.adapters.WordTitleRemoteAdapter;
-import com.undyingideas.thor.skafottet.broadcastrecievers.InternetReciever;
 import com.undyingideas.thor.skafottet.broadcastrecievers.InternetRecieverData;
 import com.undyingideas.thor.skafottet.support.firebase.controller.WordListController;
+import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 import com.undyingideas.thor.skafottet.support.utility.StringHelper;
@@ -71,7 +71,7 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_word
  * Project : skafottet
  * This activity is responsible for a couple of things.
  * First off, the lists can be viewed.
- *
+ * // TODO : As fragment
  * @author rudz
  */
 public class WordListActivity extends AppCompatActivity implements
@@ -82,8 +82,6 @@ public class WordListActivity extends AppCompatActivity implements
 {
 
     private static final String TAG = "WordListActicity";
-
-    public LoadToast loadToast;
 
     private WordListAdapter mAdapter;
     private DrawerLayout mDrawerLayout;
@@ -110,9 +108,6 @@ public class WordListActivity extends AppCompatActivity implements
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acticity_word_list);
-
-        internetRecieverData = new InternetRecieverData(this);
-        InternetReciever.addObserver(internetRecieverData);
 
         /* long arsed onCreate, but unfortunatly it's the min. req code */
 
@@ -189,19 +184,26 @@ public class WordListActivity extends AppCompatActivity implements
 
     @Override
     public void finish() {
+        final Bundle bundle = new Bundle();
+        // TODO : This can be fittet to support multiplayer word selection challenge.
+        bundle.putInt(Constant.KEY_MODE, Constant.MODE_MENU);
+
+        final Intent intent = new Intent(this, GameActivity.class);
+        intent.putExtra(Constant.KEY_MODE, bundle);
+
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        startActivity(new Intent(this, MenuActivity.class));
+        startActivity(intent);
         super.finish();
     }
 
     @Override
     protected void onPostCreate(final Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        loadToast = new LoadToast(this);
-        loadToast.setProgressColor(Color.BLACK);
-        loadToast.setTextColor(Color.WHITE);
-        loadToast.setBackgroundColor(Color.RED);
-        loadToast.setTranslationY(WindowLayout.screenDimension.y / 3);
+        WindowLayout.s_LoadToast = new LoadToast(this);
+        WindowLayout.s_LoadToast.setProgressColor(Color.BLACK);
+        WindowLayout.s_LoadToast.setTextColor(Color.WHITE);
+        WindowLayout.s_LoadToast.setBackgroundColor(Color.RED);
+        WindowLayout.s_LoadToast.setTranslationY(WindowLayout.screenDimension.y / 3);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
     }
@@ -279,7 +281,7 @@ public class WordListActivity extends AppCompatActivity implements
 
     private boolean updateCurrentList() {
         if (s_wordController.isLocal() && s_wordController.getIndexLocale() > 0) {
-            loadToast.show();
+            WindowLayout.s_LoadToast.show();
             new WordListDownloader(this, s_wordController.getLocalWords().get(s_wordController.getIndexLocale()).getTitle(), s_wordController.getLocalWords().get(s_wordController.getIndexLocale()).getUrl()).execute();
             return true;
         }
@@ -293,6 +295,7 @@ public class WordListActivity extends AppCompatActivity implements
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
+            finish();
             super.onBackPressed();
         }
     }
@@ -379,7 +382,7 @@ public class WordListActivity extends AppCompatActivity implements
         Log.d("AddListFinished", "URL   : " + url);
         Log.d("AddListFinished", "Start Download : " + startDownload);
 
-        loadToast.show();
+        WindowLayout.s_LoadToast.show();
 
 //        // this is where the list is initiated to be downloaded...
         if (startDownload) {

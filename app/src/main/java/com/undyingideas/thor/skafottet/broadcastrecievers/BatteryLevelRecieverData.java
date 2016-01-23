@@ -18,7 +18,7 @@ package com.undyingideas.thor.skafottet.broadcastrecievers;
 
 import android.util.Log;
 
-import java.lang.ref.WeakReference;
+import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
 
 /**
  * Created on 16-01-2016, 07:28.
@@ -28,11 +28,11 @@ import java.lang.ref.WeakReference;
  * For use with {@link BatteryLevelReciever}.<br>
  * @author rudz
  */
-public final class BatteryLevelRecieverData implements Runnable {
+public final class BatteryLevelRecieverData extends WeakReferenceHolder<BatteryLevelRecieverData.BatteryLevelRecieveDataInterface> implements Runnable {
 
     /* store the destination interface as a WEAK reference, this allows the system to GC the subject
        if needed. Since it's guarded nothing will happend if the target was destroyed. */
-    private final WeakReference<BatteryLevelRecieveDataInterface> batteryLevelRecieveDataInterfaceWeakReference;
+//    private final WeakReference<BatteryLevelRecieveDataInterface> batteryLevelRecieveDataInterfaceWeakReference;
 
     /* the TAG so we know who we are */
     private final static String TAG = "BatteryLevelRecData";
@@ -67,7 +67,7 @@ public final class BatteryLevelRecieverData implements Runnable {
      * @param keepInReciever If true, this observer class will not be removed when executed.
      */
     public BatteryLevelRecieverData(final BatteryLevelRecieveDataInterface batteryLevelRecieveDataInterface, final boolean keepInReciever) {
-        batteryLevelRecieveDataInterfaceWeakReference = new WeakReference<>(batteryLevelRecieveDataInterface);
+        super(batteryLevelRecieveDataInterface);
         this.keepInReciever = keepInReciever;
     }
 
@@ -78,7 +78,7 @@ public final class BatteryLevelRecieverData implements Runnable {
     @Override
     public void run() {
         Log.d(TAG, "Observer runnable started.");
-        final BatteryLevelRecieveDataInterface internetRecieverInterface = batteryLevelRecieveDataInterfaceWeakReference.get();
+        final BatteryLevelRecieveDataInterface internetRecieverInterface = weakReference.get();
         if (internetRecieverInterface != null) {
             internetRecieverInterface.onBatteryStatusChanged(data);
         }

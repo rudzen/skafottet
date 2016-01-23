@@ -14,13 +14,25 @@
  * limitations under the License.
  */
 
-package com.undyingideas.thor.skafottet.support;
+package com.undyingideas.thor.skafottet.interfaces;
+
+import android.os.Bundle;
+
+import com.undyingideas.thor.skafottet.support.utility.Constant;
 
 /**
- * Created on 21-01-2016, 09:34.
+ * Created on 22-01-2016, 19:43.
  * Project : skafottet
- *
+ * Generic fragmentflipper interface for modes.
  * @author rudz
  */
-public class MintCallback {
+public interface IFragmentFlipper {
+    /**
+     * Flips the fragment to the corresponding mode.
+     * @param gameMode The mode as defined by {@link Constant}.
+     */
+    void flipFragment(final int gameMode);
+
+    // to use with savegame
+    void flipFragment(final int gameMode, final Bundle bundle);
 }

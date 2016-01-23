@@ -15,8 +15,8 @@
   ~ limitations under the License.
   -->
 
-<RelativeLayout
-    android:id="@+id/menu_background"
+<com.undyingideas.thor.skafottet.views.StarField
+    android:id="@+id/sf"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -25,20 +25,21 @@
     android:clickable="false"
     android:focusableInTouchMode="false"
     android:orientation="vertical"
-    tools:context=".activities.MenuActivity"
+    tools:context=".activities.GameActivity"
     >
+    <!--android:id="@+id/menu_background"-->
 
-    <com.undyingideas.thor.skafottet.views.StarField
-        android:id="@+id/sf"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:background="@android:color/transparent"
-        />
+    <!--<com.undyingideas.thor.skafottet.views.StarField-->
+    <!--android:id="@+id/sf"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_alignParentLeft="true"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_alignParentStart="true"-->
+    <!--android:background="@android:color/transparent"-->
+    <!--/>-->
 
     <ImageView
         android:id="@+id/menu_title"
@@ -117,4 +118,4 @@
             android:textSize="20sp"/>
     </LinearLayout>
 
-</RelativeLayout>
+</com.undyingideas.thor.skafottet.views.StarField>

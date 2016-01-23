@@ -43,6 +43,9 @@ public final class Constant {
 
     /* game mode keys */
     public static final String KEY_MODE = "mode";
+
+    public static final int MODE_FINISH = -100;
+    public static final int MODE_MENU = -1;
     public static final int MODE_CONT_GAME = 0;
     public static final int MODE_SINGLE_PLAYER = 1;
     public static final int MODE_MULTI_PLAYER = 2;
@@ -50,9 +53,20 @@ public final class Constant {
     public static final int MODE_MULTI_PLAYER_LOBBY = 4;
     public static final int MODE_MULTI_PLAYER_LOGIN = 5;
     public static final int MODE_MULTI_PLAYER_WORD_SELECT = 6;
-    public static final int MODE_WORD_LIST = 7;
     public static final int MODE_ABOUT = 8;
     public static final int MODE_HELP = 9;
+    public static final int MODE_END_GAME = 10;
+
+
+    /* to deliver as true back pressed */
+    public static final int MODE_BACK_PRESSED = 231;
+
+
+    /* activities, going to be replaced */
+    public static final int MODE_WORD_LIST = 7;
+
+    /* perhaps one day this will become a fragment */
+    public static final int MODE_HIGHSCORE = 101;
 
     public static final String KEY_GAME_LOGIC = "log";
     public static final String KEY_PREF_HELP = "hlp";

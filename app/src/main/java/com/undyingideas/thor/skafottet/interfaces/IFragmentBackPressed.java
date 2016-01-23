@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package com.undyingideas.thor.skafottet.support;
+package com.undyingideas.thor.skafottet.interfaces;
 
 /**
- * Created on 21-01-2016, 09:34.
+ * Created on 22-01-2016, 19:45.
  * Project : skafottet
- *
+ * WHAT! HATE GOOGLE!.. no backpress in fragments.. pfff
  * @author rudz
  */
-public class MintCallback {
+public interface IFragmentBackPressed {
+
+
+
 }

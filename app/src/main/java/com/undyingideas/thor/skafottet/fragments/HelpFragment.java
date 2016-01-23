@@ -16,6 +16,7 @@
 
 package com.undyingideas.thor.skafottet.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -27,7 +28,9 @@ import android.webkit.WebView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.activities.GameActivity;
+import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
+import com.undyingideas.thor.skafottet.support.abstractions.FragmentOnBackClickListener;
+import com.undyingideas.thor.skafottet.support.utility.Constant;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,6 +40,9 @@ import java.io.InputStream;
  * @author rudz
  */
 public class HelpFragment extends Fragment {
+
+    @Nullable
+    private IFragmentFlipper iFragmentFlipper;
 
     private static final byte[] emptyBytes = new byte[0];
 
@@ -64,19 +70,42 @@ public class HelpFragment extends Fragment {
 //                GameUtility.s_preferences.putObject(Constant.KEY_PREF_HELP, help);
 //                WindowLayout.showSnack("Standard tekst hentet.", wv, true);
                 theText = new String(buffer, "UTF-8");
+                buffer = emptyBytes;
             } catch (final IOException e) {
                 e.printStackTrace();
                 theText = "Fejl ved indhentning af fil.";
             }
 //        }
         wv.loadDataWithBaseURL("file:///android_res/raw/", theText, "text/html", "UTF-8", null);
-        YoYo.with(Techniques.FadeIn).duration(2000).playOn(wv);
+        YoYo.with(Techniques.FadeIn).duration(1000).playOn(wv);
         return fragmentView;
     }
 
     @Override
-    public void onCreate(@Nullable final Bundle savedInstanceState) {
-        ((GameActivity) getActivity()).getSupportActionBar().hide();
-        super.onCreate(savedInstanceState);
+    public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
+        final View v = getView();
+        if (v != null) {
+            v.setFocusableInTouchMode(true);
+            v.requestFocus();
+            v.setOnKeyListener(new FragmentOnBackClickListener(iFragmentFlipper, Constant.MODE_MENU));
+        }
+        super.onViewCreated(view, savedInstanceState);
     }
+
+    @Override
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        if (context instanceof IFragmentFlipper) {
+            iFragmentFlipper = (IFragmentFlipper) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement IFragmentFlipper");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        iFragmentFlipper = null;
+        super.onDetach();
+    }
+
 }

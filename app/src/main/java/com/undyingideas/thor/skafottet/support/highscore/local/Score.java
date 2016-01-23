@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.undyingideas.thor.skafottet.support.highscore;
+package com.undyingideas.thor.skafottet.support.highscore.local;
 
 import java.io.Serializable;
 import java.util.Comparator;

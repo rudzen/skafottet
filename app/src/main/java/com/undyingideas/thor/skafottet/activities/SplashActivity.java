@@ -34,8 +34,8 @@ import com.firebase.client.Firebase;
 import com.nineoldandroids.animation.Animator;
 import com.splunk.mint.Mint;
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.activities.support.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.services.MusicPlay;
+import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.support.firebase.controller.MultiplayerController;
 import com.undyingideas.thor.skafottet.support.firebase.controller.WordListController;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
@@ -209,6 +209,7 @@ public class SplashActivity extends AppCompatActivity {
 
             Log.d(TAG, s_wordController.toString());
 
+
             final Message message = loadHandler.obtainMessage(MSG_LOAD_COMPLETE);
             message.sendToTarget();
         }
@@ -262,8 +263,12 @@ public class SplashActivity extends AppCompatActivity {
         public void onAnimationEnd(final Animator animation) {
             final SplashActivity splashActivity = weakReference.get();
             if (splashActivity != null) {
-                final Intent intent = new Intent(splashActivity, MenuActivity.class);
+                final Intent intent = new Intent(splashActivity, GameActivity.class);
+                final Bundle bundle;
+                bundle = new Bundle();
+                bundle.putInt(Constant.KEY_MODE, Constant.MODE_MENU);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(Constant.KEY_MODE, bundle);
                 splashActivity.startActivity(intent);
                 splashActivity.finish();
             }

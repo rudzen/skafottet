@@ -1,0 +1,42 @@
+v1.1 - 23.01.2016, rudz
+Fixes:
+- Empty Wordlist selection could cause wordlist curroption if selected while starting new game,
+  this would require user to delete application data to make it work again.
+- Login listener didn't really work, replaced with observer handling.
+- Fixed several multiplayer related menu / selection crashes.
+- SoundThread should be more operational during stop/resume stuff.
+
+New:
+- Fragment based menu, makes things easier.
+- Fragment handling of backbutton through helper class.
+- Mode set by interface back to activity.
+- Generic mode Fragment flipper interface.
+- Sound effects bug fix (would cause IllegalState + perhaps kill sound effects).
+- Sound effects added for single fragment back press towards menu.
+- Sound effect added when quiting game.
+- Groovy About fragment fade-in.
+
+Changes:
+(Code)
+- Slight refactoring of some helper classes.
+- SoundPool now only used through GameActivity, was used by two different activities before.
+- All old fragments updated with correct implementation of overrides.
+- All added/altered fragments classes has their methods sorted into categories :
+  - Overrides.
+  - Helper methods.
+  - Helper classes.
+- StarField is now a RelativeLayout (increases performance ALOT).
+- Removed old background layout in menu (replaced by StarField).
+- StarField now uses HIGH_PASS_FILTER of 3.0 to limit movement.
+- StarField calculation PS lowered.
+- StarField movement altered slightly to make it look more pleasing.
+- Moved some generic views to be global (they are used in a lot of places).
+- Added a few more generic helper methods to reduce size of some fragments.
+- Implementet WeakReferenceHolder for more classes.
+- End game fragment now has a delay for being able to click the buttons.
+- Adjusted animation of end game fragment a little.
+- End game fragment now uses threading to determin the results from the game (more UI friendly).
+
+Known Bugs:
+- Highscore doesn't show all entries when logged in (!!!!)
+

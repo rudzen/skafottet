@@ -20,6 +20,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
+import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.support.wordlist.WordController;
 
 import java.io.ByteArrayInputStream;
@@ -29,7 +30,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.ref.WeakReference;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -108,17 +108,15 @@ public final class ListFetcher {
         return context.getFileStreamPath(filename).getAbsolutePath();
     }
 
-    public static class ListSaver implements Runnable {
-
-        final WeakReference<Context> contextWeakReference;
+    public static class ListSaver extends WeakReferenceHolder<Context> implements Runnable {
 
         public ListSaver(final Context context) {
-            contextWeakReference = new WeakReference<>(context);
+            super(context);
         }
 
         @Override
         public void run() {
-            final Context context = contextWeakReference.get();
+            final Context context = weakReference.get();
             if (context != null) {
                 Log.d("ListSaver", String.valueOf(saveWordLists(GameUtility.s_wordController, context)));
             }

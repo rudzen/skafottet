@@ -19,10 +19,10 @@ package com.undyingideas.thor.skafottet.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.fragments.AboutFragment;
 import com.undyingideas.thor.skafottet.fragments.CreateLobbyFragment;
@@ -30,9 +30,11 @@ import com.undyingideas.thor.skafottet.fragments.EndOfGameFragment;
 import com.undyingideas.thor.skafottet.fragments.HangmanGameFragment;
 import com.undyingideas.thor.skafottet.fragments.HelpFragment;
 import com.undyingideas.thor.skafottet.fragments.LobbySelectorFragment;
+import com.undyingideas.thor.skafottet.fragments.MenuFragment;
 import com.undyingideas.thor.skafottet.game.HangedMan;
 import com.undyingideas.thor.skafottet.game.SaveGame;
-import com.undyingideas.thor.skafottet.interfaces.GameSoundNotifier;
+import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
+import com.undyingideas.thor.skafottet.interfaces.IGameSoundNotifier;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
@@ -40,29 +42,32 @@ import com.undyingideas.thor.skafottet.support.utility.FontUtils;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
+import net.steamcrafted.loadtoast.LoadToast;
+
 import java.util.ArrayList;
 import java.util.Set;
 
 /**
  * The main game activity.
  * It has the responsibility of showing the game itself and the end game display to the user.
- *
+ * <p/>
  * This contains the basic stuff for handling all the fragments which are displayed here.
+ *
  * @author rudz
  */
 public class GameActivity extends SoundAbstract implements
         LobbySelectorFragment.OnMultiPlayerPlayerFragmentInteractionListener,
-        EndOfGameFragment.OnEndGameButtonClickListenerInterface,
         CreateLobbyFragment.OnCreateLobbyFragmentInteractionListener,
-        GameSoundNotifier
-{
+        IGameSoundNotifier, IFragmentFlipper {
 
     private static final String TAG = "GameActivity";
-    private static String s_possibleWord;
+    /* to handle backpressed when in the menu fragment */
+    private static final int BACK_PRESSED_DELAY = 2000;
+    /* what where when how who why? */
+    private Fragment currentFragment; // what are we?
+    private int currentMode; // where are we?
+    private long backPressed;
 
-    private Toolbar toolbar;
-
-    private Fragment currentFragment;
 
 //    private ProgressBar topProgressBar;
 //
@@ -71,17 +76,10 @@ public class GameActivity extends SoundAbstract implements
 //    private Handler handler;
 //    private Runnable mvReset;
 
-    public static String getS_possibleWord() {
-        return s_possibleWord;
-    }
-
-    public static void setS_possibleWord(final String s_possibleWord) {
-        GameActivity.s_possibleWord = s_possibleWord;
-    }
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 //        requestWindowFeature(Window.FEATURE_ACTION_BAR);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         FontUtils.setDefaultFont(getApplicationContext(), "DEFAULT", Constant.FONT_BOLD);
@@ -89,81 +87,81 @@ public class GameActivity extends SoundAbstract implements
         FontUtils.setDefaultFont(getApplicationContext(), "SERIF", Constant.FONT_LIGHT);
         FontUtils.setDefaultFont(getApplicationContext(), "SANS_SERIF", Constant.FONT_BOLD);
 
-        initSound();
+        // take over the loader toast for this act..
+        WindowLayout.s_LoadToast = new LoadToast(this);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            toolbar.setLogo(R.drawable.icon);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
-        /* configure the custom marquee view linked with a textview */
-//        mvReset = new StartMarquee();
-//        handler = new Handler();
-
-//        mv = (MarqueeView) findViewById(R.id.game_marqueeView);
-//        tv = (TextView) findViewById(R.id.game_text_view_marq);
-//        tv.setText(GameUtility.mpc.name == null ? "Du er ikke logget ind, log ind for at hænge andre." : "Du er logget ind som " + GameUtility.mpc.name);
-//        mv.setPauseBetweenAnimations(500);
-//        mv.setSpeed(10);
-//        handler.postDelayed(mvReset, 500);
-
-//        topProgressBar = (ProgressBar) findViewById(R.id.topProgressBar);
-//        topProgressBar.setVisibility(View.INVISIBLE);
-
-        if (getIntent() != null) {
-            final Bundle bundle = getIntent().getExtras();
-            final int gameMode = bundle.getInt(Constant.KEY_MODE);
-            switch (gameMode){
-            case Constant.MODE_CONT_GAME:
-                // throw in the game from the preferences
-                addFragment(HangmanGameFragment.newInstance((SaveGame) bundle.getParcelable(Constant.KEY_SAVE_GAME))); //  (SaveGame) GameUtility.s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class)));
-                break;
-                case Constant.MODE_SINGLE_PLAYER :
-                addFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(), false, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du")));
-                break;
-                case Constant.MODE_MULTI_PLAYER:
-                    getFirstActiveGame();
-                    break;
-                case Constant.MODE_MULTI_PLAYER_2:
-                addFragment(LobbySelectorFragment.newInstance(true));
-                    break;
-                case Constant.MODE_MULTI_PLAYER_LOBBY:
-                addFragment(CreateLobbyFragment.newInstance(true));
-                    break;
-                case Constant.MODE_ABOUT:
-                addFragment(new AboutFragment());
-                    break;
-                case Constant.MODE_HELP:
-                addFragment(new HelpFragment());
-                    break;
+        if (getIntent() != null && getIntent().getExtras() != null) { // TODO : Figure out more direct game controlling modes..
+            final Bundle bundle = getIntent().getExtras().getBundle(Constant.KEY_MODE);
+            if (bundle != null) {
+                final int gameMode = bundle.containsKey(Constant.KEY_MODE) ? bundle.getInt(Constant.KEY_MODE) : Constant.MODE_MENU;
+                switch (gameMode) {
+                    case Constant.MODE_MENU:
+                        currentMode = Constant.MODE_MENU;
+                        addFragment(new MenuFragment());
+                        break;
+                }
+                return;
             }
-        } else {
-            addFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(), false, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du")));
         }
+        currentMode = Constant.MODE_MENU;
+        addFragment(new MenuFragment());
     }
 
-    private void getFirstActiveGame(){
-        if(GameUtility.mpc.name != null){
-            ArrayList<LobbyDTO> dtolist = new ArrayList<>();
+    @Override
+    protected void onResume() {
+        if (soundThread == null) {
+            initSound();
+            Log.d(TAG, "Sound started");
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        soundThread.interrupt();
+        soundThread = null;
+        Log.d(TAG, "Sound removed");
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    private static Bundle getFirstActiveGame() {
+        if (GameUtility.mpc.name != null) {
+            final ArrayList<LobbyDTO> dtolist = new ArrayList<>();
             dtolist.addAll(GameUtility.mpc.lc.lobbyList.values());
-            for (LobbyDTO dto : dtolist)
-                for(LobbyPlayerStatus status : dto.getPlayerList())
-                    if (status.getName().equals(GameUtility.mpc.name) && status.getScore() == -1){
+            for (final LobbyDTO dto : dtolist) {
+                for (final LobbyPlayerStatus status : dto.getPlayerList()) {
+                    if (status.getName().equals(GameUtility.mpc.name) && status.getScore() == -1) {
                         String k = "";
                         final Set<String> keys = GameUtility.mpc.lc.lobbyList.keySet();
-                        for (final String key : keys)
-                            if (dto.equals(GameUtility.mpc.lc.lobbyList.get(key)))
-                                { k = key; break; }
-                        Fragment currentFragment = HangmanGameFragment.newInstance(new SaveGame(new HangedMan(dto.getWord()), true, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du", k));
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content, currentFragment).commit(); // custom commit without backstack
+                        for (final String key : keys) {
+                            if (dto.equals(GameUtility.mpc.lc.lobbyList.get(key))) {
+                                k = key;
+                                break;
+                            }
+                        }
+                        final Bundle bundle = new Bundle();
+                        final SaveGame saveGame = new SaveGame(new HangedMan(dto.getWord()), true, GameUtility.mpc.name, k);
+                        bundle.putParcelable(Constant.KEY_SAVE_GAME, saveGame);
+                        return bundle;
+//                        replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(dto.getWord()), true, GameUtility.mpc.name, k)));
+//                        break;
                     }
+                }
+            }
         } else {
             Log.e("GameActivity 168", "not logged in error");
-            onBackPressed();
+//            onBackPressed();
         }
-        WindowLayout.showSnack("Du har ingen spil klar", toolbar.getRootView(), false);
+        return null;
+//        WindowLayout.showSnack("Du har ingen spil klar", findViewById(R.id.fragment_content), false);
+//        if (currentFragment instanceof MenuFragment) {
+//            ((MenuFragment) currentFragment).showAll();
+//        }
     }
 
     @Override
@@ -172,17 +170,17 @@ public class GameActivity extends SoundAbstract implements
             getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
         }
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        startActivity(new Intent(this, MenuActivity.class));
         super.finish();
     }
 
     @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    public void onBackPressed() {
+        if (backPressed + BACK_PRESSED_DELAY > System.currentTimeMillis()) {
+            YoYo.with(Techniques.ZoomOut).duration(300).playOn(findViewById(R.id.sf));
+            playSound(GameUtility.SFX_LOST);
+            super.onBackPressed();
+        } else WindowLayout.showSnack("Tryk tilbage igen for at flygte i rædsel.", findViewById(R.id.fragment_content), false);
+        backPressed = System.currentTimeMillis();
     }
 
     @Override
@@ -200,8 +198,11 @@ public class GameActivity extends SoundAbstract implements
 
     private void replaceFragment(final Fragment fragment) {
         currentFragment = fragment;
+        playSound(GameUtility.SFX_MENU_CLICK);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content, fragment).commit();
     }
+
+    /* interface implementations */
 
     @Override
     public void playGameSound(final int sound) {
@@ -220,16 +221,77 @@ public class GameActivity extends SoundAbstract implements
         replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(theWord), true, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du", opponentName)));
     }
 
+    @SuppressWarnings({"OverlyComplexMethod", "OverlyLongMethod"})
     @Override
-    public void onEndGameButtonClicked(final boolean newGame) {
-        if (newGame) {
+    public final void flipFragment(final int gameMode) {
+        currentMode = gameMode;
+        if (gameMode == Constant.MODE_BACK_PRESSED) {
+            onBackPressed();
+        } else if (gameMode == Constant.MODE_MENU) {
+            playSound(GameUtility.SFX_MENU_CLICK);
+            replaceFragment(new MenuFragment());
+        } else if (gameMode == Constant.MODE_SINGLE_PLAYER) {
             replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(), false, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du")));
-        } else {
-//            getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
-//             go back to the menu
-//            startActivity(new Intent(this, MenuActivity.class));
+        } else if (gameMode == Constant.MODE_MULTI_PLAYER) {
+            final Bundle bundle = getFirstActiveGame();
+            if (bundle != null) {
+                replaceFragment(HangmanGameFragment.newInstance(bundle));
+            } else {
+                WindowLayout.showSnack("Du har ikke flere spil åbne.", findViewById(R.id.fragment_content), false);
+                if (currentFragment instanceof MenuFragment) {
+                    ((MenuFragment) currentFragment).showAll();
+                }
+            }
+        } else if (gameMode == Constant.MODE_MULTI_PLAYER_2) {
+            replaceFragment(LobbySelectorFragment.newInstance(true));
+        } else if (gameMode == Constant.MODE_MULTI_PLAYER_LOBBY) {
+            replaceFragment(CreateLobbyFragment.newInstance(true));
+        } else if (gameMode == Constant.MODE_ABOUT) {
+            replaceFragment(new AboutFragment());
+        } else if (gameMode == Constant.MODE_HELP) {
+            replaceFragment(new HelpFragment());
+        } else if (gameMode == Constant.MODE_WORD_LIST) {// this is an activity, so we end the menu.. // TODO : remake as fragments...
+            getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
+            final Intent intent = new Intent(this, WordListActivity.class);
+            startActivity(intent);
+            finish();
+        } else if (gameMode == Constant.MODE_HIGHSCORE) {
+            getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
+            final Intent intent = new Intent(this, PlayerListActivity.class);
+            startActivity(intent);
+            finish();
+        } else if (gameMode == Constant.MODE_FINISH) {
+            getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
             finish();
         }
     }
+
+    @Override
+    public final void flipFragment(final int gameMode, final Bundle bundle) {
+        playSound(GameUtility.SFX_MENU_CLICK);
+        if (gameMode == Constant.MODE_CONT_GAME) {
+            // when the current save game is to be continued.
+            replaceFragment(HangmanGameFragment.newInstance((SaveGame) bundle.getParcelable(Constant.KEY_SAVE_GAME)));
+        } else if (gameMode == Constant.MODE_END_GAME) {
+            // when the game is done and the end game fragment needs to be shown.
+            replaceFragment(EndOfGameFragment.newInstance((SaveGame) bundle.getParcelable(Constant.KEY_SAVE_GAME)));
+        }
+    }
+
+    // TODO : Remove, been replaced by proper observer inferface
+//    static String user, pass;
+//    public static void postCreateResult(boolean b) {
+//        if (b) WindowLayout.s_LoadToast.success();
+//        else WindowLayout.s_LoadToast.error();
+//        new Handler().postDelayed(new postCreateLoginRunnable(), 150);
+//    }
+//
+//    private static class postCreateLoginRunnable implements Runnable {
+//        @Override
+//        public void run() {
+//            GameUtility.mpc.login(user, pass);
+//        }
+//    }
+
 }
 

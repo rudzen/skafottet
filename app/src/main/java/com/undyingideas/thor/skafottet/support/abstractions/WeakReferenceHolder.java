@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.undyingideas.thor.skafottet.activities.support;
+package com.undyingideas.thor.skafottet.support.abstractions;
 
 import java.lang.ref.WeakReference;
 
@@ -24,11 +24,11 @@ import java.lang.ref.WeakReference;
  * // not used for anyting right now.
  * @author rudz
  */
-public class WeakReferenceHolder<E> {
+public abstract class WeakReferenceHolder<E> {
 
     protected final WeakReference<E> weakReference;
 
-    public WeakReferenceHolder(final E objectReference) {
+    protected WeakReferenceHolder(final E objectReference) {
         weakReference = new WeakReference<>(objectReference);
     }
 

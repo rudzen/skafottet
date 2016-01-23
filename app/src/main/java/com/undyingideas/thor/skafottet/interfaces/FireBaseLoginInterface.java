@@ -17,15 +17,13 @@
 package com.undyingideas.thor.skafottet.interfaces;
 
 /**
- * Created on 17-01-2016, 18:04.
+ * Created on 22-01-2016, 20:54.
  * Project : skafottet
  *
  * @author rudz
  */
-public interface GameSoundNotifier {
+public interface FireBaseLoginInterface {
 
-    // so the fragments can notify the acticity which sound effect to play !
-
-    void playGameSound(final int sound);
+    void loginDataReceived(final String username, final String password);
 
 }

@@ -29,10 +29,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.activities.support.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.adapters.MultiplayerLobbyAdapter;
+import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
+import com.undyingideas.thor.skafottet.support.abstractions.FragmentOnBackClickListener;
+import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
+import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
@@ -42,6 +45,7 @@ import java.util.Set;
 /**
  * This Fragment is responsible for showing the current Multiplayer players that are online.<br>
  * It presents a list of them using a custom adapter with data retrieved from firebase.<br>
+ * TODO : Needs to facilitate a firebase observer interface *correctly* to monitor changes.
  * @author rudz
  */
 public class LobbySelectorFragment extends Fragment {
@@ -56,8 +60,9 @@ public class LobbySelectorFragment extends Fragment {
 
     @Nullable
     private OnMultiPlayerPlayerFragmentInteractionListener mListener;
-//    @Nullable
-//    private ProgressBarInterface setProgressListener;
+
+    @Nullable
+    private IFragmentFlipper iFragmentFlipper;
 
     /**
      * Use this method to create a new instance of * this fragment using the provided parameters.
@@ -70,6 +75,16 @@ public class LobbySelectorFragment extends Fragment {
         args.putBoolean(KEY_IS_ONLINE, isOnline);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    /**
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnMultiPlayerPlayerFragmentInteractionListener {
+        void onPlayerClicked(final String playerName);
+        void startNewMultiplayerGame(final String lobbyKey, final String theWord);
     }
 
     @Override
@@ -102,40 +117,32 @@ public class LobbySelectorFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
+        final View v = getView();
+        if (v != null) {
+            v.setFocusableInTouchMode(true);
+            v.requestFocus();
+            v.setOnKeyListener(new FragmentOnBackClickListener(iFragmentFlipper, Constant.MODE_MENU));
+        }
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
     public void onAttach(final Context context) {
         super.onAttach(context);
-        if (context instanceof OnMultiPlayerPlayerFragmentInteractionListener) {
+        if (context instanceof OnMultiPlayerPlayerFragmentInteractionListener && context instanceof IFragmentFlipper) {
             mListener = (OnMultiPlayerPlayerFragmentInteractionListener) context;
+            iFragmentFlipper = (IFragmentFlipper) context;
         } else {
-            throw new RuntimeException(context.toString() + " must implement OnMultiPlayerPlayerFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnMultiPlayerPlayerFragmentInteractionListener & IFragmentFlipper.");
         }
-//        if (context instanceof ProgressBarInterface) {
-//            setProgressListener = (ProgressBarInterface) context;
-//        } else {
-//            throw new RuntimeException(context.toString() + " must implement ProgressBarInterface");
-//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-//        setProgressListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnMultiPlayerPlayerFragmentInteractionListener {
-        void onPlayerClicked(final String playerName);
-        void startNewMultiplayerGame(final String lobbyKey, final String theWord);
+        iFragmentFlipper = null;
     }
 
     private void onButtonPressed(final int position) {

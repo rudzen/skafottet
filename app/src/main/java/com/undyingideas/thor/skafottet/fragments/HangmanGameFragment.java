@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +20,11 @@ import com.nineoldandroids.animation.Animator;
 import com.romainpiel.shimmer.Shimmer;
 import com.romainpiel.shimmer.ShimmerTextView;
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.activities.GameActivity;
 import com.undyingideas.thor.skafottet.game.SaveGame;
-import com.undyingideas.thor.skafottet.interfaces.GameSoundNotifier;
+import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
+import com.undyingideas.thor.skafottet.interfaces.IGameSoundNotifier;
+import com.undyingideas.thor.skafottet.support.abstractions.FragmentOnBackClickListener;
+import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
@@ -31,7 +32,6 @@ import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.views.camera.Hangman3dView;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 /**
@@ -62,22 +62,28 @@ public class HangmanGameFragment extends Fragment {
     private Animation sepAnimation, sepAnimation2;
     private OnButtonClickListener onButtonClickListener;
 
-    private GameSoundNotifier gameSoundNotifier;
+    private IFragmentFlipper iFragmentFlipper;
+    private IGameSoundNotifier iGameSoundNotifier;
 
     private Runnable resetAnimation;
 
     private Handler resetHandler;
 
     public static HangmanGameFragment newInstance(final SaveGame saveGame) {
-        final HangmanGameFragment hangmanGameFragment = new HangmanGameFragment();
         final Bundle args = new Bundle();
         args.putParcelable(Constant.KEY_SAVE_GAME, saveGame);
-        hangmanGameFragment.setArguments(args);
+        final HangmanGameFragment hangmanGameFragment = newInstance(args); //new HangmanGameFragment();
         try {
             GameUtility.mpc.setRunnable(null);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             Log.e("starthangman", "remove runnable " + e.getMessage());
         }
+        return hangmanGameFragment;
+    }
+
+    public static HangmanGameFragment newInstance(final Bundle bundle) {
+        final HangmanGameFragment hangmanGameFragment = new HangmanGameFragment();
+        hangmanGameFragment.setArguments(bundle);
         return hangmanGameFragment;
     }
 
@@ -89,7 +95,7 @@ public class HangmanGameFragment extends Fragment {
         } catch (final Exception e) {
             e.printStackTrace();
         }
-        ((GameActivity) getActivity()).getSupportActionBar().hide();
+//        ((GameActivity) getActivity()).getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
     }
 
@@ -133,10 +139,11 @@ public class HangmanGameFragment extends Fragment {
     @Override
     public void onAttach(final Context context) {
         super.onAttach(context);
-        if (context instanceof GameSoundNotifier) {
-            gameSoundNotifier = (GameSoundNotifier) context;
+        if (context instanceof IGameSoundNotifier && context instanceof IFragmentFlipper) {
+            iGameSoundNotifier = (IGameSoundNotifier) context;
+            iFragmentFlipper = (IFragmentFlipper) context;
         } else {
-            throw new RuntimeException(context.toString() + " must implement GameSoundNotifier");
+            throw new RuntimeException(context.toString() + " must implement IGameSoundNotifier & IFragmentFlipper.");
         }
     }
 
@@ -150,7 +157,7 @@ public class HangmanGameFragment extends Fragment {
         if (v != null) {
             v.setFocusableInTouchMode(true);
             v.requestFocus();
-            v.setOnKeyListener(new OnBackKeyListener());
+            v.setOnKeyListener(new FragmentOnBackClickListener(iFragmentFlipper, Constant.MODE_MENU));
         }
 
         applySaveGameStatus();
@@ -203,19 +210,20 @@ public class HangmanGameFragment extends Fragment {
     @Override
     public void onResume() {
 
-        super.onResume();
-        if (shimmerWord == null) {
-            shimmerWord = new Shimmer();
-            shimmerWord.setDuration(400);
-        }
-        if (shimmerStatus == null) {
-            shimmerStatus = new Shimmer();
-            shimmerStatus.setDuration(800);
-        }
+//        if (shimmerWord == null) {
+//            shimmerWord = new Shimmer();
+//            shimmerWord.setDuration(400);
+//        }
+//        if (shimmerStatus == null) {
+//            shimmerStatus = new Shimmer();
+//            shimmerStatus.setDuration(800);
+//        }
         shimmerWord.start(textViewWord);
         shimmerStatus.start(textViewStatus);
         sepKnown.setAnimation(sepAnimation);
         sepStatus.setAnimation(sepAnimation2);
+
+        super.onResume();
     }
 
     private static String getOppNames(final String lobbykey, final String yourname) {
@@ -305,36 +313,34 @@ public class HangmanGameFragment extends Fragment {
         if (currentGame.getLogic().isGameOver()) {
             GameUtility.writeNullGame();
             if (currentGame.getLogic().isGameWon()) {
-                gameSoundNotifier.playGameSound(GameUtility.SFX_INTRO);
+                iGameSoundNotifier.playGameSound(GameUtility.SFX_INTRO);
             } else {
-                gameSoundNotifier.playGameSound(GameUtility.SFX_LOST);
+                iGameSoundNotifier.playGameSound(GameUtility.SFX_LOST);
             }
             startEndgame();
         } else {
             // save the game status!
             GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, currentGame);
             if (!currentGame.getLogic().isLastLetterCorrect()) {
-                gameSoundNotifier.playGameSound(GameUtility.SFX_GUESS_WRONG);
+                iGameSoundNotifier.playGameSound(GameUtility.SFX_GUESS_WRONG);
                 if (vibrator != null) vibrator.vibrate(50);
                 YoYo.with(Techniques.Flash).duration(300).playOn(textViewWord);
             } else {
-                gameSoundNotifier.playGameSound(GameUtility.SFX_GUESS_RIGHT);
+                iGameSoundNotifier.playGameSound(GameUtility.SFX_GUESS_RIGHT);
             }
             updateScreen();
         }
     }
 
-    private static class OnButtonClickListener implements View.OnClickListener {
-
-        private final WeakReference<HangmanGameFragment> hangmanGameFragmentWeakReference;
+    private static class OnButtonClickListener extends WeakReferenceHolder<HangmanGameFragment> implements View.OnClickListener {
 
         public OnButtonClickListener(final HangmanGameFragment hangmanGameFragment) {
-            hangmanGameFragmentWeakReference = new WeakReference<>(hangmanGameFragment);
+            super(hangmanGameFragment);
         }
 
         @Override
         public void onClick(final View v) {
-            final HangmanGameFragment hangmanGameFragment = hangmanGameFragmentWeakReference.get();
+            final HangmanGameFragment hangmanGameFragment = weakReference.get();
             if (hangmanGameFragment != null) {
                 final Button button = (Button) v;
                 button.setClickable(false);
@@ -345,12 +351,10 @@ public class HangmanGameFragment extends Fragment {
         }
     }
 
-    private static class OnButtonClickAnimatorListener implements Animator.AnimatorListener {
-
-        private final WeakReference<View> viewWeakReference;
+    private static class OnButtonClickAnimatorListener extends WeakReferenceHolder<View> implements Animator.AnimatorListener {
 
         public OnButtonClickAnimatorListener(final View view) {
-            viewWeakReference = new WeakReference<>(view);
+            super(view);
         }
 
         @Override
@@ -358,7 +362,7 @@ public class HangmanGameFragment extends Fragment {
 
         @Override
         public void onAnimationEnd(final Animator animation) {
-            final View view = viewWeakReference.get();
+            final View view = weakReference.get();
             if (view != null) {
                 view.setVisibility(View.INVISIBLE);
             }
@@ -370,16 +374,4 @@ public class HangmanGameFragment extends Fragment {
         @Override
         public void onAnimationRepeat(final Animator animation) { }
     }
-
-    private class OnBackKeyListener implements View.OnKeyListener {
-        @Override
-        public boolean onKey(final View v, final int keyCode, final KeyEvent event) {
-            if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                getActivity().finish();
-                return true;
-            }
-            return false;
-        }
-    }
-
 }

@@ -137,10 +137,10 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
                 ListFetcher.listHandler.post(ListFetcher.listSaver);
                 wordListActivity.refreshList();
 //                wordListActivity.onWindowFocusChanged(true);
-                wordListActivity.loadToast.success();
+                WindowLayout.s_LoadToast.success();
             } else {
                 WindowLayout.showSnack("Fejl ved indhentning af listen", wordListActivity.getWindow().getDecorView(), true);
-                wordListActivity.loadToast.error();
+                WindowLayout.s_LoadToast.error();
             }
         }
         super.onPostExecute(wordItem);
@@ -149,7 +149,7 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
     @Override
     protected void onProgressUpdate(final String... values) {
         if (wordListActivity != null) {
-            wordListActivity.loadToast.setText(values[0]);
+            WindowLayout.s_LoadToast.setText(values[0]);
         }
     }
 }

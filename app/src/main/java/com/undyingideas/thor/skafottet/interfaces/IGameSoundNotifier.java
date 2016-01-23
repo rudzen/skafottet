@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package com.undyingideas.thor.skafottet.support;
+package com.undyingideas.thor.skafottet.interfaces;
 
 /**
- * Created on 21-01-2016, 09:34.
+ * Created on 17-01-2016, 18:04.
  * Project : skafottet
  *
  * @author rudz
  */
-public class MintCallback {
+public interface IGameSoundNotifier {
+
+    // so the fragments can notify the acticity which sound effect to play !
+
+    void playGameSound(final int sound);
+
 }

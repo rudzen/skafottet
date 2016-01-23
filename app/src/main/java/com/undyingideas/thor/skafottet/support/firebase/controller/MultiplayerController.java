@@ -8,6 +8,7 @@ import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;
+import com.undyingideas.thor.skafottet.support.firebase.observer.FireBaseLoginData;
 import com.undyingideas.thor.skafottet.support.highscore.online.HighScoreContent;
 import com.undyingideas.thor.skafottet.support.highscore.online.HighScoreDTO;
 
@@ -18,9 +19,10 @@ import java.util.List;
 /**
  * Created on 06-01-2016, 12:13.
  * Project : skafottet
- * @author theis
  *
- * - Additional coding and structure
+ * @author theis
+ *         <p/>
+ *         - Additional coding and structure
  * @author gummp
  */
 public class MultiplayerController {
@@ -37,7 +39,7 @@ public class MultiplayerController {
     public MultiplayerController(final Firebase ref, final Runnable playerUpdater) {
         this.ref = ref;
         pc = new PlayerController(this, ref);
-        lc = new LobbyController(this,ref);
+        lc = new LobbyController(this, ref);
         wlc = new WordListController(ref);
         Log.d("firebaseMulti", playerUpdater == null ? "No Runnable parsed" : "Runnable parsed");
         updateHandler = new Handler();
@@ -49,7 +51,7 @@ public class MultiplayerController {
     }
 
     public void setRunnable(final Runnable r) {
-        if(updateHandler == null) updateHandler = new Handler();
+        if (updateHandler == null) updateHandler = new Handler();
         playerUpdater = r;
         updateHandler.post(r);
     }
@@ -60,17 +62,27 @@ public class MultiplayerController {
         }
     }
 
-    public boolean login(final String name, final String pass) {
+    public void login(final String name, final String pass, final FireBaseLoginData dataObject) {
+        final boolean response;
         if (pc.playerList.containsKey(name)) {
             logout();
-            if (!pc.playerList.get(name).getPassword().equals(pass)) return false; // if incorrect password
-            this.name = name;
-            pc.addListener(name);
-            lc = new LobbyController(this, ref);
-            for (final String key : pc.playerList.get(name).getGameList())
-            {Log.d("firebase", key); lc.addLobbyListener(key);}
-            return true;
-        } else return false;
+            if (!pc.playerList.get(name).getPassword().equals(pass)) {
+                response = false; // if incorrect password
+            } else {
+                this.name = name;
+                pc.addListener(name);
+                lc = new LobbyController(this, ref);
+                for (final String key : pc.playerList.get(name).getGameList()) {
+                    Log.d("firebase", key);
+                    lc.addLobbyListener(key);
+                }
+                response = true;
+            }
+        } else {
+            response = false;
+        }
+        dataObject.setData(response);
+        new Handler().post(dataObject);
     }
 
     private void logout() {
@@ -81,12 +93,12 @@ public class MultiplayerController {
     }
 
     public void update() {
-        if (updateHandler != null )
+        if (updateHandler != null)
             updateHandler.post(playerUpdater);
     }
 
     public void lobbyUpdate() {
-        if (updateHandler != null )
+        if (updateHandler != null)
             updateHandler.post(playerUpdater);
     }
 
@@ -145,7 +157,7 @@ public class MultiplayerController {
         int i = 1;
         final ArrayList<HighScoreContent.HighScoreItem> list = new ArrayList<>();
 
-      //  playerHighScoreList = sortHighScoreList(playerHighScoreList);
+        //  playerHighScoreList = sortHighScoreList(playerHighScoreList);
         Collections.sort(playerHighScoreList);
         //Now i have to make the list of highscore dtos finally.
         for (final HighScoreDTO highScoreDTO : playerHighScoreList) {

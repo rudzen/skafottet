@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.undyingideas.thor.skafottet.support.highscore;
+package com.undyingideas.thor.skafottet.support.highscore.local;
 
 import android.content.Context;
 import android.util.Log;

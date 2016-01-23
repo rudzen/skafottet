@@ -24,17 +24,17 @@ import android.graphics.PointF;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
+import android.widget.RelativeLayout;
+
+import com.undyingideas.thor.skafottet.activities.support.Foreground;
 
 import java.util.ArrayList;
-import java.util.prefs.PreferenceChangeEvent;
-import java.util.prefs.PreferenceChangeListener;
 
-public class StarField extends View implements PreferenceChangeListener {
+public class StarField extends RelativeLayout implements Foreground.Listener {
 
     private static final float LOW_PASS_FILTER = 0.3f;
     private static final float HIGH_PASS_FILTER = 3.0f;
-    private static final int UPDATE_RATE = 1000 / 100;
+    private static final int UPDATE_RATE = 1000 / 80;
 
     private final ArrayList<Star2D> stars = new ArrayList<>(50);
     private Paint p;
@@ -103,6 +103,8 @@ public class StarField extends View implements PreferenceChangeListener {
             addStar((float) Math.random() * w, (float) Math.random() * h, (float) Math.random() + 0.1f);
         }
 
+        Foreground.get(getContext()).addListener(this);
+
         run = true;
 //        run = SettingsDTO.PREFS_BLOOD;
         handleCalculate = new Handler();
@@ -114,8 +116,17 @@ public class StarField extends View implements PreferenceChangeListener {
     }
 
     @Override
-    public void preferenceChange(final PreferenceChangeEvent pce) {
-        // do nothing for now
+    public void onBecameForeground() {
+        run = true;
+        handleCalculate.post(calculator);
+        handleUpdate.post(updater);
+        Log.d(TAG, "Starfield enabled itself.");
+    }
+
+    @Override
+    public void onBecameBackground() {
+        Log.d(TAG, "Starfield disabled itself.");
+        run = false;
     }
 
     private class CalculateStarfield implements Runnable {
@@ -144,22 +155,31 @@ public class StarField extends View implements PreferenceChangeListener {
     }
 
     private class UpdateStarfield implements Runnable {
-        private static final int FPS = 1000 / 30;
+        private static final int FPS = 1000 / 60;
 
         @Override
         public void run() {
             invalidate();
             if (getMeasuredHeight() > height && getMeasuredWidth() > width) {
                 init(getMeasuredWidth(), getMeasuredHeight(), Color.RED);
-                return;
+            } else {
+                handleUpdate.postDelayed(updater, FPS);
             }
-            handleUpdate.postDelayed(updater, FPS);
         }
     }
 
+    /**
+     * Apply adjustments for x / y speed
+     * @param x The adjustment for X
+     * @param y The adjustment for Y
+     */
     public void setGravity(final float x, final float y) {
         gravity.x = x >= LOW_PASS_FILTER || x <= -LOW_PASS_FILTER ? x : 0f;
         gravity.y = y >= LOW_PASS_FILTER || y <= -LOW_PASS_FILTER ? y : 0f;
+        if (gravity.x > HIGH_PASS_FILTER) gravity.x = HIGH_PASS_FILTER;
+        else if (gravity.x < -HIGH_PASS_FILTER) gravity.x = -HIGH_PASS_FILTER;
+        if (gravity.y > HIGH_PASS_FILTER) gravity.y = HIGH_PASS_FILTER;
+        else if (gravity.y < -HIGH_PASS_FILTER) gravity.y = -HIGH_PASS_FILTER;
     }
 
     @Override

@@ -15,15 +15,17 @@ import android.widget.ListView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.MultiplayerPlayersAdapter;
 import com.undyingideas.thor.skafottet.adapters.WordTitleLocalAdapter;
+import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
+import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.support.firebase.controller.WordListController;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;
+import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 /**
@@ -46,10 +48,12 @@ public class CreateLobbyFragment extends Fragment {
     private WordTitleLocalAdapter wordTitleAdapter;
     private Runnable updater;
 
+
+
     @Nullable
-    private OnCreateLobbyFragmentInteractionListener mListener;
-//    @Nullable
-//    private ProgressBarInterface setProgressListener;
+    private OnCreateLobbyFragmentInteractionListener onCreateLobbyFragmentInteractionListener;
+    @Nullable
+    private IFragmentFlipper iFragmentFlipper;
 
     public static CreateLobbyFragment newInstance(final boolean isOnline) {
         final CreateLobbyFragment fragment = new CreateLobbyFragment();
@@ -97,23 +101,19 @@ public class CreateLobbyFragment extends Fragment {
     @Override
     public void onAttach(final Context context) {
         super.onAttach(context);
-        if (context instanceof OnCreateLobbyFragmentInteractionListener) {
-            mListener = (OnCreateLobbyFragmentInteractionListener) context;
+        if (context instanceof OnCreateLobbyFragmentInteractionListener && context instanceof IFragmentFlipper) {
+            onCreateLobbyFragmentInteractionListener = (OnCreateLobbyFragmentInteractionListener) context;
+            iFragmentFlipper = (IFragmentFlipper) context;
         } else {
-            throw new RuntimeException(context.toString() + " must implement OnCreateLobbyFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnCreateLobbyFragmentInteractionListener & IFragmentFlipper.");
         }
-//        if (context instanceof ProgressBarInterface) {
-//            setProgressListener = (ProgressBarInterface) context;
-//        } else {
-//            throw new RuntimeException(context.toString() + " must implement ProgressBarInterface");
-//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-//        setProgressListener = null;
+        onCreateLobbyFragmentInteractionListener = null;
+        iFragmentFlipper = null;
         opponentName = null;
         GameUtility.mpc.setRunnable(null);
     }
@@ -134,9 +134,9 @@ public class CreateLobbyFragment extends Fragment {
     }
 
     private void onButtonPressed(final int position) {
-        if (mListener != null)
-            if (opponentName == null )mListener.onPlayerClicked(players.get(position).getName());
-            else mListener.onPlayerClicked(wordList.get(position).getTitle());
+        if (onCreateLobbyFragmentInteractionListener != null)
+            if (opponentName == null ) onCreateLobbyFragmentInteractionListener.onPlayerClicked(players.get(position).getName());
+            else onCreateLobbyFragmentInteractionListener.onPlayerClicked(wordList.get(position).getTitle());
     }
 
     private void configureAdapter() {
@@ -167,17 +167,15 @@ public class CreateLobbyFragment extends Fragment {
         }
     }
 
-    private static class OnCreateLobbyClick implements AdapterView.OnItemClickListener {
-
-        private final WeakReference<CreateLobbyFragment> createLobbyFragmentWeakReference;
+    private static class OnCreateLobbyClick extends WeakReferenceHolder<CreateLobbyFragment> implements AdapterView.OnItemClickListener {
 
         public OnCreateLobbyClick(final CreateLobbyFragment createLobbyFragment) {
-            createLobbyFragmentWeakReference = new WeakReference<>(createLobbyFragment);
+            super(createLobbyFragment);
         }
 
         @Override
         public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-            final CreateLobbyFragment createLobbyFragment =  createLobbyFragmentWeakReference.get();
+            final CreateLobbyFragment createLobbyFragment =  weakReference.get();
             if (createLobbyFragment != null) {
                 Log.d("NG", String.valueOf(id));
                 // do stuff!!!
@@ -194,10 +192,9 @@ public class CreateLobbyFragment extends Fragment {
                     dto.add(lps1); dto.add(lps2); dto.setWord(w);
                     GameUtility.mpc.createLobby(dto);
                     GameUtility.mpc.setRunnable(null);
-                    createLobbyFragmentWeakReference.get()
-                            .getActivity().onBackPressed();// TODO design return
+                    createLobbyFragment.iFragmentFlipper.flipFragment(Constant.MODE_MENU);
+//                    createLobbyFragment.getActivity().onBackPressed();// TODO design return
                     //opponentName = null ;GameUtility.mpc.update();
-
                 } else {
                     opponentName = createLobbyFragment.players.get(position).getName();
                     GameUtility.mpc.update();

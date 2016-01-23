@@ -22,7 +22,6 @@ import android.support.annotation.RawRes;
 import android.support.v7.app.AppCompatActivity;
 
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.activities.support.Foreground;
 import com.undyingideas.thor.skafottet.support.sfx.SoundItem;
 import com.undyingideas.thor.skafottet.support.sfx.SoundThread;
 
@@ -33,7 +32,7 @@ import com.undyingideas.thor.skafottet.support.sfx.SoundThread;
  * @author rudz
  */
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
-public abstract class SoundAbstract extends AppCompatActivity implements Foreground.Listener {
+public abstract class SoundAbstract extends AppCompatActivity {
 
     /* sound stuff */
     @RawRes final
@@ -48,25 +47,24 @@ public abstract class SoundAbstract extends AppCompatActivity implements Foregro
     };
 
     private SoundPool soundPool;
-    private float actVolume, maxVolume, volume;
-    private AudioManager audioManager;
+    private float volume;
 
     private final static int SOUND_COUNT = 7;
-    private SoundItem[] soundItems = new SoundItem[SOUND_COUNT];
+    private final SoundItem[] soundItems = new SoundItem[SOUND_COUNT];
 
-    private SoundThread soundThread;
+    protected SoundThread soundThread;
 
     protected void initSound() {
         /* set up the sound stuff */
-        audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-        actVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        final AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        final float actVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        final float maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         volume = actVolume / maxVolume;
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
 
-        Foreground.get(this).addListener(this);
+//        Foreground.get(this).addListener(this);
 
         loadSounds();
 
@@ -75,11 +73,6 @@ public abstract class SoundAbstract extends AppCompatActivity implements Foregro
             soundThread = new SoundThread(soundPool);
             soundThread.start();
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     @SuppressWarnings("ObjectAllocationInLoop")
@@ -93,20 +86,21 @@ public abstract class SoundAbstract extends AppCompatActivity implements Foregro
         soundThread.sounds.add(soundItems[index]);
     }
 
-    @Override
-    public void onBecameForeground() {
-        if (soundThread == null) {
-            soundThread = new SoundThread(soundPool);
-        }
-        if (soundThread.isInterrupted() || !soundThread.isAlive()) {
-            soundThread.start();
-        }
-    }
 
-    @Override
-    public void onBecameBackground() {
-        if (soundThread != null) {
-            soundThread.interrupt();
-        }
-    }
+
+
+//    @Override
+//    public void onBecameForeground() {
+//        if (soundThread == null) {
+//            soundThread = new SoundThread(soundPool);
+//            soundThread.start();
+//        }
+//    }
+//
+//    @Override
+//    public void onBecameBackground() {
+//        if (soundThread != null) {
+//            soundThread.interrupt();
+//        }
+//    }
 }

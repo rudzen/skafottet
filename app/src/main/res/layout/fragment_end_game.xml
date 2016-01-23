@@ -79,7 +79,7 @@
             android:layout_height="50dp"
             android:background="@drawable/button_new_game"
             android:contentDescription="@string/contentDescriptionEndNewGameButton"
-            android:scaleType="centerCrop"
+            android:clickable="false"
             android:layout_margin="15dp">
         </ImageView>
 
@@ -89,6 +89,7 @@
             android:layout_height="50dp"
             android:background="@drawable/button_main_menu"
             android:contentDescription="@string/contentDescriptionEndMainMenuButton"
+            android:clickable="false"
             android:layout_margin="15dp">
         </ImageView>
 

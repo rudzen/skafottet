@@ -43,7 +43,7 @@ public class PrefsActivity extends PreferenceActivity {
     @Override
     public void finish() {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        startActivity(new Intent(this, MenuActivity.class));
+        startActivity(new Intent(this, GameActivity.class));
         super.finish();
     }
 

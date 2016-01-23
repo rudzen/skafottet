@@ -17,6 +17,7 @@
 package com.undyingideas.thor.skafottet.support.utility;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
@@ -27,17 +28,26 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
+import net.steamcrafted.loadtoast.LoadToast;
+
 /**
  * Created on 22-12-2015, 11:46.
- * Project : R-TicTacToe
- *
+ * Project : Skafottet
+ * Mixed window related utility functionality.
  * @author rudz
  */
 public abstract class WindowLayout {
 
     public static final Point screenDimension = new Point();
 
+    public static LoadToast s_LoadToast;
+
+    public static MaterialDialog md;
+
     private static Snackbar snackbar;
+
 
     /**
      * Hides the statusbar of the window
@@ -87,13 +97,22 @@ public abstract class WindowLayout {
         }
     }
 
+    public static void showDialog(final Context context, final CharSequence title, final CharSequence content) {
+        new MaterialDialog.Builder(context)
+                .backgroundColor(Color.BLACK)
+                .title(title)
+                .content(content)
+                .positiveText("Ok")
+                .show();
+    }
+
     public static void setImmersiveMode(final Window w) {
         w.getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
