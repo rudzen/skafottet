@@ -33,6 +33,7 @@ import com.undyingideas.thor.skafottet.game.HangedMan;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
 import com.undyingideas.thor.skafottet.interfaces.IGameSoundNotifier;
+import com.undyingideas.thor.skafottet.services.MusicPlay;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
@@ -65,7 +66,6 @@ public class GameActivity extends SoundAbstract implements
     private Fragment currentFragment; // what are we?
     private int currentMode; // where are we?
     private long backPressed;
-
 
 //    private ProgressBar topProgressBar;
 //
@@ -168,7 +168,7 @@ public class GameActivity extends SoundAbstract implements
     @Override
     public void onBackPressed() {
         if (backPressed + BACK_PRESSED_DELAY > System.currentTimeMillis()) {
-            //super.onBackPressed();
+            stopService(MusicPlay.intent);
             finish();
         } else {
             WindowLayout.showSnack("Tryk tilbage igen for at flygte i rædsel.", findViewById(R.id.fragment_content), false);
@@ -254,6 +254,7 @@ public class GameActivity extends SoundAbstract implements
             finish();
         } else if (gameMode == Constant.MODE_FINISH) {
             getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
+            stopService(MusicPlay.intent);
             finish();
         }
     }
