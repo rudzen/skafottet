@@ -21,8 +21,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.fragments.AboutFragment;
 import com.undyingideas.thor.skafottet.fragments.CreateLobbyFragment;
@@ -135,7 +133,7 @@ public class GameActivity extends SoundAbstract implements
             dtolist.addAll(GameUtility.mpc.lc.lobbyList.values());
             for (final LobbyDTO dto : dtolist) {
                 for (final LobbyPlayerStatus status : dto.getPlayerList()) {
-                    if (status.getName().equals(GameUtility.mpc.name) && status.getScore() == -1) {
+                    if (status.getScore() == -1 && status.getName().equals(GameUtility.mpc.name)) {
                         String k = "";
                         final Set<String> keys = GameUtility.mpc.lc.lobbyList.keySet();
                         for (final String key : keys) {
@@ -148,39 +146,34 @@ public class GameActivity extends SoundAbstract implements
                         final SaveGame saveGame = new SaveGame(new HangedMan(dto.getWord()), true, GameUtility.mpc.name, k);
                         bundle.putParcelable(Constant.KEY_SAVE_GAME, saveGame);
                         return bundle;
-//                        replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(dto.getWord()), true, GameUtility.mpc.name, k)));
-//                        break;
                     }
                 }
             }
         } else {
             Log.e("GameActivity 168", "not logged in error");
-//            onBackPressed();
         }
         return null;
-//        WindowLayout.showSnack("Du har ingen spil klar", findViewById(R.id.fragment_content), false);
-//        if (currentFragment instanceof MenuFragment) {
-//            ((MenuFragment) currentFragment).showAll();
-//        }
     }
 
     @Override
     public void finish() {
+        playSound(GameUtility.SFX_LOST);
         if (currentFragment != null) {
             getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
         }
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         super.finish();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     @Override
     public void onBackPressed() {
         if (backPressed + BACK_PRESSED_DELAY > System.currentTimeMillis()) {
-            YoYo.with(Techniques.ZoomOut).duration(300).playOn(findViewById(R.id.sf));
-            playSound(GameUtility.SFX_LOST);
-            super.onBackPressed();
-        } else WindowLayout.showSnack("Tryk tilbage igen for at flygte i rædsel.", findViewById(R.id.fragment_content), false);
-        backPressed = System.currentTimeMillis();
+            //super.onBackPressed();
+            finish();
+        } else {
+            WindowLayout.showSnack("Tryk tilbage igen for at flygte i rædsel.", findViewById(R.id.fragment_content), false);
+            backPressed = System.currentTimeMillis();
+        }
     }
 
     @Override
@@ -228,7 +221,6 @@ public class GameActivity extends SoundAbstract implements
         if (gameMode == Constant.MODE_BACK_PRESSED) {
             onBackPressed();
         } else if (gameMode == Constant.MODE_MENU) {
-            playSound(GameUtility.SFX_MENU_CLICK);
             replaceFragment(new MenuFragment());
         } else if (gameMode == Constant.MODE_SINGLE_PLAYER) {
             replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(), false, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du")));
@@ -277,21 +269,5 @@ public class GameActivity extends SoundAbstract implements
             replaceFragment(EndOfGameFragment.newInstance((SaveGame) bundle.getParcelable(Constant.KEY_SAVE_GAME)));
         }
     }
-
-    // TODO : Remove, been replaced by proper observer inferface
-//    static String user, pass;
-//    public static void postCreateResult(boolean b) {
-//        if (b) WindowLayout.s_LoadToast.success();
-//        else WindowLayout.s_LoadToast.error();
-//        new Handler().postDelayed(new postCreateLoginRunnable(), 150);
-//    }
-//
-//    private static class postCreateLoginRunnable implements Runnable {
-//        @Override
-//        public void run() {
-//            GameUtility.mpc.login(user, pass);
-//        }
-//    }
-
 }
 
