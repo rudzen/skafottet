@@ -25,6 +25,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -61,8 +62,9 @@ import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.views.StarField;
 
-import java.util.ArrayDeque;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.concurrent.LinkedBlockingDeque;
 
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.imageRefs;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.mpc;
@@ -84,13 +86,6 @@ public class MenuFragment extends Fragment implements
     private static final int BUTTON_COUNT = 8;
     private ImageView title;
     private final ImageView[] buttons = new ImageView[BUTTON_COUNT];
-    private HTextView textView_buttom;
-    //    private static final String INFO_GAME = "Nuværende spil: %s";
-//    private static final String INFO_GUESS = "Dine gæt: %s";
-//    private static final String INFO_LEFT = "Gæt tilbage: %i";
-//    private static final String INFO_LOGGED_IN = "Logged ind: %s";
-//    private static final String INFO_CONNECTION = "Forbindelse: %s";
-    private UpdateText updateText;
 
     private static final int BUTTON_PLAY = 0;
     private static final int BUTTON_HIGHSCORE = 1;
@@ -104,26 +99,30 @@ public class MenuFragment extends Fragment implements
     /* star field stuff */
     private StarField sf;
 
+    /* buttom text display fields */
+    private static final int MSG_UPDATE_TEXT = 1;
+    private static final String MSG_STRING = "m";
+    private HTextView textView_buttom;
+    private TextUpdateRunner textUpdateRunner; //  the runnable
+    private TextUpdateHandler textUpdateHandler; // the handler
+
     /* sensor stuff */
     @Nullable
-    private SensorManager mSensorManager;
+    private SensorManager sensorManager;
     @Nullable
-    private Sensor mSensor;
+    private Sensor sensor;
     private MenuSensorEventListener sensorListener;
-
 
     /* other fields */
 
-    private int button_clicked;
-
-    private long backPressed;
+    private int button_clicked; // not used atm
     private boolean click_status;
-
     private View.OnClickListener s_buttonListener;
-
     private static final String TAG = "MenuFragment";
 
-    private final int[] loginButtons = new int[2];
+    private
+    @DrawableRes
+    final int[] loginButtons = new int[2];
 
 
     /* observer data receiving classes */
@@ -136,7 +135,6 @@ public class MenuFragment extends Fragment implements
     private IFragmentFlipper iFragmentFlipper;
     @Nullable
     private IGameSoundNotifier iGameSoundNotifier;
-
 
     @SuppressWarnings("ConstantConditions")
     @Nullable
@@ -158,7 +156,6 @@ public class MenuFragment extends Fragment implements
         textView_buttom = (HTextView) root.findViewById(R.id.menu_buttom_text);
         textView_buttom.setAnimateType(HTextViewType.EVAPORATE);
         textView_buttom.setOnClickListener(new OnLoginClickListener(this));
-        updateText = new UpdateText();
 
         title = (ImageView) root.findViewById(R.id.menu_title);
         title.setClickable(true);
@@ -197,56 +194,26 @@ public class MenuFragment extends Fragment implements
 
     @Override
     public void onResume() {
-        if (mSensor != null && mSensorManager != null) mSensorManager.registerListener(sensorListener, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        if (sensor != null && sensorManager != null) sensorManager.registerListener(sensorListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        textUpdateRunner = new TextUpdateRunner(this); //  the runnable
+        textUpdateHandler = new TextUpdateHandler(this);
+        textUpdateHandler.post(textUpdateRunner);
         showAll();
+
         super.onResume();
     }
 
     @Override
     public void onPause() {
+        textUpdateHandler.removeCallbacksAndMessages(null);
         super.onPause();
     }
 
     @Override
     public void onStop() {
-        if (mSensor != null && mSensorManager != null) mSensorManager.unregisterListener(sensorListener, mSensor);
+        if (sensor != null && sensorManager != null) sensorManager.unregisterListener(sensorListener, sensor);
         super.onStop();
     }
-
-
-    //    @Override
-//    public void onPostCreate(final Bundle savedInstanceState) {
-//        super.onPostCreate(savedInstanceState);
-////        playSound(GameUtility.SFX_INTRO);
-//    }
-
-//    @Override
-//    public void finish() {
-//        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-//        super.finish();
-//    }
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        updateText = new UpdateText();
-//        menuHandler.post(updateText);
-//        showAll();
-//        if (connectionObserver == null) {
-//            connectionObserver = new InternetRecieverData(this);
-//        }
-//        InternetReciever.addObserver(connectionObserver);
-//        updateMargueeScroller();
-//    }
-//
-//    @Override
-//    protected void onPause() {
-//        updateText = null;
-//        InternetReciever.removeObserver(connectionObserver);
-//        super.onPause();
-//    }
-//
-
 
     @Override
     public void onAttach(final Context context) {
@@ -272,27 +239,26 @@ public class MenuFragment extends Fragment implements
         super.onDetach();
     }
 
-
     private void setMenuButtonsClickable(final boolean value) {
         for (final ImageView iv : buttons) iv.setClickable(value);
     }
 
     private void registerSensor() {
-        mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
-        if (mSensor != null) {
+        sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        if (sensor != null) {
             sensorListener = new MenuSensorEventListener(this);
-            mSensorManager.registerListener(sensorListener, mSensor, SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(sensorListener, sensor, SensorManager.SENSOR_DELAY_UI);
             Log.i(TAG, "TYPE_GRAVITY sensor registered");
         } else {
             Log.e(TAG, "TYPE_GRAVITY sensor NOT registered");
-            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-            if (mSensor != null) {
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            if (sensor != null) {
                 sensorListener = new MenuSensorEventListener(this);
-                mSensorManager.registerListener(sensorListener, mSensor, SensorManager.SENSOR_DELAY_UI);
+                sensorManager.registerListener(sensorListener, sensor, SensorManager.SENSOR_DELAY_UI);
                 Log.i(TAG, "TYPE_ACCELEROMETER sensor registered");
             } else {
-                mSensorManager = null;
+                sensorManager = null;
                 Log.e(TAG, "TYPE_ACCELEROMETER sensor NOT registered");
             }
         }
@@ -341,7 +307,9 @@ public class MenuFragment extends Fragment implements
         } finally {
             startGameItems.add(new StartGameItem(Constant.MODE_SINGLE_PLAYER, "Nyt singleplayer", "Tilfældigt ord.", imageRefs[0]));
             if (mpc.name != null && GameUtility.connectionStatus > -1) {
+                // TODO : Add callback listener for possible multiplayer games waiting..
                 startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER, "Næste multiplayer", "Kæmp imod", imageRefs[0]));
+
                 startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_2, "Vælg multiplayer", "Jægeren er den jagtede", imageRefs[0]));
                 startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_LOBBY, "Ny udfordring", "Udvælg dit offer", imageRefs[0]));
             }
@@ -462,18 +430,13 @@ public class MenuFragment extends Fragment implements
 
         @Override
         public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+            // TODO : Call back to act to play the sound.
             final MenuFragment menuFragment = weakReference.get();
             if (menuFragment != null) {
                 WindowLayout.md.dismiss();
                 Log.d(TAG, "New game mode selected : " + view.getTag());
-//                menuFragment.startNewGame((int) view.getTag());
                 menuFragment.endMenu((int) view.getTag(), menuFragment.buttons[BUTTON_PLAY]);
             }
-
-            //                final MenuActivity menuActivity = (MenuActivity) context;
-//                menuActivity.playSound(GameUtility.SFX_MENU_CLICK);
-//                menuActivity.md.dismiss();
-            // TODO : Call back to act to play the sound.
         }
     }
 
@@ -660,10 +623,10 @@ public class MenuFragment extends Fragment implements
                         .customView(R.layout.login, false)
                         .cancelable(true)
                         .positiveText("Ok")
-                        .negativeText("Afbryd")
+                        .negativeText(R.string.cancel)
                         .onPositive(new OnLoginClickResponse(menuFragment))
                         .onNegative(new QuitDialogCallback(menuFragment))
-                        .title("Login")
+                        .title(R.string.login)
                         .show();
             }
         }
@@ -731,82 +694,106 @@ public class MenuFragment extends Fragment implements
     }
 
     /* buttom text view configuration */
-    private int pos;
-    private final ArrayDeque<String> info = new ArrayDeque<>(5);
-    private final CharSequence NONE = "Ingen.";
-    private final CharSequence NOTHING = "Intet.";
-
-    private static final String INFO_GAME = "Spil: %s.";
-    private static final String INFO_GUESS = "Dine gæt: %s.";
-    private static final String INFO_LEFT = "Gæt tilbage: %d.";
-    private static final String INFO_LOGGED_IN = "Logged ind: %s.";
-    private static final String INFO_CONNECTION = "Forbindelse: %s.";
-    private static final String INFO_BATTERY = "Batteriniveau: %s";
-
-    private void updateMargueeScroller() {
-        info.clear();
-        // this is just a quick hack! but we need some basic info!
-        final SaveGame sg;
-        try {
-            sg = (SaveGame) s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
-            if (sg.getLogic() != null && !sg.getLogic().isGameOver()) {
-                info.add(String.format(INFO_GAME, "Igang"));
-                info.add(String.format(INFO_GUESS, sg.getLogic().getUsedLetters().isEmpty() ? NONE : sg.getLogic().getUsedLetters()));
-                info.add(String.format(INFO_LEFT, 7 - sg.getLogic().getNumWrongLetters()));
-            } else {
-                info.add(String.format(INFO_GAME, NOTHING));
-            }
-        } catch (final Exception e) {
-            info.add(String.format(INFO_GAME, NOTHING));
-        }
-
-        try {
-            info.add(String.format(INFO_LOGGED_IN, mpc != null && mpc.name != null ? mpc.name : "Nej"));
-        } catch (final Exception e) {
-            e.printStackTrace();
-            info.add("Nej");
-        }
-        info.add(String.format(INFO_CONNECTION, GameUtility.connectionStatusName));
-//        try {
-//            info.add(String.format(INFO_BATTERY, Integer.toString(batteryLevelRecieverData.getData().getLevel())));
-//        } catch (final Exception e) {
-//            info.add("Ukendt %");
-//        }
-    }
-
-    private class UpdateText implements Runnable {
-        @Override
-        public void run() {
-            if (info.isEmpty()) {
-                updateMargueeScroller();
-                YoYo.with(Techniques.Flash).duration(2000).playOn(title);
-//                YoYo.with(Techniques.RubberBand).duration(3000).playOn(sf);
-            }
-            textView_buttom.animateText(info.poll());
-            new Handler().postDelayed(updateText, 3000);
-        }
-    }
-
     private class TextUpdateHandler extends Handler {
+
+        private final WeakReference<MenuFragment> menuFragmentWeakReference;
+
+        public TextUpdateHandler(final MenuFragment menuFragment) {
+            menuFragmentWeakReference = new WeakReference<>(menuFragment);
+        }
 
         @Override
         public void handleMessage(final Message msg) {
-            if (msg != null) {
-
+            if (msg != null && msg.what == MSG_UPDATE_TEXT) { // we got an updated text
+                final MenuFragment menuFragment = menuFragmentWeakReference.get();
+                if (menuFragment != null) {
+                    Log.d(TAG, "Got data : " + msg.getData().getString(MSG_STRING));
+                    final String string = msg.getData().getString(MSG_STRING);
+                    if (string != null) {
+                        menuFragment.textView_buttom.animateText(string);
+                    }
+                }
             }
             super.handleMessage(msg);
         }
     }
 
-    private class TextUpdateRunner implements Runnable {
 
+
+
+
+    private static class TextUpdateRunner extends WeakReferenceHolder<MenuFragment> implements Runnable {
+
+        private final CharSequence NONE = "Ingen.";
+        private final CharSequence NOTHING = "Intet.";
+
+        private static final String INFO_GAME = "Spil: %s.";
+        private static final String INFO_GUESS = "Dine gæt: %s.";
+        private static final String INFO_LEFT = "Gæt tilbage: %d.";
+        private static final String INFO_LOGGED_IN = "Logged ind: %s.";
+        private static final String INFO_CONNECTION = "Forbindelse: %s.";
+        private static final String INFO_BATTERY = "Batteriniveau: %s";
+
+        private final Bundle bundle = new Bundle();
+        private LinkedBlockingDeque<String> info = new LinkedBlockingDeque<>(5);
+
+        public TextUpdateRunner(final MenuFragment menuFragment) {
+            super(menuFragment);
+        }
+
+        private void updateMargueeScroller() {
+            info.clear();
+            // this is just a quick hack! but we need some basic info!
+            final SaveGame sg;
+            try {
+                sg = (SaveGame) s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
+                if (sg.getLogic() != null && !sg.getLogic().isGameOver()) {
+                    info.add(String.format(INFO_GAME, "Igang"));
+                    info.add(String.format(INFO_GUESS, sg.getLogic().getUsedLetters().isEmpty() ? NONE : sg.getLogic().getUsedLetters()));
+                    info.add(String.format(INFO_LEFT, 7 - sg.getLogic().getNumWrongLetters()));
+                } else {
+                    info.add(String.format(INFO_GAME, NOTHING));
+                }
+            } catch (final Exception e) {
+                info.add(String.format(INFO_GAME, NOTHING));
+            }
+
+            try {
+                info.add(String.format(INFO_LOGGED_IN, mpc != null && mpc.name != null ? mpc.name : "Nej"));
+            } catch (final Exception e) {
+                e.printStackTrace();
+                info.add("Nej");
+            }
+            info.add(String.format(INFO_CONNECTION, GameUtility.connectionStatusName));
+//        try {
+//            info.add(String.format(INFO_BATTERY, Integer.toString(batteryLevelRecieverData.getData().getLevel())));
+//        } catch (final Exception e) {
+//            info.add("Ukendt %");
+//        }
+        }
 
         @Override
         public void run() {
-
+            final MenuFragment menuFragment = weakReference.get();
+            if (menuFragment != null) {
+                if (info.isEmpty()) {
+                    updateMargueeScroller();
+                    YoYo.with(Techniques.Flash).duration(2000).playOn(menuFragment.title);
+                }
+                try {
+                    bundle.clear();
+                    bundle.putString(MSG_STRING, info.take());
+                    Log.d(TAG, "Attempting to send : " + bundle.getString(MSG_STRING));
+                    final Message message = menuFragment.textUpdateHandler.obtainMessage(MSG_UPDATE_TEXT);
+                    message.setData(bundle);
+                    message.sendToTarget();
+                    menuFragment.textUpdateHandler.postDelayed(menuFragment.textUpdateRunner, 2000);
+                } catch (final InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
-
 
     @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
     @Override
