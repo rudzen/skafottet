@@ -707,7 +707,7 @@ public class MenuFragment extends Fragment implements
             if (msg != null && msg.what == MSG_UPDATE_TEXT) { // we got an updated text
                 final MenuFragment menuFragment = menuFragmentWeakReference.get();
                 if (menuFragment != null) {
-                    Log.d(TAG, "Got data : " + msg.getData().getString(MSG_STRING));
+//                    Log.d(TAG, "Got data : " + msg.getData().getString(MSG_STRING));
                     final String string = msg.getData().getString(MSG_STRING);
                     if (string != null) {
                         menuFragment.textView_buttom.animateText(string);
@@ -783,7 +783,7 @@ public class MenuFragment extends Fragment implements
                 try {
                     bundle.clear();
                     bundle.putString(MSG_STRING, info.take());
-                    Log.d(TAG, "Attempting to send : " + bundle.getString(MSG_STRING));
+//                    Log.d(TAG, "Attempting to send : " + bundle.getString(MSG_STRING));
                     final Message message = menuFragment.textUpdateHandler.obtainMessage(MSG_UPDATE_TEXT);
                     message.setData(bundle);
                     message.sendToTarget();

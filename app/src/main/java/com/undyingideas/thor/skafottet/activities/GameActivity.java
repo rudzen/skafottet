@@ -158,11 +158,9 @@ public class GameActivity extends SoundAbstract implements
     @Override
     public void finish() {
         playSound(GameUtility.SFX_LOST);
-        if (currentFragment != null) {
-            getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
-        }
-        super.finish();
+        getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        super.finish();
     }
 
     @Override
@@ -181,6 +179,7 @@ public class GameActivity extends SoundAbstract implements
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
             WindowLayout.setImmersiveMode(getWindow());
+            WindowLayout.hideStatusBar(getWindow(), null);
         }
     }
 
