@@ -32,6 +32,7 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.firebase.client.Firebase;
 import com.nineoldandroids.animation.Animator;
+import com.splunk.mint.Mint;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.services.MusicPlay;
 import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
@@ -82,7 +83,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         /* Mint key! */
-//        Mint.initAndStartSession(this, "6adabf91");
+        Mint.initAndStartSession(this, "6adabf91");
 
         setContentView(R.layout.activity_splash);
 

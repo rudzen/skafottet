@@ -61,6 +61,10 @@ public class AboutFragment extends Fragment {
                     "s144868 Adam Hammer Palmar, s144868@student.dtu.dk" + SEP + SEP +
                     "Projekt ansvarlig : Rudy Alex Kohn" +
                     SEP + SEP +
+                    "v1.1.2 - 24.01.2016" + SEP +
+                    "- Mange små bugfixes" + SEP +
+                    "- Indstillinger tilføjet" + SEP +
+                    "- Basisks pointsystem tilføjet" + SEP + SEP +
                     "v1.1 - 23.01.2016, Rudy" + SEP +
                     "- Forbedret performance" + SEP +
                     "- Fixede flere multiplayer relaterede crashes." + SEP +
