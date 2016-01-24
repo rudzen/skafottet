@@ -1,4 +1,29 @@
 (+ = new, - = removed, * = change, ! = fix)
+v1.1.2 - 24.01.2016, rudz
+-------------------------
++ Preferences enabled for :
+    - StarField on/off.
+    - SoundFX on/off.
+    - Music on/off.
+    - Wrong guess vibration on/off.
++ Point system, +500 for each letter correctly guessed, -100 for wrong guess.
+! Fixed game state icon in new game list popup.
+! Fixed Kitkat (API 19) crash on list saving.
+! StarField had wrong base comparison for HIGH_PASS_FILTER
+! End game message depending on perfect result.
+! Playing end app sound effect when entering highscore activity
+! Memory leak en menufragment
+! Reduced memory use in menu fragment a bit
+! Fixed potential thread chaos in StarField.
+* Updated game play layout to better fit game with points :).
+* Reduced coupling for some firebase utility functions.
+* Minor cleanup
+* WIP for Daydream
+* Minor various code style and performance issues fixes
+* MusicPlay service intent moved out of MusicPlay.
+* StarField now handles preferences changes correctly.
+* Star base weight added depending on their fade speed.
+
 
 v1.1.1 - 24.01.2016, rudz
 -------------------------

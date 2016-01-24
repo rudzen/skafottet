@@ -21,9 +21,11 @@ import java.util.Comparator;
 class Score implements Serializable, Comparator<Score> {
     private static final long serialVersionUID = -7482559749006887621L;
     private final String name;
+    private final String word;
     private final int score, day, month, year;
 
-    public Score(final String name, final int score, final int day, final int month, final int year) {
+    public Score(final String word, final String name, final int score, final int day, final int month, final int year) {
+        this.word = word;
         this.score = score;
         this.name = name;
         this.day = day;
@@ -31,8 +33,12 @@ class Score implements Serializable, Comparator<Score> {
         this.year = year;
     }
 
-    public Score(final Score s) {
-        this(s.getName(), s.getScore(), s.getDay(), s.getMonth(), s.getYear());
+    public Score(final Score score) {
+        this(score.getWord(), score.getName(), score.getScore(), score.getDay(), score.getMonth(), score.getYear());
+    }
+
+    public String getWord() {
+        return word;
     }
 
     public int getScore() {
@@ -55,19 +61,23 @@ class Score implements Serializable, Comparator<Score> {
         return year;
     }
 
+    @SuppressWarnings("OverlyComplexMethod")
     @Override
     public int compare(final Score o1, final Score o2) {
-        if (o1.getScore() < o2.getScore()) return 1;
-        if (o1.getScore() > o2.getScore()) return -1;
+        if (o1.score > o2.score) return 1;
+        if (o1.score < o2.score) return -1;
 
-        if (o1.getYear() > o2.getYear()) return 1;
-        if (o1.getYear() < o2.getYear()) return -1;
+        if (o1.word.length() > o2.word.length()) return 1;
+        if (o1.word.length() < o2.word.length()) return -1;
 
-        if (o1.getMonth() > o2.getMonth()) return 1;
-        if (o1.getMonth() < o2.getMonth()) return -1;
+        if (o1.year > o2.year) return 1;
+        if (o1.year < o2.year) return -1;
 
-        if (o1.getDay() > o2.getDay()) return 1;
-        if (o1.getDay() < o2.getDay()) return -1;
+        if (o1.month > o2.month) return 1;
+        if (o1.month < o2.month) return -1;
+
+        if (o1.day > o2.day) return 1;
+        if (o1.day < o2.day) return -1;
 
         return 0;
     }

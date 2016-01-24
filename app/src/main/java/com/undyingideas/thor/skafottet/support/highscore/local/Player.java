@@ -16,30 +16,81 @@
 
 package com.undyingideas.thor.skafottet.support.highscore.local;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
 /**
  * @author rudz
  */
-final class Player {
+public final class Player implements Serializable, Parcelable {
+    private static final long serialVersionUID = -3214121L;
 
-    // idiotklasse til spillerpoint..
-    private static int pts;
-
-    /* used by the game status fragment */
-    private static final int DEF_START_SCORE = 0;
+    private int pts;
+    private String name;
 
     /* define the shifting values for scores on future difficulty settings */
     public static final int DIF_EASY_SHIFT_MULTIPLIER = 2;
     public static final int DIF_MEDIUM_SHIFT_MULTIPLIER = 1;
+    public static final int DIF_HARD_SHIFT_MULTIPLIER = 0;
 
-    static {
-        pts = DEF_START_SCORE;
+    public Player(final String name, final int pts) {
+        this.pts = pts;
+        this.name = name;
     }
 
-    public static void reset() {
-        pts = DEF_START_SCORE;
+    public Player(final String name) {
+        this(name, 0);
     }
 
-    public static String getPtsString() {
+    public Player(final Player player) {
+        this(player.getName(), player.getPts());
+    }
+
+    public String getPtsString() {
         return Integer.toString(pts);
+    }
+
+    public void addPoints(final int points) { pts += points; }
+
+    public int getPts() { return pts; }
+
+    public void setPts(final int pts) { this.pts = pts; }
+
+    public String getName() { return name; }
+
+    public void setName(final String name) { this.name = name; }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "pts=" + pts +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
+    @Override
+    public int describeContents() { return 0; }
+
+    @Override
+    public void writeToParcel(final Parcel dest, final int flags) {
+        dest.writeInt(pts);
+        dest.writeString(name);
+    }
+
+    protected Player(final Parcel in) {
+        pts = in.readInt();
+        name = in.readString();
+    }
+
+    public static final Parcelable.Creator<Player> CREATOR = new PlayerCreator();
+
+    private static class PlayerCreator implements Creator<Player> {
+        @Override
+        public Player createFromParcel(final Parcel source) {return new Player(source);}
+
+        @Override
+        public Player[] newArray(final int size) {return new Player[size];}
     }
 }

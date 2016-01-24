@@ -24,6 +24,8 @@ import android.support.v7.app.AppCompatActivity;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.support.sfx.SoundItem;
 import com.undyingideas.thor.skafottet.support.sfx.SoundThread;
+import com.undyingideas.thor.skafottet.support.utility.Constant;
+import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 
 /**
  * Created on 17-01-2016, 17:10.
@@ -64,8 +66,6 @@ public abstract class SoundAbstract extends AppCompatActivity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
 
-//        Foreground.get(this).addListener(this);
-
         loadSounds();
 
         // If the thread isnt initialized or it was accidently GC'd..
@@ -83,24 +83,8 @@ public abstract class SoundAbstract extends AppCompatActivity {
     }
 
     protected void playSound(final int index) {
-        soundThread.sounds.add(soundItems[index]);
+        if (GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_SFX)) {
+            soundThread.sounds.add(soundItems[index]);
+        }
     }
-
-
-
-
-//    @Override
-//    public void onBecameForeground() {
-//        if (soundThread == null) {
-//            soundThread = new SoundThread(soundPool);
-//            soundThread.start();
-//        }
-//    }
-//
-//    @Override
-//    public void onBecameBackground() {
-//        if (soundThread != null) {
-//            soundThread.interrupt();
-//        }
-//    }
 }

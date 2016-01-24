@@ -19,6 +19,8 @@ package com.undyingideas.thor.skafottet.game;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.undyingideas.thor.skafottet.support.highscore.local.Player;
+
 import java.util.Arrays;
 
 /**
@@ -31,14 +33,12 @@ public class SaveGame implements Parcelable {
 
     private HangedMan logic;
     private boolean multiPlayer;
-    private String[] names;
+    private Player[] players;
 
-    public SaveGame() { }
-
-    public SaveGame(final HangedMan logic, final boolean multiPlayer, final String ... names) {
+    public SaveGame(final HangedMan logic, final boolean multiPlayer, final Player ... players) {
         this.logic = logic;
         this.multiPlayer = multiPlayer;
-        this.names = names;
+        this.players = players;
     }
 
     public HangedMan getLogic() { return logic; }
@@ -49,14 +49,14 @@ public class SaveGame implements Parcelable {
 
     public void setMultiPlayer(final boolean multiPlayer) { this.multiPlayer = multiPlayer; }
 
-    public String[] getNames() { return names; }
+    public Player[] getPlayers() { return players; }
 
-    public void setNames(final String ... names) { this.names = names; }
+    public void setPlayers(final Player[] players) { this.players = players; }
 
     @Override
     public String toString() {
         return "SaveGame{" +
-                "names=" + Arrays.toString(names) +
+                "names=" + Arrays.toString(players) +
                 ", multiPlayer=" + multiPlayer +
                 ", logic=" + logic +
                 '}';
@@ -69,13 +69,20 @@ public class SaveGame implements Parcelable {
     public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeParcelable(logic, 0);
         dest.writeByte(multiPlayer ? (byte) 1 : (byte) 0);
-        dest.writeStringArray(names);
+        dest.writeInt(players.length);
+        for (final Player player : players) {
+            dest.writeParcelable(player, 0);
+        }
     }
 
     protected SaveGame(final Parcel in) {
         logic = in.readParcelable(HangedMan.class.getClassLoader());
         multiPlayer = in.readByte() != 0;
-        names = in.createStringArray();
+        final int playerCount = in.readInt();
+        players = new Player[playerCount];
+        for (int i = 0; i < playerCount; i++) {
+            players[i] = in.readParcelable(Player.class.getClassLoader());
+        }
     }
 
     public static final Creator<SaveGame> CREATOR = new SaveGameCreator();

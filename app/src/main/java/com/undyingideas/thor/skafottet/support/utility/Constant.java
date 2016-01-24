@@ -38,6 +38,7 @@ public final class Constant {
     public static final String KEY_PREFS_MUSIC = "kpmusic";
     public static final String KEY_PREFS_SFX   = "kpsfx";
     public static final String KEY_PREFS_BLOOD = "kpblood";
+    public static final String KEY_PREFS_HEPTIC = "kphep";
 
     /* instance keys */
 
@@ -56,7 +57,7 @@ public final class Constant {
     public static final int MODE_ABOUT = 8;
     public static final int MODE_HELP = 9;
     public static final int MODE_END_GAME = 10;
-
+    public static final int MODE_SETTINGS = 11;
 
     /* to deliver as true back pressed */
     public static final int MODE_BACK_PRESSED = 231;

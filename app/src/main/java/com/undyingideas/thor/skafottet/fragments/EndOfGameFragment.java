@@ -211,7 +211,7 @@ public class EndOfGameFragment extends Fragment {
     @SuppressWarnings({"OverlyComplexMethod", "OverlyLongMethod"})
     private class CalculateResults implements Runnable {
 
-        private final static String WORD_WAS = "Ordet var ";
+        private final static String WORD_WAS = "Ordet var : ";
 
         @Override
         public void run() {
@@ -227,12 +227,16 @@ public class EndOfGameFragment extends Fragment {
                 } else {
                     results.putInt(MSG_KEY_IMG, R.drawable.trophy);
                     results.putString(MSG_KEY_UPPER, getString(R.string.game_won));
-                    results.putString(MSG_KEY_MIDDLE, "Dine gæt var : " + endGame.getLogic().getUsedLetters() + " og du gættede forkert " + endGame.getLogic().getNumWrongLetters() + " gange. tsktsk.");
-                    results.putString(MSG_KEY_LOWER, WORD_WAS + endGame.getLogic().getTheWord());
+                    if (endGame.getLogic().getNumWrongLetters() == 0) {
+                        results.putString(MSG_KEY_MIDDLE, "Dine gæt var : " + endGame.getLogic().getUsedLetters() + ", og du havde ingen fejl!");
+                    } else {
+                        results.putString(MSG_KEY_MIDDLE, "Dine gæt var : " + endGame.getLogic().getUsedLetters() + " og du gættede forkert " + endGame.getLogic().getNumWrongLetters() + " gange. tsktsk.");
+                    }
+                    results.putString(MSG_KEY_LOWER, WORD_WAS + endGame.getLogic().getTheWord() + " / Point : " + endGame.getPlayers()[0].getPtsString());
                 }
             } else {
-                GameUtility.mpc.lc.updateLobby(endGame.getNames()[1], GameUtility.mpc.name, endGame.getLogic().getNumWrongLetters());
-                final LobbyDTO dto = GameUtility.mpc.lc.lobbyList.get(endGame.getNames()[1]);
+                GameUtility.mpc.lc.updateLobby(endGame.getPlayers()[1].getName(), GameUtility.mpc.name, endGame.getLogic().getNumWrongLetters());
+                final LobbyDTO dto = GameUtility.mpc.lc.lobbyList.get(endGame.getPlayers()[1].getName());
                 boolean gameisDone = true;
                 for (final LobbyPlayerStatus lps : dto.getPlayerList()) {
                     if (!lps.getName().equals(GameUtility.mpc.name) && lps.getScore() == -1) gameisDone = false;

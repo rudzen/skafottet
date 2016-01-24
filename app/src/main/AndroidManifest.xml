@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -25,13 +24,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".activities.WordListActivity"
-            android:screenOrientation="portrait" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.GameActivity" />
         </activity>
         <activity
             android:name=".activities.GameActivity"
@@ -78,15 +70,15 @@
 
         <!-- This service is only used on devices with API v17+ -->
         <service
-            android:name=".views.SkafotDream"
+            android:name=".services.SkafotDream"
             android:exported="true"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.service.dreams.DreamService" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
+
         <service android:name=".services.MusicPlay" >
         </service>
     </application>

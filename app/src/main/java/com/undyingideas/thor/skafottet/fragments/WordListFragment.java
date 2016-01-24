@@ -240,7 +240,7 @@ public class WordListFragment extends Fragment implements
         final int id = item.getItemId();
         final boolean returnValue;
         if (id == R.id.action_word_list_add) {
-            if (GameUtility.connectionStatus > -1) {
+            if (GameUtility.getConnectionStatus() > -1) {
             /* show Yes/No dialog here! */
                 new MaterialDialog.Builder(getContext())
                         .content("Vil du tilføje en ordliste?")
@@ -377,12 +377,12 @@ public class WordListFragment extends Fragment implements
 
     @Override
     public void onInternetStatusChanged(final int connectionState) {
-        GameUtility.connectionStatus = connectionState;
+        GameUtility.setConnectionStatus(connectionState);
     }
 
     @Override
     public void onInternetStatusChanged(final String connectionState) {
-        GameUtility.connectionStatusName = connectionState;
+        GameUtility.setConnectionStatusName(connectionState);
         if (stickyList != null) {
             WindowLayout.showSnack(connectionState + " forbindelse oprettet.", stickyList, true);
         }

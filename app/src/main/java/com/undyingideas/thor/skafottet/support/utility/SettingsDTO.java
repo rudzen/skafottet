@@ -19,19 +19,13 @@ package com.undyingideas.thor.skafottet.support.utility;
 /**
  * Created on 20-01-2016, 11:37.
  * Project : skafottet
- *
+ * To hold the current settings for the game.
  * @author rudz
  */
 public final class SettingsDTO {
 
-//    public static boolean PREFS_MUSIC;
-//    public static boolean PREFS_SFX;
-//    public static boolean PREFS_BLOOD;
-//
-//    static {
-//        PREFS_MUSIC = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_MUSIC);
-//        PREFS_SFX = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_SFX);
-//        PREFS_BLOOD = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD);
-//    }
+    public boolean PREFS_MUSIC;
+    public boolean PREFS_SFX;
+    public boolean PREFS_BLOOD;
 
 }

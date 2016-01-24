@@ -74,7 +74,7 @@ public abstract class WindowLayout {
      * @param v The root view
      * @param brief if true, lenght is short, otherwise lenght is long.
      */
-    public static void showSnack(final CharSequence text, final CharSequence buttonText, View v, final boolean brief) {
+    public static void showSnack(final CharSequence text, final CharSequence buttonText, final View v, final boolean brief) {
         // convoluted, but neccesary.
         snackbar = Snackbar.make(v, text,  brief ? Snackbar.LENGTH_SHORT : Snackbar.LENGTH_LONG);
         snackbar.setAction(buttonText, new OnSnackBarClick());

@@ -2,7 +2,6 @@ package com.undyingideas.thor.skafottet.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -16,16 +15,14 @@ import android.widget.LinearLayout;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.hanks.htextview.HTextView;
+import com.hanks.htextview.HTextViewType;
 import com.nineoldandroids.animation.Animator;
-import com.romainpiel.shimmer.Shimmer;
-import com.romainpiel.shimmer.ShimmerTextView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
 import com.undyingideas.thor.skafottet.interfaces.IGameSoundNotifier;
 import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
-import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
-import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.views.camera.Hangman3dView;
@@ -53,21 +50,15 @@ public class HangmanGameFragment extends Fragment {
 
     private Hangman3dView noose;
 
-    private ShimmerTextView textViewWord, textViewStatus;
-
+    private HTextView textWord;
+    private HTextView textStatus;
     private Vibrator vibrator;
-    private Shimmer shimmerWord, shimmerStatus;
     private View sepKnown, sepStatus;
 
-    private Animation sepAnimation, sepAnimation2;
+    private Animation sepAnimation;
     private OnButtonClickListener onButtonClickListener;
 
-    private IFragmentFlipper iFragmentFlipper;
     private IGameSoundNotifier iGameSoundNotifier;
-
-    private Runnable resetAnimation;
-
-    private Handler resetHandler;
 
     public static HangmanGameFragment newInstance(final SaveGame saveGame) {
         final Bundle args = new Bundle();
@@ -90,12 +81,13 @@ public class HangmanGameFragment extends Fragment {
     @SuppressWarnings("AccessStaticViaInstance")
     @Override
     public void onCreate(final Bundle savedInstanceState) {
-        try {
-            vibrator = (Vibrator) getActivity().getSystemService(getActivity().VIBRATOR_SERVICE);
-        } catch (final Exception e) {
-            e.printStackTrace();
+        if (GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_HEPTIC)) {
+            try {
+                vibrator = (Vibrator) getActivity().getSystemService(getActivity().VIBRATOR_SERVICE);
+            } catch (final Exception e) {
+                e.printStackTrace();
+            }
         }
-//        ((GameActivity) getActivity()).getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
     }
 
@@ -117,17 +109,19 @@ public class HangmanGameFragment extends Fragment {
             listOfButtons.addAll(getChildren(linearLayout));
         }
 
-        textViewWord = (ShimmerTextView) root.findViewById(R.id.hangman_game_known_letters);
-        textViewStatus = (ShimmerTextView) root.findViewById(R.id.hangman_game_status);
+        textWord = (HTextView) root.findViewById(R.id.hangman_game_known_letters);
+        textWord.setAnimateType(HTextViewType.SCALE);
+
+        textStatus = (HTextView) root.findViewById(R.id.hangman_game_status);
+        textStatus.setAnimateType(HTextViewType.SCALE);
 
         sepKnown = root.findViewById(R.id.sepKnown);
         sepStatus = root.findViewById(R.id.sepStatus);
 
         sepAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_repeat_backwards);
-        sepAnimation2 = AnimationUtils.loadAnimation(getContext(), R.anim.anim_hangman_game_seperator);
 
         sepKnown.setAnimation(sepAnimation);
-        sepStatus.setAnimation(sepAnimation2);
+        sepStatus.setAnimation(sepAnimation);
 
         onButtonClickListener = new OnButtonClickListener(this);
 
@@ -141,9 +135,8 @@ public class HangmanGameFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof IGameSoundNotifier && context instanceof IFragmentFlipper) {
             iGameSoundNotifier = (IGameSoundNotifier) context;
-            iFragmentFlipper = (IFragmentFlipper) context;
         } else {
-            throw new RuntimeException(context.toString() + " must implement IGameSoundNotifier & IFragmentFlipper.");
+            throw new RuntimeException(context.toString() + " must implement IGameSoundNotifier.");
         }
     }
 
@@ -157,23 +150,16 @@ public class HangmanGameFragment extends Fragment {
 
         // testing :
 //        if (currentGame.isMultiPlayer()) {
-//            WindowLayout.showSnack(getOppNames(currentGame.getNames()[1], currentGame.getNames()[0]), textViewWord, true);
+//            WindowLayout.showSnack(getOppNames(currentGame.getNames()[1], currentGame.getNames()[0]), textWord, true);
 //        }
         //Toast.makeText(getContext(), currentGame.getLogic().getTheWord(), Toast.LENGTH_SHORT).show();
 
-        shimmerWord = new Shimmer();
-        shimmerWord.setRepeatCount(1);
-        shimmerWord.start(textViewWord);
-        shimmerStatus = new Shimmer();
-        shimmerStatus.setDirection(Shimmer.ANIMATION_DIRECTION_RTL);
-        shimmerStatus.setDuration(3000);
-        shimmerStatus.setStartDelay(300);
-        shimmerStatus.start(textViewStatus);
     }
 
     @Override
     public void onDetach() {
         GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, currentGame);
+        iGameSoundNotifier = null;
         super.onDetach();
     }
 
@@ -193,8 +179,6 @@ public class HangmanGameFragment extends Fragment {
 
     @Override
     public void onPause() {
-        shimmerWord.cancel();
-        shimmerStatus.cancel();
         sepKnown.setAnimation(null);
         sepStatus.setAnimation(null);
         super.onPause();
@@ -202,41 +186,18 @@ public class HangmanGameFragment extends Fragment {
 
     @Override
     public void onResume() {
-
-//        if (shimmerWord == null) {
-//            shimmerWord = new Shimmer();
-//            shimmerWord.setDuration(400);
-//        }
-//        if (shimmerStatus == null) {
-//            shimmerStatus = new Shimmer();
-//            shimmerStatus.setDuration(800);
-//        }
-        shimmerWord.start(textViewWord);
-        shimmerStatus.start(textViewStatus);
         sepKnown.setAnimation(sepAnimation);
-        sepStatus.setAnimation(sepAnimation2);
-
+        sepStatus.setAnimation(sepAnimation);
         super.onResume();
     }
 
-    private static String getOppNames(final String lobbykey, final String yourname) {
-        try {
-            final LobbyDTO dto = GameUtility.mpc.lc.lobbyList.get(lobbykey);
-            String s = "Modstander: ";
-            for (final LobbyPlayerStatus lps : dto.getPlayerList()) if (!lps.getName().equals(yourname)) s += lps.getName() + " , ";
-            return s.length() > 3 ? s.substring(0, s.length() - 3) : s;
-        } catch (final Exception e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
+    @SuppressWarnings("ConstantConditions")
     private void applySaveGameStatus() {
-        textViewWord.setText(currentGame.getLogic().getVisibleWord());
+        textWord.animateText(currentGame.getLogic().getVisibleWord());
         if (currentGame.isMultiPlayer()) {
-            textViewStatus.setText(getOppNames(currentGame.getNames()[1], currentGame.getNames()[0]));
+            textStatus.animateText(GameUtility.mpc.lc.getOppNames(currentGame.getPlayers()[1].getName(), currentGame.getPlayers()[0].getName()) + " / " + currentGame.getPlayers()[0].getPtsString());
         } else {
-            textViewStatus.setText("Du kæmper for føden");
+            textStatus.animateText(currentGame.getPlayers()[0].getPtsString());
         }
         resetButtons();
 
@@ -258,11 +219,9 @@ public class HangmanGameFragment extends Fragment {
     }
 
     private void readFromBundle(final Bundle bundle) {
-        if (bundle != null) {
-            if (bundle.containsKey(Constant.KEY_SAVE_GAME)) {
-                // restore complete game state!!
-                currentGame = bundle.getParcelable(Constant.KEY_SAVE_GAME);
-            }
+        if (bundle != null && bundle.containsKey(Constant.KEY_SAVE_GAME)) {
+            // restore complete game state!!
+            currentGame = bundle.getParcelable(Constant.KEY_SAVE_GAME);
         }
     }
 
@@ -286,10 +245,11 @@ public class HangmanGameFragment extends Fragment {
     }
 
     private void updateScreen() {
-        textViewWord.setText(currentGame.getLogic().getVisibleWord());
+        textWord.animateText(currentGame.getLogic().getVisibleWord());
+        textStatus.animateText(currentGame.getPlayers()[0].getPtsString());
         if (!currentGame.getLogic().isLastLetterCorrect()) {
             noose.setErrors(currentGame.getLogic().getNumWrongLetters());
-            YoYo.with(Techniques.Landing).duration(100).playOn(noose);
+            YoYo.with(Techniques.Flash).duration(100).playOn(noose);
         }
     }
 
@@ -301,9 +261,20 @@ public class HangmanGameFragment extends Fragment {
 
     private void guess(final String guess) {
         currentGame.getLogic().guessLetter(guess);
-        shimmerWord.start(textViewWord);
-        textViewWord.setText(currentGame.getLogic().getVisibleWord());
-        if (currentGame.getLogic().isGameOver()) {
+        if (!currentGame.getLogic().isGameOver()) {
+            // save the game status!
+            GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, currentGame);
+            if (!currentGame.getLogic().isLastLetterCorrect()) {
+                currentGame.getPlayers()[0].addPoints(-100);
+                iGameSoundNotifier.playGameSound(GameUtility.SFX_GUESS_WRONG);
+                if (vibrator != null) vibrator.vibrate(50);
+                YoYo.with(Techniques.Flash).duration(300).playOn(textWord);
+            } else {
+                currentGame.getPlayers()[0].addPoints(500 * currentGame.getLogic().getNumCorrectLettersLast());
+                iGameSoundNotifier.playGameSound(GameUtility.SFX_GUESS_RIGHT);
+            }
+            updateScreen();
+        } else {
             GameUtility.writeNullGame();
             if (currentGame.getLogic().isGameWon()) {
                 iGameSoundNotifier.playGameSound(GameUtility.SFX_INTRO);
@@ -311,17 +282,6 @@ public class HangmanGameFragment extends Fragment {
                 iGameSoundNotifier.playGameSound(GameUtility.SFX_LOST);
             }
             startEndgame();
-        } else {
-            // save the game status!
-            GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, currentGame);
-            if (!currentGame.getLogic().isLastLetterCorrect()) {
-                iGameSoundNotifier.playGameSound(GameUtility.SFX_GUESS_WRONG);
-                if (vibrator != null) vibrator.vibrate(50);
-                YoYo.with(Techniques.Flash).duration(300).playOn(textViewWord);
-            } else {
-                iGameSoundNotifier.playGameSound(GameUtility.SFX_GUESS_RIGHT);
-            }
-            updateScreen();
         }
     }
 

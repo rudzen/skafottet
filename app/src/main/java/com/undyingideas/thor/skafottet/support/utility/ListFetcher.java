@@ -38,6 +38,7 @@ import java.util.zip.GZIPOutputStream;
  * <p>
  * Could easily be generalised.. QUICK AND DIRTY HACK!
  * </p>
+ *
  * @author rudz
  */
 public final class ListFetcher {
@@ -46,13 +47,35 @@ public final class ListFetcher {
 
     public static Handler listHandler = new Handler();
     public static Runnable listSaver;
+    private static Object syncer = new Object();
 
-    private static byte[] compressWordList(final WordController wordController) throws IOException {
+    private static byte[] compressWordList(final WordController wordController) {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final GZIPOutputStream gzipOut = new GZIPOutputStream(baos);
-        try (final ObjectOutputStream objectOut = new ObjectOutputStream(gzipOut)) {
+        GZIPOutputStream gzipOut = null;
+        ObjectOutputStream objectOut = null;
+        try {
+            gzipOut = new GZIPOutputStream(baos);
+            objectOut = new ObjectOutputStream(gzipOut);
             objectOut.writeObject(wordController);
-            objectOut.close();
+            objectOut.flush();
+        } catch (final IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (objectOut != null) {
+                try {
+                    objectOut.close();
+                } catch (final IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (gzipOut != null) {
+                try {
+                    gzipOut.close();
+                    gzipOut = null;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return baos.toByteArray();
     }

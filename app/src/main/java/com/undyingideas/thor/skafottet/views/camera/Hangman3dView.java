@@ -102,16 +102,16 @@ public class Hangman3dView extends View {
     }
     int x1, x2, y1, y2;
     float mPreviousX1, mPreviousX2, mPreviousY1,mPreviousY2;
-    final float ZOOM_SCALE_FACTOR = 1f / 180;
+    static final float ZOOM_SCALE_FACTOR = 1f / 180;
     boolean startleft, startdown;
     public void multiTouch(final MotionEvent e) {
         final float x1 = e.getX(0), y1 = e.getY(0), x2 = e.getX(1), y2 = e.getY(1);
         switch (e.getAction()) {
             case ACTION_MOVE:
-                float dx1 = x1 - mPreviousX1;
-                float dx2 = x2 - mPreviousX2;
-                float dy1 = y1 - mPreviousY1;
-                float dy2 = y2 - mPreviousY2;
+                final float dx1 = x1 - mPreviousX1;
+                final float dx2 = x2 - mPreviousX2;
+                final float dy1 = y1 - mPreviousY1;
+                final float dy2 = y2 - mPreviousY2;
                 float z;
                 z = startleft ? S.z + ((dx1 - dx2) * ZOOM_SCALE_FACTOR) : S.z + ((dx2 - dx1) * ZOOM_SCALE_FACTOR);
                 z += startdown ? ((dy1 - dy2) * ZOOM_SCALE_FACTOR) : ((dy2 - dy1) * ZOOM_SCALE_FACTOR);

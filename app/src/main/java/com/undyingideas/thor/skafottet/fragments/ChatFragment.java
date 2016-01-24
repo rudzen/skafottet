@@ -36,7 +36,7 @@ public class ChatFragment extends Fragment {
     private static class SendListener implements View.OnClickListener {
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
 
         }
     }

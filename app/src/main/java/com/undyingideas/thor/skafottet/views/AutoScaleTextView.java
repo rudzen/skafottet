@@ -60,7 +60,7 @@ public class AutoScaleTextView extends TextView {
      * Resize the text so that it fits
      *
      * @param text
-     *         The text. Neither <code>null</code> nor empty.
+     *         The text. Neither {@code null} nor empty.
      * @param textWidth
      *         The width of the TextView. > 0
      */

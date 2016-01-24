@@ -31,12 +31,10 @@ import java.io.IOException;
 
 public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, Foreground.Listener {
 
-    public static Intent intent = new Intent();
-
     private final static String TAG = "MusicPlayService";
 
-    private static final String ACTION_PLAY = "SKAFOTMUSIK";
-    private static final String ACTION_STOP = "STOPSKAFOTT";
+    public static final String ACTION_PLAY = "SKAFOTMUSIK";
+    public static final String ACTION_STOP = "STOPSKAFOTT";
     private static final int music = R.raw.insidious;
     private static MusicPlay mInstance;
 
@@ -76,7 +74,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
                 initMediaPlayer();
             } else if (intent.getAction().equals(ACTION_STOP)) {
                 if (isPlaying()) {
-                    mMediaPlayer.stop();
+                    stopMusic();
                 }
             }
         } else {

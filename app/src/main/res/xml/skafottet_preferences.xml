@@ -17,34 +17,47 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-        <PreferenceCategory
-            android:key="pref_key_sound_settings"
-            android:title="Lyd">
-            >
-            <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="kpmusic"
-                android:textColor="@color/colorAccent"
-                android:summary="Slå baggrunds musikken til eller fra."
-                android:title="Musik"/>
-            <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="kpsfx"
-                android:summary="Slå lydeffekter til eller fra."
-                android:title="Lydeffekter"/>
+    <PreferenceCategory
+        android:key="pref_key_sound_settings"
+        android:title="Lyd">
+        >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="kpmusic"
+            android:summary="Slå baggrunds musikken til eller fra."
+            android:textColor="@color/colorAccent"
+            android:title="Musik"/>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="kpsfx"
+            android:summary="Slå lydeffekter til eller fra."
+            android:title="Lydeffekter"/>
 
-        </PreferenceCategory>
+    </PreferenceCategory>
 
-        <PreferenceCategory
-            android:key="pref_key_graphics_settings"
-            android:title="Grafik">
-            >
+    <PreferenceCategory
+        android:key="pref_key_graphics_settings"
+        android:title="Grafik">
+        >
 
-            <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="kpblood"
-                android:summary="Slå blodregning til eller fra i menuen."
-                android:title="Blod"/>
-        </PreferenceCategory>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="kpblood"
+            android:summary="Slå blodregning til eller fra i menuen."
+            android:title="Blod"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="pref_key_other"
+        android:title="Andet">
+        >
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="kphep"
+            android:summary="Få vibrations feedback på forkerte gæt."
+            android:title="Heptisk tilbagemelding"/>
+    </PreferenceCategory>
+
 
 </PreferenceScreen>

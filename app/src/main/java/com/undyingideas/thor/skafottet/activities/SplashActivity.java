@@ -32,17 +32,18 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.firebase.client.Firebase;
 import com.nineoldandroids.animation.Animator;
-import com.splunk.mint.Mint;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.services.MusicPlay;
 import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.support.firebase.controller.MultiplayerController;
 import com.undyingideas.thor.skafottet.support.firebase.controller.WordListController;
+import com.undyingideas.thor.skafottet.support.highscore.local.Player;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.FontUtils;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 import com.undyingideas.thor.skafottet.support.utility.NetworkHelper;
+import com.undyingideas.thor.skafottet.support.utility.SettingsDTO;
 import com.undyingideas.thor.skafottet.support.utility.TinyDB;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.support.wordlist.WordController;
@@ -54,6 +55,7 @@ import java.util.HashMap;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.firebase;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_preferences;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_wordController;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.settings;
 
 /**
  * Created on 07-12-2015, 11:07.
@@ -80,7 +82,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         /* Mint key! */
-        Mint.initAndStartSession(this, "6adabf91");
+//        Mint.initAndStartSession(this, "6adabf91");
 
         setContentView(R.layout.activity_splash);
 
@@ -144,24 +146,22 @@ public class SplashActivity extends AppCompatActivity {
                 s_preferences = new TinyDB(getApplicationContext());
             }
 
-            MusicPlay.intent = new Intent(getApplicationContext(), MusicPlay.class);
-            MusicPlay.intent.setAction("SKAFOTMUSIK");
-            startService(MusicPlay.intent);
+            settings = new SettingsDTO();
+            settings.PREFS_MUSIC = s_preferences.getBoolean(Constant.KEY_PREFS_MUSIC, true);
+            settings.PREFS_SFX = s_preferences.getBoolean(Constant.KEY_PREFS_SFX, true);
+            settings.PREFS_BLOOD = s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD, true);
 
-//            if (SettingsDTO.PREFS_MUSIC) {
-//                startService(MusicPlay.intent);
-//            }
+            GameUtility.musicPLayIntent = new Intent(getApplicationContext(), MusicPlay.class);
 
-
-            GameUtility.connectionStatus = NetworkHelper.getConnectivityStatus(getApplicationContext());
-            GameUtility.connectionStatusName = NetworkHelper.getConnectivityStatusStringFromStatus(GameUtility.connectionStatus);
+            GameUtility.setConnectionStatus(NetworkHelper.getConnectivityStatus(getApplicationContext()));
+            GameUtility.setConnectionStatusName(NetworkHelper.getConnectivityStatusStringFromStatus(GameUtility.getConnectionStatus()));
 
             FontUtils.setDefaultFont(getApplicationContext(), "DEFAULT", Constant.FONT_BOLD);
             FontUtils.setDefaultFont(getApplicationContext(), "MONOSPACE", Constant.FONT_BOLD);
             FontUtils.setDefaultFont(getApplicationContext(), "SERIF", Constant.FONT_LIGHT);
             FontUtils.setDefaultFont(getApplicationContext(), "SANS_SERIF", Constant.FONT_BOLD);
 
-
+            GameUtility.me = new Player("Mig");
 
             // only for testing stuff!!!!
 //            s_preferences.clear();

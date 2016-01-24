@@ -27,6 +27,8 @@ import android.util.Log;
 import android.widget.RelativeLayout;
 
 import com.undyingideas.thor.skafottet.activities.support.Foreground;
+import com.undyingideas.thor.skafottet.support.utility.Constant;
+import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 
 import java.util.ArrayList;
 
@@ -34,7 +36,8 @@ public class StarField extends RelativeLayout implements Foreground.Listener {
 
     private static final float LOW_PASS_FILTER = 0.3f;
     private static final float HIGH_PASS_FILTER = 3.0f;
-    private static final int UPDATE_RATE = 1000 / 80;
+    private static final int CALC_FPS = 1000 / 60;
+    private static final int DRAW_FPS = 1000 / 80;
 
     private final ArrayList<Star2D> stars = new ArrayList<>(50);
     private Paint p;
@@ -61,8 +64,13 @@ public class StarField extends RelativeLayout implements Foreground.Listener {
             handleCalculate.post(calculator);
             handleCalculate.post(updater);
         } else {
-            handleCalculate.removeCallbacksAndMessages(null);
-            handleUpdate.removeCallbacksAndMessages(null);
+            if (handleCalculate != null) {
+                handleCalculate.removeCallbacksAndMessages(null);
+            }
+            if (handleUpdate != null) {
+                handleUpdate.removeCallbacksAndMessages(null);
+            }
+
         }
     }
 
@@ -102,68 +110,64 @@ public class StarField extends RelativeLayout implements Foreground.Listener {
             addStar((float) Math.random() * w, (float) Math.random() * h, (float) Math.random() + 0.1f);
             addStar((float) Math.random() * w, (float) Math.random() * h, (float) Math.random() + 0.1f);
         }
-
         Foreground.get(getContext()).addListener(this);
+    }
 
-        run = true;
-//        run = SettingsDTO.PREFS_BLOOD;
-        handleCalculate = new Handler();
-        handleUpdate = new Handler();
-        calculator = new CalculateStarfield();
-        updater = new UpdateStarfield();
-        handleCalculate.post(calculator);
-        handleUpdate.post(updater);
+    @Override
+    public boolean hasFocus() {
+        if (!run) setRun(GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD));
+        Log.d(TAG, "StarField focus");
+        return super.hasFocus();
     }
 
     @Override
     public void onBecameForeground() {
-        run = true;
-        handleCalculate.post(calculator);
-        handleUpdate.post(updater);
+        setRun(GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD));
         Log.d(TAG, "Starfield enabled itself.");
     }
 
     @Override
     public void onBecameBackground() {
         Log.d(TAG, "Starfield disabled itself.");
-        run = false;
+        setRun(false);
     }
 
     private class CalculateStarfield implements Runnable {
         @Override
         public void run() {
-            //final long time = System.nanoTime();
-            for (final Star2D star2D : stars) {
-                star2D.xy.x -= star2D.speedX + gravity.x;
-                star2D.xy.y += gravity.y;
+            if (run) {
+                //final long time = System.nanoTime();
+                for (final Star2D star2D : stars) {
+                    star2D.xy.x -= star2D.speedX + gravity.x;
+                    star2D.xy.y += gravity.y + star2D.weight;
 
-                if (star2D.xy.x > width) star2D.xy.x = 0;
-                else if (star2D.xy.x < 0) star2D.xy.x = width;
+                    if (star2D.xy.x > width) star2D.xy.x = 0;
+                    else if (star2D.xy.x < 0) star2D.xy.x = width;
 
-                if (star2D.xy.y > height) star2D.xy.y = 0;
-                else if (star2D.xy.y < 0) star2D.xy.y = height;
+                    if (star2D.xy.y > height) star2D.xy.y = 0;
+                    else if (star2D.xy.y < 0) star2D.xy.y = height;
 
-                if (star2D.fade > 249) star2D.fadeDirection = true;
-                else if (star2D.fade < 10) star2D.fadeDirection = false;
+                    if (star2D.fade > 249) star2D.fadeDirection = true;
+                    else if (star2D.fade < 10) star2D.fadeDirection = false;
 
-                if (!star2D.fadeDirection) star2D.fade += (int) star2D.fadespeed;
-                else star2D.fade -= (int) star2D.fadespeed;
+                    if (!star2D.fadeDirection) star2D.fade += (int) star2D.fadespeed;
+                    else star2D.fade -= (int) star2D.fadespeed;
+                }
+                //Log.d(TAG, "Time to update was (ns) : " + (System.nanoTime() - time));
+                handleCalculate.postDelayed(calculator, CALC_FPS);
             }
-            //Log.d(TAG, "Time to update was (ns) : " + (System.nanoTime() - time));
-            if (run) handleCalculate.postDelayed(calculator, UPDATE_RATE);
         }
     }
 
     private class UpdateStarfield implements Runnable {
-        private static final int FPS = 1000 / 60;
 
         @Override
         public void run() {
             invalidate();
             if (getMeasuredHeight() > height && getMeasuredWidth() > width) {
                 init(getMeasuredWidth(), getMeasuredHeight(), Color.RED);
-            } else {
-                handleUpdate.postDelayed(updater, FPS);
+            } else if (run) {
+                handleUpdate.postDelayed(updater, DRAW_FPS);
             }
         }
     }
@@ -176,18 +180,21 @@ public class StarField extends RelativeLayout implements Foreground.Listener {
     public void setGravity(final float x, final float y) {
         gravity.x = x >= LOW_PASS_FILTER || x <= -LOW_PASS_FILTER ? x : 0f;
         gravity.y = y >= LOW_PASS_FILTER || y <= -LOW_PASS_FILTER ? y : 0f;
-        if (gravity.x > HIGH_PASS_FILTER) gravity.x = HIGH_PASS_FILTER;
-        else if (gravity.x < -HIGH_PASS_FILTER) gravity.x = -HIGH_PASS_FILTER;
-        if (gravity.y > HIGH_PASS_FILTER) gravity.y = HIGH_PASS_FILTER;
-        else if (gravity.y < -HIGH_PASS_FILTER) gravity.y = -HIGH_PASS_FILTER;
+
+        if (x > HIGH_PASS_FILTER) gravity.x = HIGH_PASS_FILTER;
+        else if (x < -HIGH_PASS_FILTER) gravity.x = -HIGH_PASS_FILTER;
+        if (y > HIGH_PASS_FILTER) gravity.y = HIGH_PASS_FILTER;
+        else if (y < -HIGH_PASS_FILTER) gravity.y = -HIGH_PASS_FILTER;
     }
 
     @Override
     protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
-        for (final Star2D star : stars) {
-            p.setAlpha(star.fade);
-            canvas.drawCircle(star.xy.x, star.xy.y, 7, p);
+        if (run) {
+            for (final Star2D star : stars) {
+                p.setAlpha(star.fade);
+                canvas.drawCircle(star.xy.x, star.xy.y, 7, p);
+            }
         }
     }
 }

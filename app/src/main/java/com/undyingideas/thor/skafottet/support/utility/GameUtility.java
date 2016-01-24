@@ -17,6 +17,7 @@
 package com.undyingideas.thor.skafottet.support.utility;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -28,6 +29,7 @@ import android.support.annotation.DrawableRes;
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.support.firebase.controller.MultiplayerController;
+import com.undyingideas.thor.skafottet.support.highscore.local.Player;
 import com.undyingideas.thor.skafottet.support.wordlist.WordController;
 
 /**
@@ -49,8 +51,12 @@ public abstract class GameUtility {
     @SuppressWarnings("StaticVariableOfConcreteClass")
     public static WordController s_wordController;
 
-    public static int connectionStatus;
-    public static String connectionStatusName;
+    public static SettingsDTO settings;
+
+    public static Player me;
+
+    private static int connectionStatus;
+    private static String connectionStatusName;
 
     public static final int SFX_GUESS_WRONG = 0;
     public static final int SFX_GUESS_RIGHT = 1;
@@ -62,6 +68,8 @@ public abstract class GameUtility {
 
     public static @DrawableRes
     final int[] imageRefs = new int[8];
+
+    public static Intent musicPLayIntent = new Intent();
 
     static {
         imageRefs[0] = R.drawable.terror0;
@@ -102,4 +110,19 @@ public abstract class GameUtility {
         s_preferences.remove(Constant.KEY_SAVE_GAME);
     }
 
+    public static int getConnectionStatus() {
+        return connectionStatus;
+    }
+
+    public static void setConnectionStatus(int connectionStatus) {
+        GameUtility.connectionStatus = connectionStatus;
+    }
+
+    public static String getConnectionStatusName() {
+        return connectionStatusName;
+    }
+
+    public static void setConnectionStatusName(String connectionStatusName) {
+        GameUtility.connectionStatusName = connectionStatusName;
+    }
 }

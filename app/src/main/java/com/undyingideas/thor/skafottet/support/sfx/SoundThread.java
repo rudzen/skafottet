@@ -33,14 +33,9 @@ public class SoundThread extends Thread {
     public LinkedBlockingQueue<SoundItem> sounds = new LinkedBlockingQueue<>();
     public volatile boolean stop;
 
+    public SoundThread(final SoundPool soundPool) { this.soundPool = soundPool; }
 
-    public SoundThread(final SoundPool soundPool) {
-        this.soundPool = soundPool;
-    }
-
-    public void unloadSound(final int id) {
-        soundPool.unload(id);
-    }
+    public void unloadSound(final int id) { soundPool.unload(id); }
 
     @Override
     public void run() {

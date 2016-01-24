@@ -124,13 +124,24 @@ public class HangedMan implements Parcelable {
         Log.d(TAG, "| forkerteBogstaver = " + Integer.toString(numWrongLetters));
         Log.d(TAG, "| brugeBogstaver    = " + usedLetters);
         Log.d(TAG, "---------------------");
-        Log.d(TAG, "SPILLET ER " + (isGameLost ? " TABT" : isGameWon ? " VUNDET" : " I GANG"));
+        Log.d(TAG, "SPILLET ER" + (isGameLost ? " TABT" : isGameWon ? " VUNDET" : " I GANG"));
         Log.d(TAG, "---------------------");
     }
 
     @Override
     public String toString() {
-        return "HangedMan{" + "usedLetters=" + usedLetters + ", theWord='" + theWord + '\'' + ", visibleWord='" + visibleWord + '\'' + ", numWrongLetters=" + numWrongLetters + ", numCorrectLettersLast=" + numCorrectLettersLast + ", lastLetterCorrect=" + lastLetterCorrect + ", isGameWon=" + isGameWon + ", isGameLost=" + isGameLost + '}';
+        final StringBuilder sb = new StringBuilder(75);
+        sb.append("---------------------\n");
+        sb.append("| ordet (skjult)    = ").append(theWord).append('\n');
+        sb.append("| synligtOrd        = ").append(visibleWord).append('\n');
+        sb.append("| forkerteBogstaver = ").append(numWrongLetters).append('\n');
+        sb.append("| brugeBogstaver    = ").append(usedLetters).append('\n');
+        sb.append("---------------------\n");
+        sb.append("SPILLET ER").append(isGameLost ? " TABT" : isGameWon ? " VUNDET" : " I GANG").append('\n');
+        sb.append("---------------------\n");
+        sb.trimToSize();
+        return sb.toString();
+//        return "HangedMan{" + "usedLetters=" + usedLetters + ", theWord='" + theWord + '\'' + ", visibleWord='" + visibleWord + '\'' + ", numWrongLetters=" + numWrongLetters + ", numCorrectLettersLast=" + numCorrectLettersLast + ", lastLetterCorrect=" + lastLetterCorrect + ", isGameWon=" + isGameWon + ", isGameLost=" + isGameLost + '}';
     }
 
     /* ************************************* */

@@ -55,23 +55,23 @@ class HighscoreManager {
         return score >= scores.get(scores.size() - 1).getScore();
     }
 
-    public void addScore(final String name, final int score, final Context c) {
+    public void addScore(final String word, final String name, final int score, final Context c) {
         loadScoreFile(c);
         final Calendar cal = Calendar.getInstance();
-        scores.add(new Score(name, score, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+        scores.add(new Score(word, name, score, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
         Collections.sort(scores, new ScoreComparator());
         if (scores.size() > 10) while (scores.size() > 10) scores.remove(scores.size() - 1);
         updateScoreFile(c);
     }
 
-    private void loadScoreFile(final Context c) {
+    private void loadScoreFile(final Context context) {
         try {
-            final ObjectInputStream inputStream = new ObjectInputStream(c.openFileInput(HIGHSCORE_FILE));
+            final ObjectInputStream inputStream = new ObjectInputStream(context.openFileInput(HIGHSCORE_FILE));
             scores = (ArrayList<Score>) inputStream.readObject();
             if (scores.size() < MAX) {
                 final Calendar cal = Calendar.getInstance();
                 for (int i = 1; i < MAX - scores.size(); i++) {
-                    scores.add(new Score("rudz.dk", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+                    scores.add(new Score("Gruppe 23", "rudz.dk", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
                 }
             }
         } catch (final FileNotFoundException e) {
@@ -135,16 +135,16 @@ class HighscoreManager {
     private void generateDefaults() {
         final Calendar cal = Calendar.getInstance();
 
-        scores.add(new Score("Rudy", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-        scores.add(new Score("Thor", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-        scores.add(new Score("Adam", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-        scores.add(new Score("Emil", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-        scores.add(new Score("Theis", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-        scores.add(new Score("Christoffer", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-        scores.add(new Score("Papagøjs", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-        scores.add(new Score("Ole Olsen", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-        scores.add(new Score("Franz Jäger", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-        scores.add(new Score("Anker", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+        scores.add(new Score("Gruppe 23", "Rudy", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+        scores.add(new Score("Gruppe 23","Thor", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+        scores.add(new Score("Gruppe 23","Adam", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+        scores.add(new Score("Gruppe 23","Emil", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+        scores.add(new Score("Gruppe 23","Theis", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+        scores.add(new Score("Gruppe 23","Christoffer", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+        scores.add(new Score("Gruppe 23","Papagøjs", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+        scores.add(new Score("Gruppe 23","Ole Olsen", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+        scores.add(new Score("Gruppe 23","Franz Jäger", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+        scores.add(new Score("Gruppe 23","Anker", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
         scores.clear();
 //        for (int i = 1; i <= MAX; i++) {
 //            scores.add(new Score("rudz.dk", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
@@ -177,6 +177,4 @@ class HighscoreManager {
         if (A[low] == val) return low;
         return -1;
     }
-
-
 }

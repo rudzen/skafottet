@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/death"
+    android:background="@drawable/black_trans_black"
     android:orientation="vertical"
     android:weightSum="12.4"
     tools:context=".activities.GameActivity"
@@ -51,7 +51,7 @@
             android:background="@drawable/line_seperator_gradient"
             />
 
-        <com.romainpiel.shimmer.ShimmerTextView
+        <com.hanks.htextview.HTextView
             android:id="@+id/hangman_game_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
             android:background="@drawable/line_seperator_gradient"
             />
 
-        <com.romainpiel.shimmer.ShimmerTextView
+        <com.hanks.htextview.HTextView
             android:id="@+id/hangman_game_known_letters"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -29,8 +29,7 @@ class Star2D {
     public float fadespeed;
     public int fade;
     boolean fadeDirection;
-
-    Star2D() { }
+    public float weight;
 
     public Star2D(final float x, final float y, final float speed) {
         xy.x = x;
@@ -39,6 +38,7 @@ class Star2D {
         fade = (int) NumberHelper.round(Math.random() * FADE_MULTIPLIER, 0);
         fadeDirection = (int) NumberHelper.round(Math.random() + 1, 0) == 1;
         fadespeed = (float) (Math.random() * 3 + 1);
+        weight = fadespeed / 3;
     }
 
     public float getFadeSpeed() {

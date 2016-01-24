@@ -54,7 +54,6 @@ dependencies {
     compile 'com.daimajia.androidanimations:library:1.1.3@aar'
     compile 'com.firebase:firebase-client-android:2.5.0'
     compile 'com.google.code.gson:gson:2.5'
-    compile 'android.lib.verticalmarqueetextview:VerticalMarqueeTextView:+'
     compile 'com.romainpiel.shimmer:library:1.4.0@aar'
     compile 'asia.ivity.android:marqueeview:1.1.5'
     compile 'se.emilsjolander:stickylistheaders:2.7.0'
@@ -64,4 +63,5 @@ dependencies {
     compile 'hanks.xyz:htextview-library:0.1.3'
     compile 'net.steamcrafted:load-toast:1.0.9'
     compile 'com.splunk.mint:mint:4.4.0'
+    compile 'net.jpountz.lz4:lz4:1.3.0'
 }

@@ -22,9 +22,9 @@
      >
 
     <translate
-        android:duration="500"
-        android:fromYDelta="100%"
+        android:duration="200"
+        android:fromYDelta="75%"
         android:interpolator="@android:anim/accelerate_interpolator"
-        android:toYDelta="0%"/>
+        android:toYDelta="25%"/>
 
 </set>
