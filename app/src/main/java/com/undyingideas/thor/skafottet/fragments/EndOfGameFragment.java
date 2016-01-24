@@ -223,7 +223,7 @@ public class EndOfGameFragment extends Fragment {
                     results.putInt(MSG_KEY_IMG, R.drawable.reaper);
                     results.putString(MSG_KEY_UPPER, getString(R.string.game_lost));
                     results.putString(MSG_KEY_MIDDLE, "Dine gæt : " + endGame.getLogic().getUsedLetters());
-                    results.putString(MSG_KEY_LOWER, WORD_WAS + endGame.getLogic().getTheWord());
+                    results.putString(MSG_KEY_LOWER, WORD_WAS + endGame.getLogic().getTheWord() + " / Point : " + endGame.getPlayers()[0].getPtsString());
                 } else {
                     results.putInt(MSG_KEY_IMG, R.drawable.trophy);
                     results.putString(MSG_KEY_UPPER, getString(R.string.game_won));
