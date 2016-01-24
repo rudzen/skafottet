@@ -21,15 +21,25 @@ import android.view.View;
 
 import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
 
+/* Put the following in the fragment onViewCreated..
+        final View v = getView();
+        if (v != null) {
+            v.setFocusableInTouchMode(true);
+            v.requestFocus();
+            v.setOnKeyListener(new FragmentOnBackClickListener(iFragmentFlipper, Constant.MODE_MENU));
+        }
+*/
+
 /**
  * Created on 23-01-2016, 08:28.
  * Project : skafottet
  * To facilitate fragment back button catching :-)
+ *
  * @author rudz
  */
-public final class FragmentOnBackClickListener extends WeakReferenceHolder<IFragmentFlipper> implements View.OnKeyListener {
+public class FragmentOnBackClickListener extends WeakReferenceHolder<IFragmentFlipper> implements View.OnKeyListener {
 
-    private final int newMode;
+    protected final int newMode;
 
     public FragmentOnBackClickListener(final IFragmentFlipper iFragmentFlipper, final int newMode) {
         super(iFragmentFlipper);
@@ -42,7 +52,6 @@ public final class FragmentOnBackClickListener extends WeakReferenceHolder<IFrag
             final IFragmentFlipper iFragmentFlipper = weakReference.get();
             if (iFragmentFlipper != null) {
                 iFragmentFlipper.flipFragment(newMode);
-                return true;
             }
         }
         return false;

@@ -31,16 +31,16 @@ import android.widget.ListView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.MultiplayerLobbyAdapter;
 import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
-import com.undyingideas.thor.skafottet.support.abstractions.FragmentOnBackClickListener;
 import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
-import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import java.util.ArrayList;
 import java.util.Set;
+
+//import com.undyingideas.thor.skafottet.support.abstractions.FragmentOnBackClickListener;
 
 /**
  * This Fragment is responsible for showing the current Multiplayer players that are online.<br>
@@ -117,17 +117,6 @@ public class LobbySelectorFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
-        final View v = getView();
-        if (v != null) {
-            v.setFocusableInTouchMode(true);
-            v.requestFocus();
-            v.setOnKeyListener(new FragmentOnBackClickListener(iFragmentFlipper, Constant.MODE_MENU));
-        }
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
     public void onAttach(final Context context) {
         super.onAttach(context);
         if (context instanceof OnMultiPlayerPlayerFragmentInteractionListener && context instanceof IFragmentFlipper) {
@@ -166,7 +155,6 @@ public class LobbySelectorFragment extends Fragment {
 
         configureAdapter();
 
-//        setProgressListener.setProgressBar(true);
         GameUtility.mpc.setRunnable(updater);
     }
 

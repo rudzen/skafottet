@@ -23,16 +23,16 @@ import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
 import com.undyingideas.thor.skafottet.interfaces.IGameSoundNotifier;
-import com.undyingideas.thor.skafottet.support.abstractions.FragmentOnBackClickListener;
 import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
-import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.views.camera.Hangman3dView;
 
 import java.util.ArrayList;
+
+//import com.undyingideas.thor.skafottet.support.abstractions.FragmentOnBackClickListener;
 
 /**
  * ??.??.2015, Thor
@@ -153,19 +153,12 @@ public class HangmanGameFragment extends Fragment {
         if (getArguments() != null) {
             readFromBundle(getArguments());
         }
-        final View v = getView();
-        if (v != null) {
-            v.setFocusableInTouchMode(true);
-            v.requestFocus();
-            v.setOnKeyListener(new FragmentOnBackClickListener(iFragmentFlipper, Constant.MODE_MENU));
-        }
-
         applySaveGameStatus();
 
         // testing :
-        if (currentGame.isMultiPlayer()) {
-            WindowLayout.showSnack(getOppNames(currentGame.getNames()[1], currentGame.getNames()[0]), textViewWord, true);
-        }
+//        if (currentGame.isMultiPlayer()) {
+//            WindowLayout.showSnack(getOppNames(currentGame.getNames()[1], currentGame.getNames()[0]), textViewWord, true);
+//        }
         //Toast.makeText(getContext(), currentGame.getLogic().getTheWord(), Toast.LENGTH_SHORT).show();
 
         shimmerWord = new Shimmer();

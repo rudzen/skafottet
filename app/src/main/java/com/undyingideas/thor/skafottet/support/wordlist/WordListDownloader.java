@@ -19,7 +19,7 @@ package com.undyingideas.thor.skafottet.support.wordlist;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.undyingideas.thor.skafottet.activities.WordListActivity;
+import com.undyingideas.thor.skafottet.fragments.WordListFragment;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
@@ -50,17 +50,17 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
     //    private static final Pattern removeSpaces = Pattern.compile("  ");
     private static final Pattern removeNonDK = Pattern.compile("[^a-zæøå]");
     //    private static final Pattern removeTags = Pattern.compile(".<+?>");
-    private final WeakReference<WordListActivity> wordListActivityWeakReference;
+    private final WeakReference<WordListFragment> wordListFragmentWeakReference;
     private final String title, url;
-    private WordListActivity wordListActivity;
+    private WordListFragment wordListFragment;
     private final boolean multi;
 
-    public WordListDownloader(final WordListActivity wordListActivity, final String title, final String url) {
-        this(wordListActivity, title, url, false);
+    public WordListDownloader(final WordListFragment wordListFragment, final String title, final String url) {
+        this(wordListFragment, title, url, false);
     }
 
-    public WordListDownloader(final WordListActivity wordListActivity, final String title, final String url, final boolean multi) {
-        wordListActivityWeakReference = new WeakReference<>(wordListActivity);
+    public WordListDownloader(final WordListFragment wordListFragment, final String title, final String url, final boolean multi) {
+        wordListFragmentWeakReference = new WeakReference<>(wordListFragment);
         this.title = title;
         this.url = url.toLowerCase();
         this.multi = multi;
@@ -68,8 +68,8 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
 
     @Override
     protected WordItem doInBackground(final Void... params) {
-        wordListActivity = wordListActivityWeakReference.get();
-        if (wordListActivity != null) {
+        wordListFragment = wordListFragmentWeakReference.get();
+        if (wordListFragment != null) {
 
             publishProgress("Henter fra " + url); //"Henter fra\n" + url, "Henter ordliste.");
             try {
@@ -129,17 +129,17 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
 
     @Override
     protected void onPostExecute(final WordItem wordItem) {
-        wordListActivity = wordListActivityWeakReference.get();
-        if (wordListActivity != null) {
-            WindowLayout.hideStatusBar(wordListActivity.getWindow(), null); // sometimes the system just won't do as i ask!
+        wordListFragment = wordListFragmentWeakReference.get();
+        if (wordListFragment != null) {
+            WindowLayout.hideStatusBar(wordListFragment.getActivity().getWindow(), null); // sometimes the system just won't do as i ask!
             if (wordItem != null) {
                 Log.d("Downloader", wordItem.toString());
                 ListFetcher.listHandler.post(ListFetcher.listSaver);
-                wordListActivity.refreshList();
-//                wordListActivity.onWindowFocusChanged(true);
+                wordListFragment.refreshList();
+//                wordListFragment.onWindowFocusChanged(true);
                 WindowLayout.s_LoadToast.success();
             } else {
-                WindowLayout.showSnack("Fejl ved indhentning af listen", wordListActivity.getWindow().getDecorView(), true);
+                WindowLayout.showSnack("Fejl ved indhentning af listen", wordListFragment.getActivity().getWindow().getDecorView(), true);
                 WindowLayout.s_LoadToast.error();
             }
         }
@@ -148,7 +148,8 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
 
     @Override
     protected void onProgressUpdate(final String... values) {
-        if (wordListActivity != null) {
+        wordListFragment = wordListFragmentWeakReference.get();
+        if (wordListFragment != null) {
             WindowLayout.s_LoadToast.setText(values[0]);
         }
     }

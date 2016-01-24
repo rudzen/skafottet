@@ -18,6 +18,8 @@ package com.undyingideas.thor.skafottet.views;
 
 import android.graphics.PointF;
 
+import com.undyingideas.thor.skafottet.support.utility.NumberHelper;
+
 @SuppressWarnings("ClassNamingConvention")
 class Star2D {
     private static final int FADE_MULTIPLIER = 50;
@@ -34,8 +36,8 @@ class Star2D {
         xy.x = x;
         xy.y = y;
         speedX = speed;
-        fade = (int) (Math.random() * FADE_MULTIPLIER);
-        fadeDirection = (int) (Math.random() + 1) == 1;
+        fade = (int) NumberHelper.round(Math.random() * FADE_MULTIPLIER, 0);
+        fadeDirection = (int) NumberHelper.round(Math.random() + 1, 0) == 1;
         fadespeed = (float) (Math.random() * 3 + 1);
     }
 

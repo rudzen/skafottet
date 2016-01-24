@@ -1,2 +1,5 @@
-- Layouts
-- Oprydning og abstraction af store aktiviteter (virker dog pt som de skal, men der er KLART plads til forbedringer!)
+Known Bugs:
+- Highscore doesn't show all entries when logged in (!!!!)
+- Firebase does not use correct firebase login system
+- Firebase is generally messy, needs to be cleaned up!
+- Couple the firebase functionality to avoid duplicate code.

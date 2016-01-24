@@ -31,8 +31,6 @@ import android.widget.TextView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
-import com.undyingideas.thor.skafottet.support.abstractions.FragmentOnBackClickListener;
-import com.undyingideas.thor.skafottet.support.utility.Constant;
 
 import static android.text.util.Linkify.EMAIL_ADDRESSES;
 import static android.text.util.Linkify.WEB_URLS;
@@ -40,6 +38,8 @@ import static android.text.util.Linkify.addLinks;
 import static android.util.TypedValue.COMPLEX_UNIT_DIP;
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
 import static android.util.TypedValue.applyDimension;
+
+//import com.undyingideas.thor.skafottet.support.abstractions.FragmentOnBackClickListener;
 
 /**
  * Simple fragment to display some information about the app
@@ -167,17 +167,6 @@ public class AboutFragment extends Fragment {
         sv.addView(ll);
         YoYo.with(Techniques.FadeIn).duration(1000).playOn(sv);
         return sv;
-    }
-
-    @Override
-    public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
-        final View v = getView();
-        if (v != null) {
-            v.setFocusableInTouchMode(true);
-            v.requestFocus();
-            v.setOnKeyListener(new FragmentOnBackClickListener(iFragmentFlipper, Constant.MODE_MENU));
-        }
-        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override

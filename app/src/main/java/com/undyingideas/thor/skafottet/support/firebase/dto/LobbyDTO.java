@@ -41,11 +41,15 @@ public class LobbyDTO implements Parcelable {
 
     @Override
     public String toString() {
-        String s = "";
-        s += "Word = " + word;
-        s += " , names = ";
-        for (final LobbyPlayerStatus status : playerList.values()) s += status.getName() + " ";
-        return s;
+        final StringBuilder sb = new StringBuilder(playerList.values().size() << 2);
+//        String s = "";
+        sb.append("Word = ").append(word);
+        sb.append(" , ");
+        sb.append("names = ");
+//        s += "Word = " + word;
+//        s += " , names = ";
+        for (final LobbyPlayerStatus status : playerList.values()) sb.append(status.getName()).append(' '); // += status.getName() + " ";
+        return sb.toString();
     }
 
     /* parcel code */

@@ -8,15 +8,17 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 
 import static android.view.MotionEvent.ACTION_DOWN;
 import static android.view.MotionEvent.ACTION_MOVE;
 import static android.view.MotionEvent.ACTION_UP;
 
 /**
- * Created by theis on 15-01-2016.
+ * <p>Created on 15-01-2016, 08:25.<br>
+ * Project : skafottet</p>
+ * @author theis
  */
+@SuppressWarnings("ClassWithTooManyFields")
 public class Hangman3dView extends View {
 
     public final static String TAG = "hangman3dview";

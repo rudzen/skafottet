@@ -16,9 +16,7 @@
 
 package com.undyingideas.thor.skafottet.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,9 +26,6 @@ import android.webkit.WebView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
-import com.undyingideas.thor.skafottet.support.abstractions.FragmentOnBackClickListener;
-import com.undyingideas.thor.skafottet.support.utility.Constant;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,9 +35,6 @@ import java.io.InputStream;
  * @author rudz
  */
 public class HelpFragment extends Fragment {
-
-    @Nullable
-    private IFragmentFlipper iFragmentFlipper;
 
     private static final byte[] emptyBytes = new byte[0];
 
@@ -80,32 +72,4 @@ public class HelpFragment extends Fragment {
         YoYo.with(Techniques.FadeIn).duration(1000).playOn(wv);
         return fragmentView;
     }
-
-    @Override
-    public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
-        final View v = getView();
-        if (v != null) {
-            v.setFocusableInTouchMode(true);
-            v.requestFocus();
-            v.setOnKeyListener(new FragmentOnBackClickListener(iFragmentFlipper, Constant.MODE_MENU));
-        }
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public void onAttach(final Context context) {
-        super.onAttach(context);
-        if (context instanceof IFragmentFlipper) {
-            iFragmentFlipper = (IFragmentFlipper) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement IFragmentFlipper");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        iFragmentFlipper = null;
-        super.onDetach();
-    }
-
 }

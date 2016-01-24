@@ -19,7 +19,6 @@ package com.undyingideas.thor.skafottet.support.wordlist;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.undyingideas.thor.skafottet.support.firebase.controller.WordListController;
 
@@ -60,6 +59,7 @@ public final class WordController implements Serializable, Parcelable {
     }
 
     private void reset() {
+        random = new Random(System.currentTimeMillis());
         localWords = new ArrayList<>();
 //        wordItemComparator = new WordItemComparator();
         indexLocale = 0;
@@ -74,7 +74,7 @@ public final class WordController implements Serializable, Parcelable {
 
     @SuppressWarnings("MethodWithMultipleReturnPoints")
     public ArrayList<String> getCurrentList() {
-        Log.d("WordController", String.valueOf(isLocal));
+//        Log.d("WordController", String.valueOf(isLocal));
         if (isLocal) {
             if (indexLocale > 0 && localWords.get(indexLocale).getWords().isEmpty()) {
                 indexLocale = 0;
@@ -102,7 +102,6 @@ public final class WordController implements Serializable, Parcelable {
 
     // hacked together...
     public String getRandomWord() {
-        random = new Random(System.currentTimeMillis());
         final String returnString;
         if (isLocal || WordListController.wordList == null || WordListController.wordList.isEmpty()) {
             // using inlined method for empty list fix..

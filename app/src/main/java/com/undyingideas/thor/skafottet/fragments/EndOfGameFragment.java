@@ -37,7 +37,6 @@ import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
 import com.undyingideas.thor.skafottet.interfaces.IGameSoundNotifier;
-import com.undyingideas.thor.skafottet.support.abstractions.FragmentOnBackClickListener;
 import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
@@ -46,6 +45,8 @@ import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.views.AutoScaleTextView;
 
 import java.lang.ref.WeakReference;
+
+//import com.undyingideas.thor.skafottet.support.abstractions.FragmentOnBackClickListener;
 
 /**
  * <p>Created on 17-11-2015, 08:39.
@@ -117,7 +118,7 @@ public class EndOfGameFragment extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        onCreate(savedInstanceState);
+//        onCreate(savedInstanceState);
         final View root = inflater.inflate(R.layout.fragment_end_game, container, false);
 
         imageViewResult = (ImageView) root.findViewById(R.id.end_game_image_view);
@@ -151,13 +152,6 @@ public class EndOfGameFragment extends Fragment {
 
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
-        /* workaround for handling back pressed in fragments */
-        final View v = getView();
-        if (v != null) {
-            v.setFocusableInTouchMode(true);
-            v.requestFocus();
-            v.setOnKeyListener(new FragmentOnBackClickListener(iFragmentFlipper, Constant.MODE_MENU));
-        }
         YoYo.with(Techniques.FadeIn).duration(2000).withListener(new EnterAnimatorHandler(this)).playOn(imageViewResult);
     }
 
@@ -328,11 +322,11 @@ public class EndOfGameFragment extends Fragment {
     }
 
     private static String getOther(final LobbyDTO dto, final String name) {
-        String s = "";
+        final StringBuilder sb = new StringBuilder(16);
         for (final LobbyPlayerStatus lps : dto.getPlayerList()) {
-            if (!lps.getName().equals(name)) s += lps.getName() + " , ";
+            if (!lps.getName().equals(name)) sb.append(lps.getName()).append(" , ");
         }
-        return s.substring(0, s.length() - 3);
+        return sb.substring(0, sb.length() - 3);
     }
 
     private static String getWinner(final LobbyDTO dto) {

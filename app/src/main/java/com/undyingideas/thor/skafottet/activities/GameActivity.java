@@ -19,9 +19,12 @@ package com.undyingideas.thor.skafottet.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.util.Log;
 
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.broadcastrecievers.InternetReciever;
+import com.undyingideas.thor.skafottet.broadcastrecievers.InternetRecieverData;
 import com.undyingideas.thor.skafottet.fragments.AboutFragment;
 import com.undyingideas.thor.skafottet.fragments.CreateLobbyFragment;
 import com.undyingideas.thor.skafottet.fragments.EndOfGameFragment;
@@ -29,6 +32,7 @@ import com.undyingideas.thor.skafottet.fragments.HangmanGameFragment;
 import com.undyingideas.thor.skafottet.fragments.HelpFragment;
 import com.undyingideas.thor.skafottet.fragments.LobbySelectorFragment;
 import com.undyingideas.thor.skafottet.fragments.MenuFragment;
+import com.undyingideas.thor.skafottet.fragments.WordListFragment;
 import com.undyingideas.thor.skafottet.game.HangedMan;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
@@ -57,7 +61,9 @@ import java.util.Set;
 public class GameActivity extends SoundAbstract implements
         LobbySelectorFragment.OnMultiPlayerPlayerFragmentInteractionListener,
         CreateLobbyFragment.OnCreateLobbyFragmentInteractionListener,
-        IGameSoundNotifier, IFragmentFlipper {
+        IGameSoundNotifier, IFragmentFlipper,
+        InternetRecieverData.InternetRecieverInterface
+{
 
     private static final String TAG = "GameActivity";
     /* to handle backpressed when in the menu fragment */
@@ -66,6 +72,8 @@ public class GameActivity extends SoundAbstract implements
     private Fragment currentFragment; // what are we?
     private int currentMode; // where are we?
     private long backPressed;
+
+    private InternetRecieverData internetRecieverData;
 
 //    private ProgressBar topProgressBar;
 //
@@ -111,6 +119,8 @@ public class GameActivity extends SoundAbstract implements
             initSound();
             Log.d(TAG, "Sound started");
         }
+        internetRecieverData = new InternetRecieverData(this);
+        InternetReciever.addObserver(internetRecieverData);
         super.onResume();
     }
 
@@ -124,6 +134,7 @@ public class GameActivity extends SoundAbstract implements
 
     @Override
     protected void onStop() {
+        InternetReciever.removeObserver(internetRecieverData);
         super.onStop();
     }
 
@@ -165,12 +176,18 @@ public class GameActivity extends SoundAbstract implements
 
     @Override
     public void onBackPressed() {
-        if (backPressed + BACK_PRESSED_DELAY > System.currentTimeMillis()) {
-            stopService(MusicPlay.intent);
-            finish();
+        if (currentFragment instanceof MenuFragment) {
+            if (backPressed + BACK_PRESSED_DELAY > System.currentTimeMillis()) {
+                stopService(MusicPlay.intent);
+                finish();
+            } else {
+                WindowLayout.showSnack("Tryk tilbage igen for at flygte i rædsel.", findViewById(R.id.fragment_content), false);
+                backPressed = System.currentTimeMillis();
+            }
+        } else if (currentFragment instanceof WordListFragment && ((WordListFragment) currentFragment).mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            ((WordListFragment) currentFragment).mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            WindowLayout.showSnack("Tryk tilbage igen for at flygte i rædsel.", findViewById(R.id.fragment_content), false);
-            backPressed = System.currentTimeMillis();
+            replaceFragment(new MenuFragment());
         }
     }
 
@@ -185,7 +202,7 @@ public class GameActivity extends SoundAbstract implements
 
     private void addFragment(final Fragment fragment) {
         currentFragment = fragment;
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_content, fragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_content, fragment).addToBackStack(null).commit();
     }
 
     private void replaceFragment(final Fragment fragment) {
@@ -217,9 +234,9 @@ public class GameActivity extends SoundAbstract implements
     @Override
     public final void flipFragment(final int gameMode) {
         currentMode = gameMode;
-        if (gameMode == Constant.MODE_BACK_PRESSED) {
-            onBackPressed();
-        } else if (gameMode == Constant.MODE_MENU) {
+//        if (gameMode == Constant.MODE_BACK_PRESSED) {
+//            onBackPressed();
+        if (gameMode == Constant.MODE_MENU) {
             replaceFragment(new MenuFragment());
         } else if (gameMode == Constant.MODE_SINGLE_PLAYER) {
             replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(), false, GameUtility.mpc.name != null ? GameUtility.mpc.name : "Du")));
@@ -241,11 +258,13 @@ public class GameActivity extends SoundAbstract implements
             replaceFragment(new AboutFragment());
         } else if (gameMode == Constant.MODE_HELP) {
             replaceFragment(new HelpFragment());
-        } else if (gameMode == Constant.MODE_WORD_LIST) {// this is an activity, so we end the menu.. // TODO : remake as fragments...
-            getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
-            final Intent intent = new Intent(this, WordListActivity.class);
-            startActivity(intent);
-            finish();
+        } else if (gameMode == Constant.MODE_WORD_LIST) {
+            // this is an activity, so we end the menu.. // TODO : remake as fragments...
+            replaceFragment(WordListFragment.newInstance());
+//            getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
+//            final Intent intent = new Intent(this, WordListActivity.class);
+//            startActivity(intent);
+//            finish();
         } else if (gameMode == Constant.MODE_HIGHSCORE) {
             getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
             final Intent intent = new Intent(this, PlayerListActivity.class);
@@ -268,6 +287,24 @@ public class GameActivity extends SoundAbstract implements
             // when the game is done and the end game fragment needs to be shown.
             replaceFragment(EndOfGameFragment.newInstance((SaveGame) bundle.getParcelable(Constant.KEY_SAVE_GAME)));
         }
+    }
+
+    @Override
+    public void onInternetStatusChanged(final int connectionState) {
+        GameUtility.connectionStatus = connectionState;
+        // TODO : Handle future stuff like if in multiplayer game, notify about game not being able to be saved online.
+        if (connectionState == -1) {
+            GameUtility.mpc.name = null;
+        }
+        if (currentFragment instanceof MenuFragment) {
+            ((MenuFragment) currentFragment).setLoginButton(connectionState);
+        }
+    }
+
+    @Override
+    public void onInternetStatusChanged(final String connectionState) {
+        GameUtility.connectionStatusName = connectionState;
+        WindowLayout.showSnack("Forbindelse : " + connectionState, findViewById(R.id.fragment_content), true);
     }
 }
 

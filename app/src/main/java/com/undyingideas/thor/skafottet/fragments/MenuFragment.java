@@ -49,12 +49,9 @@ import com.nineoldandroids.animation.Animator;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.adapters.StartGameAdapter;
 import com.undyingideas.thor.skafottet.adapters.StartGameItem;
-import com.undyingideas.thor.skafottet.broadcastrecievers.InternetReciever;
-import com.undyingideas.thor.skafottet.broadcastrecievers.InternetRecieverData;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
 import com.undyingideas.thor.skafottet.interfaces.IGameSoundNotifier;
-import com.undyingideas.thor.skafottet.support.abstractions.FragmentOnBackClickListener;
 import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.support.firebase.observer.FireBaseLoginData;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
@@ -79,8 +76,6 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_pref
  */
 @SuppressWarnings("ConstantConditions")
 public class MenuFragment extends Fragment implements
-
-        InternetRecieverData.InternetRecieverInterface,
         FireBaseLoginData.FirebaseLoginResponse {
 
     private static final int BUTTON_COUNT = 8;
@@ -126,7 +121,6 @@ public class MenuFragment extends Fragment implements
 
 
     /* observer data receiving classes */
-    private InternetRecieverData connectionObserver;
     private FireBaseLoginData fireBaseLoginData;
 
 
@@ -174,20 +168,12 @@ public class MenuFragment extends Fragment implements
 
         /* configure callback observer interfaces data classes */
         fireBaseLoginData = new FireBaseLoginData(this);
-        connectionObserver = new InternetRecieverData(this);
-        InternetReciever.addObserver(connectionObserver);
 
         return root;
     }
 
     @Override
     public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
-        final View v = getView();
-        if (v != null) {
-            v.setFocusableInTouchMode(true);
-            v.requestFocus();
-            v.setOnKeyListener(new FragmentOnBackClickListener(iFragmentFlipper, Constant.MODE_BACK_PRESSED));
-        }
         registerSensor();
         super.onViewCreated(view, savedInstanceState);
     }
@@ -199,7 +185,6 @@ public class MenuFragment extends Fragment implements
         textUpdateHandler = new TextUpdateHandler(this);
         textUpdateHandler.post(textUpdateRunner);
         showAll();
-
         super.onResume();
     }
 
@@ -234,8 +219,6 @@ public class MenuFragment extends Fragment implements
         }
         iFragmentFlipper = null;
         iGameSoundNotifier = null;
-        InternetReciever.removeObserver(connectionObserver);
-        connectionObserver = null;
         super.onDetach();
     }
 
@@ -269,7 +252,7 @@ public class MenuFragment extends Fragment implements
      */
     public void showAll() {
         Log.d("login showall", String.valueOf(mpc.name == null));
-        setLoginButton();
+        setLoginButton(GameUtility.connectionStatus);
         YoYo.with(Techniques.FadeIn).duration(1000).withListener(new EnterAnimatorHandler(this)).playOn(title);
         for (final ImageView button : buttons) {
             button.setClickable(true);
@@ -355,7 +338,7 @@ public class MenuFragment extends Fragment implements
             WindowLayout.showSnack("Kunne ikke logge på.", sf, true);
         }
         buttons[BUTTON_LOGIN_OUT].setTag(result);
-        setLoginButton();
+        setLoginButton(GameUtility.connectionStatus);
     }
 
 
@@ -795,33 +778,10 @@ public class MenuFragment extends Fragment implements
         }
     }
 
-    @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
-    @Override
-    public void onInternetStatusChanged(final int connectionState) {
-        GameUtility.connectionStatus = connectionState;
-        if (connectionState > -1) {
-            // there is internet
-            setLoginButton();
-        } else {
-            // nope, no connection!
-            mpc.name = null;
-            setLoginButton();
-        }
-    }
-
-
-    @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
-    @Override
-    public void onInternetStatusChanged(final String connectionState) {
-        GameUtility.connectionStatusName = connectionState;
-        // string version... could be displayed along the way..
-        WindowLayout.showSnack(connectionState, textView_buttom, true);
-    }
-
-    private void setLoginButton() {
+    public void setLoginButton(final int connectionStatus) {
         /* make sure the right button is set for the login/logout status */
         if (buttons[BUTTON_LOGIN_OUT] != null) { // guard for when application first comes into foreground
-            if (GameUtility.connectionStatus > -1) {
+            if (connectionStatus > -1) {
                 buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable((boolean) buttons[BUTTON_LOGIN_OUT].getTag() ? loginButtons[1] : loginButtons[0]));
             } else {
                 buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(loginButtons[0]));

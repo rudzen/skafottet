@@ -48,8 +48,6 @@ public class CreateLobbyFragment extends Fragment {
     private WordTitleLocalAdapter wordTitleAdapter;
     private Runnable updater;
 
-
-
     @Nullable
     private OnCreateLobbyFragmentInteractionListener onCreateLobbyFragmentInteractionListener;
     @Nullable
@@ -96,7 +94,6 @@ public class CreateLobbyFragment extends Fragment {
 
         return root;
     }
-
 
     @Override
     public void onAttach(final Context context) {
@@ -239,7 +236,6 @@ public class CreateLobbyFragment extends Fragment {
                 playerAdapter.notifyDataSetChanged();
                 GameUtility.s_preferences.putObject(KEY_LAST_PLAYER_LIST, players);
             }
-//            setProgressListener.setProgressBar(false);
         }
     }
 }
