@@ -17,7 +17,6 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="horizontal">
@@ -36,32 +35,33 @@
             app:popupTheme="@style/AppTheme.PopupOverlay"
             />
 
-        <asia.ivity.android.marqueeview.MarqueeView
-            android:id="@+id/game_marqueeView"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            >
+        <!--<asia.ivity.android.marqueeview.MarqueeView-->
+            <!--android:id="@+id/game_marqueeView"-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:visibility="gone"-->
+            <!-->-->
 
-            <TextView
-                android:id="@+id/game_text_view_marq"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do."
-                android:visibility="gone"
-                tools:ignore="HardcodedText"/>
-        </asia.ivity.android.marqueeview.MarqueeView>
+            <!--<TextView-->
+                <!--android:id="@+id/game_text_view_marq"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:ellipsize="end"-->
+                <!--android:singleLine="true"-->
+                <!--android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do."-->
+                <!--android:visibility="gone"-->
+                <!--tools:ignore="HardcodedText"/>-->
+            <!-- -->
+        <!--</asia.ivity.android.marqueeview.MarqueeView>-->
 
-        <ProgressBar
-            android:id="@+id/topProgressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:background="@android:color/black"
-            android:indeterminate="true"
-            android:visibility="gone"/>
+        <!--<ProgressBar-->
+            <!--android:id="@+id/topProgressBar"-->
+            <!--style="?android:attr/progressBarStyleHorizontal"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="5dp"-->
+            <!--android:background="@android:color/black"-->
+            <!--android:indeterminate="true"-->
+            <!--android:visibility="gone"/>-->
 
     </android.support.design.widget.AppBarLayout>
 </LinearLayout>

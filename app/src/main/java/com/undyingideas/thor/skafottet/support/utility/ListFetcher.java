@@ -47,7 +47,6 @@ public final class ListFetcher {
 
     public static Handler listHandler = new Handler();
     public static Runnable listSaver;
-    private static Object syncer = new Object();
 
     private static byte[] compressWordList(final WordController wordController) {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
