@@ -29,6 +29,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -765,9 +766,11 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
         /* make sure the right button is set for the login/logout status */
         if (buttons[BUTTON_LOGIN_OUT] != null) { // guard for when application first comes into foreground
             if (connectionStatus > -1) {
-                buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable((boolean) buttons[BUTTON_LOGIN_OUT].getTag() ? loginButtons[1] : loginButtons[0]));
+                buttons[BUTTON_LOGIN_OUT].setBackground(ContextCompat.getDrawable(getContext(), (boolean) buttons[BUTTON_LOGIN_OUT].getTag() ? loginButtons[1] : loginButtons[0]));
+//                buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable((boolean) buttons[BUTTON_LOGIN_OUT].getTag() ? loginButtons[1] : loginButtons[0]));
             } else {
-                buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(loginButtons[0]));
+                buttons[BUTTON_LOGIN_OUT].setBackground(ContextCompat.getDrawable(getContext(), loginButtons[0]));
+//                buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(loginButtons[0]));
                 mpc.name = null;
             }
             YoYo.with(Techniques.Pulse).duration(300).playOn(buttons[BUTTON_LOGIN_OUT]);

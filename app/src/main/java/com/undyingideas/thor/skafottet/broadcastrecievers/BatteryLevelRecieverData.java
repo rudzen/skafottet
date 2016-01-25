@@ -88,11 +88,11 @@ public final class BatteryLevelRecieverData extends WeakReferenceHolder<BatteryL
      * Setter for connection state, this is invokes through the reciever.
      * @param newData The connection state of the system
      */
-    public final void setData(final BatteryDTO newData) {
+    public void setData(final BatteryDTO newData) {
         data = newData;
     }
 
-    public final BatteryDTO getData() {
+    public BatteryDTO getData() {
         return data;
     }
 
@@ -100,9 +100,9 @@ public final class BatteryLevelRecieverData extends WeakReferenceHolder<BatteryL
      * Sets the keepInReciever feature
      * @param newValue If true, it will not be removed from the internet reciever.
      */
-    public final void setKeepInReciever(final boolean newValue) {
+    public void setKeepInReciever(final boolean newValue) {
         keepInReciever = newValue;
     }
 
-    public final boolean isKeepInReciever() { return keepInReciever; }
+    public boolean isKeepInReciever() { return keepInReciever; }
 }

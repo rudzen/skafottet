@@ -16,9 +16,7 @@
 #   public *;
 #}
 
-# picasso
--dontwarn com.squareup.okhttp.**
-
+-dontwarn
 -optimizationpasses 10
 -dontusemixedcaseclassnames
 -dontskipnonpubliclibraryclasses
@@ -33,12 +31,13 @@
 -keep public class * extends android.content.ContentProvider
 -keep public class * extends android.app.backup.BackupAgentHelper
 -keep public class * extends android.preference.Preference
--keep public class com.android.vending.licensing.ILicensingService
+
+#-keep public class com.android.vending.licensing.ILicensingService
 
 #keep all classes that might be used in XML layouts
 -keep public class * extends android.view.View
 -keep public class * extends android.app.Fragment
--keep public class * extends android.support.v4.Fragment
+-keep public class * extends android.support.v4.app.Fragment
 
 
 #keep all public and protected methods that could be used by java reflection

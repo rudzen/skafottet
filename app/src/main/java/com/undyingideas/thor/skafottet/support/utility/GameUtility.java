@@ -114,7 +114,7 @@ public abstract class GameUtility {
         return connectionStatus;
     }
 
-    public static void setConnectionStatus(int connectionStatus) {
+    public static void setConnectionStatus(final int connectionStatus) {
         GameUtility.connectionStatus = connectionStatus;
     }
 
@@ -122,7 +122,7 @@ public abstract class GameUtility {
         return connectionStatusName;
     }
 
-    public static void setConnectionStatusName(String connectionStatusName) {
+    public static void setConnectionStatusName(final String connectionStatusName) {
         GameUtility.connectionStatusName = connectionStatusName;
     }
 }

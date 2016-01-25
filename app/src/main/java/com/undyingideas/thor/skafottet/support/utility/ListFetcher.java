@@ -71,7 +71,7 @@ public final class ListFetcher {
                 try {
                     gzipOut.close();
                     gzipOut = null;
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     e.printStackTrace();
                 }
             }

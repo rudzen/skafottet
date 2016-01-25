@@ -9,7 +9,6 @@ import java.util.ArrayList;
 public class S2 {
     public V2 o; // Origo
     private static final M2 F; // Flip
-    private final M2 S;
     private final M2 T; // Scale, Transform
     public Cube cube;
     public ArrayList<V2> point;
@@ -20,8 +19,8 @@ public class S2 {
 
     public S2(final float sx, final float sy, final float ox, final float oy) {
         o = new V2(ox, oy);
-        S = new M2(sx, 0, 0, sy);
-        T = F.mul(S);
+        M2 s = new M2(sx, 0, 0, sy);
+        T = F.mul(s);
     }
 
     public V2 transform(final V2 v) {

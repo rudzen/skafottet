@@ -17,7 +17,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FontUtils {
+public final class FontUtils {
 
     /* ********************************************** */
     /*              The best way!... */
