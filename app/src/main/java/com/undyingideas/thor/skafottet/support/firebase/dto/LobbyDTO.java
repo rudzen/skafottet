@@ -70,7 +70,7 @@ public class LobbyDTO implements Parcelable {
         }
     }
 
-    protected LobbyDTO(final Parcel in) {
+    private LobbyDTO(final Parcel in) {
         word = in.readString();
         final int size = in.readInt();
         for (int i = 0; i < size; i++) {

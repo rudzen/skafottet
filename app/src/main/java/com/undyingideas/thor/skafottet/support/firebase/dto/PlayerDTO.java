@@ -32,7 +32,7 @@ public class PlayerDTO implements Parcelable {
         this(name, 0, new ArrayList<String>(), password);
     }
 
-    public PlayerDTO(final String name, final int score, final ArrayList<String> gameList, final String password) {
+    private PlayerDTO(final String name, final int score, final ArrayList<String> gameList, final String password) {
         this.name = name;
         this.score = score;
         this.gameList = gameList;
@@ -69,7 +69,7 @@ public class PlayerDTO implements Parcelable {
         dest.writeStringList(gameList);
     }
 
-    protected PlayerDTO(final Parcel in) {
+    private PlayerDTO(final Parcel in) {
         name = in.readString();
         password = in.readString();
         score = in.readInt();

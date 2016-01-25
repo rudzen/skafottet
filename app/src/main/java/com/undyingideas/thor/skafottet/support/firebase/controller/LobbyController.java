@@ -27,7 +27,7 @@ public class LobbyController {
     private final Firebase ref;
     private final Firebase lobbyRef;
     private final MultiplayerController mpcRef;
-    public HashMap<String, LobbyDTO> lobbyList = new HashMap<>();
+    public final HashMap<String, LobbyDTO> lobbyList = new HashMap<>();
 
     public LobbyController(final MultiplayerController mp, final Firebase ref){
         this.ref = ref;

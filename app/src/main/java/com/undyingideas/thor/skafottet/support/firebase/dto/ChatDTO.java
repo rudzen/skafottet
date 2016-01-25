@@ -22,7 +22,7 @@ package com.undyingideas.thor.skafottet.support.firebase.dto;
  * Test chat dto
  * @author rudz
  */
-public class ChatDTO {
+class ChatDTO {
     private String name;
     private String text;
 

@@ -9,9 +9,9 @@ import android.graphics.Paint;
  *
  * @author Theis'
  */
-public class Rope {
+class Rope {
 
-    V3[][] rope = new V3[2][5];
+    private final V3[][] rope = new V3[2][5];
 
     public Rope(final V3 up1, final V3 up2, final V3 down1, final V3 down2) {
         rope[0][0] = up1;

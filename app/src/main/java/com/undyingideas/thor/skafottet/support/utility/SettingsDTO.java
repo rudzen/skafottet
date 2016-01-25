@@ -28,4 +28,6 @@ public final class SettingsDTO {
     public boolean PREFS_SFX;
     public boolean PREFS_BLOOD;
 
+    public boolean PREFS_HEPTIC;
+
 }

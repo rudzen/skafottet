@@ -147,10 +147,18 @@ public class SplashActivity extends AppCompatActivity {
                 s_preferences = new TinyDB(getApplicationContext());
             }
 
+            s_preferences.clear();
+
             settings = new SettingsDTO();
             settings.PREFS_MUSIC = s_preferences.getBoolean(Constant.KEY_PREFS_MUSIC, true);
             settings.PREFS_SFX = s_preferences.getBoolean(Constant.KEY_PREFS_SFX, true);
             settings.PREFS_BLOOD = s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD, true);
+            settings.PREFS_HEPTIC = s_preferences.getBoolean(Constant.KEY_PREFS_HEPTIC, true);
+
+            s_preferences.putBoolean(Constant.KEY_PREFS_BLOOD, settings.PREFS_BLOOD);
+            s_preferences.putBoolean(Constant.KEY_PREFS_MUSIC, settings.PREFS_MUSIC);
+            s_preferences.putBoolean(Constant.KEY_PREFS_SFX, settings.PREFS_SFX);
+            s_preferences.putBoolean(Constant.KEY_PREFS_HEPTIC, settings.PREFS_HEPTIC);
 
             GameUtility.musicPLayIntent = new Intent(getApplicationContext(), MusicPlay.class);
 

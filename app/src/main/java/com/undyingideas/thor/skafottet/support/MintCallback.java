@@ -22,5 +22,5 @@ package com.undyingideas.thor.skafottet.support;
  *
  * @author rudz
  */
-public class MintCallback {
+class MintCallback {
 }

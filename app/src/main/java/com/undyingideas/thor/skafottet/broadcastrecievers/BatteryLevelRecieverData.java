@@ -28,7 +28,7 @@ import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
  * For use with {@link BatteryLevelReciever}.<br>
  * @author rudz
  */
-public final class BatteryLevelRecieverData extends WeakReferenceHolder<BatteryLevelRecieverData.BatteryLevelRecieveDataInterface> implements Runnable {
+final class BatteryLevelRecieverData extends WeakReferenceHolder<BatteryLevelRecieverData.BatteryLevelRecieveDataInterface> implements Runnable {
 
     /* store the destination interface as a WEAK reference, this allows the system to GC the subject
        if needed. Since it's guarded nothing will happend if the target was destroyed. */
@@ -66,7 +66,7 @@ public final class BatteryLevelRecieverData extends WeakReferenceHolder<BatteryL
      * @param batteryLevelRecieveDataInterface The object which implements the interface.
      * @param keepInReciever If true, this observer class will not be removed when executed.
      */
-    public BatteryLevelRecieverData(final BatteryLevelRecieveDataInterface batteryLevelRecieveDataInterface, final boolean keepInReciever) {
+    private BatteryLevelRecieverData(final BatteryLevelRecieveDataInterface batteryLevelRecieveDataInterface, final boolean keepInReciever) {
         super(batteryLevelRecieveDataInterface);
         this.keepInReciever = keepInReciever;
     }

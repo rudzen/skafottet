@@ -43,7 +43,7 @@ public class WordListController {
         }
     }
 
-    public static void saveList() {
+    private static void saveList() {
         GameUtility.s_preferences.putObject(Constant.KEY_WORDS_FIREBASE, wordList);
     }
 

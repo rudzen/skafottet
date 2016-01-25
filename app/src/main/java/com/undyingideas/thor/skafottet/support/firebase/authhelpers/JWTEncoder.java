@@ -23,7 +23,7 @@ import javax.crypto.spec.SecretKeySpec;
  *
  * @author vikrum
  */
-public final class JWTEncoder {
+final class JWTEncoder {
 
     private static final String TOKEN_SEP = ".";
     private static final Charset UTF8_CHARSET = Charset.forName("UTF-8");

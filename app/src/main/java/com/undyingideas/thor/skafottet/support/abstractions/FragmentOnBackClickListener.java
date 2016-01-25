@@ -37,9 +37,9 @@ import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
  *
  * @author rudz
  */
-public class FragmentOnBackClickListener extends WeakReferenceHolder<IFragmentFlipper> implements View.OnKeyListener {
+class FragmentOnBackClickListener extends WeakReferenceHolder<IFragmentFlipper> implements View.OnKeyListener {
 
-    protected final int newMode;
+    private final int newMode;
 
     public FragmentOnBackClickListener(final IFragmentFlipper iFragmentFlipper, final int newMode) {
         super(iFragmentFlipper);

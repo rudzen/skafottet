@@ -4,8 +4,8 @@ package com.undyingideas.thor.skafottet.views.camera;
 public class V2 {
     public float x, y;
 
-    public static V2 i;
-    public static V2 j;
+    private static final V2 i;
+    private static final V2 j;
 
     static {
         i = new V2(1, 0);
@@ -25,11 +25,11 @@ public class V2 {
         return new V2(x - v.x, y - v.y);
     }
 
-    public V2 mul(final float k) {
+    private V2 mul(final float k) {
         return new V2(x * k, y * k);
     }
 
-    public V2 mul(final V2 v) {
+    private V2 mul(final V2 v) {
         return new V2(x * v.x, y * v.y);
     }
 
@@ -47,7 +47,7 @@ public class V2 {
         return mul(v.mul((float) 1.0 / v.length()));
     }
 
-    public float length() {
+    private float length() {
         return (float) Math.sqrt(x * x + y * y);
     }
 
@@ -82,7 +82,7 @@ public class V2 {
         return new V2(x / len, y / len);
     }
 
-    public float scal(final V2 v) {
+    private float scal(final V2 v) {
         return x * y + v.x * v.y;
     }
 

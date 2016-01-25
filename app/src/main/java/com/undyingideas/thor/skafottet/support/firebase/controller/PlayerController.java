@@ -32,7 +32,7 @@ public class PlayerController {
 
     private final Firebase ref;
     private final MultiplayerController mpcRef;
-    public HashMap<String, PlayerDTO> playerList = new HashMap<>();
+    public final HashMap<String, PlayerDTO> playerList = new HashMap<>();
 
     public PlayerController(final MultiplayerController mp, final Firebase ref) {
         this.ref = ref;

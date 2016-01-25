@@ -252,7 +252,7 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
     /**
      * Re-displays the menu from scratch
      */
-    public void showAll() {
+    private void showAll() {
         Log.d("login showall", String.valueOf(mpc.name == null));
         setLoginButton(GameUtility.getConnectionStatus());
         YoYo.with(Techniques.FadeIn).duration(1000).withListener(new EnterAnimatorHandler(this)).playOn(title);
@@ -307,13 +307,13 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
             listViewItems.setAdapter(adapter);
             listViewItems.setOnItemClickListener(new OnStartGameItemClickListener(this));
 
-            WindowLayout.md = new MaterialDialog.Builder(getActivity())
+            WindowLayout.setMd(new MaterialDialog.Builder(getActivity())
                     .customView(listViewItems, false)
                     .backgroundColor(Color.BLACK)
                     .cancelable(true)
                     .cancelListener(new NewGameCancelListener())
                     .title("Start spil")
-                    .show();
+                    .show());
         }
     }
 
@@ -336,11 +336,11 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
     @Override
     public void onLoginResponse(final boolean result) {
         if (result) {
-            WindowLayout.s_LoadToast.success();
+            WindowLayout.getLoadToast().success();
             GameUtility.me.setName(mpc.name);
             WindowLayout.showSnack("Du er nu logged ind som " + mpc.name, sf, true);
         } else {
-            WindowLayout.s_LoadToast.error();
+            WindowLayout.getLoadToast().error();
             GameUtility.me.setName("Mig");
             WindowLayout.showSnack("Kunne ikke logge på.", sf, true);
         }
@@ -408,7 +408,7 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
             // TODO : Call back to act to play the sound.
             final MenuFragment menuFragment = weakReference.get();
             if (menuFragment != null) {
-                WindowLayout.md.dismiss();
+                WindowLayout.getMd().dismiss();
                 Log.d(TAG, "New game mode selected : " + view.getTag());
                 menuFragment.endMenu((int) view.getTag(), menuFragment.buttons[BUTTON_PLAY]);
             }
@@ -598,7 +598,7 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
         public void onClick(final View v) {
             final MenuFragment menuFragment = weakReference.get();
             if (menuFragment != null) {
-                WindowLayout.md = new MaterialDialog.Builder(menuFragment.getActivity())
+                WindowLayout.setMd(new MaterialDialog.Builder(menuFragment.getActivity())
                         .customView(R.layout.login, false)
                         .cancelable(true)
                         .positiveText("Ok")
@@ -606,7 +606,7 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
                         .onPositive(new OnLoginClickResponse(menuFragment))
                         .onNegative(new QuitDialogCallback(menuFragment))
                         .title(R.string.login)
-                        .show();
+                        .show());
             }
         }
     }
@@ -632,7 +632,7 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
                     /* let's inflate the dialog view... */
                     final View dialogCustomView = dialog.getCustomView();
                     if (dialogCustomView != null) {
-                        WindowLayout.s_LoadToast.show();
+                        WindowLayout.getLoadToast().show();
                         final EditText editTextTitle = (EditText) dialogCustomView.findViewById(R.id.loginName);
                         final EditText editTextURL = (EditText) dialogCustomView.findViewById(R.id.loginPass);
                         final String user = editTextTitle.getText().toString().trim();
@@ -641,7 +641,7 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
                         final boolean isChecked = check.isChecked();
 
                         if (isValid(user, pass)) {
-                            WindowLayout.s_LoadToast.show();
+                            WindowLayout.getLoadToast().show();
                             if (isChecked) {
                                 GameUtility.mpc.pc.createPlayer(user, pass, menuFragment.fireBaseLoginData);
                             } else {
@@ -777,7 +777,7 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
         }
     }
 
-    public void setLoginButton() {
+    private void setLoginButton() {
         setLoginButton(GameUtility.getConnectionStatus());
     }
 

@@ -43,9 +43,9 @@ public class WordItem implements Parcelable, Serializable {
     private ArrayList<String> words = new ArrayList<>();
 
     /* for the serialization */
-    public WordItem() { }
+    private WordItem() { }
 
-    public WordItem(final String title, final String url, final boolean dlNow) {
+    private WordItem(final String title, final String url, final boolean dlNow) {
         this();
         this.title = title;
         this.url = url;
@@ -175,7 +175,7 @@ public class WordItem implements Parcelable, Serializable {
         dest.writeStringList(words);
     }
 
-    protected WordItem(final Parcel in) {
+    private WordItem(final Parcel in) {
         title = in.readString();
         url = in.readString();
         dlNow = in.readByte() != 0;

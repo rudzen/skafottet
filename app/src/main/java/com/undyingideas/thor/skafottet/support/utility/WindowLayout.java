@@ -42,12 +42,11 @@ public abstract class WindowLayout {
 
     public static final Point screenDimension = new Point();
 
-    public static LoadToast s_LoadToast;
+    private static LoadToast loadToast;
 
-    public static MaterialDialog md;
+    private static MaterialDialog md;
 
     private static Snackbar snackbar;
-
 
     /**
      * Hides the statusbar of the window
@@ -74,7 +73,7 @@ public abstract class WindowLayout {
      * @param v The root view
      * @param brief if true, lenght is short, otherwise lenght is long.
      */
-    public static void showSnack(final CharSequence text, final CharSequence buttonText, final View v, final boolean brief) {
+    private static void showSnack(final CharSequence text, final CharSequence buttonText, final View v, final boolean brief) {
         // convoluted, but neccesary.
         snackbar = Snackbar.make(v, text,  brief ? Snackbar.LENGTH_SHORT : Snackbar.LENGTH_LONG);
         snackbar.setAction(buttonText, new OnSnackBarClick());
@@ -88,6 +87,22 @@ public abstract class WindowLayout {
 
     public static void showSnack(final CharSequence text, final View v, final boolean brief) {
         showSnack(text, "Luk", v, brief);
+    }
+
+    public static LoadToast getLoadToast() {
+        return loadToast;
+    }
+
+    public static void setLoadToast(final LoadToast loadToast) {
+        WindowLayout.loadToast = loadToast;
+    }
+
+    public static MaterialDialog getMd() {
+        return md;
+    }
+
+    public static void setMd(MaterialDialog md) {
+        WindowLayout.md = md;
     }
 
     private static class OnSnackBarClick implements View.OnClickListener {

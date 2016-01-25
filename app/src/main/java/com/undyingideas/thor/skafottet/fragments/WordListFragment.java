@@ -97,7 +97,7 @@ public class WordListFragment extends Fragment implements
 
     private ListView listRemote, listLocal;
 
-    public MaterialDialog md; // for add list
+    private MaterialDialog md; // for add list
 
     private WordTitleLocalAdapter adapterLocal;
     private WordTitleRemoteAdapter adapterRemote;
@@ -188,11 +188,11 @@ public class WordListFragment extends Fragment implements
         listRemote.setOnItemClickListener(new ListRemoteTitleClickListener());
         listLocal.setOnItemClickListener(new ListLocalTitleClickListener());
 
-        WindowLayout.s_LoadToast = new LoadToast(getContext());
-        WindowLayout.s_LoadToast.setProgressColor(Color.BLACK);
-        WindowLayout.s_LoadToast.setTextColor(Color.WHITE);
-        WindowLayout.s_LoadToast.setBackgroundColor(Color.RED);
-        WindowLayout.s_LoadToast.setTranslationY(WindowLayout.screenDimension.y / 3);
+        WindowLayout.setLoadToast(new LoadToast(getContext()));
+        WindowLayout.getLoadToast().setProgressColor(Color.BLACK);
+        WindowLayout.getLoadToast().setTextColor(Color.WHITE);
+        WindowLayout.getLoadToast().setBackgroundColor(Color.RED);
+        WindowLayout.getLoadToast().setTranslationY(WindowLayout.screenDimension.y / 3);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
 
@@ -295,7 +295,7 @@ public class WordListFragment extends Fragment implements
 
     private boolean updateCurrentList() {
         if (s_wordController.isLocal() && s_wordController.getIndexLocale() > 0) {
-            WindowLayout.s_LoadToast.show();
+            WindowLayout.getLoadToast().show();
             new WordListDownloader(this, s_wordController.getLocalWords().get(s_wordController.getIndexLocale()).getTitle(), s_wordController.getLocalWords().get(s_wordController.getIndexLocale()).getUrl()).execute();
             return true;
         }
@@ -370,7 +370,7 @@ public class WordListFragment extends Fragment implements
         Log.d("AddListFinished", "Title : " + title);
         Log.d("AddListFinished", "URL   : " + url);
 
-        WindowLayout.s_LoadToast.show();
+        WindowLayout.getLoadToast().show();
 
         new WordListDownloader(this, title, url).execute();
     }

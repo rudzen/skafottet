@@ -38,8 +38,8 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
 public class WordListAdapter extends BaseAdapter implements StickyListHeadersAdapter, SectionIndexer {
 
-    protected static final int[] INTS = new int[0];
-    protected static final Character[] CHARACTERS = new Character[0];
+    private static final int[] INTS = new int[0];
+    private static final Character[] CHARACTERS = new Character[0];
 //    private final Context mContext;
     private ArrayList<String> mItems;
     private int[] mSectionIndices;

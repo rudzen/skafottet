@@ -21,28 +21,28 @@ import static android.view.MotionEvent.ACTION_UP;
 @SuppressWarnings("ClassWithTooManyFields")
 public class Hangman3dView extends View {
 
-    public final static String TAG = "hangman3dview";
+    private final static String TAG = "hangman3dview";
 
     private float mPreviousX, mPreviousY;
     private static final float TOUCH_SCALE_FACTOR = 2f / 180;
-    int framerate = 25;
+    private final int framerate = 25;
     int delay = 1000 / framerate;
 
     // Simulate time
     double ts;
     double t;     // simulation time in sec.
     // App
-    Camera S = new Camera(150, 150, 500, 600);
+    private Camera S = new Camera(150, 150, 500, 600);
     V3 u = new V3(0, 1, 1).unit();
-    double phi = Math.PI / 100;
+    private final double phi = Math.PI / 100;
     M3 Rz = M3.inverse.add(M3.sZ.mul((float) Math.sin(phi))).add(M3.sZ.mul(M3.sZ).mul((float) (1 - Math.cos(phi))));
 
-    V3 c = new V3(0, 0, 3);
-    Cube[] gallow;
-    Cube[] body;
-    Rope[] rope;
-    int errors;
-    Paint p = new Paint();
+    private final V3 c = new V3(0, 0, 3);
+    private Cube[] gallow;
+    private Cube[] body;
+    private Rope[] rope;
+    private int errors;
+    private final Paint p = new Paint();
 
     public Hangman3dView(final Context context) {
         super(context);
@@ -101,10 +101,14 @@ public class Hangman3dView extends View {
         return true;
     }
     int x1, x2, y1, y2;
-    float mPreviousX1, mPreviousX2, mPreviousY1,mPreviousY2;
-    static final float ZOOM_SCALE_FACTOR = 1f / 180;
-    boolean startleft, startdown;
-    public void multiTouch(final MotionEvent e) {
+    private float mPreviousX1;
+    private float mPreviousX2;
+    private float mPreviousY1;
+    private float mPreviousY2;
+    private static final float ZOOM_SCALE_FACTOR = 1f / 180;
+    private boolean startleft;
+    private boolean startdown;
+    private void multiTouch(final MotionEvent e) {
         final float x1 = e.getX(0), y1 = e.getY(0), x2 = e.getX(1), y2 = e.getY(1);
         switch (e.getAction()) {
             case ACTION_MOVE:
@@ -227,7 +231,7 @@ public class Hangman3dView extends View {
 
     }
 
-    boolean firstrun = true;
+    private boolean firstrun = true;
 
     @Override
     protected void onDraw(final Canvas canvas) {

@@ -2,7 +2,15 @@ package com.undyingideas.thor.skafottet.views.camera;
 
 public class M3 {
 
-    public float a, b, c, d, e, f, g, h, i;
+    private final float a;
+    private final float b;
+    private final float c;
+    private final float d;
+    private final float e;
+    private final float f;
+    private final float g;
+    private final float h;
+    private final float i;
 
     public final static M3 inverse;
     public final static M3 sX;

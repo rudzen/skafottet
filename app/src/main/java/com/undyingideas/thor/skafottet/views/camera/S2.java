@@ -6,8 +6,8 @@ import android.graphics.Paint;
 import java.util.ArrayList;
 
 
-public class S2 {
-    public V2 o; // Origo
+class S2 {
+    private final V2 o; // Origo
     private static final M2 F; // Flip
     private final M2 T; // Scale, Transform
     public Cube cube;
@@ -23,7 +23,7 @@ public class S2 {
         T = F.mul(s);
     }
 
-    public V2 transform(final V2 v) {
+    private V2 transform(final V2 v) {
         return T.mul(v).add(o);
     }
 

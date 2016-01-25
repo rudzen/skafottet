@@ -24,7 +24,7 @@ import com.firebase.client.AuthData;
  *
  * @author rudz
  */
-public class UserData {
+class UserData {
 
     private static final String KEY_USER_DATA = "kuser_data";
 

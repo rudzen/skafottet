@@ -41,7 +41,7 @@ public class LobbyPlayerStatus implements Parcelable {
         dest.writeInt(score);
     }
 
-    protected LobbyPlayerStatus(final Parcel in) {
+    LobbyPlayerStatus(final Parcel in) {
         name = in.readString();
         score = in.readInt();
     }

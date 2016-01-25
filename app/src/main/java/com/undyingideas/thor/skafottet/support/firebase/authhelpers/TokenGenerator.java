@@ -19,7 +19,7 @@ import java.util.Map;
  *
  * @author vikrum
  */
-public class TokenGenerator {
+class TokenGenerator {
 
     private static final int TOKEN_VERSION = 0;
 
@@ -50,7 +50,7 @@ public class TokenGenerator {
      * @param options
      * @return
      */
-    public String createToken(final Map<String, Object> data, final TokenOptions options) {
+    private String createToken(final Map<String, Object> data, final TokenOptions options) {
         if (isaBoolean(data, options)) {
             throw new IllegalArgumentException("TokenGenerator.createToken: data is empty and no options are set.  This token will have no effect on Firebase.");
         }

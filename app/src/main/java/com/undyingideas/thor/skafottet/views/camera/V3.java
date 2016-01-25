@@ -41,7 +41,7 @@ public class V3 {
         return new V3(x * v.x, y * v.y, z * v.z);
     }
 
-    public float length() {
+    private float length() {
         return (float) Math.sqrt(x * x + y * y + z * z);
     }
 

@@ -109,7 +109,7 @@ public final class ListFetcher {
         return null;
     }
 
-    public static boolean saveWordLists(final WordController wordController, final Context context) {
+    private static boolean saveWordLists(final WordController wordController, final Context context) {
         try {
             final byte[] comp = compressWordList(wordController);
             final FileOutputStream outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);

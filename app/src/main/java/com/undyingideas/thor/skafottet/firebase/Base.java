@@ -28,11 +28,11 @@ import com.undyingideas.thor.skafottet.support.utility.Constant;
  * Base class that holds the basic stuff for firebase.
  * @author rudz
  */
-public final class Base {
+final class Base {
 
     @SuppressWarnings("StaticVariableOfConcreteClass")
-    public static MultiplayerController mpc;
-    public static Firebase firebase;
+    private static MultiplayerController mpc;
+    private static Firebase firebase;
 
     public static void initFb(final Context context) {
         Firebase.setAndroidContext(context);

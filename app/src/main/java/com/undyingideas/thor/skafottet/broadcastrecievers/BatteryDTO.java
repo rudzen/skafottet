@@ -126,7 +126,7 @@ public class BatteryDTO implements Parcelable {
         dest.writeInt(voltage);
     }
 
-    protected BatteryDTO(final Parcel in) {
+    private BatteryDTO(final Parcel in) {
         health = in.readInt();
         iconSmall = in.readInt();
         level = in.readInt();

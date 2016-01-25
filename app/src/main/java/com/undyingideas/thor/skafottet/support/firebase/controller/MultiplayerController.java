@@ -28,15 +28,15 @@ import java.util.List;
 public class MultiplayerController {
     @Nullable
     public LobbyController lc;
-    public PlayerController pc;
-    public WordListController wlc;
+    public final PlayerController pc;
+    private final WordListController wlc;
     private final Firebase ref;
     @Nullable
     public String name;
     private Handler updateHandler;
     private Runnable playerUpdater;
 
-    public MultiplayerController(final Firebase ref, final Runnable playerUpdater) {
+    private MultiplayerController(final Firebase ref, final Runnable playerUpdater) {
         this.ref = ref;
         pc = new PlayerController(this, ref);
         lc = new LobbyController(this, ref);

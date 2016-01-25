@@ -36,11 +36,11 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     public static final String ACTION_PLAY = "SKAFOTMUSIK";
     public static final String ACTION_STOP = "STOPSKAFOTT";
     private static final int music = R.raw.insidious;
-    private static MusicPlay mInstance;
+    private static MusicPlay musicPlayInstance;
 
     private MediaPlayer mMediaPlayer;
 
-    private static byte STATE;
+    private byte state;
     private static final byte STATE_RETRIEVING = 0;
     private static final byte STATE_STOPPED = 1;
     private static final byte STATE_PREPARING = 2;
@@ -49,7 +49,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
 
     @Override
     public void onCreate() {
-        mInstance = this;
+        musicPlayInstance = this;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
                 mMediaPlayer.setOnErrorListener(this);
                 mMediaPlayer.setLooping(true);
                 mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                Foreground.get(mInstance).addListener(this);
+                Foreground.get(musicPlayInstance).addListener(this);
                 initMediaPlayer();
             } else if (intent.getAction().equals(ACTION_STOP)) {
                 if (isPlaying()) {
@@ -98,7 +98,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
         } catch (final IllegalStateException | IOException e) {
             e.printStackTrace();
         }
-        STATE = STATE_PREPARING;
+        state = STATE_PREPARING;
     }
 
     @Override
@@ -116,48 +116,48 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     public void onDestroy() {
         if (mMediaPlayer != null) {
             mMediaPlayer.release();
-            Foreground.get(mInstance).removeListener(this);
+            Foreground.get(musicPlayInstance).removeListener(this);
         }
-        STATE = STATE_RETRIEVING;
+        state = STATE_RETRIEVING;
     }
 
     public MediaPlayer getMediaPlayer() {
         return mMediaPlayer;
     }
 
-    public void pauseMusic() {
-        if (STATE == STATE_PLAYING) {
+    private void pauseMusic() {
+        if (state == STATE_PLAYING) {
             mMediaPlayer.pause();
-            STATE = STATE_PAUSED;
+            state = STATE_PAUSED;
         }
     }
 
-    public void startMusic() {
+    private void startMusic() {
         try {
             mMediaPlayer.start();
-            STATE = STATE_PLAYING;
+            state = STATE_PLAYING;
         } catch (final Exception e) {
             e.printStackTrace();
-            STATE = STATE_STOPPED;
+            state = STATE_STOPPED;
         }
-//        if (STATE != STATE_PREPARING && STATE != STATE_RETRIEVING) {
+//        if (state != STATE_PREPARING && state != STATE_RETRIEVING) {
 //        } else {
 //        }
     }
 
-    public void stopMusic() {
-        if (STATE == STATE_PLAYING || STATE == STATE_PAUSED) {
+    private void stopMusic() {
+        if (state == STATE_PLAYING || state == STATE_PAUSED) {
             mMediaPlayer.stop();
-            STATE = STATE_STOPPED;
+            state = STATE_STOPPED;
         }
     }
 
-    public static boolean isPlaying() {
-        return STATE == STATE_PLAYING;
+    public boolean isPlaying() {
+        return state == STATE_PLAYING;
     }
 
     public static MusicPlay getInstance() {
-        return mInstance;
+        return musicPlayInstance;
     }
 
     @Override

@@ -35,7 +35,7 @@ public class HelpFileDTO implements Parcelable {
         this(500);
     }
 
-    public HelpFileDTO(final int size) { helpData = new StringBuilder(size); }
+    private HelpFileDTO(final int size) { helpData = new StringBuilder(size); }
 
     public HelpFileDTO(final String helpData) {
         this.helpData = new StringBuilder(helpData.length());
@@ -54,7 +54,7 @@ public class HelpFileDTO implements Parcelable {
 
     public void addStringData(final HelpFileDTO data) { helpData.append(data.getStringData()); }
 
-    public String getStringData() { return helpData.toString(); }
+    private String getStringData() { return helpData.toString(); }
 
     public void setStringData(final StringBuilder newData) { helpData = newData; }
 
@@ -66,7 +66,7 @@ public class HelpFileDTO implements Parcelable {
     @Override
     public void writeToParcel(final Parcel dest, final int flags) { dest.writeSerializable(helpData); }
 
-    protected HelpFileDTO(final Parcel in) { helpData = (StringBuilder) in.readSerializable(); }
+    private HelpFileDTO(final Parcel in) { helpData = (StringBuilder) in.readSerializable(); }
 
     public static final Creator<HelpFileDTO> CREATOR = new HelpDTOCreator();
 

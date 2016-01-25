@@ -53,7 +53,7 @@ public class HelpFileDTO implements Parcelable {
         dest.writeInt(version);
     }
 
-    protected HelpFileDTO(final Parcel in) {
+    private HelpFileDTO(final Parcel in) {
         helpData = in.readString();
         version = in.readInt();
     }

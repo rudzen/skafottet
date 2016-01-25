@@ -46,7 +46,6 @@ import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import net.steamcrafted.loadtoast.LoadToast;
 
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_preferences;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.settings;
 
 /**
@@ -84,7 +83,7 @@ public class GameActivity extends SoundAbstract implements
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // take over the loader toast for this act..
-        WindowLayout.s_LoadToast = new LoadToast(this);
+        WindowLayout.setLoadToast(new LoadToast(this));
 
         if (getIntent() != null && getIntent().getExtras() != null) { // TODO : Figure out more direct game controlling modes..
             final Bundle bundle = getIntent().getExtras().getBundle(Constant.KEY_MODE);
@@ -105,8 +104,7 @@ public class GameActivity extends SoundAbstract implements
 
     @Override
     protected void onResume() {
-        GameUtility.settings.PREFS_MUSIC = s_preferences.getBoolean(Constant.KEY_PREFS_MUSIC, true);
-        if (settings.PREFS_MUSIC && !MusicPlay.isPlaying()) {
+        if (settings.PREFS_MUSIC) {
             GameUtility.musicPLayIntent.setAction(MusicPlay.ACTION_PLAY);
             startService(GameUtility.musicPLayIntent);
         } else {

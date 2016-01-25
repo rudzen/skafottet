@@ -50,7 +50,7 @@ public class SoundItem implements Parcelable {
         dest.writeByte(stop ? (byte) 1 : (byte) 0);
     }
 
-    protected SoundItem(final Parcel in) {
+    private SoundItem(final Parcel in) {
         id = in.readInt();
         volume = in.readFloat();
         stop = in.readByte() != 0;

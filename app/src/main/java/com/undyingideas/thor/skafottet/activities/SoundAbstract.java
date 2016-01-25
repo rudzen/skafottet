@@ -16,15 +16,17 @@
 
 package com.undyingideas.thor.skafottet.activities;
 
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Build;
 import android.support.annotation.RawRes;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.support.sfx.SoundItem;
 import com.undyingideas.thor.skafottet.support.sfx.SoundThread;
-import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 
 /**
@@ -34,10 +36,13 @@ import com.undyingideas.thor.skafottet.support.utility.GameUtility;
  * @author rudz
  */
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
-public abstract class SoundAbstract extends AppCompatActivity {
+public abstract class SoundAbstract extends AppCompatActivity implements SoundPool.OnLoadCompleteListener {
+
+    private final static String TAG = "SoundAbstract";
 
     /* sound stuff */
-    @RawRes final
+    @RawRes
+    final
     private int[] sound_raw = {
             R.raw.guess_wrong,
             R.raw.guess_right,
@@ -55,16 +60,17 @@ public abstract class SoundAbstract extends AppCompatActivity {
     private final SoundItem[] soundItems = new SoundItem[SOUND_COUNT];
 
     protected SoundThread soundThread;
+    private boolean loaded;
 
     protected void initSound() {
-        /* set up the sound stuff */
         final AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         final float actVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         final float maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         volume = actVolume / maxVolume;
-
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
-        soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
+
+        soundPool = makeSoundPool();
+        soundPool.setOnLoadCompleteListener(this);
 
         loadSounds();
 
@@ -75,16 +81,41 @@ public abstract class SoundAbstract extends AppCompatActivity {
         }
     }
 
+    @SuppressWarnings("deprecation")
+    private SoundPool makeSoundPool() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            final AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_GAME)
+                    .build();
+
+            return new SoundPool.Builder()
+                    .setMaxStreams(4)
+                    .setAudioAttributes(audioAttributes)
+                    .build();
+        } else {
+            return new SoundPool(6, AudioManager.STREAM_MUSIC, 0);
+        }
+    }
+
     @SuppressWarnings("ObjectAllocationInLoop")
-    protected void loadSounds() {
+    private void loadSounds() {
         for (int i = 0; i < SOUND_COUNT; i++) {
             soundItems[i] = new SoundItem(soundPool.load(this, sound_raw[i], 1), volume);
         }
     }
 
-    protected void playSound(final int index) {
-        if (GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_SFX)) {
-            soundThread.sounds.add(soundItems[index]);
+    void playSound(final int index) {
+        Log.d(TAG, String.valueOf(GameUtility.settings.PREFS_SFX));
+        if (GameUtility.settings.PREFS_SFX) {
+            if (loaded) {
+                soundThread.sounds.add(soundItems[index]);
+            }
         }
+    }
+
+    @Override
+    public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+        loaded = true;
     }
 }

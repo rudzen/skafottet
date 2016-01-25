@@ -113,7 +113,7 @@ public class TokenOptions implements Parcelable {
         dest.writeByte(debug ? (byte) 1 : (byte) 0);
     }
 
-    protected TokenOptions(final Parcel in) {
+    private TokenOptions(final Parcel in) {
         final long tmpExpires = in.readLong();
         expires = tmpExpires == -1 ? null : new Date(tmpExpires);
         final long tmpNotBefore = in.readLong();

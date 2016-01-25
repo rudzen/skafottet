@@ -22,6 +22,8 @@ import android.preference.PreferenceActivity;
 import android.view.MenuItem;
 
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.support.utility.Constant;
+import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 
 public class PrefsActivity extends PreferenceActivity {
 
@@ -44,13 +46,9 @@ public class PrefsActivity extends PreferenceActivity {
     public void finish() {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         startActivity(new Intent(this, GameActivity.class));
+        GameUtility.settings.PREFS_MUSIC = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_MUSIC);
+        GameUtility.settings.PREFS_SFX = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_SFX);
+        GameUtility.settings.PREFS_BLOOD = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD);
         super.finish();
-    }
-
-    @Override
-    public void onBackPressed() {
-//        startActivity(new Intent(this, MenuActivity.class));
-//        finish();
-        super.onBackPressed();
     }
 }

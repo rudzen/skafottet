@@ -28,7 +28,7 @@ import com.firebase.client.ValueEventListener;
  *
  * @author rudz
  */
-public class FireBaseValueListener implements ValueEventListener {
+class FireBaseValueListener implements ValueEventListener {
     @Override
     public void onDataChange(final DataSnapshot snapshot) {
         if (snapshot != null) {

@@ -93,7 +93,7 @@ public final class FontUtils {
      * @param view
      *         - root view to apply typeface to
      */
-    public static void setRobotoFont(final Context context, final View view) {
+    private static void setRobotoFont(final Context context, final View view) {
         if (view instanceof ViewGroup) {
             for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
                 setRobotoFont(context, ((ViewGroup) view).getChildAt(i));

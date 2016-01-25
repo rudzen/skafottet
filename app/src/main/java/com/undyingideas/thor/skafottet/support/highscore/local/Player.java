@@ -54,7 +54,7 @@ public final class Player implements Serializable, Parcelable {
 
     public void addPoints(final int points) { pts += points; }
 
-    public int getPts() { return pts; }
+    private int getPts() { return pts; }
 
     public void setPts(final int pts) { this.pts = pts; }
 

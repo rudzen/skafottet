@@ -48,7 +48,7 @@ public class InternetRecieverData implements Runnable {
     private boolean keepInReciever;
 
     /* simple (and memory efficient) structure to hold the string values of the connection state */
-    public static final SparseArray<String> CONNECTION_INFO = new SparseArray<>(7);
+    private static final SparseArray<String> CONNECTION_INFO = new SparseArray<>(7);
 
     /* populate the structure with the needed strings */
     static {
@@ -87,7 +87,7 @@ public class InternetRecieverData implements Runnable {
      * @param internetRecieverInterface The object which implements the interface.
      * @param keepInReciever If true, this observer class will not be removed when executed.
      */
-    public InternetRecieverData(final InternetRecieverInterface internetRecieverInterface, final boolean keepInReciever) {
+    private InternetRecieverData(final InternetRecieverInterface internetRecieverInterface, final boolean keepInReciever) {
         internetRecieverInterfaceWeakReference = new WeakReference<>(internetRecieverInterface);
         this.keepInReciever = keepInReciever;
     }

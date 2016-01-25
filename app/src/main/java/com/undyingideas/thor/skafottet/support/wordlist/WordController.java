@@ -85,7 +85,7 @@ public final class WordController implements Serializable, Parcelable {
         }
     }
 
-    public void addLocalWordList(final String title, final String url, final ArrayList<String> theList) {
+    private void addLocalWordList(final String title, final String url, final ArrayList<String> theList) {
         localWords.add(new WordItem(title, url, theList));
         indexLocale = localWords.size() - 1;
     }
@@ -225,7 +225,7 @@ public final class WordController implements Serializable, Parcelable {
         dest.writeSerializable(random);
     }
 
-    protected WordController(final Parcel in) {
+    private WordController(final Parcel in) {
         localWords = in.createTypedArrayList(WordItem.CREATOR);
         isLocal = in.readByte() != 0;
         indexLocale = in.readInt();

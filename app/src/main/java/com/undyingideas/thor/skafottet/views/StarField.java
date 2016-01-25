@@ -27,7 +27,6 @@ import android.util.Log;
 import android.widget.RelativeLayout;
 
 import com.undyingideas.thor.skafottet.activities.support.Foreground;
-import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 
 import java.util.ArrayList;
@@ -55,22 +54,24 @@ public class StarField extends RelativeLayout implements Foreground.Listener {
     }
 
     public void setRun(final boolean run) {
-        this.run = run;
-        if (run) {
-            handleCalculate = new Handler();
-            handleUpdate = new Handler();
-            calculator = new CalculateStarfield();
-            updater = new UpdateStarfield();
-            handleCalculate.post(calculator);
-            handleCalculate.post(updater);
-        } else {
-            if (handleCalculate != null) {
-                handleCalculate.removeCallbacksAndMessages(null);
-            }
-            if (handleUpdate != null) {
-                handleUpdate.removeCallbacksAndMessages(null);
-            }
+        if (this.run != run) {
+            this.run = run;
+            if (run) {
+                handleCalculate = new Handler();
+                handleUpdate = new Handler();
+                calculator = new CalculateStarfield();
+                updater = new UpdateStarfield();
+                handleCalculate.post(calculator);
+                handleCalculate.post(updater);
+            } else {
+                if (handleCalculate != null) {
+                    handleCalculate.removeCallbacksAndMessages(null);
+                }
+                if (handleUpdate != null) {
+                    handleUpdate.removeCallbacksAndMessages(null);
+                }
 
+            }
         }
     }
 
@@ -115,14 +116,14 @@ public class StarField extends RelativeLayout implements Foreground.Listener {
 
     @Override
     public boolean hasFocus() {
-        if (!run) setRun(GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD));
+        if (!run) setRun(GameUtility.settings.PREFS_BLOOD);
         Log.d(TAG, "StarField focus");
         return super.hasFocus();
     }
 
     @Override
     public void onBecameForeground() {
-        setRun(GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD));
+        setRun(GameUtility.settings.PREFS_BLOOD);
         Log.d(TAG, "Starfield enabled itself.");
     }
 
@@ -178,13 +179,17 @@ public class StarField extends RelativeLayout implements Foreground.Listener {
      * @param y The adjustment for Y
      */
     public void setGravity(final float x, final float y) {
-        gravity.x = x >= LOW_PASS_FILTER || x <= -LOW_PASS_FILTER ? x : 0f;
-        gravity.y = y >= LOW_PASS_FILTER || y <= -LOW_PASS_FILTER ? y : 0f;
-
-        if (x > HIGH_PASS_FILTER) gravity.x = HIGH_PASS_FILTER;
-        else if (x < -HIGH_PASS_FILTER) gravity.x = -HIGH_PASS_FILTER;
-        if (y > HIGH_PASS_FILTER) gravity.y = HIGH_PASS_FILTER;
-        else if (y < -HIGH_PASS_FILTER) gravity.y = -HIGH_PASS_FILTER;
+        if (run) {
+            gravity.x = x >= LOW_PASS_FILTER || x <= -LOW_PASS_FILTER ? x : 0f;
+            gravity.y = y >= LOW_PASS_FILTER || y <= -LOW_PASS_FILTER ? y : 0f;
+            if (x > HIGH_PASS_FILTER) gravity.x = HIGH_PASS_FILTER;
+            else if (x < -HIGH_PASS_FILTER) gravity.x = -HIGH_PASS_FILTER;
+            if (y > HIGH_PASS_FILTER) gravity.y = HIGH_PASS_FILTER;
+            else if (y < -HIGH_PASS_FILTER) gravity.y = -HIGH_PASS_FILTER;
+        } else {
+            gravity.x = 0.0f;
+            gravity.y = 0.0f;
+        }
     }
 
     @Override

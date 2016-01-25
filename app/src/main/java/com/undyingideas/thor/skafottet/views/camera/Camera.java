@@ -6,12 +6,12 @@ import android.graphics.Paint;
 
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 
-public class Camera {
+class Camera {
 
     // base vectors
     public final V3 O = new V3(0, 0, 0);
 
-    public V3 cameraCenter; // camera position
+    private V3 cameraCenter; // camera position
     // orientation vectors
     private V3 D = V3.i;
     private V3 U = V3.j;
@@ -27,9 +27,9 @@ public class Camera {
     private final S2 s2;
 
     V3 c = new V3(0, 0, 0);
-    M3 Rz;
-    V3 u;
-    M3 Su;
+    private final M3 Rz;
+    private final V3 u;
+    private final M3 Su;
     public float northDegree;
 
     public Camera(final float sx, final float sy, final int ox, final int oy) {
@@ -53,7 +53,7 @@ public class Camera {
     }
 
 
-    public V2 project(final V3 p) {
+    private V2 project(final V3 p) {
         final V3 EP = p.sub(cameraCenter);
 
         final float d = EP.dot(D);
@@ -89,7 +89,7 @@ public class Camera {
         return cameraCenter;
     }
 
-    public void moveCameraTo(final V3 p) {
+    private void moveCameraTo(final V3 p) {
         cameraCenter = new V3(p.getX(), p.getY(), p.getZ());
     }
 
@@ -111,7 +111,7 @@ public class Camera {
         rotate(M3.sZ, phi);
     }
 
-    public void rotate(final M3 s, final float phi) {
+    private void rotate(final M3 s, final float phi) {
         final M3 Rz = M3.inverse.add(s.mul((float) Math.sin(phi))).add(s.mul(s).mul((float) (1 - Math.cos(phi))));
         moveCameraTo(Rz.mul(cameraCenter));
     }

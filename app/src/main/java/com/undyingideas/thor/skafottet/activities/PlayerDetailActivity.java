@@ -71,7 +71,6 @@ public class PlayerDetailActivity extends AppCompatActivity {
         if (hasFocus) {
             WindowLayout.setImmersiveMode(getWindow());
         }
-
     }
 
     @Override
@@ -80,7 +79,4 @@ public class PlayerDetailActivity extends AppCompatActivity {
         startActivity(new Intent(this, GameActivity.class));
         super.finish();
     }
-
-
-
 }

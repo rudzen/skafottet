@@ -751,7 +751,7 @@ public class VerbalExpression {
      * @return extracted group
      * @since 1.1
      */
-    public String getText(final String toTest, final int group) {
+    private String getText(final String toTest, final int group) {
         final Matcher m = pattern.matcher(toTest);
         final StringBuilder result = new StringBuilder();
         while (m.find()) {

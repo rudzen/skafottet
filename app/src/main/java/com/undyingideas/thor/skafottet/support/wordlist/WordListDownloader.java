@@ -59,7 +59,7 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
         this(wordListFragment, title, url, false);
     }
 
-    public WordListDownloader(final WordListFragment wordListFragment, final String title, final String url, final boolean multi) {
+    private WordListDownloader(final WordListFragment wordListFragment, final String title, final String url, final boolean multi) {
         wordListFragmentWeakReference = new WeakReference<>(wordListFragment);
         this.title = title;
         this.url = url.toLowerCase();
@@ -137,10 +137,10 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
                 ListFetcher.listHandler.post(ListFetcher.listSaver);
                 wordListFragment.refreshList();
 //                wordListFragment.onWindowFocusChanged(true);
-                WindowLayout.s_LoadToast.success();
+                WindowLayout.getLoadToast().success();
             } else {
                 WindowLayout.showSnack("Fejl ved indhentning af listen", wordListFragment.getActivity().getWindow().getDecorView(), true);
-                WindowLayout.s_LoadToast.error();
+                WindowLayout.getLoadToast().error();
             }
         }
         super.onPostExecute(wordItem);
@@ -150,7 +150,7 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
     protected void onProgressUpdate(final String... values) {
         wordListFragment = wordListFragmentWeakReference.get();
         if (wordListFragment != null) {
-            WindowLayout.s_LoadToast.setText(values[0]);
+            WindowLayout.getLoadToast().setText(values[0]);
         }
     }
 }

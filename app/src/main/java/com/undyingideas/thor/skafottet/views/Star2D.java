@@ -29,7 +29,7 @@ class Star2D {
     public float fadespeed;
     public int fade;
     boolean fadeDirection;
-    public float weight;
+    public final float weight;
 
     public Star2D(final float x, final float y, final float speed) {
         xy.x = x;

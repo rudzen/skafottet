@@ -37,7 +37,7 @@ class Score implements Serializable, Comparator<Score> {
         this(score.getWord(), score.getName(), score.getScore(), score.getDay(), score.getMonth(), score.getYear());
     }
 
-    public String getWord() {
+    private String getWord() {
         return word;
     }
 

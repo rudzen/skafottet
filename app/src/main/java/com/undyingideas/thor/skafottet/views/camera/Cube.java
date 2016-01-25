@@ -6,8 +6,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 public class Cube {
-    V3[] cube = new V3[8];
-    public V3 c = new V3(0, 0, 0);
+    private V3[] cube = new V3[8];
+    private V3 c = new V3(0, 0, 0);
 
     public Cube(final V3... cube) {
         if (cube.length == 8) this.cube = cube;
@@ -46,7 +46,7 @@ public class Cube {
         }
     }
 
-    public V3[][] readyToPaint() {
+    private V3[][] readyToPaint() {
         final V3[][] r = new V3[2][];
         r[0] = new V3[12];
         r[1] = new V3[12];

@@ -1,4 +1,15 @@
 (+ = new, - = removed, * = change, ! = fix)
+v1.1.2b - 26.01.2016, rudz
+! Fixed not getting points for last guess.
+! Preferences now works as intended.
+! More class metrics issues dealt with.
+! More Declaration redundancys.
+! Guard added for StarField setRun() to avoid re-creating objects again.
+* SoundPool now operates Builder (API 21+), and old constructor for < 21
+* Improved internet connection receiver.
+* Upgraded some deprecated method usage.
+* More static helper objects encaplulated.
+
 v1.1.2 - 24.01.2016, rudz
 -------------------------
 + Preferences enabled for :

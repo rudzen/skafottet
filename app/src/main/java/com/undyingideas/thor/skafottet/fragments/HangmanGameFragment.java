@@ -72,7 +72,7 @@ public class HangmanGameFragment extends Fragment {
         return hangmanGameFragment;
     }
 
-    public static HangmanGameFragment newInstance(final Bundle bundle) {
+    private static HangmanGameFragment newInstance(final Bundle bundle) {
         final HangmanGameFragment hangmanGameFragment = new HangmanGameFragment();
         hangmanGameFragment.setArguments(bundle);
         return hangmanGameFragment;
@@ -81,7 +81,7 @@ public class HangmanGameFragment extends Fragment {
     @SuppressWarnings("AccessStaticViaInstance")
     @Override
     public void onCreate(final Bundle savedInstanceState) {
-        if (GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_HEPTIC)) {
+        if (GameUtility.settings.PREFS_HEPTIC) {
             try {
                 vibrator = (Vibrator) getActivity().getSystemService(getActivity().VIBRATOR_SERVICE);
             } catch (final Exception e) {
@@ -261,18 +261,20 @@ public class HangmanGameFragment extends Fragment {
 
     private void guess(final String guess) {
         currentGame.getLogic().guessLetter(guess);
+
+        if (!currentGame.getLogic().isLastLetterCorrect()) {
+            currentGame.getPlayers()[0].addPoints(-100);
+            iGameSoundNotifier.playGameSound(GameUtility.SFX_GUESS_WRONG);
+            if (vibrator != null) vibrator.vibrate(50);
+            YoYo.with(Techniques.Flash).duration(300).playOn(textWord);
+        } else {
+            currentGame.getPlayers()[0].addPoints(500 * currentGame.getLogic().getNumCorrectLettersLast());
+            iGameSoundNotifier.playGameSound(GameUtility.SFX_GUESS_RIGHT);
+        }
+
         if (!currentGame.getLogic().isGameOver()) {
             // save the game status!
             GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, currentGame);
-            if (!currentGame.getLogic().isLastLetterCorrect()) {
-                currentGame.getPlayers()[0].addPoints(-100);
-                iGameSoundNotifier.playGameSound(GameUtility.SFX_GUESS_WRONG);
-                if (vibrator != null) vibrator.vibrate(50);
-                YoYo.with(Techniques.Flash).duration(300).playOn(textWord);
-            } else {
-                currentGame.getPlayers()[0].addPoints(500 * currentGame.getLogic().getNumCorrectLettersLast());
-                iGameSoundNotifier.playGameSound(GameUtility.SFX_GUESS_RIGHT);
-            }
             updateScreen();
         } else {
             GameUtility.writeNullGame();

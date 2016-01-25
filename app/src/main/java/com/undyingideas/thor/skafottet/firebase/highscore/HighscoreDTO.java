@@ -63,7 +63,7 @@ public class HighscoreDTO implements Parcelable {
         dest.writeInt(score);
     }
 
-    protected HighscoreDTO(final Parcel in) {
+    private HighscoreDTO(final Parcel in) {
         name = in.readString();
         score = in.readInt();
     }
