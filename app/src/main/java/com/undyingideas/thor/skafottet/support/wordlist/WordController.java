@@ -19,6 +19,7 @@ package com.undyingideas.thor.skafottet.support.wordlist;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.undyingideas.thor.skafottet.support.firebase.controller.WordListController;
 
@@ -46,7 +47,7 @@ public final class WordController implements Serializable, Parcelable {
     private Random random;
     private Comparator<WordItem> wordItemComparator;
 
-    public WordController() { }
+    public WordController() {reset(); }
 
     public WordController(final ArrayList<String> defaultList) {
         reset();
@@ -60,6 +61,7 @@ public final class WordController implements Serializable, Parcelable {
 
     private void reset() {
         random = new Random(System.currentTimeMillis());
+        Log.d("test" , " " +(random==null));
         localWords = new ArrayList<>();
 //        wordItemComparator = new WordItemComparator();
         indexLocale = 0;
@@ -105,6 +107,7 @@ public final class WordController implements Serializable, Parcelable {
         final String returnString;
         if (isLocal || WordListController.wordList == null || WordListController.wordList.isEmpty()) {
             // using inlined method for empty list fix..
+            if(random==null) random = new Random(System.currentTimeMillis());
             returnString = getCurrentList().get(random.nextInt(localWords.get(indexLocale).getWordListSize()));
         } else {
             returnString = WordListController.wordList.get(indexRemote).getWords().get(random.nextInt(WordListController.wordList.get(indexRemote).getWordListSize()));
