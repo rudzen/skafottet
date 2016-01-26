@@ -62,9 +62,10 @@ public class LobbyController {
     public String getOppNames(final String lobbykey, final String yourname) {
         try {
             final LobbyDTO dto = lobbyList.get(lobbykey);
-            String s = "Modstander: ";
-            for (final LobbyPlayerStatus lps : dto.getPlayerList()) if (!lps.getName().equals(yourname)) s += lps.getName() + " , ";
-            return s.length() > 3 ? s.substring(0, s.length() - 3) : s;
+            StringBuilder sb = new StringBuilder(15);
+            sb.append("Modstander: ");
+            for (final LobbyPlayerStatus lps : dto.getPlayerList()) if (!lps.getName().equals(yourname)) sb.append(lps.getName()).append(" , ");
+            return sb.length() > 12 ? sb.substring(0, sb.length() - 3) : sb.toString();
         } catch (final Exception e) {
             e.printStackTrace();
         }

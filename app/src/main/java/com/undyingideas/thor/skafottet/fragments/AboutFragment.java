@@ -17,9 +17,11 @@
 package com.undyingideas.thor.skafottet.fragments;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +32,7 @@ import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
 
 import static android.text.util.Linkify.EMAIL_ADDRESSES;
@@ -61,10 +64,17 @@ public class AboutFragment extends Fragment {
                     "s144868 Adam Hammer Palmar, s144868@student.dtu.dk" + SEP + SEP +
                     "Projekt ansvarlig : Rudy Alex Kohn" +
                     SEP + SEP +
+
+                    "v1.1.2b - 26.01.2016" + SEP +
+                    "- Forbedret kompatilitet ved API 19." + SEP +
+                    "- En del småfejl fixed." + SEP +
+                    "- Indstillinger fixed." + SEP + SEP +
+
                     "v1.1.2 - 24.01.2016" + SEP +
                     "- Mange små bugfixes" + SEP +
                     "- Indstillinger tilføjet" + SEP +
                     "- Basisks pointsystem tilføjet" + SEP + SEP +
+
                     "v1.1 - 23.01.2016, Rudy" + SEP +
                     "- Forbedret performance" + SEP +
                     "- Fixede flere multiplayer relaterede crashes." + SEP +
@@ -139,12 +149,14 @@ public class AboutFragment extends Fragment {
     @Nullable
     private TextView[] tv = new TextView[ROWS.length];
 
+    @SuppressWarnings("deprecation")
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
 
         final ScrollView sv = new ScrollView(getContext());
         sv.setSmoothScrollingEnabled(true);
+        sv.setBackgroundResource(R.drawable.black_trans_black);
 
         final LinearLayout ll = new LinearLayout(getContext());
         ll.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -156,6 +168,8 @@ public class AboutFragment extends Fragment {
         final int padding = (int) applyDimension(COMPLEX_UNIT_DIP, 4, getActivity().getResources().getDisplayMetrics());
         int i = 0;
 
+        final int colHead = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? ContextCompat.getColor(getContext(), R.color.colorAccent) : getResources().getColor(R.color.colorAccent);
+
         //noinspection ConstantConditions
         for (TextView t : tv) {
             //noinspection ObjectAllocationInLoop
@@ -164,8 +178,10 @@ public class AboutFragment extends Fragment {
             t.setText(ROWS[i++]);
             if (i < ROWS.length) t.setTextSize(COMPLEX_UNIT_SP, 15);
             else t.setTextSize(COMPLEX_UNIT_SP, 11);
+            t.setTextColor(colHead);
             addLinks(t, WEB_URLS | EMAIL_ADDRESSES);
             ll.addView(t);
+            YoYo.with(Techniques.BounceIn).duration(50).playOn(t);
         }
         tv = null;
         sv.addView(ll);

@@ -22,6 +22,7 @@ import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -762,15 +763,22 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
         }
     }
 
+    @SuppressWarnings("deprecation")
     public void setLoginButton(final int connectionStatus) {
         /* make sure the right button is set for the login/logout status */
         if (buttons[BUTTON_LOGIN_OUT] != null) { // guard for when application first comes into foreground
             if (connectionStatus > -1) {
-                buttons[BUTTON_LOGIN_OUT].setBackground(ContextCompat.getDrawable(getContext(), (boolean) buttons[BUTTON_LOGIN_OUT].getTag() ? loginButtons[1] : loginButtons[0]));
-//                buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable((boolean) buttons[BUTTON_LOGIN_OUT].getTag() ? loginButtons[1] : loginButtons[0]));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    buttons[BUTTON_LOGIN_OUT].setBackground(ContextCompat.getDrawable(getContext(), (boolean) buttons[BUTTON_LOGIN_OUT].getTag() ? loginButtons[1] : loginButtons[0]));
+                } else {
+                    buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable((boolean) buttons[BUTTON_LOGIN_OUT].getTag() ? loginButtons[1] : loginButtons[0]));
+                }
             } else {
-                buttons[BUTTON_LOGIN_OUT].setBackground(ContextCompat.getDrawable(getContext(), loginButtons[0]));
-//                buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(loginButtons[0]));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    buttons[BUTTON_LOGIN_OUT].setBackground(ContextCompat.getDrawable(getContext(), loginButtons[0]));
+                } else {
+                    buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(loginButtons[0]));
+                }
                 mpc.name = null;
             }
             YoYo.with(Techniques.Pulse).duration(300).playOn(buttons[BUTTON_LOGIN_OUT]);

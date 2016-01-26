@@ -23,7 +23,6 @@ import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import java.util.List;
 
-
 /**
  * An activity representing a list of Players. This activity
  * has different presentations for handset and tablet-size devices. On
@@ -67,9 +66,6 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new FloaterClickHandler());
-
-//        topProgressBar = (ProgressBar) findViewById(R.id.topProgressBar);
-//        topProgressBar.setVisibility(View.INVISIBLE);
 
         recyclerView = findViewById(R.id.player_list);
         assert recyclerView != null;
@@ -119,23 +115,8 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
     //This method is called on update
     @Override
     public void run() {
-//        setProgressBar(true);
         setupRecyclerView((RecyclerView) recyclerView, GameUtility.mpc.getHighScoreItems());
-//        setProgressBar(false);
     }
-
-//    @Override
-//    public void finish() {
-//        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-//        super.finish();
-//    }
-
-//    @Override
-//    public void setProgressBar(final boolean visible) {
-//        topProgressBar.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
-//    }
-
-
 
     private static class FloaterClickHandler implements View.OnClickListener {
         @Override
@@ -144,7 +125,7 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
         }
     }
 
-    public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    private class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<HighScoreContent.HighScoreItem> mValues;
 

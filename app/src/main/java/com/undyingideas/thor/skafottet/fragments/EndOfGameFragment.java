@@ -20,7 +20,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -78,7 +77,7 @@ public class EndOfGameFragment extends Fragment {
     private static final String MSG_KEY_LOWER = "kl";
     private static final String MSG_KEY_IMG = "ki";
 
-    @NonNull
+    @Nullable
     private ImageView imageViewResult, buttonNewGame, buttonMenu;
 
     private TextView textViewTop;

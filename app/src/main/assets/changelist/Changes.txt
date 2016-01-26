@@ -1,5 +1,10 @@
 (+ = new, - = removed, * = change, ! = fix)
-v1.1.2b - 26.01.2016, rudz
+v1.1.2c - 26.01.2016, rudz
+! More deprecated method guards.
+* Cleaned up some code
+* About fragment updated.
+
+v1.1.2b - 25.01.2016, rudz
 ! Fixed not getting points for last guess.
 ! Preferences now works as intended.
 ! More class metrics issues dealt with.

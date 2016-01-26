@@ -82,7 +82,7 @@ public abstract class SoundAbstract extends AppCompatActivity implements SoundPo
     }
 
     @SuppressWarnings("deprecation")
-    private SoundPool makeSoundPool() {
+    private static SoundPool makeSoundPool() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             final AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
@@ -115,7 +115,7 @@ public abstract class SoundAbstract extends AppCompatActivity implements SoundPo
     }
 
     @Override
-    public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+    public void onLoadComplete(final SoundPool soundPool, final int sampleId, final int status) {
         loaded = true;
     }
 }

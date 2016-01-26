@@ -25,7 +25,7 @@ public class Hangman3dView extends View {
 
     private float mPreviousX, mPreviousY;
     private static final float TOUCH_SCALE_FACTOR = 2f / 180;
-    private final int framerate = 25;
+    private static final int framerate = 25;
     int delay = 1000 / framerate;
 
     // Simulate time
@@ -34,7 +34,7 @@ public class Hangman3dView extends View {
     // App
     private Camera S = new Camera(150, 150, 500, 600);
     V3 u = new V3(0, 1, 1).unit();
-    private final double phi = Math.PI / 100;
+    private static final double phi = Math.PI / 100;
     M3 Rz = M3.inverse.add(M3.sZ.mul((float) Math.sin(phi))).add(M3.sZ.mul(M3.sZ).mul((float) (1 - Math.cos(phi))));
 
     private final V3 c = new V3(0, 0, 3);
