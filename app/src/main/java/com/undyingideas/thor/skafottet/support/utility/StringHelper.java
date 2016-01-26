@@ -39,7 +39,6 @@ public final class StringHelper {
     public static final String VALID_URL = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
     public static Pattern patJS = Pattern.compile(regJavaScript);
 
-
     //'section'
 
     static {
@@ -93,14 +92,17 @@ public final class StringHelper {
         /* pure url */
         if (pureMatch.matcher(url).find()) return url;
 
+        final String WWW = "www.";
+        final String HTTP = "http://";
+
         /* check for www. */
-        if (url.toLowerCase().contains("www.")) {
+        if (url.toLowerCase().contains(WWW)) {
             /* try match with appending http */
-            if (pureMatch.matcher("http://" + url).find()) return "http://" + url;
-        } else if (url.toLowerCase().startsWith("http://") && url.length() > 7) {
-            if (pureMatch.matcher(url.substring(0, 6) + "www." + url.substring(7)).find())
-                return url.substring(0, 6) + "www." + url.substring(7);
-        } else if (pureMatch.matcher("http://www." + url).find()) return "http://www." + url;
+            if (pureMatch.matcher(HTTP + url).find()) return HTTP + url;
+        } else if (url.toLowerCase().startsWith(HTTP) && url.length() > 7) {
+            if (pureMatch.matcher(url.substring(0, 6) + WWW + url.substring(7)).find())
+                return url.substring(0, 6) + WWW + url.substring(7);
+        } else if (pureMatch.matcher(HTTP + WWW + url).find()) return HTTP + WWW + url;
 
         return url;
     }

@@ -16,6 +16,8 @@
 
 package com.undyingideas.thor.skafottet.support.utility;
 
+import android.graphics.Color;
+
 /**
  * Created on 20-01-2016, 11:37.
  * Project : skafottet
@@ -24,10 +26,24 @@ package com.undyingideas.thor.skafottet.support.utility;
  */
 public final class SettingsDTO {
 
-    public boolean PREFS_MUSIC;
-    public boolean PREFS_SFX;
-    public boolean PREFS_BLOOD;
+    public boolean prefsMusic;
+    public boolean prefsSfx;
+    public boolean prefsBlood;
 
-    public boolean PREFS_HEPTIC;
+    public boolean prefsHeptic;
+
+    public int prefsColour;
+    public int prefsColour_r;
+    public int prefsColour_g;
+    public int prefsColour_b;
+
+    public int textColour; // determined by the prefsColour.
+
+    public void setContrastColor() {
+        prefsColour_r = prefsColour >> 16 & 0x000000FF;
+        prefsColour_g = prefsColour >> 8 & 0x000000FF;
+        prefsColour_b = prefsColour & 0x000000FF;
+        textColour = (299 * prefsColour_r + 587 * prefsColour_g + 114 * prefsColour_b) / 1000 >= 128 ? Color.BLACK : Color.WHITE;
+    }
 
 }

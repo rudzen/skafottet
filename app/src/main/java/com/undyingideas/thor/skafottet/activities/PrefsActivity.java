@@ -17,8 +17,10 @@
 package com.undyingideas.thor.skafottet.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.support.v4.content.ContextCompat;
 import android.view.MenuItem;
 
 import com.undyingideas.thor.skafottet.R;
@@ -46,9 +48,11 @@ public class PrefsActivity extends PreferenceActivity {
     public void finish() {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         startActivity(new Intent(this, GameActivity.class));
-        GameUtility.settings.PREFS_MUSIC = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_MUSIC);
-        GameUtility.settings.PREFS_SFX = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_SFX);
-        GameUtility.settings.PREFS_BLOOD = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD);
+        GameUtility.settings.prefsMusic = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_MUSIC);
+        GameUtility.settings.prefsSfx = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_SFX);
+        GameUtility.settings.prefsBlood = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD);
+        GameUtility.settings.prefsColour = GameUtility.s_preferences.getInt(Constant.KEY_PREFS_COLOUR, Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? ContextCompat.getColor(getApplicationContext(), R.color.colorAccent) : getResources().getColor(R.color.colorAccent));
+        GameUtility.settings.setContrastColor();
         super.finish();
     }
 }

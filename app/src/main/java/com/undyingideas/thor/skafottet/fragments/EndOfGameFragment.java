@@ -27,6 +27,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
@@ -40,12 +41,11 @@ import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
+import com.undyingideas.thor.skafottet.support.utility.DrawableHelper;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.views.AutoScaleTextView;
 
 import java.lang.ref.WeakReference;
-
-//import com.undyingideas.thor.skafottet.support.abstractions.FragmentOnBackClickListener;
 
 /**
  * <p>Created on 17-11-2015, 08:39.
@@ -78,7 +78,10 @@ public class EndOfGameFragment extends Fragment {
     private static final String MSG_KEY_IMG = "ki";
 
     @Nullable
-    private ImageView imageViewResult, buttonNewGame, buttonMenu;
+    private ImageView imageViewResult;
+
+    private final RelativeLayout[] buttons = new RelativeLayout[2];
+    private final AutoScaleTextView[] button_text = new AutoScaleTextView[2];
 
     private TextView textViewTop;
     private TextView textViewMiddle;
@@ -117,7 +120,6 @@ public class EndOfGameFragment extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-//        onCreate(savedInstanceState);
         final View root = inflater.inflate(R.layout.fragment_end_game, container, false);
 
         imageViewResult = (ImageView) root.findViewById(R.id.end_game_image_view);
@@ -134,15 +136,20 @@ public class EndOfGameFragment extends Fragment {
             Log.d(TAG, "ClickListener initiated");
         }
 
-        buttonNewGame = (ImageView) root.findViewById(R.id.end_game_button_new_game);
-        buttonNewGame.setClickable(false);
-        buttonNewGame.setOnClickListener(endGameClickListener);
-        buttonNewGame.setVisibility(View.INVISIBLE);
+        buttons[0] = (RelativeLayout) root.findViewById(R.id.end_game_button_new_game);
+        buttons[0].setClickable(false);
+        buttons[0].setOnClickListener(endGameClickListener);
+        buttons[0].setVisibility(View.INVISIBLE);
 
-        buttonMenu = (ImageView) root.findViewById(R.id.end_game_button_main_menu);
-        buttonMenu.setClickable(false);
-        buttonMenu.setOnClickListener(endGameClickListener);
-        buttonMenu.setVisibility(View.INVISIBLE);
+        buttons[1] = (RelativeLayout) root.findViewById(R.id.end_game_button_main_menu);
+        buttons[1].setClickable(false);
+        buttons[1].setOnClickListener(endGameClickListener);
+        buttons[1].setVisibility(View.INVISIBLE);
+
+        button_text[0] = (AutoScaleTextView) root.findViewById(R.id.end_game_button_new_game_text);
+        button_text[1] = (AutoScaleTextView) root.findViewById(R.id.end_game_button_main_menu_text);
+
+        DrawableHelper.setButtonColors(buttons, button_text);
 
         displayResults(getArguments());
 
@@ -176,8 +183,8 @@ public class EndOfGameFragment extends Fragment {
     @Override
     public void onDestroy() {
         imageViewResult = null;
-        buttonMenu = null;
-        buttonNewGame = null;
+        buttons[0] = null;
+        buttons[1] = null;
         super.onDestroy();
     }
 
@@ -359,19 +366,19 @@ public class EndOfGameFragment extends Fragment {
             final EndOfGameFragment endOfGameFragment = weakReference.get();
             if (endOfGameFragment != null) {
                 v.setClickable(false);
-                if (v == endOfGameFragment.buttonMenu) {
-                    endOfGameFragment.buttonNewGame.setClickable(false);
-                    YoYo.with(Techniques.FadeOut).duration(300).playOn(endOfGameFragment.buttonNewGame);
+                if (v == endOfGameFragment.buttons[1]) {
+                    endOfGameFragment.buttons[0].setClickable(false);
+                    YoYo.with(Techniques.FadeOut).duration(300).playOn(endOfGameFragment.buttons[0]);
                 } else {
-                    endOfGameFragment.buttonMenu.setClickable(false);
-                    YoYo.with(Techniques.FadeOut).duration(300).playOn(endOfGameFragment.buttonMenu);
+                    endOfGameFragment.buttons[1].setClickable(false);
+                    YoYo.with(Techniques.FadeOut).duration(300).playOn(endOfGameFragment.buttons[1]);
                 }
                 endOfGameFragment.iGameSoundNotifier.playGameSound(GameUtility.SFX_MENU_CLICK);
                 YoYo.with(Techniques.ZoomOut).duration(300).playOn(endOfGameFragment.imageViewResult);
                 YoYo.with(Techniques.ZoomOut).duration(400).playOn(endOfGameFragment.textViewTop);
                 YoYo.with(Techniques.ZoomOut).duration(400).playOn(endOfGameFragment.textViewMiddle);
                 YoYo.with(Techniques.ZoomOut).duration(400).playOn(endOfGameFragment.textViewLower);
-                YoYo.with(Techniques.Pulse).duration(400).withListener(new ExitAnimatorHandler(endOfGameFragment, (ImageView) v)).playOn(v);
+                YoYo.with(Techniques.Pulse).duration(400).withListener(new ExitAnimatorHandler(endOfGameFragment, (RelativeLayout) v)).playOn(v);
             }
         }
     }
@@ -396,10 +403,10 @@ public class EndOfGameFragment extends Fragment {
                 endOfGameFragment.textViewMiddle.setVisibility(View.VISIBLE);
                 YoYo.with(Techniques.BounceInLeft).duration(1000).playOn(endOfGameFragment.textViewLower);
                 endOfGameFragment.textViewLower.setVisibility(View.VISIBLE);
-                YoYo.with(Techniques.BounceInLeft).duration(1000).playOn(endOfGameFragment.buttonMenu);
-                endOfGameFragment.buttonMenu.setVisibility(View.VISIBLE);
-                YoYo.with(Techniques.BounceInRight).duration(1000).playOn(endOfGameFragment.buttonNewGame);
-                endOfGameFragment.buttonNewGame.setVisibility(View.VISIBLE);
+                YoYo.with(Techniques.BounceInRight).duration(1000).playOn(endOfGameFragment.buttons[1]);
+                endOfGameFragment.buttons[1].setVisibility(View.VISIBLE);
+                YoYo.with(Techniques.BounceInLeft).duration(1000).playOn(endOfGameFragment.buttons[0]);
+                endOfGameFragment.buttons[0].setVisibility(View.VISIBLE);
             }
         }
 
@@ -412,11 +419,11 @@ public class EndOfGameFragment extends Fragment {
 
     private static class ExitAnimatorHandler extends WeakReferenceHolder<EndOfGameFragment> implements Animator.AnimatorListener {
 
-        private final ImageView clickedImageView;
+        private final RelativeLayout clickedView;
 
-        public ExitAnimatorHandler(final EndOfGameFragment endOfGameFragment, final ImageView clickedImageView) {
+        public ExitAnimatorHandler(final EndOfGameFragment endOfGameFragment, final RelativeLayout clickedView) {
             super(endOfGameFragment);
-            this.clickedImageView = clickedImageView;
+            this.clickedView = clickedView;
         }
 
         @Override
@@ -427,7 +434,7 @@ public class EndOfGameFragment extends Fragment {
         public void onAnimationEnd(final Animator animation) {
             final EndOfGameFragment endOfGameFragment = weakReference.get();
             if (endOfGameFragment != null) {
-                endOfGameFragment.iFragmentFlipper.flipFragment(clickedImageView == endOfGameFragment.buttonNewGame ? Constant.MODE_SINGLE_PLAYER : Constant.MODE_MENU);
+                endOfGameFragment.iFragmentFlipper.flipFragment(clickedView == endOfGameFragment.buttons[0] ? Constant.MODE_SINGLE_PLAYER : Constant.MODE_MENU);
             }
         }
 

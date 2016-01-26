@@ -19,7 +19,6 @@ package com.undyingideas.thor.skafottet.fragments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -57,8 +56,6 @@ import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.StringHelper;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.support.wordlist.WordListDownloader;
-
-import net.steamcrafted.loadtoast.LoadToast;
 
 import java.lang.ref.WeakReference;
 import java.util.Objects;
@@ -198,11 +195,6 @@ public class WordListFragment extends Fragment implements
         listRemote.setOnItemClickListener(new ListRemoteTitleClickListener());
         listLocal.setOnItemClickListener(new ListLocalTitleClickListener());
 
-        WindowLayout.setLoadToast(new LoadToast(getContext()));
-        WindowLayout.getLoadToast().setProgressColor(Color.BLACK);
-        WindowLayout.getLoadToast().setTextColor(Color.WHITE);
-        WindowLayout.getLoadToast().setBackgroundColor(Color.RED);
-        WindowLayout.getLoadToast().setTranslationY(WindowLayout.screenDimension.y / 3);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
 
@@ -453,12 +445,10 @@ public class WordListFragment extends Fragment implements
                             wordListFragment.onFinishAddWordDialog(title, url);
                         } else {
                             WindowLayout.showSnack("Forkert indtastede informationer", wordListFragment.stickyList, true);
-//                            Toast.makeText(wordListFragment, "Forkert indtastede informationer.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
                 dialog.dismiss();
-//                wordListFragment.onWindowFocusChanged(true);
             }
         }
     }
@@ -521,38 +511,4 @@ public class WordListFragment extends Fragment implements
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
     }
-
-    /**
-     * Basic class for handling the special case of the navigation drawer.
-     */
-//    private static class BackPressClick extends WeakReferenceHolder<WordListFragment> implements View.OnKeyListener {
-//
-//        private final int newMode;
-//
-//        public BackPressClick(final WordListFragment wordListFragment, final int newMode) {
-//            super(wordListFragment);
-//            this.newMode = newMode;
-//        }
-//
-//        @Override
-//        public boolean onKey(final View v, final int keyCode, final KeyEvent event) {
-//            if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-//                final WordListFragment wordListFragment = weakReference.get();
-//                if (wordListFragment != null) {
-//                    if (wordListFragment.mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-//                        wordListFragment.mDrawerLayout.closeDrawer(GravityCompat.START);
-//                        return true;
-//                    } else {
-//                        iFragmentFlipper.flipFragment(newMode);
-//                        return true;
-//                    }
-//                } else if (iFragmentFlipper != null) {
-//                    iFragmentFlipper.flipFragment(newMode);
-//                }
-//            }
-//            return false;
-//        }
-//    }
-
-
 }

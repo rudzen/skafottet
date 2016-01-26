@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.undyingideas.thor.skafottet.support.utility.GameUtility;
+
 import static android.view.MotionEvent.ACTION_DOWN;
 import static android.view.MotionEvent.ACTION_MOVE;
 import static android.view.MotionEvent.ACTION_UP;
@@ -26,7 +28,6 @@ public class Hangman3dView extends View {
     private float mPreviousX, mPreviousY;
     private static final float TOUCH_SCALE_FACTOR = 2f / 180;
     private static final int framerate = 25;
-    int delay = 1000 / framerate;
 
     // Simulate time
     double ts;
@@ -42,7 +43,7 @@ public class Hangman3dView extends View {
     private Cube[] body;
     private Rope[] rope;
     private int errors;
-    private final Paint p = new Paint();
+    private final Paint noosePainter = new Paint();
 
     public Hangman3dView(final Context context) {
         super(context);
@@ -77,10 +78,10 @@ public class Hangman3dView extends View {
                 case ACTION_MOVE:
                     float dx = x - mPreviousX;
                     float dy = y - mPreviousY;
-                    if (y > getHeight() / 2) {
+                    if (y > getHeight() >> 1) {
                         dx *= -1;          // reverse direction of rotation above the mid-line
                     }
-                    if (x < getWidth() / 2) {
+                    if (x < getWidth() >> 1) {
                         dy *= -1;           // reverse direction of rotation to left of the mid-line
                     }
                     S.rotateLeft(dx * TOUCH_SCALE_FACTOR);
@@ -117,8 +118,8 @@ public class Hangman3dView extends View {
                 final float dy1 = y1 - mPreviousY1;
                 final float dy2 = y2 - mPreviousY2;
                 float z;
-                z = startleft ? S.z + ((dx1 - dx2) * ZOOM_SCALE_FACTOR) : S.z + ((dx2 - dx1) * ZOOM_SCALE_FACTOR);
-                z += startdown ? ((dy1 - dy2) * ZOOM_SCALE_FACTOR) : ((dy2 - dy1) * ZOOM_SCALE_FACTOR);
+                z = startleft ? S.z + (dx1 - dx2) * ZOOM_SCALE_FACTOR : S.z + (dx2 - dx1) * ZOOM_SCALE_FACTOR;
+                z += startdown ? (dy1 - dy2) * ZOOM_SCALE_FACTOR : (dy2 - dy1) * ZOOM_SCALE_FACTOR;
                 if (z > 1 && z < 20) S.setZoom(z); else if (z > 20) S.setZoom(20); else S.setZoom(1);
                 invalidate();
                 //noinspection fallthrough
@@ -212,8 +213,8 @@ public class Hangman3dView extends View {
     }
 
     private void buildOther() {
-        p.setStrokeWidth(10);
-        p.setColor(Color.RED);
+        noosePainter.setStrokeWidth(10);
+        noosePainter.setColor(GameUtility.settings.prefsColour);
 //        final Handler h = new Handler();
 //        new Thread(new Runnable() {
 //            @Override
@@ -236,21 +237,21 @@ public class Hangman3dView extends View {
     @Override
     protected void onDraw(final Canvas canvas) {
         if (firstrun) {
-            S = new Camera(150, 150, getWidth()/2, getHeight()/2+getHeight()/8);
+            S = new Camera(150, 150, getWidth() >> 1, (getHeight() >> 1) + (getHeight() >> 3));
             firstrun = false;
         }
         S.focus(c);
         for (final Cube cu : gallow) {
-            cu.draw(S, canvas, p); // draw gallow
+            cu.draw(S, canvas, noosePainter); // draw gallow
         }
-        p.setStrokeWidth(3f);
-        p.setColor(Color.GRAY);
+        noosePainter.setStrokeWidth(3f);
+        noosePainter.setColor(GameUtility.settings.textColour == Color.BLACK ? Color.GRAY : GameUtility.settings.textColour);
         for (final Rope r : rope)
-            r.draw(S, canvas, p);
-        p.setStrokeWidth(7f);
-        p.setColor(Color.RED);
+            r.draw(S, canvas, noosePainter);
+        noosePainter.setStrokeWidth(7f);
+        noosePainter.setColor(GameUtility.settings.prefsColour);
         for (int i = 0; i < errors; i++) {
-            body[i].draw(S, canvas, p); // draw inflicted bodyparts
+            body[i].draw(S, canvas, noosePainter); // draw inflicted bodyparts
         }
     }
 

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2016 Rudy Alex Kohn
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,30 +15,16 @@
   -->
 
 <com.undyingideas.thor.skafottet.views.StarField
-    android:id="@+id/sf"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sf"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/black_trans_black_strong"
     android:clickable="false"
     android:focusableInTouchMode="false"
     android:orientation="vertical"
-    tools:context=".activities.GameActivity"
-    >
-    <!--android:id="@+id/menu_background"-->
-
-    <!--<com.undyingideas.thor.skafottet.views.StarField-->
-    <!--android:id="@+id/sf"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:layout_alignParentEnd="true"-->
-    <!--android:layout_alignParentLeft="true"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:layout_alignParentStart="true"-->
-    <!--android:background="@android:color/transparent"-->
-    <!--/>-->
+    tools:context=".activities.GameActivity">
 
     <ImageView
         android:id="@+id/menu_title"
@@ -47,9 +32,10 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:alpha="0.7"
+        android:foregroundGravity="top"
         android:clickable="true"
         android:contentDescription="@string/contentDescriptionMenuTitle"
-        android:src="@drawable/skafottet_logo"/>
+        android:src="@drawable/skafottet_logo" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,56 +43,94 @@
         android:alpha="0.8"
         android:orientation="vertical">
 
-        <ImageView
+        <RelativeLayout
             android:id="@+id/menu_button_play"
-            style="@style/menu_button_style"
             android:layout_marginTop="125dp"
-            android:background="@drawable/button_play"
-            android:contentDescription="@string/contentDescriptionMenuButtonPlay"/>
+            style="@style/menu_button_style"
+            android:background="@drawable/menu_button_shape">
 
-        <ImageView
+            <com.undyingideas.thor.skafottet.views.AutoScaleTextView
+                android:id="@+id/menu_button_play_text"
+                style="@style/menu_button_style_text"
+                android:text="@string/menu_button_play"/>
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/menu_button_highscore"
             style="@style/menu_button_style"
-            android:background="@drawable/button_highscore"
-            android:contentDescription="@string/contentDescriptionMenuHighscore"/>
+            android:background="@drawable/menu_button_shape">
 
-        <ImageView
+            <com.undyingideas.thor.skafottet.views.AutoScaleTextView
+                android:id="@+id/menu_button_highscore_text"
+                style="@style/menu_button_style_text"
+                android:text="@string/menu_button_highscore"/>
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/menu_button_word_lists"
             style="@style/menu_button_style"
-            android:background="@drawable/button_ordlister"
-            android:contentDescription="@string/contentDescriptionMenuWordLists"/>
+            android:background="@drawable/menu_button_shape">
 
-        <ImageView
+            <com.undyingideas.thor.skafottet.views.AutoScaleTextView
+                android:id="@+id/menu_button_word_lists_text"
+                style="@style/menu_button_style_text"
+                android:text="@string/menu_button_word_lists"/>
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/menu_button_settings"
             style="@style/menu_button_style"
-            android:background="@drawable/button_settings"
-            android:contentDescription="@string/contentDescriptionMenuSettings"/>
+            android:background="@drawable/menu_button_shape">
 
-        <ImageView
+            <com.undyingideas.thor.skafottet.views.AutoScaleTextView
+                android:id="@+id/menu_button_settings_text"
+                style="@style/menu_button_style_text"
+                android:text="@string/menu_button_settings"/>
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/menu_button_about"
             style="@style/menu_button_style"
-            android:background="@drawable/button_about"
-            android:contentDescription="@string/contentDescriptionMenuAbout"/>
+            android:background="@drawable/menu_button_shape">
 
-        <ImageView
+            <com.undyingideas.thor.skafottet.views.AutoScaleTextView
+                android:id="@+id/menu_button_about_text"
+                style="@style/menu_button_style_text"
+                android:text="@string/menu_button_about"/>
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/menu_button_help"
             style="@style/menu_button_style"
-            android:background="@drawable/button_help"
-            android:contentDescription="@string/contentDescriptionMenuHelp"/>
+            android:background="@drawable/menu_button_shape">
 
-        <ImageView
+            <com.undyingideas.thor.skafottet.views.AutoScaleTextView
+                android:id="@+id/menu_button_help_text"
+                style="@style/menu_button_style_text"
+                android:text="@string/menu_button_help"/>
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/menu_button_login_out"
             style="@style/menu_button_style"
-            android:background="@drawable/button_login"
-            android:contentDescription="@string/contentDescriptionMenuLogInOut"/>
+            android:background="@drawable/menu_button_shape">
 
-        <ImageView
+            <com.undyingideas.thor.skafottet.views.AutoScaleTextView
+                android:id="@+id/menu_button_login_out_text"
+                style="@style/menu_button_style_text"
+                android:text="@string/menu_button_login_in"/>
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/menu_button_quit"
             style="@style/menu_button_style"
-            android:layout_marginBottom="75dp"
-            android:background="@drawable/button_end"
-            android:contentDescription="@string/contentDescriptionMenuQuit"/>
+            android:background="@drawable/menu_button_shape">
 
+            <com.undyingideas.thor.skafottet.views.AutoScaleTextView
+                android:id="@+id/menu_button_quit_text"
+                style="@style/menu_button_style_text"
+                android:text="@string/menu_button_quit"/>
+        </RelativeLayout>
 
         <com.hanks.htextview.HTextView
             android:id="@+id/menu_buttom_text"
@@ -115,7 +139,7 @@
             android:gravity="bottom"
             android:padding="10dp"
             android:textColor="@color/colorAccent"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
     </LinearLayout>
 
 </com.undyingideas.thor.skafottet.views.StarField>

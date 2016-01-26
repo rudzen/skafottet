@@ -19,18 +19,16 @@ package com.undyingideas.thor.skafottet.fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +38,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -57,8 +56,10 @@ import com.undyingideas.thor.skafottet.interfaces.IGameSoundNotifier;
 import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.support.firebase.observer.FireBaseLoginData;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
+import com.undyingideas.thor.skafottet.support.utility.DrawableHelper;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
+import com.undyingideas.thor.skafottet.views.AutoScaleTextView;
 import com.undyingideas.thor.skafottet.views.StarField;
 
 import java.lang.ref.WeakReference;
@@ -70,6 +71,7 @@ import java.util.prefs.PreferenceChangeListener;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.imageRefs;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.mpc;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_preferences;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.settings;
 
 /**
  * <p>
@@ -83,7 +85,8 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
 
     private static final int BUTTON_COUNT = 8;
     private ImageView title;
-    private final ImageView[] buttons = new ImageView[BUTTON_COUNT];
+    private final RelativeLayout[] buttons = new RelativeLayout[BUTTON_COUNT];
+    private final AutoScaleTextView[] buttons_text = new AutoScaleTextView[BUTTON_COUNT];
 
     private static final int BUTTON_PLAY = 0;
     private static final int BUTTON_HIGHSCORE = 1;
@@ -112,20 +115,15 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
     private MenuSensorEventListener sensorListener;
 
     /* other fields */
-
     private int button_clicked; // not used atm
     private boolean click_status;
     private View.OnClickListener s_buttonListener;
     private static final String TAG = "MenuFragment";
 
-    private
-    @DrawableRes
-    final int[] loginButtons = new int[2];
-
+    private GradientDrawable menuButton;
 
     /* observer data receiving classes */
     private FireBaseLoginData fireBaseLoginData;
-
 
     /* interfaces to control the activity's actions */
     @Nullable
@@ -144,6 +142,13 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
         }
     }
 
+    @Override
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //noinspection IfMayBeConditional
+
+    }
+
     @SuppressWarnings("ConstantConditions")
     @Nullable
     @Override
@@ -156,29 +161,55 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
 
         /* begin configuration for starfield and sensor */
         sf = (StarField) root.findViewById(R.id.sf);
-        sf.init(WindowLayout.screenDimension.x, WindowLayout.screenDimension.y, Color.RED);
-
-        loginButtons[0] = R.drawable.button_login;
-        loginButtons[1] = R.drawable.button_logout;
+        sf.init(WindowLayout.screenDimension.x, WindowLayout.screenDimension.y, settings.prefsColour);
 
         textView_buttom = (HTextView) root.findViewById(R.id.menu_buttom_text);
         textView_buttom.setAnimateType(HTextViewType.EVAPORATE);
         textView_buttom.setOnClickListener(new OnLoginClickListener(this));
+        textView_buttom.setTextColor(GameUtility.settings.textColour);
 
         title = (ImageView) root.findViewById(R.id.menu_title);
         title.setClickable(true);
         title.setOnClickListener(s_buttonListener);
 
-        buttons[BUTTON_PLAY] = (ImageView) root.findViewById(R.id.menu_button_play);
-        buttons[BUTTON_HIGHSCORE] = (ImageView) root.findViewById(R.id.menu_button_highscore);
+        buttons[BUTTON_PLAY] = (RelativeLayout) root.findViewById(R.id.menu_button_play);
+        buttons_text[BUTTON_PLAY] = (AutoScaleTextView) root.findViewById(R.id.menu_button_play_text);
 
-        buttons[BUTTON_WORD_LISTS] = (ImageView) root.findViewById(R.id.menu_button_word_lists);
-        buttons[BUTTON_SETTINGS] = (ImageView) root.findViewById(R.id.menu_button_settings);
-        buttons[BUTTON_ABOUT] = (ImageView) root.findViewById(R.id.menu_button_about);
-        buttons[BUTTON_HELP] = (ImageView) root.findViewById(R.id.menu_button_help);
-        buttons[BUTTON_LOGIN_OUT] = (ImageView) root.findViewById(R.id.menu_button_login_out);
-        buttons[BUTTON_LOGIN_OUT].setTag(false);
-        buttons[BUTTON_QUIT] = (ImageView) root.findViewById(R.id.menu_button_quit);
+        buttons[BUTTON_HIGHSCORE] = (RelativeLayout) root.findViewById(R.id.menu_button_highscore);
+        buttons_text[BUTTON_HIGHSCORE] = (AutoScaleTextView) root.findViewById(R.id.menu_button_highscore_text);
+
+        buttons[BUTTON_WORD_LISTS] = (RelativeLayout) root.findViewById(R.id.menu_button_word_lists);
+        buttons_text[BUTTON_WORD_LISTS] = (AutoScaleTextView) root.findViewById(R.id.menu_button_word_lists_text);
+
+        buttons[BUTTON_SETTINGS] = (RelativeLayout) root.findViewById(R.id.menu_button_settings);
+        buttons_text[BUTTON_SETTINGS] = (AutoScaleTextView) root.findViewById(R.id.menu_button_settings_text);
+
+        buttons[BUTTON_ABOUT] = (RelativeLayout) root.findViewById(R.id.menu_button_about);
+        buttons_text[BUTTON_ABOUT] = (AutoScaleTextView) root.findViewById(R.id.menu_button_about_text);
+
+        buttons[BUTTON_HELP] = (RelativeLayout) root.findViewById(R.id.menu_button_help);
+        buttons_text[BUTTON_HELP] = (AutoScaleTextView) root.findViewById(R.id.menu_button_help_text);
+
+        buttons[BUTTON_LOGIN_OUT] = (RelativeLayout) root.findViewById(R.id.menu_button_login_out);
+        buttons_text[BUTTON_LOGIN_OUT] = (AutoScaleTextView) root.findViewById(R.id.menu_button_login_out_text);
+        buttons[BUTTON_LOGIN_OUT].setTag(false); // logged in or not :)
+
+        buttons[BUTTON_QUIT] = (RelativeLayout) root.findViewById(R.id.menu_button_quit);
+        buttons_text[BUTTON_QUIT] = (AutoScaleTextView) root.findViewById(R.id.menu_button_quit_text);
+
+        /* configure the button colours */
+        DrawableHelper.setButtonColors(buttons, buttons_text);
+//        final int[] cols = new int[3];
+//        cols[0] = Color.BLACK;
+//        cols[1] = settings.prefsColour;
+//        cols[2] = Color.BLACK;
+//        Drawable drawable;
+//        for (int i = 0; i < BUTTON_COUNT; i++) {
+//            drawable = (GradientDrawable) buttons[i].getBackground();
+//            ((GradientDrawable) drawable).setColors(cols);
+//            buttons[i].setBackground(drawable);
+//            buttons_text[i].setTextColor(settings.textColour);
+//        }
 
         /* configure callback observer interfaces data classes */
         fireBaseLoginData = new FireBaseLoginData(this);
@@ -226,7 +257,7 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
     }
 
     private void setMenuButtonsClickable(final boolean value) {
-        for (final ImageView iv : buttons) iv.setClickable(value);
+        for (final RelativeLayout relativeLayout : buttons) relativeLayout.setClickable(value);
     }
 
     private void registerSensor() {
@@ -257,18 +288,18 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
         Log.d("login showall", String.valueOf(mpc.name == null));
         setLoginButton(GameUtility.getConnectionStatus());
         YoYo.with(Techniques.FadeIn).duration(1000).withListener(new EnterAnimatorHandler(this)).playOn(title);
-        for (final ImageView button : buttons) {
+        for (final RelativeLayout button : buttons) {
             button.setClickable(true);
             button.setOnClickListener(s_buttonListener);
         }
         setLoginButton();
     }
 
-    private void endMenu(final int gameMode, final ImageView clickedImageView) {
+    private void endMenu(final int gameMode, final RelativeLayout clickedView) {
         if (click_status) {
             click_status = false;
-            for (final ImageView iv : buttons) if (iv != clickedImageView) YoYo.with(Techniques.ZoomOut).duration(100).playOn(iv);
-            YoYo.with(Techniques.Pulse).duration(500).withListener(new ExitAnimatorHandler(this, gameMode)).playOn(clickedImageView);
+            for (final RelativeLayout iv : buttons) if (iv != clickedView) YoYo.with(Techniques.ZoomOut).duration(100).playOn(iv);
+            YoYo.with(Techniques.Pulse).duration(500).withListener(new ExitAnimatorHandler(this, gameMode)).playOn(clickedView);
         }
     }
 
@@ -426,9 +457,9 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
         public void onClick(final View v) {
             final MenuFragment menuFragment = weakReference.get();
             if (menuFragment != null) {
+                menuFragment.iGameSoundNotifier.playGameSound(GameUtility.SFX_MENU_CLICK);
                 boolean buttonStates = false;
-                if (v instanceof ImageView) {
-                    menuFragment.iGameSoundNotifier.playGameSound(GameUtility.SFX_MENU_CLICK);
+                if (v instanceof RelativeLayout) {
                     menuFragment.setMenuButtonsClickable(false);
 
                     if (v == menuFragment.buttons[BUTTON_PLAY]) {
@@ -485,16 +516,15 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
 
 //                        WindowLayout.showDialog(menuFragment.getContext(), "Hov!", "Denne funktion er ikke klar endnu.");
 //                        buttonStates = true;
-
-                    } else if (v == menuFragment.title) {
-                        menuFragment.showAll();
-                        buttonStates = true;
                     }
 
                     // we don't want to disable the buttons for the action that doesn't switch the fragment/act
                     if (buttonStates) {
                         menuFragment.setMenuButtonsClickable(true);
                     }
+                } else if (v instanceof ImageView) {
+                    // title was clicked.
+                    menuFragment.showAll();
                 }
             }
         }
@@ -684,9 +714,9 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
                 final MenuFragment menuFragment = menuFragmentWeakReference.get();
                 if (menuFragment != null) {
 //                    Log.d(TAG, "Got data : " + msg.getData().getString(MSG_STRING));
-                    final String string = msg.getData().getString(MSG_STRING);
-                    if (string != null) {
-                        menuFragment.textView_buttom.animateText(string);
+                    final String theText = msg.getData().getString(MSG_STRING);
+                    if (theText != null) {
+                        menuFragment.textView_buttom.animateText(theText);
                     }
                 }
             }
@@ -754,7 +784,6 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
                 }
                 bundle.clear();
                 bundle.putString(MSG_STRING, info.pollFirst());
-//                    Log.d(TAG, "Attempting to send : " + bundle.getString(MSG_STRING));
                 final Message message = menuFragment.textUpdateHandler.obtainMessage(MSG_UPDATE_TEXT);
                 message.setData(bundle);
                 message.sendToTarget();
@@ -768,17 +797,9 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
         /* make sure the right button is set for the login/logout status */
         if (buttons[BUTTON_LOGIN_OUT] != null) { // guard for when application first comes into foreground
             if (connectionStatus > -1) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    buttons[BUTTON_LOGIN_OUT].setBackground(ContextCompat.getDrawable(getContext(), (boolean) buttons[BUTTON_LOGIN_OUT].getTag() ? loginButtons[1] : loginButtons[0]));
-                } else {
-                    buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable((boolean) buttons[BUTTON_LOGIN_OUT].getTag() ? loginButtons[1] : loginButtons[0]));
-                }
+                buttons_text[BUTTON_LOGIN_OUT].setText(R.string.menu_button_login_in);
             } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    buttons[BUTTON_LOGIN_OUT].setBackground(ContextCompat.getDrawable(getContext(), loginButtons[0]));
-                } else {
-                    buttons[BUTTON_LOGIN_OUT].setBackground(getResources().getDrawable(loginButtons[0]));
-                }
+                buttons_text[BUTTON_LOGIN_OUT].setText(R.string.menu_button_login_out);
                 mpc.name = null;
             }
             YoYo.with(Techniques.Pulse).duration(300).playOn(buttons[BUTTON_LOGIN_OUT]);

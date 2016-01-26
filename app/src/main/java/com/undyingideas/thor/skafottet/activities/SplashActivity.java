@@ -17,9 +17,11 @@
 package com.undyingideas.thor.skafottet.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
@@ -147,19 +149,24 @@ public class SplashActivity extends AppCompatActivity {
                 s_preferences = new TinyDB(getApplicationContext());
             }
 
-            s_preferences.clear();
+//            s_preferences.clear();
 
             settings = new SettingsDTO();
-            settings.PREFS_MUSIC = s_preferences.getBoolean(Constant.KEY_PREFS_MUSIC, true);
-            settings.PREFS_SFX = s_preferences.getBoolean(Constant.KEY_PREFS_SFX, true);
-            settings.PREFS_BLOOD = s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD, true);
-            settings.PREFS_HEPTIC = s_preferences.getBoolean(Constant.KEY_PREFS_HEPTIC, true);
+            settings.prefsMusic = s_preferences.getBoolean(Constant.KEY_PREFS_MUSIC, true);
+            settings.prefsSfx = s_preferences.getBoolean(Constant.KEY_PREFS_SFX, true);
+            settings.prefsBlood = s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD, true);
+            settings.prefsHeptic = s_preferences.getBoolean(Constant.KEY_PREFS_HEPTIC, true);
+            settings.prefsColour = s_preferences.getInt(Constant.KEY_PREFS_COLOUR, Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? ContextCompat.getColor(getApplicationContext(), R.color.colorAccent) : getResources().getColor(R.color.colorAccent));
+            settings.setContrastColor();
 
-            s_preferences.putBoolean(Constant.KEY_PREFS_BLOOD, settings.PREFS_BLOOD);
-            s_preferences.putBoolean(Constant.KEY_PREFS_MUSIC, settings.PREFS_MUSIC);
-            s_preferences.putBoolean(Constant.KEY_PREFS_SFX, settings.PREFS_SFX);
-            s_preferences.putBoolean(Constant.KEY_PREFS_HEPTIC, settings.PREFS_HEPTIC);
+            /* keep the preferences as we don't know if the user actually ran the app for the first time. */
+            s_preferences.putBoolean(Constant.KEY_PREFS_BLOOD, settings.prefsBlood);
+            s_preferences.putBoolean(Constant.KEY_PREFS_MUSIC, settings.prefsMusic);
+            s_preferences.putBoolean(Constant.KEY_PREFS_SFX, settings.prefsSfx);
+            s_preferences.putBoolean(Constant.KEY_PREFS_HEPTIC, settings.prefsHeptic);
+            s_preferences.putInt(Constant.KEY_PREFS_COLOUR, settings.prefsColour);
 
+            /* set the intent for the background music */
             GameUtility.musicPLayIntent = new Intent(getApplicationContext(), MusicPlay.class);
 
             GameUtility.setConnectionStatus(NetworkHelper.getConnectivityStatus(getApplicationContext()));

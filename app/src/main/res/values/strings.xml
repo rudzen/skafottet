@@ -52,4 +52,20 @@
     <string name="pref_dream_text_default">zzzZZZzzz</string>
     <string name="cancel">Afbryd</string>
     <string name="login">Login</string>
+
+
+    <!-- Color Picker -->
+    <string name="dialog_color_picker">Farvevælger</string>
+    <string name="press_color_to_apply">Tryk på en farve for at vælge</string>
+    <string name="menu_button_play">Spil</string>
+    <string name="menu_button_highscore">Highscore</string>
+    <string name="menu_button_word_lists">Ordlister</string>
+    <string name="menu_button_settings">Indstillinger</string>
+    <string name="menu_button_about">Omkring</string>
+    <string name="menu_button_help">Hjælp</string>
+    <string name="menu_button_login_in">Log ind</string>
+    <string name="menu_button_login_out">Log ud</string>
+    <string name="menu_button_quit">Afslut</string>
+    <string name="end_game_button_new_game_text">Nyt spil</string>
+    <string name="end_game_button_main_menu_text">Hovedmenu</string>
 </resources>

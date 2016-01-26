@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/menu_button_layout"
+    android:layout_width="180dp"
+    android:layout_height="60dp"
+    android:alpha="0.9"
+    android:background="@drawable/menu_button_shape"
+    android:gravity="center">
+
+    <com.undyingideas.thor.skafottet.views.AutoScaleTextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="button"
+        android:textSize="30sp" />
+</RelativeLayout>

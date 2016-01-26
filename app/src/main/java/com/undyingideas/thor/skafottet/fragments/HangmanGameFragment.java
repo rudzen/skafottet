@@ -1,6 +1,7 @@
 package com.undyingideas.thor.skafottet.fragments;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
@@ -58,6 +59,8 @@ public class HangmanGameFragment extends Fragment {
     private Animation sepAnimation;
     private OnButtonClickListener onButtonClickListener;
 
+    private Drawable menuButton;
+
     private IGameSoundNotifier iGameSoundNotifier;
 
     @Override
@@ -70,10 +73,10 @@ public class HangmanGameFragment extends Fragment {
         }
     }
 
-    @SuppressWarnings("AccessStaticViaInstance")
+    @SuppressWarnings({"AccessStaticViaInstance", "deprecation"})
     @Override
     public void onCreate(final Bundle savedInstanceState) {
-        if (GameUtility.settings.PREFS_HEPTIC) {
+        if (GameUtility.settings.prefsHeptic) {
             try {
                 vibrator = (Vibrator) getActivity().getSystemService(getActivity().VIBRATOR_SERVICE);
             } catch (final Exception e) {
@@ -119,6 +122,8 @@ public class HangmanGameFragment extends Fragment {
 
         resetButtons();
 
+        applyColours();
+
         return root;
     }
 
@@ -149,6 +154,7 @@ public class HangmanGameFragment extends Fragment {
     public void onResume() {
         sepKnown.setAnimation(sepAnimation);
         sepStatus.setAnimation(sepAnimation);
+        applyColours();
         super.onResume();
     }
 
@@ -189,6 +195,12 @@ public class HangmanGameFragment extends Fragment {
         GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, currentGame);
         outState.putParcelable(Constant.KEY_SAVE_GAME, currentGame);
         super.onSaveInstanceState(outState);
+    }
+
+    private void applyColours() {
+        /* apply colours to all controls except guess buttons. */
+        textWord.setTextColor(GameUtility.settings.textColour);
+        textStatus.setTextColor(GameUtility.settings.textColour);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -232,8 +244,11 @@ public class HangmanGameFragment extends Fragment {
         YoYo.with(Techniques.FadeIn).duration(400).playOn(buttonRows[3]);
         YoYo.with(Techniques.FadeIn).duration(400).playOn(noose);
         for (final Button button : listOfButtons) {
+            button.setBackgroundColor(GameUtility.settings.prefsColour);
+            button.setTextColor(GameUtility.settings.textColour);
             YoYo.with(Techniques.FadeIn).duration(400).playOn(button);
             button.setVisibility(View.VISIBLE);
+            button.setBackgroundColor(GameUtility.settings.prefsColour);
             button.setOnClickListener(onButtonClickListener);
         }
     }

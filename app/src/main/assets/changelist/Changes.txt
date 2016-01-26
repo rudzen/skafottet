@@ -1,10 +1,21 @@
 (+ = new, - = removed, * = change, ! = fix)
+v1.1.2d - 26.01.2016, rudz
+--------------------------
++ It's now possible to set the colour theme of the game through preferences,
+  the text colour is adjusted to white or black depending on the brightness of the selected theme colour.
+* Graphical buttons replaced by shape/gradient drawable.
+* Removed a lot of old not-needed files, about ½mb smaller in size.
+* End game fragment structure adjusted to better fit new colouring of buttons.
+* The robe colour in the 3d model will not turn black or white, but grey or white depending on main colour.
+
 v1.1.2c - 26.01.2016, rudz
+--------------------------
 ! More deprecated method guards.
 * Cleaned up some code
 * About fragment updated.
 
 v1.1.2b - 25.01.2016, rudz
+--------------------------
 ! Fixed not getting points for last guess.
 ! Preferences now works as intended.
 ! More class metrics issues dealt with.

@@ -97,6 +97,7 @@ public abstract class WindowLayout {
         WindowLayout.loadToast = loadToast;
     }
 
+
     public static MaterialDialog getMd() {
         return md;
     }

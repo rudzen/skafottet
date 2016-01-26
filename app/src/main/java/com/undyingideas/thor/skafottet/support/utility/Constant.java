@@ -40,6 +40,9 @@ public final class Constant {
     public static final String KEY_PREFS_BLOOD = "kpblood";
     public static final String KEY_PREFS_HEPTIC = "kphep";
 
+    public static final String KEY_PREFS_COLOUR = "kpcol";
+
+
     /* instance keys */
 
     /* game mode keys */

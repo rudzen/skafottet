@@ -39,12 +39,11 @@ import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
 import com.undyingideas.thor.skafottet.interfaces.IGameSoundNotifier;
 import com.undyingideas.thor.skafottet.services.MusicPlay;
+import com.undyingideas.thor.skafottet.support.classes.SetLoadToaster;
 import com.undyingideas.thor.skafottet.support.highscore.local.Player;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
-
-import net.steamcrafted.loadtoast.LoadToast;
 
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.settings;
 
@@ -82,8 +81,8 @@ public class GameActivity extends SoundAbstract implements
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        // take over the loader toast for this act..
-        WindowLayout.setLoadToast(new LoadToast(this));
+        // take over the loader toast for this activity..
+        new SetLoadToaster(this).run();
 
         if (getIntent() != null && getIntent().getExtras() != null) { // TODO : Figure out more direct game controlling modes..
             final Bundle bundle = getIntent().getExtras().getBundle(Constant.KEY_MODE);
@@ -104,7 +103,7 @@ public class GameActivity extends SoundAbstract implements
 
     @Override
     protected void onResume() {
-        if (settings.PREFS_MUSIC) {
+        if (settings.prefsMusic) {
             GameUtility.musicPLayIntent.setAction(MusicPlay.ACTION_PLAY);
             startService(GameUtility.musicPLayIntent);
         } else {
@@ -279,5 +278,10 @@ public class GameActivity extends SoundAbstract implements
         GameUtility.setConnectionStatusName(connectionState);
         WindowLayout.showSnack("Forbindelse : " + connectionState, findViewById(R.id.fragment_content), true);
     }
+
+
+
+
+
 }
 

@@ -106,8 +106,8 @@ public abstract class SoundAbstract extends AppCompatActivity implements SoundPo
     }
 
     void playSound(final int index) {
-        Log.d(TAG, String.valueOf(GameUtility.settings.PREFS_SFX));
-        if (GameUtility.settings.PREFS_SFX) {
+        Log.d(TAG, String.valueOf(GameUtility.settings.prefsSfx));
+        if (GameUtility.settings.prefsSfx) {
             if (loaded) {
                 soundThread.sounds.add(soundItems[index]);
             }
