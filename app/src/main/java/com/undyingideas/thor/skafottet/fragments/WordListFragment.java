@@ -109,12 +109,22 @@ public class WordListFragment extends Fragment implements
 
     private static IFragmentFlipper iFragmentFlipper;
 
-    public static WordListFragment newInstance() {
-        final WordListFragment wordListFragment = new WordListFragment();
-        final Bundle args = new Bundle();
-        // TODO : Insert arguments
-        wordListFragment.setArguments(args);
-        return wordListFragment;
+    @Override
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        if (context instanceof IFragmentFlipper) {
+            iFragmentFlipper = (IFragmentFlipper) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement IFragmentFlipper.");
+        }
+    }
+
+    @SuppressLint("InflateParams")
+    @Override
+    public void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        refreshStopper = new RefreshStopper();
+        handler = new Handler();
     }
 
     @Nullable
@@ -199,28 +209,18 @@ public class WordListFragment extends Fragment implements
         super.onViewCreated(view, savedInstanceState);
     }
 
-    @SuppressLint("InflateParams")
-    @Override
-    public void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        refreshStopper = new RefreshStopper();
-        handler = new Handler();
-    }
-
-    @Override
-    public void onAttach(final Context context) {
-        super.onAttach(context);
-        if (context instanceof IFragmentFlipper) {
-            iFragmentFlipper = (IFragmentFlipper) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement IFragmentFlipper.");
-        }
-    }
-
     @Override
     public void onDetach() {
         iFragmentFlipper = null;
         super.onDetach();
+    }
+
+    public static WordListFragment newInstance() {
+        final WordListFragment wordListFragment = new WordListFragment();
+        final Bundle args = new Bundle();
+        // TODO : Insert arguments
+        wordListFragment.setArguments(args);
+        return wordListFragment;
     }
 
     @Override

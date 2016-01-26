@@ -64,27 +64,15 @@ public class LobbySelectorFragment extends Fragment {
     @Nullable
     private IFragmentFlipper iFragmentFlipper;
 
-    /**
-     * Use this method to create a new instance of * this fragment using the provided parameters.
-     * @param isOnline Defines if the application has access to the internet.
-     * @return A new instance of fragment LobbySelectorFragment.
-     */
-    public static LobbySelectorFragment newInstance(final boolean isOnline) {
-        final LobbySelectorFragment fragment = new LobbySelectorFragment();
-        final Bundle args = new Bundle();
-        args.putBoolean(KEY_IS_ONLINE, isOnline);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    /**
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnMultiPlayerPlayerFragmentInteractionListener {
-        void onPlayerClicked(final String playerName);
-        void startNewMultiplayerGame(final String lobbyKey, final String theWord);
+    @Override
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        if (context instanceof OnMultiPlayerPlayerFragmentInteractionListener && context instanceof IFragmentFlipper) {
+            mListener = (OnMultiPlayerPlayerFragmentInteractionListener) context;
+            iFragmentFlipper = (IFragmentFlipper) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement OnMultiPlayerPlayerFragmentInteractionListener & IFragmentFlipper.");
+        }
     }
 
     @Override
@@ -117,21 +105,33 @@ public class LobbySelectorFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(final Context context) {
-        super.onAttach(context);
-        if (context instanceof OnMultiPlayerPlayerFragmentInteractionListener && context instanceof IFragmentFlipper) {
-            mListener = (OnMultiPlayerPlayerFragmentInteractionListener) context;
-            iFragmentFlipper = (IFragmentFlipper) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement OnMultiPlayerPlayerFragmentInteractionListener & IFragmentFlipper.");
-        }
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
         iFragmentFlipper = null;
+    }
+
+    /**
+     * Use this method to create a new instance of * this fragment using the provided parameters.
+     * @param isOnline Defines if the application has access to the internet.
+     * @return A new instance of fragment LobbySelectorFragment.
+     */
+    public static LobbySelectorFragment newInstance(final boolean isOnline) {
+        final LobbySelectorFragment fragment = new LobbySelectorFragment();
+        final Bundle args = new Bundle();
+        args.putBoolean(KEY_IS_ONLINE, isOnline);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    /**
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnMultiPlayerPlayerFragmentInteractionListener {
+        void onPlayerClicked(final String playerName);
+        void startNewMultiplayerGame(final String lobbyKey, final String theWord);
     }
 
     private void onButtonPressed(final int position) {

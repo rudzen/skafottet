@@ -133,6 +133,17 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
     @Nullable
     private IGameSoundNotifier iGameSoundNotifier;
 
+    @Override
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        if (context instanceof IFragmentFlipper && context instanceof IGameSoundNotifier) {
+            iFragmentFlipper = (IFragmentFlipper) context;
+            iGameSoundNotifier = (IGameSoundNotifier) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement IFragmentFlipper & IGameSoundNotifier");
+        }
+    }
+
     @SuppressWarnings("ConstantConditions")
     @Nullable
     @Override
@@ -201,17 +212,6 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
     public void onStop() {
         if (sensor != null && sensorManager != null) sensorManager.unregisterListener(sensorListener, sensor);
         super.onStop();
-    }
-
-    @Override
-    public void onAttach(final Context context) {
-        super.onAttach(context);
-        if (context instanceof IFragmentFlipper && context instanceof IGameSoundNotifier) {
-            iFragmentFlipper = (IFragmentFlipper) context;
-            iGameSoundNotifier = (IGameSoundNotifier) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement IFragmentFlipper & IGameSoundNotifier");
-        }
     }
 
     @Override

@@ -149,6 +149,16 @@ public class AboutFragment extends Fragment {
     @Nullable
     private TextView[] tv = new TextView[ROWS.length];
 
+    @Override
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        if (context instanceof IFragmentFlipper) {
+            iFragmentFlipper = (IFragmentFlipper) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement IFragmentFlipper");
+        }
+    }
+
     @SuppressWarnings("deprecation")
     @Nullable
     @Override
@@ -190,13 +200,9 @@ public class AboutFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(final Context context) {
-        super.onAttach(context);
-        if (context instanceof IFragmentFlipper) {
-            iFragmentFlipper = (IFragmentFlipper) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement IFragmentFlipper");
-        }
+    public void onDestroy() {
+        tv = null;
+        super.onDestroy();
     }
 
     @Override
@@ -205,9 +211,4 @@ public class AboutFragment extends Fragment {
         super.onDetach();
     }
 
-    @Override
-    public void onDestroy() {
-        tv = null;
-        super.onDestroy();
-    }
 }

@@ -121,17 +121,17 @@ public class GameActivity extends SoundAbstract implements
     }
 
     @Override
+    protected void onStop() {
+        InternetReciever.removeObserver(internetRecieverData);
+        super.onStop();
+    }
+
+    @Override
     protected void onDestroy() {
         soundThread.interrupt();
         soundThread = null;
         Log.d(TAG, "Sound removed");
         super.onDestroy();
-    }
-
-    @Override
-    protected void onStop() {
-        InternetReciever.removeObserver(internetRecieverData);
-        super.onStop();
     }
 
     @Override

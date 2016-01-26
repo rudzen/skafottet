@@ -32,13 +32,6 @@ public class PlayerDetailFragment extends Fragment {
      */
     private HighScoreContent.HighScoreItem mItem;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public PlayerDetailFragment() {
-    }
-
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,4 +61,12 @@ public class PlayerDetailFragment extends Fragment {
 
         return rootView;
     }
+
+    /**
+     * Mandatory empty constructor for the fragment manager to instantiate the
+     * fragment (e.g. upon screen orientation changes).
+     */
+    public PlayerDetailFragment() {
+    }
+
 }

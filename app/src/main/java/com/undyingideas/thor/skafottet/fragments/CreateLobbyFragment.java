@@ -53,12 +53,15 @@ public class CreateLobbyFragment extends Fragment {
     @Nullable
     private IFragmentFlipper iFragmentFlipper;
 
-    public static CreateLobbyFragment newInstance(final boolean isOnline) {
-        final CreateLobbyFragment fragment = new CreateLobbyFragment();
-        final Bundle args = new Bundle();
-        args.putBoolean(KEY_IS_ONLINE, isOnline);
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        if (context instanceof OnCreateLobbyFragmentInteractionListener && context instanceof IFragmentFlipper) {
+            onCreateLobbyFragmentInteractionListener = (OnCreateLobbyFragmentInteractionListener) context;
+            iFragmentFlipper = (IFragmentFlipper) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement OnCreateLobbyFragmentInteractionListener & IFragmentFlipper.");
+        }
     }
 
     @Override
@@ -96,23 +99,20 @@ public class CreateLobbyFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(final Context context) {
-        super.onAttach(context);
-        if (context instanceof OnCreateLobbyFragmentInteractionListener && context instanceof IFragmentFlipper) {
-            onCreateLobbyFragmentInteractionListener = (OnCreateLobbyFragmentInteractionListener) context;
-            iFragmentFlipper = (IFragmentFlipper) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement OnCreateLobbyFragmentInteractionListener & IFragmentFlipper.");
-        }
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
         onCreateLobbyFragmentInteractionListener = null;
         iFragmentFlipper = null;
         opponentName = null;
         GameUtility.mpc.setRunnable(null);
+    }
+
+    public static CreateLobbyFragment newInstance(final boolean isOnline) {
+        final CreateLobbyFragment fragment = new CreateLobbyFragment();
+        final Bundle args = new Bundle();
+        args.putBoolean(KEY_IS_ONLINE, isOnline);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     /**

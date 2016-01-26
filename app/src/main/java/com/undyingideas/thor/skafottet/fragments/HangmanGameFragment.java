@@ -60,22 +60,14 @@ public class HangmanGameFragment extends Fragment {
 
     private IGameSoundNotifier iGameSoundNotifier;
 
-    public static HangmanGameFragment newInstance(final SaveGame saveGame) {
-        final Bundle args = new Bundle();
-        args.putParcelable(Constant.KEY_SAVE_GAME, saveGame);
-        final HangmanGameFragment hangmanGameFragment = newInstance(args); //new HangmanGameFragment();
-        try {
-            GameUtility.mpc.setRunnable(null);
-        } catch (final Exception e) {
-            Log.e("starthangman", "remove runnable " + e.getMessage());
+    @Override
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        if (context instanceof IGameSoundNotifier && context instanceof IFragmentFlipper) {
+            iGameSoundNotifier = (IGameSoundNotifier) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement IGameSoundNotifier.");
         }
-        return hangmanGameFragment;
-    }
-
-    private static HangmanGameFragment newInstance(final Bundle bundle) {
-        final HangmanGameFragment hangmanGameFragment = new HangmanGameFragment();
-        hangmanGameFragment.setArguments(bundle);
-        return hangmanGameFragment;
     }
 
     @SuppressWarnings("AccessStaticViaInstance")
@@ -131,16 +123,6 @@ public class HangmanGameFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(final Context context) {
-        super.onAttach(context);
-        if (context instanceof IGameSoundNotifier && context instanceof IFragmentFlipper) {
-            iGameSoundNotifier = (IGameSoundNotifier) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement IGameSoundNotifier.");
-        }
-    }
-
-    @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getArguments() != null) {
@@ -157,24 +139,17 @@ public class HangmanGameFragment extends Fragment {
     }
 
     @Override
-    public void onDetach() {
-        GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, currentGame);
-        iGameSoundNotifier = null;
-        super.onDetach();
-    }
-
-    @Override
-    public void onSaveInstanceState(final Bundle outState) {
-        GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, currentGame);
-        outState.putParcelable(Constant.KEY_SAVE_GAME, currentGame);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
     public void onViewStateRestored(final Bundle savedInstanceState) {
         readFromBundle(savedInstanceState);
         applySaveGameStatus();
         super.onViewStateRestored(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        sepKnown.setAnimation(sepAnimation);
+        sepStatus.setAnimation(sepAnimation);
+        super.onResume();
     }
 
     @Override
@@ -185,10 +160,35 @@ public class HangmanGameFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        sepKnown.setAnimation(sepAnimation);
-        sepStatus.setAnimation(sepAnimation);
-        super.onResume();
+    public void onDetach() {
+        GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, currentGame);
+        iGameSoundNotifier = null;
+        super.onDetach();
+    }
+
+    public static HangmanGameFragment newInstance(final SaveGame saveGame) {
+        final Bundle args = new Bundle();
+        args.putParcelable(Constant.KEY_SAVE_GAME, saveGame);
+        final HangmanGameFragment hangmanGameFragment = newInstance(args); //new HangmanGameFragment();
+        try {
+            GameUtility.mpc.setRunnable(null);
+        } catch (final Exception e) {
+            Log.e("starthangman", "remove runnable " + e.getMessage());
+        }
+        return hangmanGameFragment;
+    }
+
+    private static HangmanGameFragment newInstance(final Bundle bundle) {
+        final HangmanGameFragment hangmanGameFragment = new HangmanGameFragment();
+        hangmanGameFragment.setArguments(bundle);
+        return hangmanGameFragment;
+    }
+
+    @Override
+    public void onSaveInstanceState(final Bundle outState) {
+        GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, currentGame);
+        outState.putParcelable(Constant.KEY_SAVE_GAME, currentGame);
+        super.onSaveInstanceState(outState);
     }
 
     @SuppressWarnings("ConstantConditions")
