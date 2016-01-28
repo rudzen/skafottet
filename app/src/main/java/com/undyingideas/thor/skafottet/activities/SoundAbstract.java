@@ -28,6 +28,7 @@ import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.support.sfx.SoundItem;
 import com.undyingideas.thor.skafottet.support.sfx.SoundThread;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
+import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 /**
  * Created on 17-01-2016, 17:10.
@@ -110,6 +111,8 @@ public abstract class SoundAbstract extends AppCompatActivity implements SoundPo
         if (GameUtility.settings.prefsSfx) {
             if (loaded) {
                 soundThread.sounds.add(soundItems[index]);
+            } else {
+                WindowLayout.showSnack("Lydfil ikke indhentet endnu,", findViewById(R.id.fragment_content), true);
             }
         }
     }
