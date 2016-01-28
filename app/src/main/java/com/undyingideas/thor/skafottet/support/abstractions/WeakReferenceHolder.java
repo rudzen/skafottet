@@ -21,7 +21,7 @@ import java.lang.ref.WeakReference;
 /**
  * Created on 20-01-2016, 17:25.
  * Project : skafottet
- * // not used for anyting right now.
+ * Simple generic weak reference abstraction class.<br>
  * @author rudz
  */
 public abstract class WeakReferenceHolder<E> {

@@ -97,13 +97,25 @@ public abstract class WindowLayout {
         WindowLayout.loadToast = loadToast;
     }
 
-
+    /**
+     * Returns the current material dialog.
+     * @return The dialog to return, this should be configured through the setMd,
+     *         So only necessary to call .show() on it.
+     */
     public static MaterialDialog getMd() {
         return md;
     }
 
-    public static void setMd(MaterialDialog md) {
-        WindowLayout.md = md;
+    /**
+     * Creates a new immersive mode material dialog from parsed in builder.
+     * @param md The builder from which to create the dialog from.
+     */
+    public static void setMd(final MaterialDialog.Builder md) {
+        WindowLayout.md = md.build();
+        WindowLayout.md.setCanceledOnTouchOutside(false);
+        WindowLayout.md.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        WindowLayout.md.getWindow().addFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        setImmersiveMode(WindowLayout.md.getWindow());
     }
 
     private static class OnSnackBarClick implements View.OnClickListener {
@@ -114,12 +126,12 @@ public abstract class WindowLayout {
     }
 
     public static void showDialog(final Context context, final CharSequence title, final CharSequence content) {
-        new MaterialDialog.Builder(context)
+        setMd(new MaterialDialog.Builder(context)
                 .backgroundColor(Color.BLACK)
                 .title(title)
                 .content(content)
-                .positiveText("Ok")
-                .show();
+                .positiveText("Ok"));
+        md.show();
     }
 
     public static void setImmersiveMode(final Window w) {

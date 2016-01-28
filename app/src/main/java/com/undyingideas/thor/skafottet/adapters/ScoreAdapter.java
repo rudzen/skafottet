@@ -22,36 +22,37 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.support.highscore.local.Score;
 import com.undyingideas.thor.skafottet.views.AutoScaleTextView;
 
 import java.util.ArrayList;
 
 /**
  * Created on 27-12-2015, 09:59.<br>
- * Adapter for showing the relevant information about game selection.
- * Tweaked to support custom tag for item selection based on current availble game modes.
+ * Adapter for showing the highscore list
  * @author rudz
  */
-public class StartGameAdapter extends ArrayAdapter<StartGameItem> {
+public class ScoreAdapter extends ArrayAdapter<Score> {
 
     private final Context context;
     private final int layoutResourceId;
-    private final ArrayList<StartGameItem> data;
+    private final ArrayList<Score> data;
 
-    public StartGameAdapter(final Context context, final int layoutResourceId, final ArrayList<StartGameItem> data) {
+    public ScoreAdapter(final Context context, final int layoutResourceId, final ArrayList<Score> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
     }
 
+    @SuppressWarnings("StaticVariableOfConcreteClass")
     private static final class ViewHolder {
-        public static AutoScaleTextView s_textViewItem;
-        public static AutoScaleTextView s_textViewDesc;
-        public static ImageView s_icon;
+        public static AutoScaleTextView s_Name;
+        public static AutoScaleTextView s_Word;
+        public static AutoScaleTextView s_Date;
+        public static AutoScaleTextView s_Points;
     }
 
     @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
@@ -61,15 +62,18 @@ public class StartGameAdapter extends ArrayAdapter<StartGameItem> {
         if (view == null) {
             final LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             view = inflater.inflate(layoutResourceId, parent, false);
-            ViewHolder.s_textViewItem = (AutoScaleTextView) view.findViewById(R.id.new_game_item);
-            ViewHolder.s_textViewDesc = (AutoScaleTextView) view.findViewById(R.id.new_game_description);
-            ViewHolder.s_icon = (ImageView) view.findViewById(R.id.new_game_icon);
+            ViewHolder.s_Name = (AutoScaleTextView) view.findViewById(R.id.highscore_name);
+            ViewHolder.s_Word = (AutoScaleTextView) view.findViewById(R.id.highscore_word);
+            ViewHolder.s_Date = (AutoScaleTextView) view.findViewById(R.id.highscore_date);
+            ViewHolder.s_Points = (AutoScaleTextView) view.findViewById(R.id.highscore_points);
         }
-        final StartGameItem startGameItem = data.get(position);
-        ViewHolder.s_textViewItem.setText(startGameItem.itemName);
-        ViewHolder.s_textViewDesc.setText(startGameItem.description);
-        ViewHolder.s_icon.setImageResource(startGameItem.resourceIcon);
-        view.setTag(startGameItem.itemId);
+
+        final Score score = data.get(position);
+        ViewHolder.s_Name.setText(score.getName());
+        ViewHolder.s_Word.setText(score.getWord());
+        ViewHolder.s_Date.setText(score.getDateString());
+        ViewHolder.s_Points.setText(Integer.toString(score.getScore()));
+        view.setTag(ViewHolder.s_Name);
         return view;
     }
 

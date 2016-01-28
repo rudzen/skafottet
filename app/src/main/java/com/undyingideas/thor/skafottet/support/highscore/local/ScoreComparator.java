@@ -16,9 +16,13 @@
 
 package com.undyingideas.thor.skafottet.support.highscore.local;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
-class ScoreComparator implements Comparator<Score> {
+class ScoreComparator implements Comparator<Score>, Serializable {
+
+    private static final long serialVersionUID = 6944625214625451817L;
+
     @Override
     public int compare(final Score score1, final Score score2) {
         final int sc1 = score1.getScore();

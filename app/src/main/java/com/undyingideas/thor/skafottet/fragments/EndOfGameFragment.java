@@ -17,6 +17,7 @@
 package com.undyingideas.thor.skafottet.fragments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -26,14 +27,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.nineoldandroids.animation.Animator;
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.adapters.ScoreAdapter;
 import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
 import com.undyingideas.thor.skafottet.interfaces.IGameSoundNotifier;
@@ -43,6 +47,7 @@ import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.DrawableHelper;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
+import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.views.AutoScaleTextView;
 
 import java.lang.ref.WeakReference;
@@ -80,12 +85,12 @@ public class EndOfGameFragment extends Fragment {
     @Nullable
     private ImageView imageViewResult;
 
-    private final RelativeLayout[] buttons = new RelativeLayout[2];
-    private final AutoScaleTextView[] button_text = new AutoScaleTextView[2];
+    private final RelativeLayout[] buttons = new RelativeLayout[3];
+    private final AutoScaleTextView[] button_text = new AutoScaleTextView[3];
 
-    private TextView textViewTop;
-    private TextView textViewMiddle;
-    private TextView textViewLower;
+    private AutoScaleTextView textViewTop;
+    private AutoScaleTextView textViewMiddle;
+    private AutoScaleTextView textViewLower;
 
     private SaveGame endGame;
 
@@ -96,6 +101,8 @@ public class EndOfGameFragment extends Fragment {
 
     @Nullable
     private IFragmentFlipper iFragmentFlipper;
+
+    private ScoreAdapter scoreAdapter;
 
     /**
      * Constructs a new EndOfGameFragment.
@@ -146,8 +153,15 @@ public class EndOfGameFragment extends Fragment {
         buttons[1].setOnClickListener(endGameClickListener);
         buttons[1].setVisibility(View.INVISIBLE);
 
+        buttons[2] = (RelativeLayout) root.findViewById(R.id.end_game_button_highscore);
+        buttons[2].setClickable(false);
+        buttons[2].setOnClickListener(endGameClickListener);
+        buttons[2].setVisibility(View.INVISIBLE);
+
+
         button_text[0] = (AutoScaleTextView) root.findViewById(R.id.end_game_button_new_game_text);
         button_text[1] = (AutoScaleTextView) root.findViewById(R.id.end_game_button_main_menu_text);
+        button_text[2] = (AutoScaleTextView) root.findViewById(R.id.end_game_button_highscore_text);
 
         DrawableHelper.setButtonColors(buttons, button_text);
 
@@ -304,6 +318,20 @@ public class EndOfGameFragment extends Fragment {
         resultCalcHandler.post(calculateResults);
     }
 
+    private void showHighscores() {
+        scoreAdapter = new ScoreAdapter(getContext(), R.layout.highscore_list_row, GameUtility.highscoreManager.getScores());
+        final ListView listViewItems = new ListView(getActivity().getApplicationContext());
+        listViewItems.setAdapter(scoreAdapter);
+
+        WindowLayout.setMd(new MaterialDialog.Builder(getActivity())
+                .customView(listViewItems, false)
+                .backgroundColor(Color.BLACK)
+                .cancelable(true)
+                .autoDismiss(true)
+                .title("De bedste i din verden!"));
+        WindowLayout.getMd().show();
+    }
+
     private static class ResultCalcHandler extends Handler {
 
         final private WeakReference<EndOfGameFragment> endOfGameFragmentWeakReference;
@@ -365,25 +393,29 @@ public class EndOfGameFragment extends Fragment {
         public void onClick(final View v) {
             final EndOfGameFragment endOfGameFragment = weakReference.get();
             if (endOfGameFragment != null) {
-                v.setClickable(false);
-                if (v == endOfGameFragment.buttons[1]) {
-                    endOfGameFragment.buttons[0].setClickable(false);
-                    YoYo.with(Techniques.FadeOut).duration(300).playOn(endOfGameFragment.buttons[0]);
-                } else {
-                    endOfGameFragment.buttons[1].setClickable(false);
-                    YoYo.with(Techniques.FadeOut).duration(300).playOn(endOfGameFragment.buttons[1]);
-                }
                 endOfGameFragment.iGameSoundNotifier.playGameSound(GameUtility.SFX_MENU_CLICK);
-                YoYo.with(Techniques.ZoomOut).duration(300).playOn(endOfGameFragment.imageViewResult);
-                YoYo.with(Techniques.ZoomOut).duration(400).playOn(endOfGameFragment.textViewTop);
-                YoYo.with(Techniques.ZoomOut).duration(400).playOn(endOfGameFragment.textViewMiddle);
-                YoYo.with(Techniques.ZoomOut).duration(400).playOn(endOfGameFragment.textViewLower);
-                YoYo.with(Techniques.Pulse).duration(400).withListener(new ExitAnimatorHandler(endOfGameFragment, (RelativeLayout) v)).playOn(v);
+                if (v != endOfGameFragment.buttons[2]) { // not the highscore button!
+                    v.setClickable(false);
+                    if (v == endOfGameFragment.buttons[1]) {
+                        endOfGameFragment.buttons[0].setClickable(false);
+                        YoYo.with(Techniques.FadeOut).duration(300).playOn(endOfGameFragment.buttons[0]);
+                    } else {
+                        endOfGameFragment.buttons[1].setClickable(false);
+                        YoYo.with(Techniques.FadeOut).duration(300).playOn(endOfGameFragment.buttons[1]);
+                    }
+                    YoYo.with(Techniques.ZoomOut).duration(300).playOn(endOfGameFragment.imageViewResult);
+                    YoYo.with(Techniques.ZoomOut).duration(400).playOn(endOfGameFragment.textViewTop);
+                    YoYo.with(Techniques.ZoomOut).duration(400).playOn(endOfGameFragment.textViewMiddle);
+                    YoYo.with(Techniques.ZoomOut).duration(400).playOn(endOfGameFragment.textViewLower);
+                    YoYo.with(Techniques.Pulse).duration(400).withListener(new ExitAnimatorHandler(endOfGameFragment, (RelativeLayout) v)).playOn(v);
+                } else {
+                    endOfGameFragment.showHighscores();
+                }
             }
         }
     }
 
-    private static class EnterAnimatorHandler extends WeakReferenceHolder<EndOfGameFragment> implements Animator.AnimatorListener {
+    private static class EnterAnimatorHandler extends WeakReferenceHolder<EndOfGameFragment> implements Animator.AnimatorListener,  AdapterView.OnItemClickListener {
 
         public EnterAnimatorHandler(final EndOfGameFragment endOfGameFragment) {
             super(endOfGameFragment);
@@ -407,6 +439,23 @@ public class EndOfGameFragment extends Fragment {
                 endOfGameFragment.buttons[1].setVisibility(View.VISIBLE);
                 YoYo.with(Techniques.BounceInLeft).duration(1000).playOn(endOfGameFragment.buttons[0]);
                 endOfGameFragment.buttons[0].setVisibility(View.VISIBLE);
+                YoYo.with(Techniques.BounceIn).duration(1000).playOn(endOfGameFragment.buttons[2]);
+                endOfGameFragment.buttons[2].setVisibility(View.VISIBLE);
+
+                if (!endOfGameFragment.endGame.isMultiPlayer()) {
+                    if (GameUtility.highscoreManager.checkScore(endOfGameFragment.endGame.getPlayers()[0].getPts()) > -1) {
+                        final int highscorePosition = GameUtility.highscoreManager.addScore(endOfGameFragment.endGame.getLogic().getTheWord(), endOfGameFragment.endGame.getPlayers()[0]);
+                        Log.d("Highscore", "Tilføjet til position # : " + highscorePosition);
+                        GameUtility.highscoreManager.saveHighScore();
+                        endOfGameFragment.textViewLower.setText(endOfGameFragment.textViewLower.getText().toString() + "\nDu har indtaget position nummer " + Integer.toString(highscorePosition + 1));
+                    } else {
+                        Log.d("Highscore", "Spiller " + endOfGameFragment.endGame.getPlayers()[0].getName() + " sux.");
+                    }
+                    Log.d("Highscore", GameUtility.highscoreManager.getHighscoreString());
+                    endOfGameFragment.showHighscores();
+                }
+
+
             }
         }
 
@@ -415,6 +464,11 @@ public class EndOfGameFragment extends Fragment {
 
         @Override
         public void onAnimationRepeat(final Animator animation) { }
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        }
     }
 
     private static class ExitAnimatorHandler extends WeakReferenceHolder<EndOfGameFragment> implements Animator.AnimatorListener {

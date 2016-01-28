@@ -25,8 +25,8 @@ import java.io.Serializable;
  * @author rudz
  */
 public final class Player implements Serializable, Parcelable {
-    private static final long serialVersionUID = -3214121L;
 
+    private static final long serialVersionUID = 7717445435298264329L;
     private int pts;
     private String name;
 
@@ -54,7 +54,7 @@ public final class Player implements Serializable, Parcelable {
 
     public void addPoints(final int points) { pts += points; }
 
-    private int getPts() { return pts; }
+    public int getPts() { return pts; }
 
     public void setPts(final int pts) { this.pts = pts; }
 

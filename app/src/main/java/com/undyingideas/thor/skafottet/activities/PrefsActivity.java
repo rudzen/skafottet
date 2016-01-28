@@ -44,6 +44,7 @@ public class PrefsActivity extends PreferenceActivity {
         return super.onMenuItemSelected(featureId, item);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void finish() {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -52,6 +53,11 @@ public class PrefsActivity extends PreferenceActivity {
         GameUtility.settings.prefsSfx = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_SFX);
         GameUtility.settings.prefsBlood = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD);
         GameUtility.settings.prefsColour = GameUtility.s_preferences.getInt(Constant.KEY_PREFS_COLOUR, Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? ContextCompat.getColor(getApplicationContext(), R.color.colorAccent) : getResources().getColor(R.color.colorAccent));
+        GameUtility.settings.prefsHeptic = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_HEPTIC);
+        final String newName = GameUtility.s_preferences.getString(Constant.KEY_PREFS_PLAYER_NAME);
+        if (!newName.isEmpty() && !newName.equalsIgnoreCase(GameUtility.me.getName())) {
+            GameUtility.me.setName(newName);
+        }
         GameUtility.settings.setContrastColor();
         super.finish();
     }

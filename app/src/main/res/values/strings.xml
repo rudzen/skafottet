@@ -1,8 +1,11 @@
 <resources>
     <string name="app_name">g23 Skafottet</string>
 
+    <!-- dialog text -->
     <string name="dialog_yes">Ja</string>
     <string name="dialog_no">Nej</string>
+    <string name="cancel">Afbryd</string>
+    <string name="login">Login</string>
 
     <string name="action_settings">Indstillinger</string>
 
@@ -46,17 +49,15 @@
     <string name="contentDescriptionEndMainMenuButton">End main menu button</string>
     <string name="contentDescriptionEndNewGameButton">End new game button</string>
 
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
     <string name="pref_dream_text_key">pref_dream_text</string>
     <string name="pref_dream_text_default">zzzZZZzzz</string>
-    <string name="cancel">Afbryd</string>
-    <string name="login">Login</string>
 
 
     <!-- Color Picker -->
     <string name="dialog_color_picker">Farvevælger</string>
     <string name="press_color_to_apply">Tryk på en farve for at vælge</string>
+
+    <!-- buttons -->
     <string name="menu_button_play">Spil</string>
     <string name="menu_button_highscore">Highscore</string>
     <string name="menu_button_word_lists">Ordlister</string>
@@ -68,4 +69,6 @@
     <string name="menu_button_quit">Afslut</string>
     <string name="end_game_button_new_game_text">Nyt spil</string>
     <string name="end_game_button_main_menu_text">Hovedmenu</string>
+
+    <string name="default_player_name">Mig</string>
 </resources>

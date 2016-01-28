@@ -344,14 +344,14 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
                     .backgroundColor(Color.BLACK)
                     .cancelable(true)
                     .cancelListener(new NewGameCancelListener())
-                    .title("Start spil")
-                    .show());
+                    .title("Start spil"));
+            WindowLayout.getMd().show();
         }
     }
 
     @SuppressWarnings("deprecation")
     private void dialogQuit() {
-        new MaterialDialog.Builder(getContext())
+        WindowLayout.setMd(new MaterialDialog.Builder(getActivity())
                 .content("Ønsker du virkelig af forlade spillet?")
                 .cancelable(true)
                 .onAny(new QuitDialogCallback(this))
@@ -360,9 +360,9 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
                 .title("Afslutningen er nær...")
                 .backgroundColor(Color.BLACK)
                 .contentColor(getResources().getColor(R.color.colorAccent))
-                .buttonRippleColor(getResources().getColor(R.color.colorPrimaryDark))
-                .show()
+                .buttonRippleColor(getResources().getColor(R.color.colorPrimaryDark)));
         ;
+        WindowLayout.getMd().show();
     }
 
     @Override
@@ -636,8 +636,8 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
                         .negativeText(R.string.cancel)
                         .onPositive(new OnLoginClickResponse(menuFragment))
                         .onNegative(new QuitDialogCallback(menuFragment))
-                        .title(R.string.login)
-                        .show());
+                        .title(R.string.login));
+                WindowLayout.getMd().show();
             }
         }
     }

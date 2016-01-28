@@ -96,7 +96,7 @@
         <item name="android:selectable">?android:selectable</item>
     </style>
 
-    <style name="menu_button_style_text">
+    <style name="menu_button_style_text" parent="autoScaleTextView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:clickable">false</item>
@@ -125,8 +125,9 @@
 
     <!-- Standard configuration for the AutoScaleTextView -->
     <style name="autoScaleTextView">
+
         <!-- use the next line to alter the minimum text size (uncomment first)-->
-        <!-- <item name="@attr/minTextSize">10dp</item> -->
+         <item name="@attr/minTextSize">10dp</item>
     </style>
 
 </resources>

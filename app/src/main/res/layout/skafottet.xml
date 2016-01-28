@@ -24,7 +24,6 @@
         android:layout_margin="8dp"
         android:autoText="false"
         android:background="#000099cc"
-        android:contentDescription="@string/appwidget_text"
         android:text="@string/app_name"
         android:textColor="#ffffff"
         android:textSize="24sp"

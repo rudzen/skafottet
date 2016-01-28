@@ -19,7 +19,6 @@ package com.undyingideas.thor.skafottet.support.wordlist;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.undyingideas.thor.skafottet.support.firebase.controller.WordListController;
 
@@ -27,7 +26,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Objects;
-import java.util.Random;
 import java.util.Set;
 
 /**
@@ -44,7 +42,6 @@ public final class WordController implements Serializable, Parcelable {
     private boolean isLocal;
     private int indexLocale;
     private String indexRemote;
-    private Random random;
     private Comparator<WordItem> wordItemComparator;
 
     public WordController() {reset(); }
@@ -60,8 +57,6 @@ public final class WordController implements Serializable, Parcelable {
     }
 
     private void reset() {
-        random = new Random(System.currentTimeMillis());
-        Log.d("test" , " " +(random==null));
         localWords = new ArrayList<>();
 //        wordItemComparator = new WordItemComparator();
         indexLocale = 0;
@@ -107,10 +102,9 @@ public final class WordController implements Serializable, Parcelable {
         final String returnString;
         if (isLocal || WordListController.wordList == null || WordListController.wordList.isEmpty()) {
             // using inlined method for empty list fix..
-            if(random==null) random = new Random(System.currentTimeMillis());
-            returnString = getCurrentList().get(random.nextInt(localWords.get(indexLocale).getWordListSize()));
+            returnString = getCurrentList().get((int) (Math.random() * localWords.get(indexLocale).getWordListSize()));
         } else {
-            returnString = WordListController.wordList.get(indexRemote).getWords().get(random.nextInt(WordListController.wordList.get(indexRemote).getWordListSize()));
+            returnString = WordListController.wordList.get(indexRemote).getWords().get((int) (Math.random() * WordListController.wordList.get(indexRemote).getWordListSize()));
         }
         return returnString;
     }
@@ -195,10 +189,6 @@ public final class WordController implements Serializable, Parcelable {
 
     public void setIndexRemote(final String indexRemote) { this.indexRemote = indexRemote; }
 
-    public Random getRandom() { return random; }
-
-    public void setRandom(final Random random) { this.random = random; }
-
 /* overrides */
 
     @Override
@@ -208,7 +198,6 @@ public final class WordController implements Serializable, Parcelable {
                 ", isLocal=" + isLocal +
                 ", indexLocale=" + indexLocale +
                 ", indexRemote='" + indexRemote + '\'' +
-                ", random=" + random +
                 '}';
     }
 
@@ -225,7 +214,6 @@ public final class WordController implements Serializable, Parcelable {
         dest.writeByte(isLocal ? (byte) 1 : (byte) 0);
         dest.writeInt(indexLocale);
         dest.writeString(indexRemote);
-        dest.writeSerializable(random);
     }
 
     private WordController(final Parcel in) {
@@ -233,7 +221,6 @@ public final class WordController implements Serializable, Parcelable {
         isLocal = in.readByte() != 0;
         indexLocale = in.readInt();
         indexRemote = in.readString();
-        random = (Random) in.readSerializable();
     }
 
     public static final Creator<WordController> CREATOR = new WordControllerCreator();

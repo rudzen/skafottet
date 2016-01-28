@@ -1,4 +1,15 @@
 (+ = new, - = removed, * = change, ! = fix)
+v1.1.3 - 28.01.2016, rudz
+-------------------------
++ Basic local highscore (10 rankings). Players name/score/word/date is kept.
++ Added highscore view to end-game fragment.
++ Local player name can be set through preferences, with summary set for current name.
++ More strings extracted (for future translations).
++ Updated help file a bit to reflect current game and added info about resetting preferences.
+! Dialogs are now immersive.
+* Improved preferences.
+* Updated adapters to use AutoScaleTextView where appropriate.
+
 v1.1.2d - 26.01.2016, rudz
 --------------------------
 + It's now possible to set the colour theme of the game through preferences,

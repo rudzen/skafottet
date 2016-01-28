@@ -29,6 +29,7 @@ import android.support.annotation.DrawableRes;
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.support.firebase.controller.MultiplayerController;
+import com.undyingideas.thor.skafottet.support.highscore.local.HighscoreManager;
 import com.undyingideas.thor.skafottet.support.highscore.local.Player;
 import com.undyingideas.thor.skafottet.support.wordlist.WordController;
 
@@ -51,9 +52,14 @@ public abstract class GameUtility {
     @SuppressWarnings("StaticVariableOfConcreteClass")
     public static WordController s_wordController;
 
+    @SuppressWarnings("StaticVariableOfConcreteClass")
     public static SettingsDTO settings;
 
+    @SuppressWarnings("StaticVariableOfConcreteClass")
     public static Player me;
+
+    @SuppressWarnings("StaticVariableOfConcreteClass")
+    public static HighscoreManager highscoreManager;
 
     private static int connectionStatus;
     private static String connectionStatusName;

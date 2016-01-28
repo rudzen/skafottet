@@ -219,6 +219,7 @@ public class GameActivity extends SoundAbstract implements
             replaceFragment(WordListFragment.newInstance());
         } else if (gameMode == Constant.MODE_HIGHSCORE) {
             quitMode = false;
+            // TODO : Facilitate local highscore..
 //            getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
             final Intent intent = new Intent(this, PlayerListActivity.class);
             startActivity(intent);

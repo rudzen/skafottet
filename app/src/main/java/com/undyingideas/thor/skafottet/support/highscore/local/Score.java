@@ -15,70 +15,90 @@
  */
 package com.undyingideas.thor.skafottet.support.highscore.local;
 
-import java.io.Serializable;
-import java.util.Comparator;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
-class Score implements Serializable, Comparator<Score> {
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+public class Score implements Comparable<Score>, Serializable, Parcelable {
     private static final long serialVersionUID = -7482559749006887621L;
     private final String name;
     private final String word;
-    private final int score, day, month, year;
+    private int score;
+    private Date date;
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh.mm.ss", Locale.US);
 
-    public Score(final String word, final String name, final int score, final int day, final int month, final int year) {
+    public Score(final String word, final String name, final int score, final Date date) {
         this.word = word;
         this.score = score;
         this.name = name;
-        this.day = day;
-        this.month = month;
-        this.year = year;
+        this.date = date;
     }
 
     public Score(final Score score) {
-        this(score.getWord(), score.getName(), score.getScore(), score.getDay(), score.getMonth(), score.getYear());
+        this(score.getWord(), score.getName(), score.getScore(), score.getDate());
     }
 
-    private String getWord() {
-        return word;
-    }
+    public String getWord() { return word; }
 
-    public int getScore() {
-        return score;
-    }
+    public int getScore() { return score; }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
-    private int getDay() {
-        return day;
-    }
+    public void setScore(final int score) { this.score = score; }
 
-    private int getMonth() {
-        return month;
-    }
+    public Date getDate() { return date; }
 
-    private int getYear() {
-        return year;
-    }
+    public void setDate(final Date date) { this.date = date; }
 
-    @SuppressWarnings("OverlyComplexMethod")
+    public String getDateString() { return formatter.format(date); }
+
     @Override
-    public int compare(final Score o1, final Score o2) {
-        if (o1.score > o2.score) return 1;
-        if (o1.score < o2.score) return -1;
+    public String toString() {
+        return "Score {" + "name='" + name + '\'' + ", word='" + word + '\'' + ", score=" + score + ", " + getDateString() + '}';
+    }
 
-        if (o1.word.length() > o2.word.length()) return 1;
-        if (o1.word.length() < o2.word.length()) return -1;
+    @Override
+    public int compareTo(@NonNull final Score anotherScore) {
+        return anotherScore.getScore() - score;
+    }
 
-        if (o1.year > o2.year) return 1;
-        if (o1.year < o2.year) return -1;
-
-        if (o1.month > o2.month) return 1;
-        if (o1.month < o2.month) return -1;
-
-        if (o1.day > o2.day) return 1;
-        if (o1.day < o2.day) return -1;
-
+    @Override
+    public int describeContents() {
         return 0;
+    }
+
+    @Override
+    public void writeToParcel(final Parcel dest, final int flags) {
+        dest.writeString(name);
+        dest.writeString(word);
+        dest.writeInt(score);
+        dest.writeLong(date != null ? date.getTime() : -1);
+    }
+
+    protected Score(final Parcel in) {
+        name = in.readString();
+        word = in.readString();
+        score = in.readInt();
+        final long tmpDate = in.readLong();
+        date = tmpDate == -1 ? null : new Date(tmpDate);
+    }
+
+    public static final Parcelable.Creator<Score> CREATOR = new ScoreCreator();
+
+    private static class ScoreCreator implements Creator<Score> {
+        @Override
+        public Score createFromParcel(final Parcel source) {
+            return new Score(source);
+        }
+
+        @Override
+        public Score[] newArray(final int size) {
+            return new Score[size];
+        }
     }
 }

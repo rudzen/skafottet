@@ -18,42 +18,78 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:key="pref_key_graphics_settings"
-        android:title="Grafik">
-        >
-        <com.undyingideas.thor.skafottet.support.preferences.colourpicker.ColorPickerPreference
-            android:key="kpcol"
-            android:title="Vælg farvetema"
-            android:summary="Spillets farvetema."
-            android:defaultValue="@color/colorAccent">
-            <!--alphaSlider="false"-->
+        android:key="name_config"
+        android:title="Spillernavn">
 
-        </com.undyingideas.thor.skafottet.support.preferences.colourpicker.ColorPickerPreference>    <!-- integer resources are also accepted -->
+        <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
+            android:key="kpplyname"
+            android:title="Vælg spillernavn"
+            android:defaultValue="Mig"
+            android:shouldDisableView="true"
+            >
 
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="kpblood"
-            android:summary="Slå menuens blodregn til eller fra."
-            android:title="Blod"/>
+
+        </com.afollestad.materialdialogs.prefs.MaterialEditTextPreference>
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="pref_key_sound_settings"
-        android:title="Lyd">
+        android:title="Grafik"
         >
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="kpmusic"
-            android:summary="Slå baggrunds musikken til eller fra."
-            android:textColor="@color/colorAccent"
-            android:title="Musik"/>
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="kpsfx"
-            android:summary="Slå lydeffekter til eller fra."
-            android:title="Lydeffekter"/>
+        <PreferenceScreen
+            android:title="Grafik indstillinger"
+            android:summary="Konfigurer de grafiske indstillinger."
+            >
+
+            <PreferenceCategory
+                android:key="pref_key_graphics_settings"
+                android:title="Grafik">
+                >
+                <com.undyingideas.thor.skafottet.support.preferences.colourpicker.ColorPickerPreference
+                    android:key="kpcol"
+                    android:title="Vælg farvetema"
+                    android:summary="Spillets farvetema."
+                    android:defaultValue="@color/colorAccent">
+
+                </com.undyingideas.thor.skafottet.support.preferences.colourpicker.ColorPickerPreference>    <!-- integer resources are also accepted -->
+
+                <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:key="kpblood"
+                    android:summary="Slå menuens blodregn til eller fra."
+                    android:title="Blod"/>
+            </PreferenceCategory>
+
+        </PreferenceScreen>
 
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Lyd">
+        <PreferenceScreen
+            android:title="Lyd indstillinger"
+            android:summary="Konfigurer lydindstillinger."
+            >
+            <PreferenceCategory
+                android:key="pref_key_sound_settings"
+                android:title="Lyd">
+                >
+
+                <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:key="kpmusic"
+                    android:summary="Slå baggrunds musikken til eller fra."
+                    android:textColor="@color/colorAccent"
+                    android:title="Musik"/>
+                <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:key="kpsfx"
+                    android:summary="Slå lydeffekter til eller fra."
+                    android:title="Lydeffekter"/>
+
+            </PreferenceCategory>
+        </PreferenceScreen>
+    </PreferenceCategory>
+
 
     <PreferenceCategory
         android:key="pref_key_other"

@@ -34,16 +34,15 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.firebase.client.Firebase;
 import com.nineoldandroids.animation.Animator;
-import com.splunk.mint.Mint;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.services.MusicPlay;
 import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.support.firebase.controller.MultiplayerController;
 import com.undyingideas.thor.skafottet.support.firebase.controller.WordListController;
+import com.undyingideas.thor.skafottet.support.highscore.local.HighscoreManager;
 import com.undyingideas.thor.skafottet.support.highscore.local.Player;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.FontUtils;
-import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 import com.undyingideas.thor.skafottet.support.utility.NetworkHelper;
 import com.undyingideas.thor.skafottet.support.utility.SettingsDTO;
@@ -56,8 +55,15 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.firebase;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getConnectionStatus;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.highscoreManager;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.me;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.mpc;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.musicPLayIntent;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_preferences;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_wordController;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setConnectionStatus;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setConnectionStatusName;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.settings;
 
 /**
@@ -85,7 +91,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         /* Mint key! */
-        Mint.initAndStartSession(this, "6adabf91");
+//        Mint.initAndStartSession(this, "6adabf91");
 
         setContentView(R.layout.activity_splash);
 
@@ -138,6 +144,11 @@ public class SplashActivity extends AppCompatActivity {
 
     private class LoadConfig implements Runnable {
 
+        private void configureSettings() {
+
+        }
+
+
         @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
         @Override
         public void run() {
@@ -151,6 +162,11 @@ public class SplashActivity extends AppCompatActivity {
 
 //            s_preferences.clear();
 
+            /* set the highscore manager */
+            HighscoreManager.deleteHighScore(getApplicationContext());
+            highscoreManager = new HighscoreManager(getApplicationContext());
+            highscoreManager.loadScoreFile();
+
             settings = new SettingsDTO();
             settings.prefsMusic = s_preferences.getBoolean(Constant.KEY_PREFS_MUSIC, true);
             settings.prefsSfx = s_preferences.getBoolean(Constant.KEY_PREFS_SFX, true);
@@ -158,6 +174,8 @@ public class SplashActivity extends AppCompatActivity {
             settings.prefsHeptic = s_preferences.getBoolean(Constant.KEY_PREFS_HEPTIC, true);
             settings.prefsColour = s_preferences.getInt(Constant.KEY_PREFS_COLOUR, Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? ContextCompat.getColor(getApplicationContext(), R.color.colorAccent) : getResources().getColor(R.color.colorAccent));
             settings.setContrastColor();
+
+            me = new Player(s_preferences.getString(Constant.KEY_PREFS_PLAYER_NAME, getString(R.string.default_player_name)));
 
             /* keep the preferences as we don't know if the user actually ran the app for the first time. */
             s_preferences.putBoolean(Constant.KEY_PREFS_BLOOD, settings.prefsBlood);
@@ -167,17 +185,16 @@ public class SplashActivity extends AppCompatActivity {
             s_preferences.putInt(Constant.KEY_PREFS_COLOUR, settings.prefsColour);
 
             /* set the intent for the background music */
-            GameUtility.musicPLayIntent = new Intent(getApplicationContext(), MusicPlay.class);
+            musicPLayIntent = new Intent(getApplicationContext(), MusicPlay.class);
 
-            GameUtility.setConnectionStatus(NetworkHelper.getConnectivityStatus(getApplicationContext()));
-            GameUtility.setConnectionStatusName(NetworkHelper.getConnectivityStatusStringFromStatus(GameUtility.getConnectionStatus()));
+            setConnectionStatus(NetworkHelper.getConnectivityStatus(getApplicationContext()));
+            setConnectionStatusName(NetworkHelper.getConnectivityStatusStringFromStatus(getConnectionStatus()));
 
             FontUtils.setDefaultFont(getApplicationContext(), "DEFAULT", Constant.FONT_BOLD);
             FontUtils.setDefaultFont(getApplicationContext(), "MONOSPACE", Constant.FONT_BOLD);
             FontUtils.setDefaultFont(getApplicationContext(), "SERIF", Constant.FONT_LIGHT);
             FontUtils.setDefaultFont(getApplicationContext(), "SANS_SERIF", Constant.FONT_BOLD);
 
-            GameUtility.me = new Player("Mig");
 
             // only for testing stuff!!!!
 //            s_preferences.clear();
@@ -217,10 +234,10 @@ public class SplashActivity extends AppCompatActivity {
             s_wordController.setIsLocal(true);
 
             Firebase.setAndroidContext(getApplicationContext());
-            GameUtility.firebase = new Firebase(Constant.HANGMANDTU_FIREBASEIO);
+            firebase = new Firebase(Constant.HANGMANDTU_FIREBASEIO);
             firebase.keepSynced(true);
 //            GameUtility.firebase.keepSynced(false);
-            GameUtility.mpc = new MultiplayerController(GameUtility.firebase);
+            mpc = new MultiplayerController(firebase);
 
 
             Log.d(TAG, s_wordController.toString());

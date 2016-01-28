@@ -28,52 +28,82 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 
-class HighscoreManager {
+public class HighscoreManager {
+
     private static final String TAG = "HighScoreLoc";
-    private ArrayList<Score> scores;
+
     private static final String HIGHSCORE_FILE = "scores.dat";
+
+    private final Context context;
 
     private ObjectOutputStream outputStream;
 
+    private ArrayList<Score> scores;
+
     private final static int MAX = 10;
 
-    public HighscoreManager() {
+    public HighscoreManager(final Context context) {
         scores = new ArrayList<>();
+        this.context = context;
     }
 
-    public ArrayList<Score> getScores(final Context c) {
-        loadScoreFile(c);
-        sort();
+    public ArrayList<Score> getScores() {
         return scores;
     }
 
     private void sort() {
-        Collections.sort(scores, new ScoreComparator());
+//        HashSet<Score> mmYeah = new HashSet<>();
+        Log.d(TAG, "Before sort : " + scores.toString());
+        Collections.sort(scores);
+//        mmYeah.addAll(scores);
+//        scores.clear();
+//        int count = 0;
+//
+//        Iterator<Score> iterator = mmYeah.iterator();
+//        while (count++ < MAX && iterator.hasNext()) {
+//            scores.add(iterator.next());
+//        }
+        Log.d(TAG, "After sort : " + scores.toString());
     }
 
-    public boolean checkScore(final int score) {
-        return score >= scores.get(scores.size() - 1).getScore();
+    /**
+     * Check if the score parsed is in range of the current list.
+     *
+     * @param score The score to check.
+     * @return true if score can be added, otherwise false.
+     */
+    public int checkScore(final int score) {
+        if (scores.isEmpty()) {
+            return 0;
+        }
+        if (scores.size() < MAX) {
+            return scores.size();
+        }
+        if (scores.size() >= MAX && score >= scores.get(MAX - 1).getScore()) {
+            return MAX - 1;
+        }
+        return -1;
     }
 
-    public void addScore(final String word, final String name, final int score, final Context c) {
-        loadScoreFile(c);
-        final Calendar cal = Calendar.getInstance();
-        scores.add(new Score(word, name, score, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-        Collections.sort(scores, new ScoreComparator());
-        if (scores.size() > 10) while (scores.size() > 10) scores.remove(scores.size() - 1);
-        updateScoreFile(c);
+    public int addScore(final String word, final String name, final int points) {
+        sort();
+        final int pos = checkScore(points);
+        if (pos > -1) {
+            scores.add(pos, new Score(word, name, points, Calendar.getInstance().getTime()));
+            sort();
+        }
+        return pos;
     }
 
-    private void loadScoreFile(final Context context) {
+    public int addScore(final String word, final Player player) {
+        return addScore(word, player.getName(), player.getPts());
+    }
+
+    public void loadScoreFile() {
         try {
             final ObjectInputStream inputStream = new ObjectInputStream(context.openFileInput(HIGHSCORE_FILE));
             scores = (ArrayList<Score>) inputStream.readObject();
-            if (scores.size() < MAX) {
-                final Calendar cal = Calendar.getInstance();
-                for (int i = 1; i < MAX - scores.size(); i++) {
-                    scores.add(new Score("Gruppe 23", "rudz.dk", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-                }
-            }
+            Collections.sort(scores);
         } catch (final FileNotFoundException e) {
             Log.e(TAG, "[Load] FNF Error: " + e.getMessage());
         } catch (final IOException e) {
@@ -92,10 +122,9 @@ class HighscoreManager {
         }
     }
 
-    private void updateScoreFile(final Context c) {
+    public void saveHighScore() {
         try {
-            outputStream = new ObjectOutputStream(c.openFileOutput(HIGHSCORE_FILE, Context.MODE_PRIVATE));
-            scores.trimToSize();
+            outputStream = new ObjectOutputStream(context.openFileOutput(HIGHSCORE_FILE, Context.MODE_PRIVATE));
             outputStream.writeObject(scores);
         } catch (final FileNotFoundException e) {
             Log.e("HighScore", "[Update] FNF Error: " + e.getMessage() + ", the program will try and make a new file");
@@ -124,57 +153,11 @@ class HighscoreManager {
             sb.append(" [");
             sb.append(scores.get(i).getScore());
             sb.append(']');
+            sb.append('\n');
         }
         return sb.toString();
     }
 
-    public static boolean deleteHighScore(final Context c) {
-        return c.deleteFile(HIGHSCORE_FILE);
-    }
+    public static boolean deleteHighScore(final Context c) { return c.deleteFile(HIGHSCORE_FILE); }
 
-    private void generateDefaults() {
-        final Calendar cal = Calendar.getInstance();
-
-        scores.add(new Score("Gruppe 23", "Rudy", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-        scores.add(new Score("Gruppe 23","Thor", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-        scores.add(new Score("Gruppe 23","Adam", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-        scores.add(new Score("Gruppe 23","Emil", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-        scores.add(new Score("Gruppe 23","Theis", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-        scores.add(new Score("Gruppe 23","Christoffer", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-        scores.add(new Score("Gruppe 23","Papagøjs", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-        scores.add(new Score("Gruppe 23","Ole Olsen", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-        scores.add(new Score("Gruppe 23","Franz Jäger", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-        scores.add(new Score("Gruppe 23","Anker", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-        scores.clear();
-//        for (int i = 1; i <= MAX; i++) {
-//            scores.add(new Score("rudz.dk", 100, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-//        }
-    }
-
-    /**
-     * Interpolation search.<br>
-     * Log Log n
-     *
-     * @param A
-     *         The array to search in
-     * @param val
-     *         The value to search for
-     * @return the index of found value, or -1 if fails.
-     */
-    public static int interpolationSearch(final int[] A, final int val) {
-        final int len = A.length;
-        if (len == 0) return -1;
-        else if (len == 1 && A[0] == val) return 0;
-        int mid, low = 0, high = len - 1;
-        while (A[low] <= val && A[high] >= val) {
-            mid = low + (val - A[low]) * (high - low) / (A[high] - A[low]);
-            if (mid < 0) mid = 0;
-            else if (mid > len - 1) mid = len;
-            if (A[mid] < val) low = mid + 1;
-            else if (A[mid] > val) high = mid - 1;
-            else return mid;
-        }
-        if (A[low] == val) return low;
-        return -1;
-    }
 }

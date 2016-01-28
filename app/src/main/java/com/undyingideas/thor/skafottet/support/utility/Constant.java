@@ -42,6 +42,7 @@ public final class Constant {
 
     public static final String KEY_PREFS_COLOUR = "kpcol";
 
+    public static final String KEY_PREFS_PLAYER_NAME = "kpplyname";
 
     /* instance keys */
 

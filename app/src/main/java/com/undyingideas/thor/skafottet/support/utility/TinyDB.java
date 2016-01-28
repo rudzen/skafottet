@@ -322,8 +322,12 @@ public class TinyDB {
      * @return String value at 'key' or "" (empty String) if key not found
      */
     public final String getString(final String key) {
-        return preferences.getString(key, "");
+        return getString(key, "");
     }
+    public final String getString(final String key, final String defaultValue) {
+        return preferences.getString(key, defaultValue);
+    }
+
 
     /**
      * Get parsed ArrayList of String from SharedPreferences at 'key'

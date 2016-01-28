@@ -38,10 +38,10 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:fadingEdge="vertical"
-            android:text="Indlæser data"
+            android:text="@string/loading_text"
             android:textAlignment="center"
             android:textColor="@android:color/black"
-            android:textSize="20sp"/>
+            android:textSize="15sp"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:text="Skafo"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorAccent"
             android:textSize="30sp"/>
 
         <TextView

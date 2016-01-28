@@ -16,14 +16,13 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:orientation="vertical"
-                android:background="@drawable/black_trans_black_strong"
-                android:weightSum="10">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:orientation="vertical"
+    android:background="@drawable/black_trans_black_strong"
+    android:weightSum="11">
 
     <ImageView
         android:id="@+id/end_game_image_view"
@@ -41,7 +40,6 @@
         android:layout_marginBottom="38dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_weight="1"
-        android:text=""
         android:textSize="30sp"
         android:textIsSelectable="false"
         android:gravity="center"/>
@@ -61,11 +59,31 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:ellipsize="end"
-        android:singleLine="true"
+        android:singleLine="false"
         android:textSize="15sp"
-        tools:ignore="HardcodedText"
         android:layout_weight="1"
         android:gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        >
+        <RelativeLayout
+            android:id="@+id/end_game_button_highscore"
+            style="@style/menu_button_style"
+            android:layout_margin="5dp"
+            android:clickable="false"
+            android:background="@drawable/menu_button_shape">
+
+            <com.undyingideas.thor.skafottet.views.AutoScaleTextView
+                android:id="@+id/end_game_button_highscore_text"
+                style="@style/menu_button_style_text"
+                android:text="Highscore"/>
+        </RelativeLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -77,7 +95,7 @@
         <RelativeLayout
             android:id="@+id/end_game_button_new_game"
             style="@style/menu_button_style"
-            android:layout_margin="15dp"
+            android:layout_margin="5dp"
             android:clickable="false"
             android:background="@drawable/menu_button_shape">
 
@@ -90,7 +108,7 @@
         <RelativeLayout
             android:id="@+id/end_game_button_main_menu"
             style="@style/menu_button_style"
-            android:layout_margin="15dp"
+            android:layout_margin="5dp"
             android:clickable="false"
             android:background="@drawable/menu_button_shape">
 

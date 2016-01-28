@@ -65,6 +65,11 @@ public class AboutFragment extends Fragment {
                     "Projekt ansvarlig : Rudy Alex Kohn" +
                     SEP + SEP +
 
+                    "v1.1.3 - 28.01.2016" + SEP +
+                    "- Layout problemer med dialoger fixet." + SEP +
+                    "- Lokal highscore (10 pladser) tilføjet." + SEP +
+                    "- Indstillinger forbedret, tilføjet mulighed for at sætte ens navn." + SEP + SEP +
+
                     "v1.1.2b - 26.01.2016" + SEP +
                     "- Forbedret kompatilitet ved API 19." + SEP +
                     "- En del småfejl fixed." + SEP +
