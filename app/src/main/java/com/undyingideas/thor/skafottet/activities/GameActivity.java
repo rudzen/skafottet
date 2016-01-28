@@ -143,18 +143,23 @@ public class GameActivity extends SoundAbstract implements
 
     @Override
     public void onBackPressed() {
-        if (currentFragment instanceof MenuFragment) {
-            if (backPressed + BACK_PRESSED_DELAY > System.currentTimeMillis()) {
-                stopService(GameUtility.musicPLayIntent);
-                finish();
-            } else {
-                WindowLayout.showSnack("Tryk tilbage igen for at flygte i rædsel.", findViewById(R.id.fragment_content), false);
-                backPressed = System.currentTimeMillis();
-            }
-        } else if (currentFragment instanceof WordListFragment && ((WordListFragment) currentFragment).mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            ((WordListFragment) currentFragment).mDrawerLayout.closeDrawer(GravityCompat.START);
+        // First check if the dialog is showing, if so, close it and don't care about the rest!.
+        if (WindowLayout.getMd().isShowing()) {
+            WindowLayout.getMd().dismiss();
         } else {
-            replaceFragment(new MenuFragment());
+            if (currentFragment instanceof MenuFragment) {
+                if (backPressed + BACK_PRESSED_DELAY > System.currentTimeMillis()) {
+                    stopService(GameUtility.musicPLayIntent);
+                    finish();
+                } else {
+                    WindowLayout.showSnack("Tryk tilbage igen for at flygte i rædsel.", findViewById(R.id.fragment_content), false);
+                    backPressed = System.currentTimeMillis();
+                }
+            } else if (currentFragment instanceof WordListFragment && ((WordListFragment) currentFragment).mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+                ((WordListFragment) currentFragment).mDrawerLayout.closeDrawer(GravityCompat.START);
+            } else {
+                replaceFragment(new MenuFragment());
+            }
         }
     }
 

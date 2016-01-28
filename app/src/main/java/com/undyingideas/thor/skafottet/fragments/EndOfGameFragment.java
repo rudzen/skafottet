@@ -326,7 +326,7 @@ public class EndOfGameFragment extends Fragment {
         WindowLayout.setMd(new MaterialDialog.Builder(getActivity())
                 .customView(listViewItems, false)
                 .backgroundColor(Color.BLACK)
-                .cancelable(true)
+                .positiveText("Ok")
                 .autoDismiss(true)
                 .title("De bedste i din verden!"));
         WindowLayout.getMd().show();
