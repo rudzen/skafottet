@@ -17,13 +17,13 @@
 package com.undyingideas.thor.skafottet.interfaces;
 
 /**
- * Created on 19-01-2016, 17:31.
+ * Created on 22-01-2016, 20:54.
  * Project : skafottet
  *
  * @author rudz
  */
-public interface GameStateInterface {
+public interface IFireBaseLogin {
 
-    void setGameStatus(final boolean isGameOver);
+    void loginDataReceived(final String username, final String password);
 
 }

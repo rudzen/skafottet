@@ -94,8 +94,6 @@ public class WordListFragment extends Fragment implements
 
     private ListView listRemote, listLocal;
 
-    private MaterialDialog md; // for add list
-
     private WordTitleLocalAdapter adapterLocal;
     private WordTitleRemoteAdapter adapterRemote;
 
@@ -234,14 +232,14 @@ public class WordListFragment extends Fragment implements
         if (id == R.id.action_word_list_add) {
             if (GameUtility.getConnectionStatus() > -1) {
             /* show Yes/No dialog here! */
-                new MaterialDialog.Builder(getContext())
+                WindowLayout.setMd(new MaterialDialog.Builder(getActivity())
                         .content("Vil du tilføje en ordliste?")
                         .cancelable(true)
                         .onPositive(new AddWordListDialogListener(this))
                         .positiveText(R.string.dialog_yes)
                         .negativeText(R.string.dialog_no)
-                        .title("Tilføj Ordliste")
-                        .show();
+                        .title("Tilføj Ordliste"));
+                WindowLayout.getMd().show();
             } else {
                 WindowLayout.showSnack("Ingen forbindelse til internettet.", stickyList, true);
             }
@@ -350,10 +348,8 @@ public class WordListFragment extends Fragment implements
     /**
      * Handles the functionality when the user has pressed accept for adding a custom list.
      *
-     * @param title
-     *         The title of the list
-     * @param url
-     *         The URL of the list (guarenteed VALID web address!
+     * @param title The title of the list
+     * @param url   The URL of the list (guarenteed VALID web address!
      */
     private void onFinishAddWordDialog(final String title, final String url) {
         /* the recieved input from the dual-edittext dialog fragment */
@@ -466,13 +462,20 @@ public class WordListFragment extends Fragment implements
             final WordListFragment wordListFragment = wordListActivityWeakReference.get();
             if (wordListFragment != null) {
                 if (which == DialogAction.POSITIVE) {
-                    wordListFragment.md = new MaterialDialog.Builder(wordListFragment.getContext())
+                    // TODO : Investigate possible fix for softkeyboard issues with immersive mode etc
+                    new MaterialDialog.Builder(wordListFragment.getActivity())
                             .customView(R.layout.wordlist_add, false)
                             .positiveText("Ok")
                             .negativeText("Afbryd")
-                            .onAny(new OnAddWordResponseCallback(wordListFragment))
-                            .title("Tilføj Ordliste")
-                            .show();
+                            .onPositive(new OnAddWordResponseCallback(wordListFragment))
+                            .title("Tilføj Ordliste").show();
+//                    WindowLayout.setMd(new MaterialDialog.Builder(wordListFragment.getActivity())
+//                            .customView(R.layout.wordlist_add, false)
+//                            .positiveText("Ok")
+//                            .negativeText("Afbryd")
+//                            .onAny(new OnAddWordResponseCallback(wordListFragment))
+//                            .title("Tilføj Ordliste"));
+//                    WindowLayout.getMd().show();
                 }
             }
         }

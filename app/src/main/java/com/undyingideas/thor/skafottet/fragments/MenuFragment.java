@@ -199,17 +199,6 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
 
         /* configure the button colours */
         DrawableHelper.setButtonColors(buttons, buttons_text);
-//        final int[] cols = new int[3];
-//        cols[0] = Color.BLACK;
-//        cols[1] = settings.prefsColour;
-//        cols[2] = Color.BLACK;
-//        Drawable drawable;
-//        for (int i = 0; i < BUTTON_COUNT; i++) {
-//            drawable = (GradientDrawable) buttons[i].getBackground();
-//            ((GradientDrawable) drawable).setColors(cols);
-//            buttons[i].setBackground(drawable);
-//            buttons_text[i].setTextColor(settings.textColour);
-//        }
 
         /* configure callback observer interfaces data classes */
         fireBaseLoginData = new FireBaseLoginData(this);

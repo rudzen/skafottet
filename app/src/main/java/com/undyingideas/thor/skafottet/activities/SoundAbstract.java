@@ -49,7 +49,6 @@ public abstract class SoundAbstract extends AppCompatActivity implements SoundPo
             R.raw.guess_right,
             R.raw.intro,
             R.raw.menu_click,
-            R.raw.won,
             R.raw.lost,
             R.raw.challenge
     };
@@ -57,13 +56,13 @@ public abstract class SoundAbstract extends AppCompatActivity implements SoundPo
     private SoundPool soundPool;
     private float volume;
 
-    private final static int SOUND_COUNT = 7;
+    private final static int SOUND_COUNT = 6;
     private final SoundItem[] soundItems = new SoundItem[SOUND_COUNT];
 
-    protected SoundThread soundThread;
+    SoundThread soundThread;
     private boolean loaded;
 
-    protected void initSound() {
+    void initSound() {
         final AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         final float actVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         final float maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);

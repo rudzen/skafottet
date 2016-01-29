@@ -112,11 +112,13 @@ public abstract class WindowLayout {
      */
     public static void setMd(final MaterialDialog.Builder md) {
         WindowLayout.md = md.build();
-        WindowLayout.md.setCanceledOnTouchOutside(false);
+        WindowLayout.md.setCanceledOnTouchOutside(true);
         WindowLayout.md.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         WindowLayout.md.getWindow().addFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//        WindowLayout.md.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         setImmersiveMode(WindowLayout.md.getWindow());
     }
+
 
     private static class OnSnackBarClick implements View.OnClickListener {
         @Override
@@ -140,8 +142,8 @@ public abstract class WindowLayout {
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+//                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
 }

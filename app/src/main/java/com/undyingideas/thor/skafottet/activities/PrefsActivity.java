@@ -48,7 +48,6 @@ public class PrefsActivity extends PreferenceActivity {
     @Override
     public void finish() {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        startActivity(new Intent(this, GameActivity.class));
         GameUtility.settings.prefsMusic = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_MUSIC);
         GameUtility.settings.prefsSfx = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_SFX);
         GameUtility.settings.prefsBlood = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD);
@@ -59,6 +58,7 @@ public class PrefsActivity extends PreferenceActivity {
             GameUtility.me.setName(newName);
         }
         GameUtility.settings.setContrastColor();
+        startActivity(new Intent(this, GameActivity.class));
         super.finish();
     }
 }

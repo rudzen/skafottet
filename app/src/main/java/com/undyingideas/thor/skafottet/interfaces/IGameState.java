@@ -17,13 +17,13 @@
 package com.undyingideas.thor.skafottet.interfaces;
 
 /**
- * Created on 11-01-2016, 12:01.
+ * Created on 19-01-2016, 17:31.
  * Project : skafottet
- * Used for fragments to communicate back to activity for en-/disable of progress bar.
+ *
  * @author rudz
  */
-public interface ProgressBarInterface {
+public interface IGameState {
 
-    void setProgressBar(final boolean visible);
+    void setGameStatus(final boolean isGameOver);
 
 }
