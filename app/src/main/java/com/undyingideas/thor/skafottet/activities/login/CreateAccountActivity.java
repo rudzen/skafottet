@@ -63,6 +63,14 @@ public class CreateAccountActivity extends BaseActivity {
         return true;
     }
 
+    @Override
+    public void onWindowFocusChanged(final boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            WindowLayout.setImmersiveMode(getWindow());
+            WindowLayout.hideStatusBar(getWindow(), null);
+        }
+    }
 
     /**
      * Link layout elements from XML and setup the progress dialog

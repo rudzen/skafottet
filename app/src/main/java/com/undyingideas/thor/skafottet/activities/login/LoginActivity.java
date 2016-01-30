@@ -107,7 +107,6 @@ public class LoginActivity extends BaseActivity {
                 signInPassword();
             }
         }
-
     }
 
     @Override
@@ -165,6 +164,16 @@ public class LoginActivity extends BaseActivity {
         super.onPause();
         mFirebaseRef.removeAuthStateListener(mAuthStateListener);
     }
+
+    @Override
+    public void onWindowFocusChanged(final boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            WindowLayout.setImmersiveMode(getWindow());
+            WindowLayout.hideStatusBar(getWindow(), null);
+        }
+    }
+
 
     /**
      * Override onCreateOptionsMenu to inflate nothing
