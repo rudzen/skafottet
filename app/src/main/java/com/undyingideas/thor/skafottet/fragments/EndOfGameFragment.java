@@ -243,7 +243,7 @@ public class EndOfGameFragment extends Fragment {
                     results.putInt(MSG_KEY_IMG, R.drawable.reaper);
                     results.putString(MSG_KEY_UPPER, getString(R.string.game_lost));
                     results.putString(MSG_KEY_MIDDLE, "Dine gæt : " + endGame.getLogic().getUsedLetters());
-                    results.putString(MSG_KEY_LOWER, WORD_WAS + endGame.getLogic().getTheWord() + " / Point : " + endGame.getPlayers()[0].getPtsString());
+                    results.putString(MSG_KEY_LOWER, WORD_WAS + endGame.getLogic().getTheWord() + " / Point : " + Integer.toString(endGame.getPlayers()[0].getScore()));
                 } else {
                     results.putInt(MSG_KEY_IMG, R.drawable.trophy);
                     results.putString(MSG_KEY_UPPER, getString(R.string.game_won));
@@ -252,49 +252,49 @@ public class EndOfGameFragment extends Fragment {
                     } else {
                         results.putString(MSG_KEY_MIDDLE, "Dine gæt var : " + endGame.getLogic().getUsedLetters() + " og du gættede forkert " + endGame.getLogic().getNumWrongLetters() + " gange. tsktsk.");
                     }
-                    results.putString(MSG_KEY_LOWER, WORD_WAS + endGame.getLogic().getTheWord() + " / Point : " + endGame.getPlayers()[0].getPtsString());
+                    results.putString(MSG_KEY_LOWER, WORD_WAS + endGame.getLogic().getTheWord() + " / Point : " + Integer.toString(endGame.getPlayers()[0].getScore()));
                 }
             } else {
-                GameUtility.mpc.lc.updateLobby(endGame.getPlayers()[1].getName(), GameUtility.mpc.name, endGame.getLogic().getNumWrongLetters());
-                final LobbyDTO dto = GameUtility.mpc.lc.lobbyList.get(endGame.getPlayers()[1].getName());
-                boolean gameisDone = true;
-                for (final LobbyPlayerStatus lps : dto.getPlayerList()) {
-                    if (!lps.getName().equals(GameUtility.mpc.name) && lps.getScore() == -1) gameisDone = false;
-                }
-                if (gameisDone) {
-                    for (final LobbyPlayerStatus lps : dto.getPlayerList()) {
-                        if (!lps.getName().equals(GameUtility.mpc.name)) {
-                            if (lps.getScore() < endGame.getLogic().getNumWrongLetters()) {
-                                GameUtility.mpc.pc.updatePlayerScore(lps.getName(), 1);
-                            } else {
-                                GameUtility.mpc.pc.updatePlayerScore(GameUtility.mpc.name, 1);
-                            }
-                        }
-                    }
-                    if (endGame.getLogic().isGameLost()) {
-                        results.putInt(MSG_KEY_IMG, R.drawable.reaper);
-                        results.putString(MSG_KEY_UPPER, "Du er blever henrettet af");
-                        results.putString(MSG_KEY_MIDDLE, getWinner(dto));
-                        results.putString(MSG_KEY_LOWER, WORD_WAS + endGame.getLogic().getTheWord());
-                    } else {
-                        results.putInt(MSG_KEY_IMG, R.drawable.trophy);
-                        results.putString(MSG_KEY_UPPER, "Du undslap galgen! - Triumf over ");
-                        results.putString(MSG_KEY_MIDDLE, getOther(dto, GameUtility.mpc.name));
-                        results.putString(MSG_KEY_LOWER, "Du gættede ordet " + endGame.getLogic().getTheWord() + ", derved har du undgået at blive klynget op");
-                    }
-                } else {
-                    if (endGame.getLogic().isGameLost()) {
-                        results.putInt(MSG_KEY_IMG, R.drawable.reaper);
-                        results.putString(MSG_KEY_UPPER, "Du er blevet hængt");
-                        results.putString(MSG_KEY_MIDDLE, "men din modstander kan også nå at blive det");
-                        results.putString(MSG_KEY_LOWER, WORD_WAS + endGame.getLogic().getTheWord());
-                    } else {
-                        results.putInt(MSG_KEY_IMG, R.drawable.trophy);
-                        results.putString(MSG_KEY_UPPER, "Du undslap galgen!");
-                        results.putString(MSG_KEY_MIDDLE, "Din modstander kan dog stadig nå at gøre det bedre.");
-                        results.putString(MSG_KEY_LOWER, "Du gættede ordet " + endGame.getLogic().getTheWord() + ", derved har du undgået at blive klynget op");
-                    }
-                }
+//                GameUtility.mpc.lc.updateLobby(endGame.getPlayers()[1].getName(), GameUtility.mpc.name, endGame.getLogic().getNumWrongLetters());
+//                final LobbyDTO dto = GameUtility.mpc.lc.lobbyList.get(endGame.getPlayers()[1].getName());
+//                boolean gameisDone = true;
+//                for (final LobbyPlayerStatus lps : dto.getPlayerList()) {
+//                    if (!lps.getName().equals(GameUtility.mpc.name) && lps.getScore() == -1) gameisDone = false;
+//                }
+//                if (gameisDone) {
+//                    for (final LobbyPlayerStatus lps : dto.getPlayerList()) {
+//                        if (!lps.getName().equals(GameUtility.mpc.name)) {
+//                            if (lps.getScore() < endGame.getLogic().getNumWrongLetters()) {
+//                                GameUtility.mpc.pc.updatePlayerScore(lps.getName(), 1);
+//                            } else {
+//                                GameUtility.mpc.pc.updatePlayerScore(GameUtility.mpc.name, 1);
+//                            }
+//                        }
+//                    }
+//                    if (endGame.getLogic().isGameLost()) {
+//                        results.putInt(MSG_KEY_IMG, R.drawable.reaper);
+//                        results.putString(MSG_KEY_UPPER, "Du er blever henrettet af");
+//                        results.putString(MSG_KEY_MIDDLE, getWinner(dto));
+//                        results.putString(MSG_KEY_LOWER, WORD_WAS + endGame.getLogic().getTheWord());
+//                    } else {
+//                        results.putInt(MSG_KEY_IMG, R.drawable.trophy);
+//                        results.putString(MSG_KEY_UPPER, "Du undslap galgen! - Triumf over ");
+//                        results.putString(MSG_KEY_MIDDLE, getOther(dto, GameUtility.mpc.name));
+//                        results.putString(MSG_KEY_LOWER, "Du gættede ordet " + endGame.getLogic().getTheWord() + ", derved har du undgået at blive klynget op");
+//                    }
+//                } else {
+//                    if (endGame.getLogic().isGameLost()) {
+//                        results.putInt(MSG_KEY_IMG, R.drawable.reaper);
+//                        results.putString(MSG_KEY_UPPER, "Du er blevet hængt");
+//                        results.putString(MSG_KEY_MIDDLE, "men din modstander kan også nå at blive det");
+//                        results.putString(MSG_KEY_LOWER, WORD_WAS + endGame.getLogic().getTheWord());
+//                    } else {
+//                        results.putInt(MSG_KEY_IMG, R.drawable.trophy);
+//                        results.putString(MSG_KEY_UPPER, "Du undslap galgen!");
+//                        results.putString(MSG_KEY_MIDDLE, "Din modstander kan dog stadig nå at gøre det bedre.");
+//                        results.putString(MSG_KEY_LOWER, "Du gættede ordet " + endGame.getLogic().getTheWord() + ", derved har du undgået at blive klynget op");
+//                    }
+//                }
             }
             final Message message = resultCalcHandler.obtainMessage(MSG_RESULT_COMPLETE);
             message.setData(results);
@@ -443,7 +443,7 @@ public class EndOfGameFragment extends Fragment {
                 endOfGameFragment.buttons[2].setVisibility(View.VISIBLE);
 
                 if (!endOfGameFragment.endGame.isMultiPlayer()) {
-                    if (GameUtility.highscoreManager.checkScore(endOfGameFragment.endGame.getPlayers()[0].getPts()) > -1) {
+                    if (GameUtility.highscoreManager.checkScore(endOfGameFragment.endGame.getPlayers()[0].getScore()) > -1) {
                         final int highscorePosition = GameUtility.highscoreManager.addScore(endOfGameFragment.endGame.getLogic().getTheWord(), endOfGameFragment.endGame.getPlayers()[0]);
                         Log.d("Highscore", "Tilføjet til position # : " + highscorePosition);
                         GameUtility.highscoreManager.saveHighScore();
@@ -466,8 +466,8 @@ public class EndOfGameFragment extends Fragment {
         public void onAnimationRepeat(final Animator animation) { }
 
         @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+            // TODO : Show some nice popup with trophy depending on placement.
         }
     }
 

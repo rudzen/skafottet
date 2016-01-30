@@ -17,8 +17,11 @@
 package com.undyingideas.thor.skafottet.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.support.v4.content.ContextCompat;
 import android.view.MenuItem;
@@ -27,12 +30,26 @@ import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 
-public class PrefsActivity extends PreferenceActivity {
+public class PrefsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.skafottet_preferences);
+        final EditTextPreference playerNameEdit = (EditTextPreference) findPreference(Constant.KEY_PREFS_PLAYER_NAME);
+        playerNameEdit.setSummary(GameUtility.s_preferences.getString(Constant.KEY_PREFS_PLAYER_NAME, "Mig"));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -53,6 +70,11 @@ public class PrefsActivity extends PreferenceActivity {
         GameUtility.settings.prefsBlood = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD);
         GameUtility.settings.prefsColour = GameUtility.s_preferences.getInt(Constant.KEY_PREFS_COLOUR, Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? ContextCompat.getColor(getApplicationContext(), R.color.colorAccent) : getResources().getColor(R.color.colorAccent));
         GameUtility.settings.prefsHeptic = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_HEPTIC);
+        GameUtility.settings.keepLogin = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_KEEP_LOGIN);
+        if (!GameUtility.settings.keepLogin) {
+            GameUtility.settings.lastPw = null;
+        }
+
         final String newName = GameUtility.s_preferences.getString(Constant.KEY_PREFS_PLAYER_NAME);
         if (!newName.isEmpty() && !newName.equalsIgnoreCase(GameUtility.me.getName())) {
             GameUtility.me.setName(newName);
@@ -60,5 +82,14 @@ public class PrefsActivity extends PreferenceActivity {
         GameUtility.settings.setContrastColor();
         startActivity(new Intent(this, GameActivity.class));
         super.finish();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
+        final Preference preference = findPreference(key);
+        if (preference instanceof EditTextPreference) {
+            final EditTextPreference editTextPreference = (EditTextPreference) preference;
+            preference.setSummary(editTextPreference.getText());
+        }
     }
 }

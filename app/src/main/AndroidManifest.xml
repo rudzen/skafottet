@@ -48,8 +48,26 @@
         </activity>
         <activity
             android:name=".activities.PrefsActivity"
-            android:parentActivityName=".activities.GameActivity" >
+            android:parentActivityName=".activities.GameActivity" />
+
+        <activity android:name=".activities.login.LoginActivity"
+            android:parentActivityName=".activities.GameActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.GameActivity" />
         </activity>
+
+        <activity
+            android:name=".activities.login.CreateAccountActivity"
+            android:label="@string/title_activity_create_account"
+            android:parentActivityName=".activities.login.LoginActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.login.LoginActivity" />
+        </activity>
+
+
+
 
         <receiver
             android:name=".broadcastrecievers.InternetReciever"
@@ -68,6 +86,7 @@
             </intent-filter>
         </receiver>
 
+
         <!-- This service is only used on devices with API v17+ -->
         <service
             android:name=".services.SkafotDream"
@@ -79,8 +98,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
-        <service android:name=".services.MusicPlay" >
-        </service>
+        <service android:name=".services.MusicPlay" />
+
     </application>
 
 </manifest>

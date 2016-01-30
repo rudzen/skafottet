@@ -28,9 +28,8 @@ import android.support.annotation.DrawableRes;
 
 import com.firebase.client.Firebase;
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.support.firebase.controller.MultiplayerController;
+import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;
 import com.undyingideas.thor.skafottet.support.highscore.local.HighscoreManager;
-import com.undyingideas.thor.skafottet.support.highscore.local.Player;
 import com.undyingideas.thor.skafottet.support.wordlist.WordController;
 
 /**
@@ -43,7 +42,6 @@ import com.undyingideas.thor.skafottet.support.wordlist.WordController;
 public abstract class GameUtility {
 
     @SuppressWarnings("StaticVariableOfConcreteClass")
-    public static MultiplayerController mpc;
     public static Firebase firebase;
 
     @SuppressWarnings("StaticVariableOfConcreteClass")
@@ -56,13 +54,15 @@ public abstract class GameUtility {
     public static SettingsDTO settings;
 
     @SuppressWarnings("StaticVariableOfConcreteClass")
-    public static Player me;
+    public static PlayerDTO me;
 
     @SuppressWarnings("StaticVariableOfConcreteClass")
     public static HighscoreManager highscoreManager;
 
     private static int connectionStatus;
     private static String connectionStatusName;
+
+    private static boolean isLoggedIn;
 
     public static final int SFX_GUESS_WRONG = 0;
     public static final int SFX_GUESS_RIGHT = 1;
@@ -112,23 +112,27 @@ public abstract class GameUtility {
         return ret;
     }
 
-    public static void writeNullGame() {
-        s_preferences.remove(Constant.KEY_SAVE_GAME);
-    }
+    public static void writeNullGame() { s_preferences.remove(Constant.KEY_SAVE_GAME); }
 
-    public static int getConnectionStatus() {
-        return connectionStatus;
-    }
+    public static int getConnectionStatus() { return connectionStatus; }
 
     public static void setConnectionStatus(final int connectionStatus) {
         GameUtility.connectionStatus = connectionStatus;
     }
 
-    public static String getConnectionStatusName() {
-        return connectionStatusName;
+    public static String getConnectionStatusName() { return connectionStatusName; }
+
+    public static void setConnectionStatusName(final String connectionStatusName) { GameUtility.connectionStatusName = connectionStatusName; }
+
+    public static boolean isLoggedIn() { return isLoggedIn; }
+
+    public static void setIsLoggedIn(final boolean isLoggedIn) { GameUtility.isLoggedIn = isLoggedIn; }
+
+    public static Firebase getFirebase() {
+        return firebase;
     }
 
-    public static void setConnectionStatusName(final String connectionStatusName) {
-        GameUtility.connectionStatusName = connectionStatusName;
+    public static void setFirebase(Firebase firebase) {
+        GameUtility.firebase = firebase;
     }
 }

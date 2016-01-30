@@ -17,6 +17,7 @@
 package com.undyingideas.thor.skafottet.support.utility;
 
 import android.graphics.Color;
+import android.support.annotation.Nullable;
 
 /**
  * Created on 20-01-2016, 11:37.
@@ -26,11 +27,23 @@ import android.graphics.Color;
  */
 public final class SettingsDTO {
 
+    public final static byte AUTH_NONE = 0;
+    public final static byte AUTH_ANON = 1;
+    public final static byte AUTH_USER = 2;
+
+    public byte auth_status;
+
+    @Nullable
+    public String lastPw;
+
     public boolean prefsMusic;
     public boolean prefsSfx;
     public boolean prefsBlood;
 
     public boolean prefsHeptic;
+
+    public boolean keepLogin;
+
 
     public int prefsColour;
     public int prefsColour_r;

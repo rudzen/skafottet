@@ -71,4 +71,74 @@
     <string name="end_game_button_main_menu_text">Hovedmenu</string>
 
     <string name="default_player_name">Mig</string>
+    <string name="title_activity_login">Log ind</string>
+
+
+    <!-- Base Error Strings-->
+    <string name="log_error_updating_data">Fejl ved opdatering af data: </string>
+    <string name="log_error_the_read_failed">Fejl ved læsning: </string>
+    <string name="log_error_occurred">"Fejl opstod: "</string>
+
+    <!-- Menu Strings -->
+    <string name="action_logout">Log ud</string>
+    <string name="action_share_list">Share List</string>
+    <string name="action_sort">Sort</string>
+    <string name="action_remove_list">Remove list</string>
+    <string name="action_archive">Archive</string>
+
+
+    == Login and Create Account Strings ==
+
+    -->
+    <!-- Activity Titles  -->
+    <string name="title_activity_create_account">Opret konto</string>
+
+    <!-- Login and Create Account Screen  -->
+    <string name="text_dont_have_account">Ingen konto?</string>
+    <string name="text_already_have_account">Du har allerede en konto?</string>
+    <string name="button_create_account">Opret dig!</string>
+    <string name="button_sign_in">Log in</string>
+    <string name="button_signin_with_google">Log in med google</string>
+    <string name="button_signin_with_password">Log in</string>
+    <string name="hint_enter_email">Indtast din email</string>
+    <string name="hint_enter_username">Indtast dit navn</string>
+    <string name="hint_enter_password">Indtast kodeord</string>
+    <string name="image_view_logo_image">Logo Billede</string>
+
+    <!-- Instructions and Loading Text -->
+    <string name="progress_dialog_loading">Henter…</string>
+    <string name="progress_dialog_authenticating_with_firebase">Authentikerer med Firebase…</string>
+    <string name="progress_dialog_creating_user_with_firebase">Forsøger at oprette konto…</string>
+    <string name="progress_dialog_check_inbox">Se venligs din email inbox for dit kodeord</string>
+
+    <!-- Errors -->
+    <string name="dialog_title_error">Fejl</string>
+    <string name="error_message_failed_sign_in_no_network">Der var et problem med netværksforbindelsen.\nEr du sikker på du er forbundet til internettet?</string>
+    <string name="log_error_invalid_provider">"Invalid tildeler: "</string>
+    <string name="log_error_failed_to_change_password">"Fejlede ved ændring af kodeord: "</string>
+    <string name="error_invalid_email_not_valid">%s er ikke en gyldig email</string>
+    <string name="error_message_email_issue">Der var en fejl med din email, tjek venligst at du har indtastet den korrekt.</string>
+    <string name="error_you_didnt_give_permissions">Du skal give Skafottet tilladelse til at få adgang til din Google konto hvis du vil benytte dig af Google log-ind.</string>
+    <string name="error_email_taken">Denne email er allerede taget.</string>
+    <string name="error_invalid_password_not_valid">Indtast venligst et kodeord på mindst 6 i tegnlængde.</string>
+    <string name="error_cannot_be_empty">Denne kan ikke være tom.</string>
+
+    <!-- Google Errors -->
+    <string name="google_error_recoverable_oauth_error">"Korregerbar Google OAuth fejl: "</string>
+    <string name="google_error_google_play_services_not_available">Google Play Services er ikke tilgængelige.</string>
+    <string name="google_error_trying_to_connect_google_api">Forsøger at forbinde til Google API</string>
+    <string name="google_error_auth_with_google">"Fejl ved authentificering med Google: "</string>
+    <string name="google_error_network_error">"Netværksfejl: "</string>
+    <string name="google_error_cant_connect_to_api">Er du sikker på det vil opsætte et projekt for din app?
+        Se : https://console.developers.google.com/project. Og vær sikker på du har de nødvendige gradle dependencies</string>
+
+
+    <!-- OAuth Format -->
+    <string name="oauth2_format">oauth2:%s</string>
+
+    <!-- Log Messages -->
+    <string name="log_message_password_changed_successfully">Kodeord ændret fra midligertidigt til </string>
+    <string name="log_message_auth_successful">auth successfuld.</string>
+
+
 </resources>

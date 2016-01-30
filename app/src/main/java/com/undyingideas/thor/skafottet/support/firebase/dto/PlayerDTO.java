@@ -3,7 +3,9 @@ package com.undyingideas.thor.skafottet.support.firebase.dto;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created on 05-01-2016, 12:13.
@@ -13,31 +15,52 @@ import java.util.ArrayList;
  *
  * 16-01-2016
  * - As parcel
+ *
+ * 29-01-2016
+ * - Added fields to facilitate remote auth.
+ * - Removed un-used fields.
+ * - Replaced Player object with this.
  * @author rudz
  */
-public class PlayerDTO implements Parcelable {
+public class PlayerDTO implements Parcelable, Serializable {
 
-    private String name;
+    private static final long serialVersionUID = 7717445435298264329L;
     private int score;
-    private String password;
+    private String name;
+    private String email;
+    private HashMap<String, Object> timestampJoined;
+    private boolean hasLoggedInWithPassword;
     private ArrayList<String> gameList = new ArrayList<>();
 
-    public PlayerDTO() { }
+    /* define the shifting values for scores on future difficulty settings */
+    public static final int DIF_EASY_SHIFT_MULTIPLIER = 2;
+    public static final int DIF_MEDIUM_SHIFT_MULTIPLIER = 1;
+    public static final int DIF_HARD_SHIFT_MULTIPLIER = 0;
 
+    /* constructors */
     public PlayerDTO(final String name) {
-        this(name, 0, new ArrayList<String>(), null);
-    }
-
-    public PlayerDTO(final String name, final String password) {
-        this(name, 0, new ArrayList<String>(), password);
-    }
-
-    private PlayerDTO(final String name, final int score, final ArrayList<String> gameList, final String password) {
         this.name = name;
-        this.score = score;
-        this.gameList = gameList;
-        this.password = password;
     }
+
+    public PlayerDTO(final PlayerDTO playerDTO) {
+        name = playerDTO.getName();
+        email = playerDTO.getEmail();
+        score = playerDTO.getScore();
+    }
+
+    public PlayerDTO(final String userName, final String mEncodedEmail, final HashMap<String, Object> timestampJoined) {
+        name = userName;
+        email = mEncodedEmail;
+        this.timestampJoined = timestampJoined;
+    }
+
+    /* helper methods */
+
+    public void addPoints(final int pointsToAdd) {
+        score += pointsToAdd;
+    }
+
+    /* getters and setters */
 
     public String getName() { return name; }
 
@@ -51,38 +74,57 @@ public class PlayerDTO implements Parcelable {
 
     public void setGameList(final ArrayList<String> gameList) { this.gameList = gameList; }
 
-    public String getPassword() { return password; }
+    public String getEmail() { return email; }
 
-    public void setPassword(final String password) { this.password = password; }
+    public void setEmail(final String email) { this.email = email; }
 
+    public HashMap<String, Object> getTimestampJoined() { return timestampJoined; }
+
+    public void setTimestampJoined(final HashMap<String, Object> timestampJoined) { this.timestampJoined = timestampJoined; }
+
+    public boolean isHasLoggedInWithPassword() { return hasLoggedInWithPassword; }
+
+    public void setHasLoggedInWithPassword(final boolean hasLoggedInWithPassword) { this.hasLoggedInWithPassword = hasLoggedInWithPassword; }
 
     /* begin parcelazation :) */
 
     @Override
-    public int describeContents() { return 0; }
+    public int describeContents() {
+        return 0;
+    }
 
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
-        dest.writeString(name);
-        dest.writeString(password);
         dest.writeInt(score);
+        dest.writeString(name);
+        dest.writeString(email);
+        dest.writeSerializable(timestampJoined);
+        dest.writeByte(hasLoggedInWithPassword ? (byte) 1 : (byte) 0);
         dest.writeStringList(gameList);
     }
 
-    private PlayerDTO(final Parcel in) {
-        name = in.readString();
-        password = in.readString();
+    public PlayerDTO() { }
+
+    protected PlayerDTO(final Parcel in) {
         score = in.readInt();
+        name = in.readString();
+        email = in.readString();
+        timestampJoined = (HashMap<String, Object>) in.readSerializable();
+        hasLoggedInWithPassword = in.readByte() != 0;
         gameList = in.createStringArrayList();
     }
 
-    public static final Parcelable.Creator<PlayerDTO> CREATOR = new PlayerDTOCreator();
+    public static final Creator<PlayerDTO> CREATOR = new PlayerDTOCreator();
 
     private static class PlayerDTOCreator implements Creator<PlayerDTO> {
         @Override
-        public PlayerDTO createFromParcel(final Parcel source) {return new PlayerDTO(source);}
+        public PlayerDTO createFromParcel(final Parcel source) {
+            return new PlayerDTO(source);
+        }
 
         @Override
-        public PlayerDTO[] newArray(final int size) {return new PlayerDTO[size];}
+        public PlayerDTO[] newArray(final int size) {
+            return new PlayerDTO[size];
+        }
     }
 }

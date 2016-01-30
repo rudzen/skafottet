@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.fragments.PlayerDetailFragment;
 import com.undyingideas.thor.skafottet.support.highscore.online.HighScoreContent;
-import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import java.util.List;
@@ -33,22 +32,19 @@ import java.util.List;
  * @author adam
  * @author rudz
  */
-public class PlayerListActivity extends AppCompatActivity implements Runnable {
+public class PlayerListActivity extends AppCompatActivity {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
     private boolean mTwoPane;
-    private View recyclerView;
-//    private ProgressBar topProgressBar;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_list);
-
-        GameUtility.mpc.setRunnable(this);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -59,7 +55,6 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
             toolbar.setLogo(R.mipmap.ic_launcher);
             toolbar.setLogoDescription("Applikations logo");
             toolbar.setNavigationContentDescription("Home icon");
-
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
         }
@@ -67,7 +62,7 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new FloaterClickHandler());
 
-        recyclerView = findViewById(R.id.player_list);
+        recyclerView = (RecyclerView) findViewById(R.id.player_list);
         assert recyclerView != null;
         //Uncomment here if needed.
         //setupRecyclerView((RecyclerView) recyclerView);
@@ -110,12 +105,6 @@ public class PlayerListActivity extends AppCompatActivity implements Runnable {
 
     private void setupRecyclerView(@NonNull final RecyclerView recyclerView, final List<HighScoreContent.HighScoreItem> items) {
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(items));
-    }
-
-    //This method is called on update
-    @Override
-    public void run() {
-        setupRecyclerView((RecyclerView) recyclerView, GameUtility.mpc.getHighScoreItems());
     }
 
     private static class FloaterClickHandler implements View.OnClickListener {

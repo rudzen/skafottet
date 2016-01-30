@@ -19,7 +19,7 @@ package com.undyingideas.thor.skafottet.game;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.undyingideas.thor.skafottet.support.highscore.local.Player;
+import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;
 
 import java.util.Arrays;
 
@@ -33,9 +33,9 @@ public class SaveGame implements Parcelable {
 
     private HangedMan logic;
     private boolean multiPlayer;
-    private Player[] players;
+    private PlayerDTO[] players;
 
-    public SaveGame(final HangedMan logic, final boolean multiPlayer, final Player ... players) {
+    public SaveGame(final HangedMan logic, final boolean multiPlayer, final PlayerDTO ... players) {
         this.logic = logic;
         this.multiPlayer = multiPlayer;
         this.players = players;
@@ -49,9 +49,9 @@ public class SaveGame implements Parcelable {
 
     public void setMultiPlayer(final boolean multiPlayer) { this.multiPlayer = multiPlayer; }
 
-    public Player[] getPlayers() { return players; }
+    public PlayerDTO[] getPlayers() { return players; }
 
-    public void setPlayers(final Player[] players) { this.players = players; }
+    public void setPlayers(final PlayerDTO[] players) { this.players = players; }
 
     @Override
     public String toString() {
@@ -70,7 +70,7 @@ public class SaveGame implements Parcelable {
         dest.writeParcelable(logic, 0);
         dest.writeByte(multiPlayer ? (byte) 1 : (byte) 0);
         dest.writeInt(players.length);
-        for (final Player player : players) {
+        for (final PlayerDTO player : players) {
             dest.writeParcelable(player, 0);
         }
     }
@@ -79,9 +79,9 @@ public class SaveGame implements Parcelable {
         logic = in.readParcelable(HangedMan.class.getClassLoader());
         multiPlayer = in.readByte() != 0;
         final int playerCount = in.readInt();
-        players = new Player[playerCount];
+        players = new PlayerDTO[playerCount];
         for (int i = 0; i < playerCount; i++) {
-            players[i] = in.readParcelable(Player.class.getClassLoader());
+            players[i] = in.readParcelable(PlayerDTO.class.getClassLoader());
         }
     }
 

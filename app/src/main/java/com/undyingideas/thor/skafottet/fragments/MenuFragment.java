@@ -34,8 +34,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -54,10 +52,10 @@ import com.undyingideas.thor.skafottet.game.SaveGame;
 import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
 import com.undyingideas.thor.skafottet.interfaces.IGameSoundNotifier;
 import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
-import com.undyingideas.thor.skafottet.support.firebase.observer.FireBaseLoginData;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.DrawableHelper;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
+import com.undyingideas.thor.skafottet.support.utility.SettingsDTO;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.views.AutoScaleTextView;
 import com.undyingideas.thor.skafottet.views.StarField;
@@ -69,7 +67,7 @@ import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
 
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.imageRefs;
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.mpc;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.me;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_preferences;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.settings;
 
@@ -81,7 +79,7 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.settin
  * @author rudz
  */
 @SuppressWarnings("ConstantConditions")
-public class MenuFragment extends Fragment implements FireBaseLoginData.FirebaseLoginResponse, PreferenceChangeListener {
+public class MenuFragment extends Fragment implements PreferenceChangeListener {
 
     private static final int BUTTON_COUNT = 8;
     private ImageView title;
@@ -123,7 +121,7 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
     private GradientDrawable menuButton;
 
     /* observer data receiving classes */
-    private FireBaseLoginData fireBaseLoginData;
+//    private FireBaseLoginData fireBaseLoginData;
 
     /* interfaces to control the activity's actions */
     @Nullable
@@ -201,7 +199,7 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
         DrawableHelper.setButtonColors(buttons, buttons_text);
 
         /* configure callback observer interfaces data classes */
-        fireBaseLoginData = new FireBaseLoginData(this);
+//        fireBaseLoginData = new FireBaseLoginData(this);
 
         return root;
     }
@@ -274,8 +272,8 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
      * Re-displays the menu from scratch
      */
     private void showAll() {
-        Log.d("login showall", String.valueOf(mpc.name == null));
-        setLoginButton(GameUtility.getConnectionStatus());
+//        Log.d("login showall", String.valueOf(mpc.name == null));
+        setLoginButton();
         YoYo.with(Techniques.FadeIn).duration(1000).withListener(new EnterAnimatorHandler(this)).playOn(title);
         for (final RelativeLayout button : buttons) {
             button.setClickable(true);
@@ -302,23 +300,22 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
             // If previous game is found, add it to list :-)
             final SaveGame saveGame = (SaveGame) s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
 //            Log.d(TAG, saveGame.getLogic().toString());
-            if (saveGame.getLogic() != null && !saveGame.getLogic().isGameOver()) {
-                if (mpc.name != null && saveGame.isMultiPlayer() && mpc.name.equals(saveGame.getPlayers()[0].getName())) {
-                    startGameItems.add(new StartGameItem(Constant.MODE_CONT_GAME, "Fortsæt sidste spil", "Type : Multiplayer / Modstander : " + saveGame.getPlayers()[1].getName(), imageRefs[saveGame.getLogic().getNumWrongLetters()]));
-                } else {
+//            if (saveGame.getLogic() != null && !saveGame.getLogic().isGameOver()) {
+//                if (mpc.name != null && saveGame.isMultiPlayer() && mpc.name.equals(saveGame.getPlayers()[0].getName())) {
+//                    startGameItems.add(new StartGameItem(Constant.MODE_CONT_GAME, "Fortsæt sidste spil", "Type : Multiplayer / Modstander : " + saveGame.getPlayers()[1].getName(), imageRefs[saveGame.getLogic().getNumWrongLetters()]));
+//                } else {
                     startGameItems.add(new StartGameItem(Constant.MODE_CONT_GAME, "Fortsæt sidste spil", "Type : Singleplayer / Gæt : " + saveGame.getLogic().getVisibleWord(), imageRefs[saveGame.getLogic().getNumWrongLetters()]));
-                }
-            }
+//                }
+//            }
         } catch (final NullPointerException npe) {
             // nothing happends here, its just for not adding the option to continue a game.
         } finally {
             startGameItems.add(new StartGameItem(Constant.MODE_SINGLE_PLAYER, "Nyt singleplayer", "Tilfældigt ord.", imageRefs[0]));
-            if (mpc.name != null && GameUtility.getConnectionStatus() > -1) {
+            if (GameUtility.isLoggedIn() && GameUtility.getConnectionStatus() > -1) {
                 // TODO : Add callback listener for possible multiplayer games waiting..
-
-                if (mpc.lc.getFirstActiveGame() != null) {
-                    startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER, "Næste multiplayer", "Kæmp imod", imageRefs[0]));
-                }
+//                if (mpc.lc.getFirstActiveGame() != null) {
+//                    startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER, "Næste multiplayer", "Kæmp imod", imageRefs[0]));
+//                }
                 startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_2, "Vælg multiplayer", "Jægeren er den jagtede", imageRefs[0]));
                 startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_LOBBY, "Ny udfordring", "Udvælg dit offer", imageRefs[0]));
             }
@@ -354,20 +351,20 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
         WindowLayout.getMd().show();
     }
 
-    @Override
-    public void onLoginResponse(final boolean result) {
-        if (result) {
-            WindowLayout.getLoadToast().success();
-            GameUtility.me.setName(mpc.name);
-            WindowLayout.showSnack("Du er nu logged ind som " + mpc.name, sf, true);
-        } else {
-            WindowLayout.getLoadToast().error();
-            GameUtility.me.setName("Mig");
-            WindowLayout.showSnack("Kunne ikke logge på.", sf, true);
-        }
-        buttons[BUTTON_LOGIN_OUT].setTag(result);
-        setLoginButton(GameUtility.getConnectionStatus());
-    }
+//    @Override
+//    public void onLoginResponse(final boolean result) {
+//        if (result) {
+//            WindowLayout.getLoadToast().success();
+//            GameUtility.me.setName(mpc.name);
+//            WindowLayout.showSnack("Du er nu logged ind som " + mpc.name, sf, true);
+//        } else {
+//            WindowLayout.getLoadToast().error();
+//            GameUtility.me.setName("Mig");
+//            WindowLayout.showSnack("Kunne ikke logge på.", sf, true);
+//        }
+//        buttons[BUTTON_LOGIN_OUT].setTag(result);
+//        setLoginButton();
+//    }
 
     @Override
     public void preferenceChange(final PreferenceChangeEvent pce) {
@@ -461,7 +458,12 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
                         menuFragment.button_clicked = BUTTON_LOGIN_OUT;
 
                         if (GameUtility.getConnectionStatus() > -1) {
-                            menuFragment.textView_buttom.callOnClick();
+                            if (GameUtility.isLoggedIn()) {
+                                menuFragment.iFragmentFlipper.flipFragment(Constant.MODE_LOGOUT);
+                            } else {
+                                menuFragment.endMenu(Constant.MODE_LOGIN, menuFragment.buttons[BUTTON_HIGHSCORE]);
+                            }
+//                            menuFragment.textView_buttom.callOnClick();
                         } else {
                             WindowLayout.showDialog(menuFragment.getContext(), "Fejl", "Ingen internetforbindelse tilstede.");
                         }
@@ -591,8 +593,8 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
             if (menuFragment != null) {
                 if (gameMode != Constant.MODE_CONT_GAME) {
                     menuFragment.iFragmentFlipper.flipFragment(gameMode);
-                } else if (gameMode == Constant.MODE_MULTI_PLAYER) {
-                    menuFragment.iFragmentFlipper.flipFragment(gameMode, mpc.lc.getFirstActiveGame());
+//                } else if (gameMode == Constant.MODE_MULTI_PLAYER) {
+//                    menuFragment.iFragmentFlipper.flipFragment(gameMode, mpc.lc.getFirstActiveGame());
                 } else {
                     final Bundle bundle = new Bundle();
                     bundle.putParcelable(Constant.KEY_SAVE_GAME, (SaveGame) s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class));
@@ -618,15 +620,16 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
         public void onClick(final View v) {
             final MenuFragment menuFragment = weakReference.get();
             if (menuFragment != null) {
-                WindowLayout.setMd(new MaterialDialog.Builder(menuFragment.getActivity())
-                        .customView(R.layout.login, false)
-                        .cancelable(true)
-                        .positiveText("Ok")
-                        .negativeText(R.string.cancel)
-                        .onPositive(new OnLoginClickResponse(menuFragment))
-                        .onNegative(new QuitDialogCallback(menuFragment))
-                        .title(R.string.login));
-                WindowLayout.getMd().show();
+                menuFragment.iFragmentFlipper.flipFragment(Constant.MODE_LOGIN);
+//                WindowLayout.setMd(new MaterialDialog.Builder(menuFragment.getActivity())
+//                        .customView(R.layout.login, false)
+//                        .cancelable(true)
+//                        .positiveText("Ok")
+//                        .negativeText(R.string.cancel)
+//                        .onPositive(new OnLoginClickResponse(menuFragment))
+//                        .onNegative(new QuitDialogCallback(menuFragment))
+//                        .title(R.string.login));
+//                WindowLayout.getMd().show();
             }
         }
     }
@@ -634,51 +637,51 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
     /**
      * Listener for adding list dialog !
      */
-    private static class OnLoginClickResponse extends WeakReferenceHolder<MenuFragment> implements MaterialDialog.SingleButtonCallback {
-
-        public OnLoginClickResponse(final MenuFragment menuFragment) {
-            super(menuFragment);
-        }
-
-        private static boolean isValid(@NonNull final String title, @NonNull final String url) {
-            return !title.isEmpty() && !url.isEmpty();
-        }
-
-        @Override
-        public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
-            final MenuFragment menuFragment = weakReference.get();
-            if (menuFragment != null) {
-                if (which == DialogAction.POSITIVE) {
-                    /* let's inflate the dialog view... */
-                    final View dialogCustomView = dialog.getCustomView();
-                    if (dialogCustomView != null) {
-                        WindowLayout.getLoadToast().show();
-                        final EditText editTextTitle = (EditText) dialogCustomView.findViewById(R.id.loginName);
-                        final EditText editTextURL = (EditText) dialogCustomView.findViewById(R.id.loginPass);
-                        final String user = editTextTitle.getText().toString().trim();
-                        final String pass = editTextURL.getText().toString().trim();
-                        final CheckBox check = (CheckBox) dialogCustomView.findViewById(R.id.createUserCheckBox);
-                        final boolean isChecked = check.isChecked();
-
-                        if (isValid(user, pass)) {
-                            WindowLayout.getLoadToast().show();
-                            if (isChecked) {
-                                GameUtility.mpc.pc.createPlayer(user, pass, menuFragment.fireBaseLoginData);
-                            } else {
-                                GameUtility.mpc.login(user, pass, menuFragment.fireBaseLoginData);
-                            }
-                        } else {
-                            WindowLayout.showSnack("Ugyldig information indtastet.", menuFragment.textView_buttom, true);
-                        }
-                    }
-                } else {
-//                    menuFragment.setLoginButton();
-                    menuFragment.showAll();
-                }
-                dialog.dismiss();
-            }
-        }
-    }
+//    private static class OnLoginClickResponse extends WeakReferenceHolder<MenuFragment> implements MaterialDialog.SingleButtonCallback {
+//
+//        public OnLoginClickResponse(final MenuFragment menuFragment) {
+//            super(menuFragment);
+//        }
+//
+//        private static boolean isValid(@NonNull final String title, @NonNull final String url) {
+//            return !title.isEmpty() && !url.isEmpty();
+//        }
+//
+//        @Override
+//        public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+//            final MenuFragment menuFragment = weakReference.get();
+//            if (menuFragment != null) {
+//                if (which == DialogAction.POSITIVE) {
+//                    /* let's inflate the dialog view... */
+//                    final View dialogCustomView = dialog.getCustomView();
+//                    if (dialogCustomView != null) {
+//                        WindowLayout.getLoadToast().show();
+//                        final EditText editTextTitle = (EditText) dialogCustomView.findViewById(R.id.loginName);
+//                        final EditText editTextURL = (EditText) dialogCustomView.findViewById(R.id.loginPass);
+//                        final String user = editTextTitle.getText().toString().trim();
+//                        final String pass = editTextURL.getText().toString().trim();
+//                        final CheckBox check = (CheckBox) dialogCustomView.findViewById(R.id.createUserCheckBox);
+//                        final boolean isChecked = check.isChecked();
+//
+//                        if (isValid(user, pass)) {
+//                            WindowLayout.getLoadToast().show();
+//                            if (isChecked) {
+//                                GameUtility.mpc.pc.createPlayer(user, pass, menuFragment.fireBaseLoginData);
+//                            } else {
+//                                GameUtility.mpc.login(user, pass, menuFragment.fireBaseLoginData);
+//                            }
+//                        } else {
+//                            WindowLayout.showSnack("Ugyldig information indtastet.", menuFragment.textView_buttom, true);
+//                        }
+//                    }
+//                } else {
+////                    menuFragment.setLoginButton();
+//                    menuFragment.showAll();
+//                }
+//                dialog.dismiss();
+//            }
+//        }
+//    }
 
     private class NewGameCancelListener implements DialogInterface.OnCancelListener {
         @Override
@@ -749,12 +752,22 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
                 info.add(String.format(INFO_GAME, NOTHING));
             }
 
-            try {
-                info.add(String.format(INFO_LOGGED_IN, mpc != null && mpc.name != null ? mpc.name : "Nej"));
-            } catch (final Exception e) {
-                e.printStackTrace();
-                info.add("Nej");
+            final String logInName;
+            if (settings.auth_status == SettingsDTO.AUTH_USER) {
+                logInName = me.getEmail();
+            } else if (settings.auth_status == SettingsDTO.AUTH_ANON) {
+                logInName = "Basis";
+            } else {
+                logInName = "Nej";
             }
+            info.add(String.format(INFO_LOGGED_IN, logInName));
+
+//            try {
+//                info.add(String.format(INFO_LOGGED_IN, mpc != null && mpc.name != null ? mpc.name : "Nej"));
+//            } catch (final Exception e) {
+//                e.printStackTrace();
+//                info.add("Nej");
+//            }
             info.add(String.format(INFO_CONNECTION, GameUtility.getConnectionStatusName()));
 //        try {
 //            info.add(String.format(INFO_BATTERY, Integer.toString(batteryLevelRecieverData.getData().getLevel())));
@@ -781,22 +794,20 @@ public class MenuFragment extends Fragment implements FireBaseLoginData.Firebase
         }
     }
 
-    @SuppressWarnings("deprecation")
-    public void setLoginButton(final int connectionStatus) {
+    public void setLoginButton(final boolean isLoggedIn) {
         /* make sure the right button is set for the login/logout status */
         if (buttons[BUTTON_LOGIN_OUT] != null) { // guard for when application first comes into foreground
-            if (connectionStatus > -1) {
+            if (!isLoggedIn) {
                 buttons_text[BUTTON_LOGIN_OUT].setText(R.string.menu_button_login_in);
             } else {
                 buttons_text[BUTTON_LOGIN_OUT].setText(R.string.menu_button_login_out);
-                mpc.name = null;
             }
             YoYo.with(Techniques.Pulse).duration(300).playOn(buttons[BUTTON_LOGIN_OUT]);
         }
     }
 
-    private void setLoginButton() {
-        setLoginButton(GameUtility.getConnectionStatus());
+    public void setLoginButton() {
+        setLoginButton(GameUtility.isLoggedIn());
     }
 
 }

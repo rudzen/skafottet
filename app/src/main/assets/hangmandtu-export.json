@@ -1,45 +1,198 @@
 {
   "Lobby" : {
-    "-K8TLYJnFxKJAbGhT-ID" : {
-      "Adam" : 1,
-      "Theis" : 0,
-      "word" : "pudel"
-    },
-    "-K8TNG25_KMXXhQSGvB3" : {
-      "Adam" : 7,
-      "Theis" : 4,
+    "-K8Yj-xKxBjmvCLmQJxh" : {
+      "hej" : 3,
+      "test" : 0,
       "word" : "ppois"
     },
-    "-K8TS3tj1_j6dAGNuEzG" : {
-      "Adam" : 2,
+    "-K8YlItffFV_1_A0Yigb" : {
+      "Adam" : 1,
+      "Rudy" : 0,
+      "word" : "ppois"
+    },
+    "-K8YmD--aXAGHeibOQSo" : {
+      "Adam" : -1,
+      "test" : -1,
+      "word" : "ppois"
+    },
+    "-K8YyK_s5gyMp3OP97EW" : {
+      "Adam" : 7,
+      "Vildsviner" : -1,
+      "word" : "ppois"
+    },
+    "-K8cbBNYpRMqdUpgxjbU" : {
+      "Adam" : 7,
+      "Theis" : 5,
+      "word" : "american foxhound"
+    },
+    "-K8cccqzblpd2Q5pRzUS" : {
+      "Rudy" : 5,
+      "Theis" : 6,
+      "word" : "afghansk mynde"
+    },
+    "-K8ce9hnxtOvObf1dL15" : {
+      "Adam" : 6,
       "Theis" : 0,
       "word" : "pudel"
+    },
+    "-K8cnWPyTYY3S271ZqvO" : {
+      "Rudy" : 2,
+      "Theis" : -1,
+      "word" : "afghansk mynde"
+    },
+    "-K8iDCXgc8lsMcwMOGNX" : {
+      "Rudy" : 0,
+      "Theis" : -1,
+      "word" : "pudel"
+    },
+    "-K8iF4TKb_mmZkroScFg" : {
+      "Adam" : -1,
+      "Rudy" : 6,
+      "word" : "american foxhound"
+    },
+    "-K8iZsCsL6Nq8YSv15AG" : {
+      "Rudy" : 5,
+      "Theis" : -1,
+      "word" : "pudel"
+    },
+    "-K8jl1xu-B7ZUWvdL8UA" : {
+      "Adam" : -1,
+      "Qualityguano" : -1,
+      "word" : "ppois"
+    },
+    "-K8jl5Cjd4r774UxUrRV" : {
+      "Adam" : -1,
+      "Qualityguano" : -1,
+      "word" : "afghansk mynde"
+    },
+    "-K8nyMtsK46dIbOCwsLa" : {
+      "Martin" : -1,
+      "Rudy" : 0,
+      "word" : "ppois"
+    },
+    "-K8nyt2dWCPyTE4tA0CU" : {
+      "Martin" : -1,
+      "Rudy" : 1,
+      "word" : "american foxhound"
+    },
+    "-K8nyw2jpKKGz9MlwRgZ" : {
+      "Martin" : -1,
+      "Rudy" : 0,
+      "word" : "ppois"
+    },
+    "-K8o-4KNGWtd4nwAkwJY" : {
+      "Rudy" : 7,
+      "Vildsviner" : -1,
+      "word" : "ppois"
     }
   },
   "Players" : {
     "Adam" : {
       "gameList" : {
-        "-K8TLYK2KTu16S5JRMiu" : "-K8TLYJnFxKJAbGhT-ID",
-        "-K8TNG2KFL49EelEFzdJ" : "-K8TNG25_KMXXhQSGvB3",
-        "-K8TS3uGsNTj0CqCIaLr" : "-K8TS3tj1_j6dAGNuEzG"
+        "-K8YlIu7TuT0iUv5tZ73" : "-K8YlItffFV_1_A0Yigb",
+        "-K8YmD-SkX82J4T_2bh-" : "-K8YmD--aXAGHeibOQSo",
+        "-K8YyK_yVo1eSxwNaXy_" : "-K8YyK_s5gyMp3OP97EW",
+        "-K8cbBOBUu1az9e7fsyN" : "-K8cbBNYpRMqdUpgxjbU",
+        "-K8ce9hpDKYBMcg16V71" : "-K8ce9hnxtOvObf1dL15",
+        "-K8iF4TSVkH2cJ4NOqyE" : "-K8iF4TKb_mmZkroScFg",
+        "-K8jl1xwkYoGZYQn2ryT" : "-K8jl1xu-B7ZUWvdL8UA",
+        "-K8jl5CuQwtUCnVJbCyf" : "-K8jl5Cjd4r774UxUrRV"
       },
       "name" : "Adam",
       "password" : "a",
-      "score" : 3
+      "score" : 5
+    },
+    "Bjørn" : {
+      "name" : "Bjørn",
+      "password" : "123098",
+      "score" : 0
+    },
+    "Martin" : {
+      "gameList" : {
+        "-K8nyMtwouHr7UIjRjtP" : "-K8nyMtsK46dIbOCwsLa",
+        "-K8nyt2g0cqiUrFY2ruG" : "-K8nyt2dWCPyTE4tA0CU",
+        "-K8nyw2kmN78wKi-bPBB" : "-K8nyw2jpKKGz9MlwRgZ"
+      },
+      "name" : "Martin",
+      "password" : "taxa",
+      "score" : 0
+    },
+    "Qualityguano" : {
+      "gameList" : {
+        "-K8jl1xwkYoGZYQn2ryU" : "-K8jl1xu-B7ZUWvdL8UA",
+        "-K8jl5CuQwtUCnVJbCyg" : "-K8jl5Cjd4r774UxUrRV"
+      },
+      "name" : "Qualityguano",
+      "password" : "casper82915",
+      "score" : 0
+    },
+    "Rudy" : {
+      "gameList" : {
+        "-K8YlIu7TuT0iUv5tZ74" : "-K8YlItffFV_1_A0Yigb",
+        "-K8cccrFyWfq-8Z_QhxV" : "-K8cccqzblpd2Q5pRzUS",
+        "-K8cnWQ7Ff9-ogs21ROU" : "-K8cnWPyTYY3S271ZqvO",
+        "-K8iDCXnHgRoXQb9lOnu" : "-K8iDCXgc8lsMcwMOGNX",
+        "-K8iF4TSVkH2cJ4NOqyF" : "-K8iF4TKb_mmZkroScFg",
+        "-K8iZsD-EHrYSuRZinjw" : "-K8iZsCsL6Nq8YSv15AG",
+        "-K8nyMtwouHr7UIjRjtQ" : "-K8nyMtsK46dIbOCwsLa",
+        "-K8nyt2iT2ILDpk9EWhd" : "-K8nyt2dWCPyTE4tA0CU",
+        "-K8nyw2l0VtKnntLDqBh" : "-K8nyw2jpKKGz9MlwRgZ",
+        "-K8o-4KObjvJpho5pdD-" : "-K8o-4KNGWtd4nwAkwJY"
+      },
+      "name" : "Rudy",
+      "password" : "r",
+      "score" : 4
     },
     "Theis" : {
       "gameList" : {
-        "-K8TLYK4Yveetnj2Ny0m" : "-K8TLYJnFxKJAbGhT-ID",
-        "-K8TNG2NQ7OGW_De2HPU" : "-K8TNG25_KMXXhQSGvB3",
-        "-K8TS3uHl1BGl9HZ85g_" : "-K8TS3tj1_j6dAGNuEzG"
+        "-K8cbBOBUu1az9e7fsyO" : "-K8cbBNYpRMqdUpgxjbU",
+        "-K8cccrGvZ9TpaS2AKCA" : "-K8cccqzblpd2Q5pRzUS",
+        "-K8ce9hpDKYBMcg16V72" : "-K8ce9hnxtOvObf1dL15",
+        "-K8cnWQ93MeNbm09DNsV" : "-K8cnWPyTYY3S271ZqvO",
+        "-K8iDCXnHgRoXQb9lOnv" : "-K8iDCXgc8lsMcwMOGNX",
+        "-K8iZsD0OtfYzq1B_dJz" : "-K8iZsCsL6Nq8YSv15AG"
       },
       "name" : "Theis",
+      "password" : "t",
+      "score" : 7
+    },
+    "Vildsviner" : {
+      "gameList" : {
+        "-K8YyK_yVo1eSxwNaXya" : "-K8YyK_s5gyMp3OP97EW",
+        "-K8o-4KPd6Gb-5jbdPFz" : "-K8o-4KNGWtd4nwAkwJY"
+      },
+      "name" : "Vildsviner",
+      "password" : "1",
+      "score" : 0
+    },
+    "hej" : {
+      "gameList" : {
+        "-K8Yj-xi12tLM3Fgh7cO" : "-K8Yj-xKxBjmvCLmQJxh"
+      },
+      "name" : "hej",
+      "password" : "hej",
+      "score" : 0
+    },
+    "test" : {
+      "gameList" : {
+        "-K8Yj-xkhur6V8ieVEOv" : "-K8Yj-xKxBjmvCLmQJxh",
+        "-K8YmD-YhQshpd5ul_bk" : "-K8YmD--aXAGHeibOQSo"
+      },
+      "name" : "test",
       "password" : "t",
       "score" : 1
     }
   },
   "Wordlist" : {
     "Hunde" : {
+      "affenpincher" : "affenpincher",
+      "afghansk mynde" : "afghansk mynde",
+      "aidi" : "aidi",
+      "airedale" : "terrier",
+      "akita" : "akita",
+      "alaskan malamute" : "alaskan malamut",
+      "ameriansk cocker spaniel" : "amerikansk cocker spaniel",
+      "american foxhound" : "american foxhound",
       "pudel" : "pudel"
     },
     "Statistik" : {

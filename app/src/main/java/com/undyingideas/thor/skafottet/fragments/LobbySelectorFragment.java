@@ -33,12 +33,9 @@ import com.undyingideas.thor.skafottet.adapters.MultiplayerLobbyAdapter;
 import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
 import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
-import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
-import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 //import com.undyingideas.thor.skafottet.support.abstractions.FragmentOnBackClickListener;
 
@@ -46,6 +43,7 @@ import java.util.Set;
  * This Fragment is responsible for showing the current Multiplayer players that are online.<br>
  * It presents a list of them using a custom adapter with data retrieved from firebase.<br>
  * TODO : Needs to facilitate a firebase observer interface *correctly* to monitor changes.
+ *
  * @author rudz
  */
 public class LobbySelectorFragment extends Fragment {
@@ -113,6 +111,7 @@ public class LobbySelectorFragment extends Fragment {
 
     /**
      * Use this method to create a new instance of * this fragment using the provided parameters.
+     *
      * @param isOnline Defines if the application has access to the internet.
      * @return A new instance of fragment LobbySelectorFragment.
      */
@@ -131,6 +130,7 @@ public class LobbySelectorFragment extends Fragment {
      */
     public interface OnMultiPlayerPlayerFragmentInteractionListener {
         void onPlayerClicked(final String playerName);
+
         void startNewMultiplayerGame(final String lobbyKey, final String theWord);
     }
 
@@ -141,12 +141,13 @@ public class LobbySelectorFragment extends Fragment {
     private void configureAdapter() {
         lobbys.clear();
 
-        removeInactive(GameUtility.mpc.name);
-        lobbyAdapter = new MultiplayerLobbyAdapter(GameUtility.mpc.name, getContext(), R.layout.multiplayer_player_list_row, lobbys);
+//        removeInactive(GameUtility.mpc.name);
+//        lobbyAdapter = new MultiplayerLobbyAdapter(GameUtility.mpc.name, getContext(), R.layout.multiplayer_player_list_row, lobbys);
+
         listView.setAdapter(lobbyAdapter);
         listView.setOnItemClickListener(new OnLobbyClick(this));
         lobbyAdapter.notifyDataSetChanged();
-        if(lobbys.isEmpty()) WindowLayout.showSnack("Du har ingen udfordringer klar", listView, false);
+        if (lobbys.isEmpty()) WindowLayout.showSnack("Du har ingen udfordringer klar", listView, false);
     }
 
     private void updateList() {
@@ -155,7 +156,7 @@ public class LobbySelectorFragment extends Fragment {
 
         configureAdapter();
 
-        GameUtility.mpc.setRunnable(updater);
+//        GameUtility.mpc.setRunnable(updater);
     }
 
     public void setOnlineStatus(final boolean newStatus) {
@@ -176,34 +177,37 @@ public class LobbySelectorFragment extends Fragment {
 
         @Override
         public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-            final LobbySelectorFragment lobbySelectorFragment =  weakReference.get();
+            final LobbySelectorFragment lobbySelectorFragment = weakReference.get();
             if (lobbySelectorFragment != null) {
                 Log.d("NG", String.valueOf(id));
                 // do stuff!!!
                 lobbySelectorFragment.onButtonPressed(position);
-                if(GameUtility.mpc.name == null)
-                    Log.e("lobbyselectorfrag", "error : name == null");
-                else {
-                    for (final LobbyPlayerStatus lobbyPlayerStatus : lobbySelectorFragment.lobbys.get(position).getPlayerList())
-                        if (lobbyPlayerStatus.getName().equals(GameUtility.mpc.name)){
-
-                                if (lobbyPlayerStatus.getScore() == -1) {
-                                    Log.d("firebaseopengame", lobbySelectorFragment.lobbys.get(position).getWord());
-                                    //noinspection ConstantConditions
-                                    String k = "";
-                                    final LobbyDTO dto = lobbySelectorFragment.lobbys.get(position);
-                                    final Set<String> keys = GameUtility.mpc.lc.lobbyList.keySet();
-                                    for (final String key : keys)
-                                        if (dto.equals(GameUtility.mpc.lc.lobbyList.get(key)))
-                                            { k = key; break; }
-
-                                    GameUtility.mpc.setRunnable(null);
-                                    lobbySelectorFragment.mListener.startNewMultiplayerGame(k, dto.getWord());
-                                    //TODO
-                                    return;
-                                }
-                            }
-                }
+//                if (GameUtility.mpc.name == null)
+//                    Log.e("lobbyselectorfrag", "error : name == null");
+//                else {
+//                    for (final LobbyPlayerStatus lobbyPlayerStatus : lobbySelectorFragment.lobbys.get(position).getPlayerList()) {
+//                        if (lobbyPlayerStatus.getName().equals(GameUtility.mpc.name)) {
+//                            if (lobbyPlayerStatus.getScore() == -1) {
+//                                Log.d("firebaseopengame", lobbySelectorFragment.lobbys.get(position).getWord());
+//                                //noinspection ConstantConditions
+//                                String k = "";
+//                                final LobbyDTO dto = lobbySelectorFragment.lobbys.get(position);
+//                                final Set<String> keys = GameUtility.mpc.lc.lobbyList.keySet();
+//                                for (final String key : keys)
+//                                    if (dto.equals(GameUtility.mpc.lc.lobbyList.get(key))) {
+//                                        k = key;
+//                                        break;
+//                                    }
+//
+//                                GameUtility.mpc.setRunnable(null);
+//                                lobbySelectorFragment.mListener.startNewMultiplayerGame(k, dto.getWord());
+//                                //TODO
+//                                return;
+//                            }
+//                        }
+//
+//                    }
+//                }
             }
         }
     }
@@ -218,39 +222,36 @@ public class LobbySelectorFragment extends Fragment {
     private class UpdateList implements Runnable {
         @Override
         public void run() {
-            if (GameUtility.mpc.name == null) {
-                // TODO not logged in
-            } else {
-                lobbys.clear();
-
-                removeInactive(GameUtility.mpc.name);
-                lobbyAdapter = new MultiplayerLobbyAdapter(GameUtility.mpc.name, getContext(), R.layout.multiplayer_player_list_row, lobbys);
-                listView.setAdapter(lobbyAdapter);
-                lobbyAdapter.notifyDataSetChanged();
-            }
-//            setProgressListener.setProgressBar(false);
+//            if (GameUtility.mpc.name == null) {
+//                // TODO not logged in
+//            } else {
+//                lobbys.clear();
+//
+//                removeInactive(GameUtility.mpc.name);
+//                lobbyAdapter = new MultiplayerLobbyAdapter(GameUtility.mpc.name, getContext(), R.layout.multiplayer_player_list_row, lobbys);
+//                listView.setAdapter(lobbyAdapter);
+//                lobbyAdapter.notifyDataSetChanged();
+//            }
         }
     }
 
     private void removeInactive(final String name) {
         final ArrayList<LobbyDTO> dtoList = new ArrayList<>();
-        dtoList.addAll(GameUtility.mpc.lc.lobbyList.values());
-        boolean b;
-        for(final LobbyDTO dto : dtoList) {
-            b = false;
-            try {
-                for (final LobbyPlayerStatus status : dto.getPlayerList()) {
-                    if (status.getScore() == -1 && status.getName().equals(name)) {
-                        b = true;
-                        break;
-                    }
-                }
-                if (b) lobbys.add(dto);
-            } catch (final NullPointerException e) {
-                Log.e("NullPointer", e.toString());
-            }
-        }
-
+//        dtoList.addAll(GameUtility.mpc.lc.lobbyList.values());
+//        boolean b;
+//        for (final LobbyDTO dto : dtoList) {
+//            b = false;
+//            try {
+//                for (final LobbyPlayerStatus status : dto.getPlayerList()) {
+//                    if (status.getScore() == -1 && status.getName().equals(name)) {
+//                        b = true;
+//                        break;
+//                    }
+//                }
+//                if (b) lobbys.add(dto);
+//            } catch (final NullPointerException e) {
+//                Log.e("NullPointer", e.toString());
+//            }
+//        }
     }
-
 }

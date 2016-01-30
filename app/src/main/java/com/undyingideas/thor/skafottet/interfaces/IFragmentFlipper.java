@@ -16,7 +16,9 @@
 
 package com.undyingideas.thor.skafottet.interfaces;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 
@@ -34,5 +36,9 @@ public interface IFragmentFlipper {
     void flipFragment(final int gameMode);
 
     // to use with savegame
-    void flipFragment(final int gameMode, final Bundle bundle);
+    void flipFragment(final int gameMode, @NonNull final Bundle bundle);
+
+    // for opening an intent! (most likely to choose email client from login stuff)
+    void flipFragment(@NonNull final Intent intent) throws android.content.ActivityNotFoundException;
+
 }

@@ -27,9 +27,17 @@
             android:defaultValue="Mig"
             android:shouldDisableView="true"
             >
-
-
         </com.afollestad.materialdialogs.prefs.MaterialEditTextPreference>
+
+        <CheckBoxPreference
+            android:key="kploginlast"
+            android:title="Genbrug sidste login."
+            android:defaultValue="true"
+            android:summary="Bliver ikke husket ved manuel udlogning."
+            >
+
+        </CheckBoxPreference>
+
     </PreferenceCategory>
 
     <PreferenceCategory

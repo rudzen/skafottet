@@ -21,7 +21,6 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
 import android.support.annotation.RawRes;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.undyingideas.thor.skafottet.R;
@@ -37,7 +36,7 @@ import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
  * @author rudz
  */
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
-public abstract class SoundAbstract extends AppCompatActivity implements SoundPool.OnLoadCompleteListener {
+public abstract class SoundAbstract extends BaseActivity implements SoundPool.OnLoadCompleteListener {
 
     private final static String TAG = "SoundAbstract";
 
@@ -90,7 +89,7 @@ public abstract class SoundAbstract extends AppCompatActivity implements SoundPo
                     .build();
 
             return new SoundPool.Builder()
-                    .setMaxStreams(4)
+                    .setMaxStreams(6)
                     .setAudioAttributes(audioAttributes)
                     .build();
         } else {

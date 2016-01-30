@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.undyingideas.thor.skafottet.firebase.highscore;
+package com.undyingideas.thor.skafottet.firebase.help;
 
 import android.os.Parcel;
 import android.os.Parcelable;

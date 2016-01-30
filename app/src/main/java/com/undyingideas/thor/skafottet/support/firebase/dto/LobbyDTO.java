@@ -27,6 +27,11 @@ public class LobbyDTO implements Parcelable {
         this.playerList = playerList;
     }
 
+    public LobbyDTO(final LobbyDTO lobbyDTO) {
+        word = lobbyDTO.getWord();
+        playerList = lobbyDTO.getPlayerList();
+    }
+
     public void add(final LobbyPlayerStatus lps) { playerList.put(lps.getName(), lps); }
 
     public void put(final String key, final LobbyPlayerStatus lobbyPlayerStatus) { playerList.put(key, lobbyPlayerStatus); }
@@ -35,9 +40,21 @@ public class LobbyDTO implements Parcelable {
 
     public void setWord(final String word) { this.word = word; }
 
-    public ArrayList<LobbyPlayerStatus> getPlayerList() { return new ArrayList<>(playerList.values()); }
+    public ArrayMap<String, LobbyPlayerStatus> getPlayerList() { return playerList; }
 
     public void setPlayerList(final ArrayMap<String, LobbyPlayerStatus> playerList) { this.playerList = playerList; }
+
+    public ArrayList<LobbyPlayerStatus> getPlayerListArray() { return new ArrayList<>(playerList.values()); }
+
+    public boolean isDone() {
+        int doneCount = 0;
+        for (final Map.Entry<String, LobbyPlayerStatus> stringLobbyPlayerStatusEntry : playerList.entrySet()) {
+            if (stringLobbyPlayerStatusEntry.getValue().getScore() > 0) {
+                doneCount++;
+            }
+        }
+        return doneCount == playerList.size();
+    }
 
     @Override
     public String toString() {

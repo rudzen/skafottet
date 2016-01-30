@@ -130,4 +130,8 @@
          <item name="@attr/minTextSize">10dp</item>
     </style>
 
+    <style name="HintText">
+        <item name="android:textSize">0dp</item>
+    </style>
+
 </resources>

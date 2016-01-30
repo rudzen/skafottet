@@ -18,16 +18,21 @@ package com.undyingideas.thor.skafottet.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.util.Log;
 import android.view.WindowManager;
 
+import com.firebase.client.Firebase;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.activities.login.CreateAccountActivity;
+import com.undyingideas.thor.skafottet.activities.login.LoginActivity;
 import com.undyingideas.thor.skafottet.broadcastrecievers.InternetReciever;
 import com.undyingideas.thor.skafottet.broadcastrecievers.InternetRecieverData;
 import com.undyingideas.thor.skafottet.fragments.AboutFragment;
-import com.undyingideas.thor.skafottet.fragments.CreateLobbyFragment;
 import com.undyingideas.thor.skafottet.fragments.EndOfGameFragment;
 import com.undyingideas.thor.skafottet.fragments.HangmanGameFragment;
 import com.undyingideas.thor.skafottet.fragments.HelpFragment;
@@ -40,7 +45,7 @@ import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
 import com.undyingideas.thor.skafottet.interfaces.IGameSoundNotifier;
 import com.undyingideas.thor.skafottet.services.MusicPlay;
 import com.undyingideas.thor.skafottet.support.classes.SetLoadToaster;
-import com.undyingideas.thor.skafottet.support.highscore.local.Player;
+import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
@@ -57,10 +62,15 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.settin
  */
 public class GameActivity extends SoundAbstract implements
         LobbySelectorFragment.OnMultiPlayerPlayerFragmentInteractionListener,
-        CreateLobbyFragment.OnCreateLobbyFragmentInteractionListener,
         IGameSoundNotifier, IFragmentFlipper,
-        InternetRecieverData.InternetRecieverInterface
-{
+        InternetRecieverData.InternetRecieverInterface {
+
+//    CreateLobbyFragment.OnCreateLobbyFragmentInteractionListener,
+
+    protected GoogleApiClient googleApiClient;
+    protected Firebase.AuthStateListener authStateListener;
+    protected Firebase firebase;
+
 
     private static final String TAG = "GameActivity";
     /* to handle backpressed when in the menu fragment */
@@ -126,7 +136,7 @@ public class GameActivity extends SoundAbstract implements
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         soundThread.interrupt();
         soundThread = null;
         Log.d(TAG, "Sound removed");
@@ -198,24 +208,24 @@ public class GameActivity extends SoundAbstract implements
     @Override
     public void startNewMultiplayerGame(final String opponentName, final String theWord) {
         Log.d(TAG, "Want to start new game against : " + opponentName + " with word : " + theWord);
-        GameUtility.mpc.setRunnable(null); // hack til at fjerne updaterings fejl
-        replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(theWord), true, new Player(GameUtility.me), new Player(opponentName))));
+//        GameUtility.mpc.setRunnable(null); // hack til at fjerne updaterings fejl
+        replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(theWord), true, new PlayerDTO(GameUtility.me), new PlayerDTO(opponentName))));
     }
 
     @SuppressWarnings({"OverlyComplexMethod", "OverlyLongMethod"})
     @Override
-    public final void flipFragment(final int gameMode) {
+    public final void flipFragment(@NonNull final int gameMode) {
         currentMode = gameMode;
 //        if (gameMode == Constant.MODE_BACK_PRESSED) {
 //            onBackPressed();
         if (gameMode == Constant.MODE_MENU) {
             replaceFragment(new MenuFragment());
         } else if (gameMode == Constant.MODE_SINGLE_PLAYER) {
-            replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(), false, new Player(GameUtility.me))));
+            replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(), false, new PlayerDTO(GameUtility.me))));
         } else if (gameMode == Constant.MODE_MULTI_PLAYER_2) {
             replaceFragment(LobbySelectorFragment.newInstance(true));
         } else if (gameMode == Constant.MODE_MULTI_PLAYER_LOBBY) {
-            replaceFragment(CreateLobbyFragment.newInstance(true));
+//            replaceFragment(CreateLobbyFragment.newInstance(true));
         } else if (gameMode == Constant.MODE_ABOUT) {
             replaceFragment(new AboutFragment());
         } else if (gameMode == Constant.MODE_HELP) {
@@ -240,43 +250,48 @@ public class GameActivity extends SoundAbstract implements
             final Intent intent = new Intent(this, PrefsActivity.class);
             startActivity(intent);
             finish();
+        } else if (gameMode == Constant.MODE_LOGIN) {
+            final Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        } else if (gameMode == Constant.MODE_LOGOUT) {
+            logout();
+            if (currentFragment instanceof MenuFragment) {
+                ((MenuFragment) currentFragment).setLoginButton(false);
+            }
+        } else if (gameMode == Constant.MODE_CREATE_ACCOUNT) {
+            final Intent intent = new Intent(this, CreateAccountActivity.class);
+            startActivity(intent);
         }
     }
 
     @Override
-    public final void flipFragment(final int gameMode, final Bundle bundle) {
+    public final void flipFragment(final int gameMode, @NonNull final Bundle bundle) {
         playSound(GameUtility.SFX_MENU_CLICK);
-        if (gameMode == Constant.MODE_CONT_GAME) {
+        if (gameMode == Constant.MODE_CONT_GAME || gameMode == Constant.MODE_MULTI_PLAYER) {
             // when the current save game is to be continued.
             replaceFragment(HangmanGameFragment.newInstance((SaveGame) bundle.getParcelable(Constant.KEY_SAVE_GAME)));
         } else if (gameMode == Constant.MODE_END_GAME) {
             // when the game is done and the end game fragment needs to be shown.
             replaceFragment(EndOfGameFragment.newInstance((SaveGame) bundle.getParcelable(Constant.KEY_SAVE_GAME)));
-        } else if (gameMode == Constant.MODE_MULTI_PLAYER) {
-            // TODO : Verify it works!
-            replaceFragment(HangmanGameFragment.newInstance((SaveGame) bundle.getParcelable(Constant.KEY_SAVE_GAME)));
-//            final Bundle bundle = getFirstActiveGame();
-//            if (bundle != null) {
-//                replaceFragment(HangmanGameFragment.newInstance(bundle));
-//            } else {
-//                WindowLayout.showSnack("Du har ikke flere spil åbne.", findViewById(R.id.fragment_content), false);
-//                if (currentFragment instanceof MenuFragment) {
-//                    ((MenuFragment) currentFragment).showAll();
-//                }
-//            }
         }
+    }
+
+    @Override
+    public void flipFragment(@NonNull final Intent intent) throws android.content.ActivityNotFoundException {
+        startActivity(intent);
+//        finish();
     }
 
     @Override
     public void onInternetStatusChanged(final int connectionState) {
         GameUtility.setConnectionStatus(connectionState);
         // TODO : Handle future stuff like if in multiplayer game, notify about game not being able to be saved online.
-        if (connectionState == -1) {
-            GameUtility.mpc.name = null;
-        }
-        if (currentFragment instanceof MenuFragment) {
-            ((MenuFragment) currentFragment).setLoginButton(connectionState);
-        }
+//        if (connectionState == -1) {
+//            GameUtility.mpc.name = null;
+//        }
+//        if (currentFragment instanceof MenuFragment) {
+//            ((MenuFragment) currentFragment).setLoginButton();
+//        }
     }
 
     @Override
@@ -286,8 +301,9 @@ public class GameActivity extends SoundAbstract implements
     }
 
 
-
-
-
+    @Override
+    public void onConnectionFailed(final ConnectionResult connectionResult) {
+        WindowLayout.showSnack("Forbindelse til google fejlede.", findViewById(R.id.fragment_content), true);
+    }
 }
 

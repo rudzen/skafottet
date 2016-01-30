@@ -32,17 +32,19 @@ import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.nineoldandroids.animation.Animator;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.services.MusicPlay;
 import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
-import com.undyingideas.thor.skafottet.support.firebase.controller.MultiplayerController;
 import com.undyingideas.thor.skafottet.support.firebase.controller.WordListController;
+import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;
 import com.undyingideas.thor.skafottet.support.highscore.local.HighscoreManager;
-import com.undyingideas.thor.skafottet.support.highscore.local.Player;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.FontUtils;
+import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 import com.undyingideas.thor.skafottet.support.utility.NetworkHelper;
 import com.undyingideas.thor.skafottet.support.utility.SettingsDTO;
@@ -53,12 +55,12 @@ import com.undyingideas.thor.skafottet.support.wordlist.WordItem;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.Map;
 
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.firebase;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getConnectionStatus;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.highscoreManager;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.me;
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.mpc;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.musicPLayIntent;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_preferences;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_wordController;
@@ -83,6 +85,8 @@ public class SplashActivity extends AppCompatActivity {
     private TextView title1, title2;
     private Handler loadHandler;
     private static final int MSG_LOAD_COMPLETE = 1;
+    private static final int MSG_ANON_AUTH_COMPLETE = 2;
+    private static final int MSG_USER_AUTH_COMPLETE = 3;
 
     private static final String TAG = "SplashActivity";
 
@@ -144,12 +148,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private class LoadConfig implements Runnable {
 
-        private void configureSettings() {
-
-        }
-
-
-        @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
+        @SuppressWarnings({"AssignmentToStaticFieldFromInstanceMethod", "unchecked"})
         @Override
         public void run() {
             /* This is the first code executed, thus some configuration of the application takes place.. */
@@ -160,10 +159,10 @@ public class SplashActivity extends AppCompatActivity {
                 s_preferences = new TinyDB(getApplicationContext());
             }
 
-//            s_preferences.clear();
+            s_preferences.clear();
 
             /* set the highscore manager */
-            HighscoreManager.deleteHighScore(getApplicationContext());
+//            HighscoreManager.deleteHighScore(getApplicationContext());
             highscoreManager = new HighscoreManager(getApplicationContext());
             highscoreManager.loadScoreFile();
 
@@ -172,10 +171,12 @@ public class SplashActivity extends AppCompatActivity {
             settings.prefsSfx = s_preferences.getBoolean(Constant.KEY_PREFS_SFX, true);
             settings.prefsBlood = s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD, true);
             settings.prefsHeptic = s_preferences.getBoolean(Constant.KEY_PREFS_HEPTIC, true);
+            settings.keepLogin = s_preferences.getBoolean(Constant.KEY_PREFS_KEEP_LOGIN, false);
             settings.prefsColour = s_preferences.getInt(Constant.KEY_PREFS_COLOUR, Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? ContextCompat.getColor(getApplicationContext(), R.color.colorAccent) : getResources().getColor(R.color.colorAccent));
             settings.setContrastColor();
 
-            me = new Player(s_preferences.getString(Constant.KEY_PREFS_PLAYER_NAME, getString(R.string.default_player_name)));
+            me = new PlayerDTO(s_preferences.getString(Constant.KEY_PREFS_PLAYER_NAME, getString(R.string.default_player_name)));
+
 
             /* keep the preferences as we don't know if the user actually ran the app for the first time. */
             s_preferences.putBoolean(Constant.KEY_PREFS_BLOOD, settings.prefsBlood);
@@ -197,7 +198,6 @@ public class SplashActivity extends AppCompatActivity {
 
 
             // only for testing stuff!!!!
-//            s_preferences.clear();
 //            Log.d(TAG, "Wordlist deleted : " + ListFetcher.deleteList(getApplicationContext()));
             ListFetcher.listHandler = new Handler();
             ListFetcher.listSaver = new ListFetcher.ListSaver(getApplicationContext());
@@ -216,7 +216,7 @@ public class SplashActivity extends AppCompatActivity {
 
             try {
 //                TinyDB.checkForNullKey(Constant.KEY_WORDS_FIREBASE);
-                WordListController.wordList = (HashMap<String, WordItem>) s_preferences.getObject(Constant.KEY_WORDS_FIREBASE, HashMap.class);
+                WordListController.wordList = (HashMap<String, WordItem>) s_preferences.getObject(Constant.KEY_WORDS_FIREBASE, Map.class);
             } catch (final Exception e) {
                 Log.d(TAG, "Unable to load any remote cached word lists from preferences, log in to update.");
                 if (!s_wordController.isLocal()) {
@@ -233,18 +233,51 @@ public class SplashActivity extends AppCompatActivity {
 
             s_wordController.setIsLocal(true);
 
+            Firebase.getDefaultConfig().setPersistenceEnabled(true);
             Firebase.setAndroidContext(getApplicationContext());
-            firebase = new Firebase(Constant.HANGMANDTU_FIREBASEIO);
-            firebase.keepSynced(true);
-//            GameUtility.firebase.keepSynced(false);
-            mpc = new MultiplayerController(firebase);
+            GameUtility.setFirebase(new Firebase(Constant.FIREBASE_URL));
 
+//            GameUtility.firebase.child("wordList").child("Lande").setValue(s_wordController.getCurrentList());
+
+//            firebase = new Firebase(Constant.FIREBASE_URL);
+//            firebase.keepSynced(true);
+//            mpc = new MultiplayerController(firebase);
 
             Log.d(TAG, s_wordController.toString());
 
+            if (settings.keepLogin && settings.lastPw != null) {
+                firebase.authWithPassword(me.getEmail(), settings.lastPw, new StartupAuthResultHandler(true));
+            } else {
+                firebase.authAnonymously(new StartupAuthResultHandler(false));
+            }
 
-            final Message message = loadHandler.obtainMessage(MSG_LOAD_COMPLETE);
-            message.sendToTarget();
+        }
+
+        private class StartupAuthResultHandler implements Firebase.AuthResultHandler {
+
+            final boolean withPassword;
+
+            public StartupAuthResultHandler(final boolean withPassword) {
+                this.withPassword = withPassword;
+            }
+
+            @Override
+            public void onAuthenticated(final AuthData authData) {
+                Log.d(TAG, (withPassword ? "Logged in with password as : " : "Logged in without password as : ") + authData.getUid());
+                me.setHasLoggedInWithPassword(withPassword);
+                GameUtility.setIsLoggedIn(true);
+                final Message message = loadHandler.obtainMessage(withPassword ? MSG_USER_AUTH_COMPLETE : MSG_ANON_AUTH_COMPLETE);
+                message.sendToTarget();
+            }
+
+            @Override
+            public void onAuthenticationError(final FirebaseError firebaseError) {
+                Log.d(TAG, (withPassword ? "Failed to log in with password : " : "Failed to Log in without password : ") + firebaseError.getMessage());
+                me.setHasLoggedInWithPassword(false);
+                GameUtility.setIsLoggedIn(false);
+                final Message message = loadHandler.obtainMessage(MSG_LOAD_COMPLETE);
+                message.sendToTarget();
+            }
         }
     }
 
@@ -260,7 +293,17 @@ public class SplashActivity extends AppCompatActivity {
         @Override
         public void handleMessage(final Message msg) {
             super.handleMessage(msg);
-            if (msg != null && msg.what == MSG_LOAD_COMPLETE) {
+            if (msg != null) {
+                if (msg.what == MSG_LOAD_COMPLETE) {
+                    /* no connection was availble, so we just proceed with singleplayer mode. */
+                    settings.auth_status = SettingsDTO.AUTH_NONE;
+                } else if (msg.what == MSG_ANON_AUTH_COMPLETE) {
+                    /* user has read access to firebase (not able to play multiplayer) */
+                    settings.auth_status = SettingsDTO.AUTH_ANON;
+                } else if (msg.what == MSG_USER_AUTH_COMPLETE) {
+                    /* user has access to the full features of the game */
+                    settings.auth_status = SettingsDTO.AUTH_USER;
+                }
                 final SplashActivity splashActivity = splashActivityWeakReference.get();
                 if (splashActivity != null) {
                     splashActivity.loadHandler.postDelayed(new EndSplash(splashActivity), 1000);

@@ -88,7 +88,6 @@ public class HangmanGameFragment extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        onCreate(savedInstanceState);
         final View root = inflater.inflate(R.layout.fragment_hangman_game, container, false);
 
         noose = (Hangman3dView) root.findViewById(R.id.imageView);
@@ -176,11 +175,11 @@ public class HangmanGameFragment extends Fragment {
         final Bundle args = new Bundle();
         args.putParcelable(Constant.KEY_SAVE_GAME, saveGame);
         final HangmanGameFragment hangmanGameFragment = newInstance(args); //new HangmanGameFragment();
-        try {
-            GameUtility.mpc.setRunnable(null);
-        } catch (final Exception e) {
-            Log.e("starthangman", "remove runnable " + e.getMessage());
-        }
+//        try {
+//            GameUtility.mpc.setRunnable(null);
+//        } catch (final Exception e) {
+//            Log.e("starthangman", "remove runnable " + e.getMessage());
+//        }
         return hangmanGameFragment;
     }
 
@@ -206,11 +205,11 @@ public class HangmanGameFragment extends Fragment {
     @SuppressWarnings("ConstantConditions")
     private void applySaveGameStatus() {
         textWord.animateText(currentGame.getLogic().getVisibleWord());
-        if (currentGame.isMultiPlayer()) {
-            textStatus.animateText(GameUtility.mpc.lc.getOppNames(currentGame.getPlayers()[1].getName(), currentGame.getPlayers()[0].getName()) + " / " + currentGame.getPlayers()[0].getPtsString());
-        } else {
-            textStatus.animateText(currentGame.getPlayers()[0].getPtsString());
-        }
+//        if (currentGame.isMultiPlayer()) {
+//            textStatus.animateText(GameUtility.mpc.lc.getOppNames(currentGame.getPlayers()[1].getName(), currentGame.getPlayers()[0].getName()) + " / " + Integer.toString(currentGame.getPlayers()[0].getScore()));
+//        } else {
+            textStatus.animateText(Integer.toString(currentGame.getPlayers()[0].getScore()));
+//        }
         resetButtons();
 
         // set the button status for the already guessed letters, this is just a quick and dirty hack :-)
@@ -261,7 +260,7 @@ public class HangmanGameFragment extends Fragment {
 
     private void updateScreen() {
         textWord.animateText(currentGame.getLogic().getVisibleWord());
-        textStatus.animateText(currentGame.getPlayers()[0].getPtsString());
+        textStatus.animateText(Integer.toString(currentGame.getPlayers()[0].getScore()));
         if (!currentGame.getLogic().isLastLetterCorrect()) {
             noose.setErrors(currentGame.getLogic().getNumWrongLetters());
             YoYo.with(Techniques.Flash).duration(100).playOn(noose);

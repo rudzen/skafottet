@@ -20,6 +20,8 @@ package com.undyingideas.thor.skafottet.support.highscore.local;
 import android.content.Context;
 import android.util.Log;
 
+import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -95,8 +97,8 @@ public class HighscoreManager {
         return pos;
     }
 
-    public int addScore(final String word, final Player player) {
-        return addScore(word, player.getName(), player.getPts());
+    public int addScore(final String word, final PlayerDTO player) {
+        return addScore(word, player.getName(), player.getScore());
     }
 
     public void loadScoreFile() {
@@ -124,6 +126,7 @@ public class HighscoreManager {
 
     public void saveHighScore() {
         try {
+
             outputStream = new ObjectOutputStream(context.openFileOutput(HIGHSCORE_FILE, Context.MODE_PRIVATE));
             outputStream.writeObject(scores);
         } catch (final FileNotFoundException e) {
