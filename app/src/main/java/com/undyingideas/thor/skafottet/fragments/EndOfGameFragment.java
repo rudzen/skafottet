@@ -361,7 +361,7 @@ public class EndOfGameFragment extends Fragment {
 
     private static String getOther(final LobbyDTO dto, final String name) {
         final StringBuilder sb = new StringBuilder(16);
-        for (final LobbyPlayerStatus lps : dto.getPlayerList()) {
+        for (final LobbyPlayerStatus lps : dto.getPlayerList().values()) {
             if (!lps.getName().equals(name)) sb.append(lps.getName()).append(" , ");
         }
         return sb.substring(0, sb.length() - 3);
@@ -369,7 +369,7 @@ public class EndOfGameFragment extends Fragment {
 
     private static String getWinner(final LobbyDTO dto) {
         for (int i = 0; i < 10; i++) {
-            for (final LobbyPlayerStatus lps : dto.getPlayerList()) {
+            for (final LobbyPlayerStatus lps : dto.getPlayerList().values()) {
                 Log.d("getWinner", lps.toString() + " , score = " + lps.getScore());
                 if (lps.getScore() == i) return lps.getName();
             }

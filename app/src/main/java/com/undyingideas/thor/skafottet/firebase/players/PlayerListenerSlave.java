@@ -3,6 +3,9 @@ package com.undyingideas.thor.skafottet.firebase.players;
 import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 /**
@@ -25,9 +28,11 @@ public class PlayerListenerSlave extends WeakReferenceHolder<PlayerListenerSlave
     /* reflects the data structure, String as unique key (email) and playerDTO as the value */
     private static final HashMap<String, PlayerDTO> playerList = new HashMap<>();
 
+    private final Comparator<PlayerDTO> comparator = new PlayerDTOScoreComparator();
+
     private static boolean aborted;
 
-    protected PlayerListenerSlave(final PlayerListenerReceiver playerListenerReceiver) {
+    public PlayerListenerSlave(final PlayerListenerReceiver playerListenerReceiver) {
         super(playerListenerReceiver);
     }
 
@@ -56,6 +61,15 @@ public class PlayerListenerSlave extends WeakReferenceHolder<PlayerListenerSlave
         return playerList;
     }
 
+    public ArrayList<PlayerDTO> getHighScoreItems() {
+        final ArrayList<PlayerDTO> returnList = new ArrayList<>(playerList.size());
+        for (final PlayerDTO playerDTO : playerList.values()) {
+            returnList.add(playerDTO);
+        }
+        Collections.sort(returnList, comparator);
+        return returnList;
+    }
+
     public void addPlayer(final String key, final PlayerDTO playerDTO) {
         /* to avoid potential reference issues, just duplicate the parsed dto */
         playerList.put(key, new PlayerDTO(playerDTO));
@@ -73,4 +87,12 @@ public class PlayerListenerSlave extends WeakReferenceHolder<PlayerListenerSlave
         return aborted;
     }
 
+    private static class PlayerDTOScoreComparator implements Comparator<PlayerDTO> {
+        @Override
+        public int compare(final PlayerDTO lhs, final PlayerDTO rhs) {
+            if (lhs.getScore() < rhs.getScore()) return -1;
+            if (lhs.getScore() > rhs.getScore()) return 1;
+            return 0;
+        }
+    }
 }

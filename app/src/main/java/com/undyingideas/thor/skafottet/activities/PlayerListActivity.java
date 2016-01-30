@@ -16,8 +16,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.undyingideas.thor.skafottet.R;
+import com.undyingideas.thor.skafottet.firebase.players.PlayerListener;
+import com.undyingideas.thor.skafottet.firebase.players.PlayerListenerSlave;
 import com.undyingideas.thor.skafottet.fragments.PlayerDetailFragment;
-import com.undyingideas.thor.skafottet.support.highscore.online.HighScoreContent;
+import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import java.util.List;
@@ -32,7 +34,7 @@ import java.util.List;
  * @author adam
  * @author rudz
  */
-public class PlayerListActivity extends AppCompatActivity {
+public class PlayerListActivity extends AppCompatActivity implements PlayerListenerSlave.PlayerListenerReceiver{
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -40,6 +42,9 @@ public class PlayerListActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
     private RecyclerView recyclerView;
+
+    private PlayerListener playerListener;
+    private PlayerListenerSlave playerListenerSlave;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -67,6 +72,10 @@ public class PlayerListActivity extends AppCompatActivity {
         //Uncomment here if needed.
         //setupRecyclerView((RecyclerView) recyclerView);
 
+        playerListener = new PlayerListener();
+        playerListenerSlave = new PlayerListenerSlave(this);
+        playerListener.addSlave(playerListenerSlave);
+
         if (findViewById(R.id.player_detail_container) != null) {
             mTwoPane = true;
         }
@@ -78,6 +87,18 @@ public class PlayerListActivity extends AppCompatActivity {
             WindowLayout.hideStatusBar(getWindow(), null);
         }
         super.onPostCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onResume() {
+        playerListener.setListeners();
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        playerListener.removeListeners();
+        super.onStop();
     }
 
     @Override
@@ -103,8 +124,18 @@ public class PlayerListActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void setupRecyclerView(@NonNull final RecyclerView recyclerView, final List<HighScoreContent.HighScoreItem> items) {
+    private void setupRecyclerView(@NonNull final RecyclerView recyclerView, final List<PlayerDTO> items) {
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(items));
+    }
+
+    @Override
+    public void onPlayerDataReceived(final PlayerListenerSlave playerListenerReceiver) {
+        setupRecyclerView(recyclerView, playerListenerReceiver.getHighScoreItems());
+    }
+
+    @Override
+    public void onPlayerDataTransferAbort(final boolean aborted) {
+        WindowLayout.showSnack("Spillerliste opdatering afbrudt.", recyclerView, false);
     }
 
     private static class FloaterClickHandler implements View.OnClickListener {
@@ -116,9 +147,9 @@ public class PlayerListActivity extends AppCompatActivity {
 
     private class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<HighScoreContent.HighScoreItem> mValues;
+        private final List<PlayerDTO> mValues;
 
-        public SimpleItemRecyclerViewAdapter(final List<HighScoreContent.HighScoreItem> items) {
+        public SimpleItemRecyclerViewAdapter(final List<PlayerDTO> items) {
             mValues = items;
         }
 
@@ -132,8 +163,8 @@ public class PlayerListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mIdView.setText(mValues.get(position).getName());
+            holder.mContentView.setText(mValues.get(position).getScore());
             holder.mView.setOnClickListener(new MyOnClickListener(holder));
         }
 
@@ -146,7 +177,7 @@ public class PlayerListActivity extends AppCompatActivity {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public HighScoreContent.HighScoreItem mItem;
+            public PlayerDTO mItem;
 
             public ViewHolder(final View view) {
                 super(view);
@@ -172,14 +203,14 @@ public class PlayerListActivity extends AppCompatActivity {
             public void onClick(final View v) {
                 if (mTwoPane) {
                     final Bundle arguments = new Bundle();
-                    arguments.putString(PlayerDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                    arguments.putString(PlayerDetailFragment.ARG_ITEM_ID, holder.mItem.getEmail());
                     final PlayerDetailFragment fragment = new PlayerDetailFragment();
                     fragment.setArguments(arguments);
                     getSupportFragmentManager().beginTransaction().replace(R.id.player_detail_container, fragment).commit();
                 } else {
                     final Context context = v.getContext();
                     final Intent intent = new Intent(context, PlayerDetailActivity.class);
-                    intent.putExtra(PlayerDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                    intent.putExtra(PlayerDetailFragment.ARG_ITEM_ID, holder.mItem.getEmail());
                     context.startActivity(intent);
                 }
             }

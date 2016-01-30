@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyPlayerStatus;
+import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;
 
 import java.util.ArrayList;
 
@@ -45,9 +46,9 @@ public class MultiplayerLobbyAdapter extends ArrayAdapter<LobbyDTO> {
     private final int layoutResourceId;
     private final ArrayList<LobbyDTO> data;
     private static final ViewHolder viewHolder = new ViewHolder();
-    private final String activePlayer;
+    private final PlayerDTO activePlayer;
 
-    public MultiplayerLobbyAdapter(final String player, final Context mContext, final int layoutResourceId, final ArrayList<LobbyDTO> data) {
+    public MultiplayerLobbyAdapter(final PlayerDTO player, final Context mContext, final int layoutResourceId, final ArrayList<LobbyDTO> data) {
         super(mContext, layoutResourceId, data);
         activePlayer = player;
         this.layoutResourceId = layoutResourceId;
@@ -75,7 +76,7 @@ public class MultiplayerLobbyAdapter extends ArrayAdapter<LobbyDTO> {
         final LobbyDTO dto = data.get(position);
         StringBuilder sb = new StringBuilder(100);
 
-        for (final LobbyPlayerStatus lobbyPlayerStatus : dto.getPlayerList()) {
+        for (final LobbyPlayerStatus lobbyPlayerStatus : dto.getPlayerList().values()) {
             if (!lobbyPlayerStatus.getName().equals(activePlayer))
                 sb.append(lobbyPlayerStatus.getName()).append(" , ");
         }
@@ -85,7 +86,7 @@ public class MultiplayerLobbyAdapter extends ArrayAdapter<LobbyDTO> {
         viewHolder.textViewName.setText(sb.toString());
 
         sb = new StringBuilder(100);
-        for (final LobbyPlayerStatus status : dto.getPlayerList()) {
+        for (final LobbyPlayerStatus status : dto.getPlayerList().values()) {
             sb.append(status.getScore()).append(" , ");
         }
         if (sb.length() > 3) {

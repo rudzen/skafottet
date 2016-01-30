@@ -154,7 +154,7 @@ public class GameActivity extends SoundAbstract implements
     @Override
     public void onBackPressed() {
         // First check if the dialog is showing, if so, close it and don't care about the rest!.
-        if (WindowLayout.getMd().isShowing()) {
+        if (WindowLayout.getMd() != null && WindowLayout.getMd().isShowing()) {
             WindowLayout.getMd().dismiss();
         } else {
             if (currentFragment instanceof MenuFragment) {

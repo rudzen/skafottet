@@ -74,13 +74,13 @@ public abstract class BaseActivity extends AppCompatActivity implements
             if (!(this instanceof LoginActivity || this instanceof CreateAccountActivity) && GameUtility.getFirebase() != null) {
                 GameUtility.setFirebase(new Firebase(Constant.FIREBASE_URL));
             }
-            mAuthListener = new AuthListener();
-            authDataHolder = new AuthDataHolder(this);
-            mAuthListener.addSlave(authDataHolder);
-            GameUtility.getFirebase().addAuthStateListener(mAuthListener);
         } else {
 //            WindowLayout.showSnack("Ingen internetforbindelse.", findViewById(R.id.fragment_content), true);
         }
+        mAuthListener = new AuthListener();
+        authDataHolder = new AuthDataHolder(this);
+        mAuthListener.addSlave(authDataHolder);
+        GameUtility.getFirebase().addAuthStateListener(mAuthListener);
     }
 
     @Override
@@ -162,7 +162,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
 
     @Override
     public void firebaseAuthDataReceived(final boolean loggedIn) {
-        WindowLayout.showSnack("Du er nu logged " + (loggedIn ?  "ind." : "ud."), getCurrentFocus().getRootView().findViewById(R.id.fragment_content), true);
+        WindowLayout.showSnack("Du er nu logged " + (loggedIn ?  "ind." : "ud."), getWindow().getDecorView(), true);
         GameUtility.setIsLoggedIn(loggedIn);
         if (!loggedIn) {
             GameUtility.s_preferences.remove(Constant.KEY_ENCODED_EMAIL);

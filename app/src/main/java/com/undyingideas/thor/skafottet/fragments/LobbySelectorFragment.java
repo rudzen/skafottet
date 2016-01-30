@@ -33,6 +33,7 @@ import com.undyingideas.thor.skafottet.adapters.MultiplayerLobbyAdapter;
 import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
 import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
+import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import java.util.ArrayList;
@@ -142,7 +143,7 @@ public class LobbySelectorFragment extends Fragment {
         lobbys.clear();
 
 //        removeInactive(GameUtility.mpc.name);
-//        lobbyAdapter = new MultiplayerLobbyAdapter(GameUtility.mpc.name, getContext(), R.layout.multiplayer_player_list_row, lobbys);
+        lobbyAdapter = new MultiplayerLobbyAdapter(GameUtility.me, getContext(), R.layout.multiplayer_player_list_row, lobbys);
 
         listView.setAdapter(lobbyAdapter);
         listView.setOnItemClickListener(new OnLobbyClick(this));

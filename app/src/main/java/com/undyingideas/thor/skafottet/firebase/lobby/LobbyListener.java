@@ -49,8 +49,8 @@ public class LobbyListener {
     }
 
     public void setListeners() {
-        firebase.child(LOBBY).keepSynced(true);
         if (settings.auth_status > 0) {
+            firebase.child(LOBBY).keepSynced(true);
             firebase.child(LOBBY).addChildEventListener(nameGetter);
             if (settings.auth_status == SettingsDTO.AUTH_USER) { // play nice, could be the user has logged in for real since last check.
                 firebase.child(LOBBY).child(EMAIL).child(GAME_LIST).addChildEventListener(gameListListener);
