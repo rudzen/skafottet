@@ -7,12 +7,10 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;
-import com.undyingideas.thor.skafottet.support.utility.SettingsDTO;
 
 import java.util.ArrayList;
 
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getFirebase;
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getSettings;
 
 /**
  * <p>
@@ -56,13 +54,8 @@ public class PlayerListener {
 
     public void setListeners() {
         getFirebase().child(PLAYERS).keepSynced(true);
-        if (getSettings().auth_status > 0) {
-            getFirebase().child(PLAYERS).addChildEventListener(nameGetter);
-            if (getSettings().auth_status == SettingsDTO.AUTH_USER) { // play nice, could be the user has logged in for real since last check.
-                getFirebase().child(PLAYERS).child(EMAIL).child(GAME_LIST).addChildEventListener(gameListListener);
-            }
-        }
-
+        getFirebase().child(PLAYERS).addChildEventListener(nameGetter);
+        getFirebase().child(PLAYERS).child(EMAIL).child(GAME_LIST).addChildEventListener(gameListListener);
     }
 
     public void removeListeners() {

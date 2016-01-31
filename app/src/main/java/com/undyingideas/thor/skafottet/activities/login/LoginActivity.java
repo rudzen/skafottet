@@ -53,7 +53,6 @@ import com.undyingideas.thor.skafottet.support.firebase.Utils;
 import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
-import com.undyingideas.thor.skafottet.support.utility.SettingsDTO;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import java.io.IOException;
@@ -159,7 +158,7 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
                  * No need to pass data via SharedPreferences because app
                  * already holds userName/provider data from the latest session
                  */
-                if (authData != null && GameUtility.getSettings().auth_status == SettingsDTO.AUTH_USER) {
+                if (authData != null && GameUtility.isLoggedIn()) {
                     final Intent intent = new Intent(LoginActivity.this, GameActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);

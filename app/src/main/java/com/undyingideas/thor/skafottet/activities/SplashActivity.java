@@ -44,6 +44,7 @@ import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;
 import com.undyingideas.thor.skafottet.support.highscore.local.HighscoreManager;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.FontUtils;
+import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 import com.undyingideas.thor.skafottet.support.utility.NetworkHelper;
 import com.undyingideas.thor.skafottet.support.utility.SettingsDTO;
@@ -273,7 +274,6 @@ public class SplashActivity extends AppCompatActivity {
                 Log.d(TAG, (withPassword ? "Logged in with password as : " : "Logged in without password as : ") + authData.getUid());
                 getMe().setHasLoggedInWithPassword(withPassword);
                 setIsLoggedIn(true);
-                getSettings().auth_status = SettingsDTO.AUTH_USER;
                 final Message message = loadHandler.obtainMessage(withPassword ? MSG_USER_AUTH_COMPLETE : MSG_ANON_AUTH_COMPLETE);
                 message.sendToTarget();
             }
@@ -304,13 +304,13 @@ public class SplashActivity extends AppCompatActivity {
             if (msg != null) {
                 if (msg.what == MSG_LOAD_COMPLETE) {
                     /* no connection was availble, so we just proceed with singleplayer mode. */
-                    getSettings().auth_status = SettingsDTO.AUTH_NONE;
-                } else if (msg.what == MSG_ANON_AUTH_COMPLETE) {
-                    /* user has read access to firebase (not able to play multiplayer) */
+                    GameUtility.setIsLoggedIn(false);
+//                } else if (msg.what == MSG_ANON_AUTH_COMPLETE) {
+//                    /* user has read access to firebase (not able to play multiplayer) */
 //                    getSettings().auth_status = SettingsDTO.AUTH_ANON;
                 } else if (msg.what == MSG_USER_AUTH_COMPLETE) {
                     /* user has access to the full features of the game */
-                    getSettings().auth_status = SettingsDTO.AUTH_USER;
+                    GameUtility.setIsLoggedIn(true);
                 }
                 final SplashActivity splashActivity = splashActivityWeakReference.get();
                 if (splashActivity != null) {

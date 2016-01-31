@@ -8,7 +8,6 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
-import com.undyingideas.thor.skafottet.support.utility.SettingsDTO;
 
 import java.util.ArrayList;
 
@@ -49,9 +48,7 @@ public class LobbyListener {
     public void setListeners() {
         GameUtility.getFirebase().child(LOBBY).keepSynced(true);
         GameUtility.getFirebase().child(LOBBY).addChildEventListener(nameGetter);
-        if (GameUtility.getSettings().auth_status == SettingsDTO.AUTH_USER) { // play nice, could be the user has logged in for real since last check.
-            GameUtility.getFirebase().child(LOBBY).child(EMAIL).child(GAME_LIST).addChildEventListener(gameListListener);
-        }
+        GameUtility.getFirebase().child(LOBBY).child(EMAIL).child(GAME_LIST).addChildEventListener(gameListListener);
     }
 
     public void removeListeners() {

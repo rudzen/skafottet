@@ -23,7 +23,6 @@ import com.undyingideas.thor.skafottet.firebase.auth.AuthDataHolder;
 import com.undyingideas.thor.skafottet.firebase.auth.AuthListener;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
-import com.undyingideas.thor.skafottet.support.utility.SettingsDTO;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 /**
@@ -144,7 +143,6 @@ public abstract class BaseActivity extends AppCompatActivity implements
         }
         GameUtility.setIsLoggedIn(false);
         GameUtility.getFirebase().unauth();
-        GameUtility.getSettings().auth_status = SettingsDTO.AUTH_NONE;
     }
 
     private void takeUserToLoginScreenOnUnAuth() {

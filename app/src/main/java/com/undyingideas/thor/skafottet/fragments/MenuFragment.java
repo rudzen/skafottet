@@ -54,7 +54,7 @@ import com.undyingideas.thor.skafottet.interfaces.IGameSoundNotifier;
 import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.DrawableHelper;
-import com.undyingideas.thor.skafottet.support.utility.SettingsDTO;
+import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.views.AutoScaleTextView;
 import com.undyingideas.thor.skafottet.views.StarField;
@@ -313,7 +313,7 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
             // nothing happends here, its just for not adding the option to continue a game.
         } finally {
             startGameItems.add(new StartGameItem(Constant.MODE_SINGLE_PLAYER, "Nyt singleplayer", "Tilfældigt ord.", imageRefs[0]));
-            if (getSettings().auth_status == SettingsDTO.AUTH_USER && getConnectionStatus() > -1) {
+            if (GameUtility.isLoggedIn() && getConnectionStatus() > -1) {
                 if (!getMe().getGameList().isEmpty()) {
                     startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER, "Næste multiplayer", "Kæmp imod", imageRefs[0]));
                 }
@@ -459,7 +459,7 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
                         menuFragment.button_clicked = BUTTON_LOGIN_OUT;
 
                         if (getConnectionStatus() > -1) {
-                            if (settings.auth_status == SettingsDTO.AUTH_USER) {
+                            if (GameUtility.isLoggedIn()) {
                                 menuFragment.iFragmentFlipper.flipFragment(Constant.MODE_LOGOUT);
                             } else {
                                 menuFragment.endMenu(Constant.MODE_LOGIN, menuFragment.buttons[BUTTON_LOGIN_OUT]);
@@ -754,7 +754,7 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
             }
 
             final String logInName;
-            if (settings.auth_status == SettingsDTO.AUTH_USER) {
+            if (GameUtility.isLoggedIn()) {
                 logInName = getMe().getName();
 //            } else if (settings.auth_status == SettingsDTO.AUTH_ANON) {
 //                logInName = "Basis";
@@ -798,7 +798,7 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
     public void setLoginButton() {
         /* make sure the right button is set for the login/logout status */
         if (buttons[BUTTON_LOGIN_OUT] != null) { // guard for when application first comes into foreground
-            if (settings.auth_status < SettingsDTO.AUTH_USER) {
+            if (!GameUtility.isLoggedIn()) {
                 buttons_text[BUTTON_LOGIN_OUT].setText(R.string.menu_button_login_in);
             } else {
                 buttons_text[BUTTON_LOGIN_OUT].setText(R.string.menu_button_login_out);
