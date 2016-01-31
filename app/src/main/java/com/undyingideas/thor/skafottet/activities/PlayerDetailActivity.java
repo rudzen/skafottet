@@ -41,9 +41,8 @@ public class PlayerDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             final Bundle arguments = new Bundle();
-            arguments.putString(PlayerDetailFragment.ARG_ITEM_ID,getIntent().getStringExtra(PlayerDetailFragment.ARG_ITEM_ID));
-            final PlayerDetailFragment fragment = new PlayerDetailFragment();
-            fragment.setArguments(arguments);
+            arguments.putParcelable(PlayerDetailFragment.ARG_ITEM_ID, getIntent().getParcelableExtra(PlayerDetailFragment.ARG_ITEM_ID));
+            final PlayerDetailFragment fragment = PlayerDetailFragment.newInstance(arguments);
             getSupportFragmentManager().beginTransaction().add(R.id.player_detail_container, fragment).commit();
         }
     }

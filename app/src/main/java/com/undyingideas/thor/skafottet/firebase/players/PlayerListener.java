@@ -36,9 +36,15 @@ public class PlayerListener {
     private final ArrayList<PlayerListenerSlave> slaves = new ArrayList<>();
 
     private final static String PLAYERS = "users";
+
     private final static String GAME_LIST = "gameList";
     private final static String SCORE = "score";
     private final static String EMAIL = "email";
+    private final static String NAME = "name";
+    public final static String HAS_LOGGED_IN_PW = "hasLoggedInWithPassword";
+    public final static String TIMESTAMP_VALUE = "timestamp";
+    public final static String TIMESTAMP_CHILD = TIMESTAMP_VALUE + "Joined";
+
 
     private final GameListListener gameListListener;
     private final NameGetter nameGetter;
@@ -91,12 +97,30 @@ public class PlayerListener {
 
         private static final String TAG = "NameGetter";
 
+//        private PlayerDTO getDTO(final DataSnapshot dataSnapshot) {
+//            try {
+//                final PlayerDTO dto = new PlayerDTO(dataSnapshot.getKey());
+//                dto.setHasLoggedInWithPassword(dataSnapshot.child());
+//                dto.setScore(Integer.valueOf(dataSnapshot.child(SCORE).getValue().toString()));
+//                dto.setPassword(dataSnapshot.child(PASSWORD).getValue().toString());
+//                if (dataSnapshot.hasChild(GAME_LIST)) {
+//                    for (final DataSnapshot ds : dataSnapshot.child(GAME_LIST).getChildren()) {
+//                        dto.getGameList().add(ds.getValue().toString());
+//                    }
+//                }
+//                return dto;
+//            } catch (final Exception e) {
+//                e.printStackTrace();
+//            }
+//            return null;
+//        }
+
         @Override
         public void onChildAdded(final DataSnapshot dataSnapshot, final String s) {
             Log.d(TAG, "onChildAdded : " + dataSnapshot.toString() + " and " + s);
             if (dataSnapshot.exists() && dataSnapshot.hasChildren()) {
                 for (final PlayerListenerSlave slave : slaves) {
-                    slave.addPlayer(dataSnapshot.getKey(), (PlayerDTO) dataSnapshot.getValue());
+                    slave.addPlayer(dataSnapshot.getKey(), dataSnapshot.getValue(PlayerDTO.class));
                     slave.setAborted(false);
                     handler.post(slave);
                 }
@@ -108,7 +132,7 @@ public class PlayerListener {
             Log.d(TAG, "onChildChanged : " + dataSnapshot.toString() + " and " + s);
             for (final PlayerListenerSlave slave : slaves) {
                 slave.getPlayerList().remove(dataSnapshot.getKey());
-                slave.getPlayerList().put(dataSnapshot.getKey(), (PlayerDTO) dataSnapshot.getValue());
+                slave.getPlayerList().put(dataSnapshot.getKey(), (PlayerDTO) dataSnapshot.getValue(PlayerDTO.class));
                 slave.setAborted(false);
                 handler.post(slave);
             }
@@ -143,7 +167,6 @@ public class PlayerListener {
         // TODO : This class should be moved to the LobbyListener class........
         @Override
         public void onChildAdded(final DataSnapshot dataSnapshot, final String s) {
-
 
         }
 

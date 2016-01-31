@@ -9,7 +9,9 @@ import com.undyingideas.thor.skafottet.support.utility.Constant;
 
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Utility class
@@ -18,7 +20,9 @@ public class Utils {
     /**
      * Format the timestamp with SimpleDateFormat
      */
-    public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.US);
+    private static final Pattern EMAIL_DECODE = Pattern.compile(",", Pattern.LITERAL);
+    private static final Pattern EMAIL_ENCODE = Pattern.compile(".", Pattern.LITERAL);
     private Context mContext = null;
 
 
@@ -43,7 +47,7 @@ public class Utils {
      * Encoded email is also used as "userEmail", list and item "owner" value
      */
     public static String encodeEmail(String userEmail) {
-        return userEmail.replace(".", ",");
+        return EMAIL_ENCODE.matcher(userEmail).replaceAll(",");
     }
     
     /**
@@ -52,7 +56,7 @@ public class Utils {
 //     * @see com.udacity.firebase.shoppinglistplusplus.ui.sharing.AutocompleteFriendAdapter
      */
     public static String decodeEmail(String userEmail) {
-        return userEmail.replace(",", ".");
+        return EMAIL_DECODE.matcher(userEmail).replaceAll(".");
     }
 
     /**

@@ -216,11 +216,6 @@ public class LoginActivity extends BaseActivity {
                 .cancelable(false)
                 .progress(true, 0));
 
-//        mAuthProgressDialog = new ProgressDialog(this);
-//        mAuthProgressDialog.setTitle(getString(R.string.progress_dialog_loading));
-//        mAuthProgressDialog.setMessage(getString(R.string.progress_dialog_authenticating_with_firebase));
-//        mAuthProgressDialog.setCancelable(false);
-
         /* Setup Google Sign In */
         setupGoogleSignIn();
     }

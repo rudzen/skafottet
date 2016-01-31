@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,10 +32,11 @@ import java.util.List;
  * lead to a {@link PlayerDetailActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
+ *
  * @author adam
  * @author rudz
  */
-public class PlayerListActivity extends AppCompatActivity implements PlayerListenerSlave.PlayerListenerReceiver{
+public class PlayerListActivity extends AppCompatActivity implements PlayerListenerSlave.PlayerListenerReceiver {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -149,9 +151,7 @@ public class PlayerListActivity extends AppCompatActivity implements PlayerListe
 
         private final List<PlayerDTO> mValues;
 
-        public SimpleItemRecyclerViewAdapter(final List<PlayerDTO> items) {
-            mValues = items;
-        }
+        public SimpleItemRecyclerViewAdapter(final List<PlayerDTO> items) { mValues = items; }
 
         @Override
         public ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
@@ -162,10 +162,13 @@ public class PlayerListActivity extends AppCompatActivity implements PlayerListe
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-            holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).getName());
-            holder.mContentView.setText(mValues.get(position).getScore());
-            holder.mView.setOnClickListener(new MyOnClickListener(holder));
+            if (mValues != null && !mValues.isEmpty()) {
+                holder.mItem = mValues.get(position);
+                holder.mIdView.setText(mValues.get(position).getName());
+                holder.mContentView.setText(Integer.toString(mValues.get(position).getScore()));
+                holder.mView.setOnClickListener(new MyOnClickListener(holder));
+                Log.d("RecycleAdapter", mValues.get(position).toString());
+            }
         }
 
         @Override
@@ -201,16 +204,23 @@ public class PlayerListActivity extends AppCompatActivity implements PlayerListe
 
             @Override
             public void onClick(final View v) {
+
                 if (mTwoPane) {
-                    final Bundle arguments = new Bundle();
-                    arguments.putString(PlayerDetailFragment.ARG_ITEM_ID, holder.mItem.getEmail());
-                    final PlayerDetailFragment fragment = new PlayerDetailFragment();
-                    fragment.setArguments(arguments);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.player_detail_container, fragment).commit();
+                    final PlayerDetailFragment playerDetailFragment = PlayerDetailFragment.newInstance(holder.mItem);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.player_detail_container, playerDetailFragment).commit();
+
+//                    final Bundle arguments = new Bundle();
+//                    arguments.putString(PlayerDetailFragment.ARG_ITEM_ID, holder.mItem.getEmail());
+//                    final PlayerDetailFragment fragment = new PlayerDetailFragment();
+//                    fragment.setArguments(arguments);
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.player_detail_container, fragment).commit();
                 } else {
                     final Context context = v.getContext();
                     final Intent intent = new Intent(context, PlayerDetailActivity.class);
-                    intent.putExtra(PlayerDetailFragment.ARG_ITEM_ID, holder.mItem.getEmail());
+
+                    final Bundle bundle = new Bundle();
+                    bundle.putParcelable(PlayerDetailFragment.ARG_ITEM_ID, holder.mItem);
+                    intent.putExtra(PlayerDetailFragment.ARG_ITEM_ID, bundle);
                     context.startActivity(intent);
                 }
             }

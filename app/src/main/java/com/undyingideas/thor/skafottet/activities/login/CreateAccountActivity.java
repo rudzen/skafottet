@@ -87,12 +87,6 @@ public class CreateAccountActivity extends BaseActivity {
                 .content(getResources().getString(R.string.progress_dialog_check_inbox))
                 .cancelable(false)
                 .progress(true, 0));
-//        WindowLayout.getMd().show();
-
-//        mAuthProgressDialog = new ProgressDialog(this);
-//        mAuthProgressDialog.setTitle(getResources().getString(R.string.progress_dialog_loading));
-//        mAuthProgressDialog.setMessage(getResources().getString(R.string.progress_dialog_check_inbox));
-//        mAuthProgressDialog.setCancelable(false);
     }
 
     /**

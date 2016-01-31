@@ -177,7 +177,6 @@ public class SplashActivity extends AppCompatActivity {
 
             me = new PlayerDTO(s_preferences.getString(Constant.KEY_PREFS_PLAYER_NAME, getString(R.string.default_player_name)));
 
-
             /* keep the preferences as we don't know if the user actually ran the app for the first time. */
             s_preferences.putBoolean(Constant.KEY_PREFS_BLOOD, settings.prefsBlood);
             s_preferences.putBoolean(Constant.KEY_PREFS_MUSIC, settings.prefsMusic);

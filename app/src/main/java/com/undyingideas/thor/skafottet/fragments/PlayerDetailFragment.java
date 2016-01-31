@@ -12,7 +12,8 @@ import android.widget.TextView;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.activities.PlayerDetailActivity;
 import com.undyingideas.thor.skafottet.activities.PlayerListActivity;
-import com.undyingideas.thor.skafottet.support.highscore.online.HighScoreContent;
+import com.undyingideas.thor.skafottet.support.firebase.Utils;
+import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;
 
 /**
  * A fragment representing a single Player detail screen.
@@ -21,16 +22,12 @@ import com.undyingideas.thor.skafottet.support.highscore.online.HighScoreContent
  * on handsets.
  */
 public class PlayerDetailFragment extends Fragment {
-    /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
-     */
     public static final String ARG_ITEM_ID = "item_id";
 
     /**
      * The dummy content this fragment is presenting.
      */
-    private HighScoreContent.HighScoreItem mItem;
+    private PlayerDTO mItem;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -40,12 +37,13 @@ public class PlayerDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = HighScoreContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            final Bundle bundle = getArguments().getBundle(ARG_ITEM_ID);
+            mItem = bundle.getParcelable(ARG_ITEM_ID);
 
             final Activity activity = getActivity();
             final CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content);
+                appBarLayout.setTitle(mItem.getName());
             }
         }
     }
@@ -56,10 +54,27 @@ public class PlayerDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.player_detail)).setText(mItem.details);
+            ((TextView) rootView.findViewById(R.id.player_detail)).setText(Utils.decodeEmail(mItem.getEmail()));
         }
 
         return rootView;
+    }
+
+    /**
+     * Creates a new fragment instance.
+     * @param playerDTO The information to display.
+     * @return The new fragment instance.
+     */
+    public static PlayerDetailFragment newInstance(final PlayerDTO playerDTO) {
+        final Bundle args = new Bundle();
+        args.putParcelable(ARG_ITEM_ID, playerDTO);
+        return newInstance(args);
+    }
+
+    public static PlayerDetailFragment newInstance(final Bundle args) {
+        final PlayerDetailFragment playerDetailFragment = new PlayerDetailFragment();
+        playerDetailFragment.setArguments(args);
+        return playerDetailFragment;
     }
 
     /**
