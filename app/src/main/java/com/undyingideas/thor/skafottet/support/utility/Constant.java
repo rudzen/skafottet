@@ -137,6 +137,7 @@ public final class Constant {
     public static final String GOOGLE_PROVIDER = "gog";
     public static final String PROVIDER_DATA_DISPLAY_NAME = "displayName";
     public static final String PASSWORD_LAST = "last_password";
+    public static final String USER_LAST = "user_last";
 
     /* Constants for bundles, extras and shared preferences keys */
     public static final String KEY_LIST_NAME = "LIST_NAME";

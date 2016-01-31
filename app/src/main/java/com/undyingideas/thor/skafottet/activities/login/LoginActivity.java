@@ -62,6 +62,7 @@ import java.util.List;
 import java.util.Map;
 
 import static android.Manifest.permission.READ_CONTACTS;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getPrefs;
 
 /**
  * Represents Sign in screen and functionality of the app
@@ -129,10 +130,10 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
         });
 
         /* if the user has chosen to keep their login/password, restore here and proceed with login */
-        if (GameUtility.getSettings().keepLogin && !GameUtility.getMe().isHasLoggedInWithPassword()) {
-            if (GameUtility.getMe().getEmail() != null && GameUtility.getSettings().lastPw != null) {
+        if (GameUtility.getSettings().keepLogin && !GameUtility.isLoggedIn()) {
+            if (GameUtility.getMe().getEmail() != null) {
                 mEditTextEmailInput.setText(Utils.decodeEmail(GameUtility.getMe().getEmail()));
-                mEditTextPasswordInput.setText(GameUtility.getPrefs().getString(Constant.PASSWORD_LAST));
+                //mEditTextPasswordInput.setText(GameUtility.getPrefs().getString(Constant.PASSWORD_LAST));
 //                signInPassword();
             }
         }
@@ -471,7 +472,6 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
                      * (never logged in using password provider)
                      */
                     if (!GameUtility.getMe().isHasLoggedInWithPassword()) {
-
                         /**
                          * Change password if user that just signed in signed up recently
                          * to make sure that user will be able to use temporary password
@@ -483,6 +483,8 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
                                 userRef.child(Constant.FIREBASE_PROPERTY_USER_HAS_LOGGED_IN_WITH_PASSWORD).setValue(true);
                                 /* The password was changed */
                                 Log.d(LOG_TAG, getString(R.string.log_message_password_changed_successfully) + mEditTextPasswordInput.getText().toString());
+                                getPrefs().putString(Constant.PASSWORD_LAST, mEditTextPasswordInput.getText().toString());
+                                getPrefs().putString(Constant.USER_LAST, unprocessedEmail);
                             }
 
                             @Override

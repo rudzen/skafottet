@@ -33,12 +33,15 @@ import android.widget.TextView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.firebase.client.AuthData;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.nineoldandroids.animation.Animator;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.services.MusicPlay;
 import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
+import com.undyingideas.thor.skafottet.support.firebase.Utils;
 import com.undyingideas.thor.skafottet.support.firebase.controller.WordListController;
 import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;
 import com.undyingideas.thor.skafottet.support.highscore.local.HighscoreManager;
@@ -68,8 +71,6 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setCon
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setConnectionStatusName;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setFirebase;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setHighscoreManager;
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setIsLoggedIn;
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setMe;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setMusicPLayIntent;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setPrefs;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setSettings;
@@ -114,7 +115,9 @@ public class SplashActivity extends AppCompatActivity {
         title2 = (TextView) findViewById(R.id.splash_text_left);
         title1 = (TextView) findViewById(R.id.splash_text_right);
 
-        if (savedInstanceState == null) flyIn();
+        if (savedInstanceState == null) {
+            flyIn();
+        }
     }
 
     @Override
@@ -180,9 +183,6 @@ public class SplashActivity extends AppCompatActivity {
             getSettings().prefsColour = getPrefs().getInt(Constant.KEY_PREFS_COLOUR, Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? ContextCompat.getColor(getApplicationContext(), R.color.colorAccent) : getResources().getColor(R.color.colorAccent));
             getSettings().setContrastColor();
 
-            // TODO : improve auth here to get the real DTO
-            setMe(new PlayerDTO(getPrefs().getString(Constant.KEY_PREFS_PLAYER_NAME, getString(R.string.default_player_name))));
-
             /* keep the preferences as we don't know if the user actually ran the app for the first time. */
             getPrefs().putBoolean(Constant.KEY_PREFS_BLOOD, getSettings().prefsBlood);
             getPrefs().putBoolean(Constant.KEY_PREFS_MUSIC, getSettings().prefsMusic);
@@ -242,23 +242,15 @@ public class SplashActivity extends AppCompatActivity {
             Firebase.setAndroidContext(getApplicationContext());
             setFirebase(new Firebase(Constant.FIREBASE_URL));
 
-//            GameUtility.firebase.child("wordList").child("Lande").setValue(wordController.getCurrentList());
+            final String lastPw = getPrefs().getString(Constant.PASSWORD_LAST, null);
+            final String lastUser = getPrefs().getString(Constant.USER_LAST, null);
 
-//            firebase = new Firebase(Constant.FIREBASE_URL);
-//            firebase.keepSynced(true);
-//            mpc = new MultiplayerController(firebase);
-
-            Log.d(TAG, getWordController().toString());
-
-//            Log.d(TAG, "Trying to log in with email :" + Utils.decodeEmail(me.getEmail()) + " and password : " + "fFNG35gcGxA8vDXY");
-//            if (settings.keepLogin && settings.lastPw != null) {
-                getFirebase().authWithPassword("rudzen@gmail.com", "HTJc8eWs632R5cLC", new StartupAuthResultHandler(true));
-//            } else {
-//                firebase.authAnonymously(new StartupAuthResultHandler(false));
-//            } else {
-//                final Message message = loadHandler.obtainMessage(MSG_LOAD_COMPLETE);
-//                message.sendToTarget();
-//            }
+            if (lastPw != null && lastUser != null) {
+                getFirebase().authWithPassword(lastUser, lastPw, new StartupAuthResultHandler(true));
+            } else {
+                final Message message = loadHandler.obtainMessage(MSG_LOAD_COMPLETE);
+                message.sendToTarget();
+            }
         }
 
         private class StartupAuthResultHandler implements Firebase.AuthResultHandler {
@@ -271,21 +263,53 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onAuthenticated(final AuthData authData) {
-                Log.d(TAG, (withPassword ? "Logged in with password as : " : "Logged in without password as : ") + authData.getUid());
-                getMe().setHasLoggedInWithPassword(withPassword);
-                setIsLoggedIn(true);
-                final Message message = loadHandler.obtainMessage(withPassword ? MSG_USER_AUTH_COMPLETE : MSG_ANON_AUTH_COMPLETE);
-                message.sendToTarget();
+                if (authData != null) {
+                    Log.d(TAG, (withPassword ? "Logged in with password as : " : "Logged in without password as : ") + authData.getUid());
+                    setAuthenticatedUserPasswordProvider(authData);
+                } else {
+                    final Message message = loadHandler.obtainMessage(MSG_LOAD_COMPLETE);
+                    message.sendToTarget();
+                }
             }
 
             @Override
             public void onAuthenticationError(final FirebaseError firebaseError) {
                 Log.d(TAG, (withPassword ? "Failed to log in with password : " : "Failed to Log in without password : ") + firebaseError.getMessage());
                 getMe().setHasLoggedInWithPassword(false);
-                setIsLoggedIn(false);
                 final Message message = loadHandler.obtainMessage(MSG_LOAD_COMPLETE);
                 message.sendToTarget();
             }
+
+            private void setAuthenticatedUserPasswordProvider(final AuthData authData) {
+                final String unprocessedEmail = authData.getProviderData().get(Constant.FIREBASE_PROPERTY_EMAIL).toString().toLowerCase();
+                final String mEncodedEmail = Utils.encodeEmail(unprocessedEmail);
+                final Firebase userRef = new Firebase(Constant.FIREBASE_URL_USERS).child(mEncodedEmail);
+
+                /**
+                 * Check if current user has logged in at least once
+                 */
+                userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        final Message message;
+                        GameUtility.setMe(dataSnapshot.getValue(PlayerDTO.class));
+                        if (GameUtility.getMe() != null) {
+                            message = loadHandler.obtainMessage(MSG_USER_AUTH_COMPLETE);
+                        } else {
+                            message = loadHandler.obtainMessage(MSG_LOAD_COMPLETE);
+                        }
+                        message.sendToTarget();
+                    }
+                    @Override
+                    public void onCancelled(final FirebaseError firebaseError) {
+                        Log.e(TAG, getString(R.string.log_error_the_read_failed) + firebaseError.getMessage());
+                        final Message message = loadHandler.obtainMessage(MSG_LOAD_COMPLETE);
+                        message.sendToTarget();
+                    }
+                });
+
+            }
+
         }
     }
 
