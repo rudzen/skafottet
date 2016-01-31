@@ -19,7 +19,7 @@
 
     <PreferenceCategory
         android:key="name_config"
-        android:title="Spillernavn">
+        android:title="Spillernavn (offline)">
 
         <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
             android:key="kpplyname"

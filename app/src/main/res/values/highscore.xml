@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright 2016 Rudy Alex Kohn
   ~
@@ -15,14 +14,9 @@
   ~ limitations under the License.
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="70dip"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="@string/app_name"/>
-</FrameLayout>
+<resources>
+    <string name="highscore_title">"Highscore</string>
+    <string name="highscore_drawer_open">Skuffe åben</string>
+    <string name="highscore_drawer_close">Skuffe lukket</string>
+    <string name="empty_highscore">Ingen er gode nok endnu..</string>
+</resources>

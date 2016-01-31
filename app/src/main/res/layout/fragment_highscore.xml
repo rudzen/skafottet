@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:background="@drawable/black_trans_black"
+              tools:context=".activities.GameActivity">
+
+    <include
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </include>
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/highscore_drawer_layout"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/highscore_refresh_layout"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent">
+
+                <se.emilsjolander.stickylistheaders.StickyListHeadersListView
+                    android:id="@+id/list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:drawSelectorOnTop="true"
+                    android:fadingEdge="vertical"
+                    android:fastScrollEnabled="true"
+                    android:overScrollMode="never"
+                    android:padding="0dp"
+                    android:scrollbarStyle="outsideOverlay"/>
+
+            </android.support.v4.widget.SwipeRefreshLayout>
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/highscore_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/empty"
+            android:textSize="30sp"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:id="@+id/left_drawer"
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@drawable/black_trans_black"
+            android:clickable="true"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:scrollbars="none">
+
+            <include layout="@layout/highscore_nav_drawer">
+            </include>
+
+        </LinearLayout>
+    </android.support.v4.widget.DrawerLayout>
+</LinearLayout>

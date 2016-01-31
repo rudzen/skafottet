@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Lokal">
+        <menu>
+            <item
+                android:id="@+id/highscore_nav_local_show"
+                android:icon="@android:drawable/ic_menu_info_details"
+                android:title="Vis"/>
+            <item
+                android:id="@+id/highscore_nav_local_share"
+                android:icon="@android:drawable/ic_menu_share"
+                android:title="Del"/>
+        </menu>
+    </item>
+
+    <item android:title="Online">
+        <menu>
+            <item
+                android:id="@+id/highscore_nav_online_show"
+                android:icon="@android:drawable/ic_menu_info_details"
+                android:title="Vis"/>
+            <item
+                android:id="@+id/highscore_nav_online_fuse"
+                android:icon="@android:drawable/ic_menu_add"
+                android:title="Importer"/>
+        </menu>
+    </item>
+
+</menu>

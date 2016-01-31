@@ -246,6 +246,7 @@ public class SplashActivity extends AppCompatActivity {
             final String lastUser = getPrefs().getString(Constant.USER_LAST, null);
 
             if (lastPw != null && lastUser != null) {
+                Log.d(TAG, "Loggin in with u/p : " + lastUser + "/" + lastPw);
                 getFirebase().authWithPassword(lastUser, lastPw, new StartupAuthResultHandler(true));
             } else {
                 final Message message = loadHandler.obtainMessage(MSG_LOAD_COMPLETE);
@@ -293,13 +294,10 @@ public class SplashActivity extends AppCompatActivity {
                     public void onDataChange(final DataSnapshot dataSnapshot) {
                         final Message message;
                         GameUtility.setMe(dataSnapshot.getValue(PlayerDTO.class));
-                        if (GameUtility.getMe() != null) {
-                            message = loadHandler.obtainMessage(MSG_USER_AUTH_COMPLETE);
-                        } else {
-                            message = loadHandler.obtainMessage(MSG_LOAD_COMPLETE);
-                        }
+                        message = loadHandler.obtainMessage(GameUtility.getMe() != null ? MSG_USER_AUTH_COMPLETE : MSG_LOAD_COMPLETE);
                         message.sendToTarget();
                     }
+
                     @Override
                     public void onCancelled(final FirebaseError firebaseError) {
                         Log.e(TAG, getString(R.string.log_error_the_read_failed) + firebaseError.getMessage());
@@ -329,6 +327,9 @@ public class SplashActivity extends AppCompatActivity {
                 if (msg.what == MSG_LOAD_COMPLETE) {
                     /* no connection was availble, so we just proceed with singleplayer mode. */
                     GameUtility.setIsLoggedIn(false);
+                    GameUtility.setMe(new PlayerDTO(GameUtility.getPrefs().getString(Constant.KEY_PREFS_PLAYER_NAME, "Mig")));
+
+
 //                } else if (msg.what == MSG_ANON_AUTH_COMPLETE) {
 //                    /* user has read access to firebase (not able to play multiplayer) */
 //                    getSettings().auth_status = SettingsDTO.AUTH_ANON;

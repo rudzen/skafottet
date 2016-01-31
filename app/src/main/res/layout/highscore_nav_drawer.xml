@@ -1,0 +1,28 @@
+<android.support.v4.widget.DrawerLayout
+    android:id="@+id/highscore_drawer_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
+
+    <com.undyingideas.thor.skafottet.views.UnderlinedTextView
+        android:id="@+id/highscore_local"
+        style="@style/word_list_section_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|left"
+        android:text="Highscorelister"
+        android:textStyle="bold"/>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/highscore_nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:menu="@menu/nav_highscore"/>
+
+</android.support.v4.widget.DrawerLayout>

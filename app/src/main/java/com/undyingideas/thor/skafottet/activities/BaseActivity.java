@@ -70,16 +70,16 @@ public abstract class BaseActivity extends AppCompatActivity implements
             mEncodedEmail = GameUtility.getPrefs().getString(Constant.KEY_ENCODED_EMAIL, null);
             mProvider = GameUtility.getPrefs().getString(Constant.KEY_PROVIDER, null);
 
-            if (!(this instanceof LoginActivity || this instanceof CreateAccountActivity) && GameUtility.getFirebase() != null) {
-                GameUtility.setFirebase(new Firebase(Constant.FIREBASE_URL));
+            if (!(this instanceof LoginActivity || this instanceof CreateAccountActivity)) {
+//                GameUtility.setFirebase(new Firebase(Constant.FIREBASE_URL));
+                mAuthListener = new AuthListener();
+                authDataHolder = new AuthDataHolder(this);
+                mAuthListener.addSlave(authDataHolder);
+                GameUtility.getFirebase().addAuthStateListener(mAuthListener);
             }
         } else {
 //            WindowLayout.showSnack("Ingen internetforbindelse.", findViewById(R.id.fragment_content), true);
         }
-        mAuthListener = new AuthListener();
-        authDataHolder = new AuthDataHolder(this);
-        mAuthListener.addSlave(authDataHolder);
-        GameUtility.getFirebase().addAuthStateListener(mAuthListener);
     }
 
     @Override

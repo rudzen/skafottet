@@ -75,10 +75,6 @@ public class PrefsActivity extends PreferenceActivity implements SharedPreferenc
             GameUtility.getSettings().lastPw = null;
         }
 
-        final String newName = GameUtility.getPrefs().getString(Constant.KEY_PREFS_PLAYER_NAME);
-        if (!newName.isEmpty() && !newName.equalsIgnoreCase(GameUtility.getMe().getName())) {
-            GameUtility.getMe().setName(newName);
-        }
         GameUtility.getSettings().setContrastColor();
         startActivity(new Intent(this, GameActivity.class));
         super.finish();

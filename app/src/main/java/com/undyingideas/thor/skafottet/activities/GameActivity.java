@@ -36,6 +36,7 @@ import com.undyingideas.thor.skafottet.fragments.AboutFragment;
 import com.undyingideas.thor.skafottet.fragments.EndOfGameFragment;
 import com.undyingideas.thor.skafottet.fragments.HangmanGameFragment;
 import com.undyingideas.thor.skafottet.fragments.HelpFragment;
+import com.undyingideas.thor.skafottet.fragments.HighscoreFragment;
 import com.undyingideas.thor.skafottet.fragments.LobbySelectorFragment;
 import com.undyingideas.thor.skafottet.fragments.MenuFragment;
 import com.undyingideas.thor.skafottet.fragments.WordListFragment;
@@ -231,12 +232,13 @@ public class GameActivity extends SoundAbstract implements
         } else if (gameMode == Constant.MODE_WORD_LIST) {
             replaceFragment(WordListFragment.newInstance());
         } else if (gameMode == Constant.MODE_HIGHSCORE) {
-            quitMode = false;
+//            quitMode = false;
             // TODO : Facilitate local highscore..
 //            getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
-            final Intent intent = new Intent(this, PlayerListActivity.class);
-            startActivity(intent);
-            finish();
+//            final Intent intent = new Intent(this, PlayerListActivity.class);
+//            startActivity(intent);
+//            finish();
+            replaceFragment(HighscoreFragment.newInstance(true));
         } else if (gameMode == Constant.MODE_FINISH) {
             quitMode = true;
             getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
