@@ -56,8 +56,8 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.firebase;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getConnectionStatus;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getFirebase;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getHighscoreManager;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getMe;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getPrefs;
@@ -251,7 +251,7 @@ public class SplashActivity extends AppCompatActivity {
 
 //            Log.d(TAG, "Trying to log in with email :" + Utils.decodeEmail(me.getEmail()) + " and password : " + "fFNG35gcGxA8vDXY");
 //            if (settings.keepLogin && settings.lastPw != null) {
-                firebase.authWithPassword("rudzen@gmail.com", "HTJc8eWs632R5cLC", new StartupAuthResultHandler(true));
+                getFirebase().authWithPassword("rudzen@gmail.com", "HTJc8eWs632R5cLC", new StartupAuthResultHandler(true));
 //            } else {
 //                firebase.authAnonymously(new StartupAuthResultHandler(false));
 //            } else {
@@ -273,6 +273,7 @@ public class SplashActivity extends AppCompatActivity {
                 Log.d(TAG, (withPassword ? "Logged in with password as : " : "Logged in without password as : ") + authData.getUid());
                 getMe().setHasLoggedInWithPassword(withPassword);
                 setIsLoggedIn(true);
+                getSettings().auth_status = SettingsDTO.AUTH_USER;
                 final Message message = loadHandler.obtainMessage(withPassword ? MSG_USER_AUTH_COMPLETE : MSG_ANON_AUTH_COMPLETE);
                 message.sendToTarget();
             }
@@ -306,7 +307,7 @@ public class SplashActivity extends AppCompatActivity {
                     getSettings().auth_status = SettingsDTO.AUTH_NONE;
                 } else if (msg.what == MSG_ANON_AUTH_COMPLETE) {
                     /* user has read access to firebase (not able to play multiplayer) */
-                    getSettings().auth_status = SettingsDTO.AUTH_ANON;
+//                    getSettings().auth_status = SettingsDTO.AUTH_ANON;
                 } else if (msg.what == MSG_USER_AUTH_COMPLETE) {
                     /* user has access to the full features of the game */
                     getSettings().auth_status = SettingsDTO.AUTH_USER;

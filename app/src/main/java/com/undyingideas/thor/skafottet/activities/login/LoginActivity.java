@@ -77,7 +77,7 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
     /* A dialog that is presented until the Firebase authentication finished. */
 //    private ProgressDialog mAuthProgressDialog;
     /* References to the Firebase */
-    private Firebase mFirebaseRef;
+//    private Firebase mFirebaseRef;
     /* Listener for Firebase session changes */
     private Firebase.AuthStateListener mAuthStateListener;
     private AutoCompleteTextView mEditTextEmailInput;
@@ -108,7 +108,7 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
         /**
          * Create Firebase references
          */
-        mFirebaseRef = GameUtility.firebase; // new Firebase(Constant.FIREBASE_URL);
+//        mFirebaseRef = GameUtility.getFirebase(); // new Firebase(Constant.FIREBASE_URL);
 
         /**
          * Link layout elements from XML and setup progress dialog
@@ -168,7 +168,7 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
             }
         };
         /* Add auth listener to Firebase ref */
-        mFirebaseRef.addAuthStateListener(mAuthStateListener);
+        GameUtility.getFirebase().addAuthStateListener(mAuthStateListener);
 
         /**
          * Get the newly registered user email if present, use null as default value
@@ -194,7 +194,7 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
     @Override
     public void onPause() {
         super.onPause();
-        mFirebaseRef.removeAuthStateListener(mAuthStateListener);
+        GameUtility.getFirebase().removeAuthStateListener(mAuthStateListener);
     }
 
     @Override
@@ -306,7 +306,7 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
             return;
         }
         WindowLayout.getMd().show();
-        mFirebaseRef.authWithPassword(email, password, new MyAuthResultHandler(Constant.PASSWORD_PROVIDER));
+        GameUtility.getFirebase().authWithPassword(email, password, new MyAuthResultHandler(Constant.PASSWORD_PROVIDER));
     }
 
     private interface ProfileQuery {
@@ -478,7 +478,7 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
                          * to make sure that user will be able to use temporary password
                          * from the email more than 24 hours
                          */
-                        mFirebaseRef.changePassword(unprocessedEmail, mEditTextPasswordInput.getText().toString(), mEditTextPasswordInput.getText().toString(), new Firebase.ResultHandler() {
+                        GameUtility.getFirebase().changePassword(unprocessedEmail, mEditTextPasswordInput.getText().toString(), mEditTextPasswordInput.getText().toString(), new Firebase.ResultHandler() {
                             @Override
                             public void onSuccess() {
                                 userRef.child(Constant.FIREBASE_PROPERTY_USER_HAS_LOGGED_IN_WITH_PASSWORD).setValue(true);
@@ -555,12 +555,12 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
         userAndUidMapping.put("/" + Constant.FIREBASE_LOCATION_UID_MAPPINGS + "/" + authData.getUid(), mEncodedEmail);
 
         /* Update the database; it will fail if a user already exists */
-        mFirebaseRef.updateChildren(userAndUidMapping, new Firebase.CompletionListener() {
+        GameUtility.getFirebase().updateChildren(userAndUidMapping, new Firebase.CompletionListener() {
             @Override
             public void onComplete(final FirebaseError firebaseError, final Firebase firebase) {
                 if (firebaseError != null) {
                     /* Try just making a uid mapping */
-                    mFirebaseRef.child(Constant.FIREBASE_LOCATION_UID_MAPPINGS).child(authData.getUid()).setValue(mEncodedEmail);
+                    GameUtility.getFirebase().child(Constant.FIREBASE_LOCATION_UID_MAPPINGS).child(authData.getUid()).setValue(mEncodedEmail);
                 }
             }
         });
@@ -580,7 +580,7 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
      * @param token A Google OAuth access token returned from Google
      */
     private void loginWithGoogle(final String token) {
-        mFirebaseRef.authWithOAuthToken(Constant.GOOGLE_PROVIDER, token, new MyAuthResultHandler(Constant.GOOGLE_PROVIDER));
+        GameUtility.getFirebase().authWithOAuthToken(Constant.GOOGLE_PROVIDER, token, new MyAuthResultHandler(Constant.GOOGLE_PROVIDER));
     }
 
     /**

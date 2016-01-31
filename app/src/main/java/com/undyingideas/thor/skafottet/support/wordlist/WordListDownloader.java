@@ -20,6 +20,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.undyingideas.thor.skafottet.fragments.WordListFragment;
+import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
@@ -35,8 +36,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
-
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.wordController;
 
 /**
  * Created on 09-01-2016, 16:06.
@@ -121,7 +120,7 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
             final WordItem wordItem = new WordItem(title, url, dude.size());
             wordItem.getWords().addAll(dude);
             Collections.sort(wordItem.getWords());
-            wordController.replaceLocalWordList(wordItem);
+            GameUtility.getWordController().replaceLocalWordList(wordItem);
             return wordItem.getWords().isEmpty() ? null : wordItem;
         }
         return null;

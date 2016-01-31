@@ -40,11 +40,11 @@ import com.undyingideas.thor.skafottet.support.wordlist.WordController;
  */
 public final class GameUtility {
 
-    public static Firebase firebase;
+    private static Firebase firebase;
 
-    public static TinyDB prefs;
+    private static TinyDB prefs;
 
-    public static WordController wordController;
+    private static WordController wordController;
 
     public static SettingsDTO settings;
 
@@ -105,7 +105,7 @@ public final class GameUtility {
         return ret;
     }
 
-    public static void writeNullGame() { getPrefs().remove(Constant.KEY_SAVE_GAME); }
+    public static void writeNullGame() { prefs.remove(Constant.KEY_SAVE_GAME); }
 
     public static int getConnectionStatus() { return connectionStatus; }
 

@@ -7,12 +7,10 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.undyingideas.thor.skafottet.support.firebase.dto.LobbyDTO;
+import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.SettingsDTO;
 
 import java.util.ArrayList;
-
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.firebase;
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.settings;
 
 /**
  * <p>
@@ -49,20 +47,17 @@ public class LobbyListener {
     }
 
     public void setListeners() {
-        if (settings.auth_status > 0) {
-            firebase.child(LOBBY).keepSynced(true);
-            firebase.child(LOBBY).addChildEventListener(nameGetter);
-            if (settings.auth_status == SettingsDTO.AUTH_USER) { // play nice, could be the user has logged in for real since last check.
-                firebase.child(LOBBY).child(EMAIL).child(GAME_LIST).addChildEventListener(gameListListener);
-            }
+        GameUtility.getFirebase().child(LOBBY).keepSynced(true);
+        GameUtility.getFirebase().child(LOBBY).addChildEventListener(nameGetter);
+        if (GameUtility.getSettings().auth_status == SettingsDTO.AUTH_USER) { // play nice, could be the user has logged in for real since last check.
+            GameUtility.getFirebase().child(LOBBY).child(EMAIL).child(GAME_LIST).addChildEventListener(gameListListener);
         }
-
     }
 
     public void removeListeners() {
-        firebase.child(LOBBY).keepSynced(false);
-        firebase.child(LOBBY).removeEventListener(nameGetter);
-        firebase.child(LOBBY).child(EMAIL).child(GAME_LIST).removeEventListener(gameListListener);
+        GameUtility.getFirebase().child(LOBBY).keepSynced(false);
+        GameUtility.getFirebase().child(LOBBY).removeEventListener(nameGetter);
+        GameUtility.getFirebase().child(LOBBY).child(EMAIL).child(GAME_LIST).removeEventListener(gameListListener);
     }
 
     public void addSlave(final LobbyListenerSlave playerListenerSlave) {

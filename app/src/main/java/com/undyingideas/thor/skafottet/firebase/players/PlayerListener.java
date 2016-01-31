@@ -11,8 +11,8 @@ import com.undyingideas.thor.skafottet.support.utility.SettingsDTO;
 
 import java.util.ArrayList;
 
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.firebase;
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.settings;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getFirebase;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getSettings;
 
 /**
  * <p>
@@ -55,20 +55,20 @@ public class PlayerListener {
     }
 
     public void setListeners() {
-        firebase.child(PLAYERS).keepSynced(true);
-        if (settings.auth_status > 0) {
-            firebase.child(PLAYERS).addChildEventListener(nameGetter);
-            if (settings.auth_status == SettingsDTO.AUTH_USER) { // play nice, could be the user has logged in for real since last check.
-                firebase.child(PLAYERS).child(EMAIL).child(GAME_LIST).addChildEventListener(gameListListener);
+        getFirebase().child(PLAYERS).keepSynced(true);
+        if (getSettings().auth_status > 0) {
+            getFirebase().child(PLAYERS).addChildEventListener(nameGetter);
+            if (getSettings().auth_status == SettingsDTO.AUTH_USER) { // play nice, could be the user has logged in for real since last check.
+                getFirebase().child(PLAYERS).child(EMAIL).child(GAME_LIST).addChildEventListener(gameListListener);
             }
         }
 
     }
 
     public void removeListeners() {
-        firebase.child(PLAYERS).keepSynced(false);
-        firebase.child(PLAYERS).removeEventListener(nameGetter);
-        firebase.child(PLAYERS).child(EMAIL).child(GAME_LIST).removeEventListener(gameListListener);
+        getFirebase().child(PLAYERS).keepSynced(false);
+        getFirebase().child(PLAYERS).removeEventListener(nameGetter);
+        getFirebase().child(PLAYERS).child(EMAIL).child(GAME_LIST).removeEventListener(gameListListener);
     }
 
     public void addSlave(final PlayerListenerSlave playerListenerSlave) {

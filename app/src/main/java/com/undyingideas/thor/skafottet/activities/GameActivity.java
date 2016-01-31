@@ -50,8 +50,6 @@ import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.settings;
-
 /**
  * The main game activity.
  * It has the responsibility of showing the game itself and the end game display to the user.
@@ -113,7 +111,7 @@ public class GameActivity extends SoundAbstract implements
 
     @Override
     protected void onResume() {
-        if (settings.prefsMusic) {
+        if (GameUtility.getSettings().prefsMusic) {
             GameUtility.getMusicPLayIntent().setAction(MusicPlay.ACTION_PLAY);
             startService(GameUtility.getMusicPLayIntent());
         } else {

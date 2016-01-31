@@ -63,8 +63,6 @@ import java.util.regex.Pattern;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.wordController;
-
 /**
  * <p>Created on 12-01-2016, 07:24.<br>
  * Project : skafottet</p>
@@ -154,7 +152,7 @@ public class WordListFragment extends Fragment implements
         /* configure the view */
         refreshLayout.setOnRefreshListener(new SwipeOnRefreshListener(this));
 
-        mAdapter = new WordListAdapter(getContext(), wordController.getCurrentList());
+        mAdapter = new WordListAdapter(getContext(), GameUtility.getWordController().getCurrentList());
 
         stickyList.setOnItemClickListener(this);
         stickyList.setOnHeaderClickListener(this);
@@ -165,7 +163,7 @@ public class WordListFragment extends Fragment implements
 
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         toolbar.setTitle(getString(R.string.word_list_title));
-        toolbar.setSubtitle("Antal Lister : " + wordController.getListCount()); // "<nuværende liste>"); // vil blive sat dynamisk ved klik på liste og ved opstart!
+        toolbar.setSubtitle("Antal Lister : " + GameUtility.getWordController().getListCount()); // "<nuværende liste>"); // vil blive sat dynamisk ved klik på liste og ved opstart!
         toolbar.setCollapsible(false);
         toolbar.setLogo(R.mipmap.ic_launcher);
         toolbar.setLogoDescription("Applikations logo");
@@ -184,7 +182,7 @@ public class WordListFragment extends Fragment implements
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         /* configure the adapters for the side bar lists */
-        adapterLocal = new WordTitleLocalAdapter(getContext(), R.layout.word_list_nav_drawer_list, wordController.getLocalWords());
+        adapterLocal = new WordTitleLocalAdapter(getContext(), R.layout.word_list_nav_drawer_list, GameUtility.getWordController().getLocalWords());
         adapterRemote = new WordTitleRemoteAdapter(getContext(), R.layout.word_list_nav_drawer_list, WordListController.getKeyList());
 
         listRemote.setAdapter(adapterRemote);
@@ -248,22 +246,22 @@ public class WordListFragment extends Fragment implements
 
             final StringBuilder oldListName = new StringBuilder(20);
             oldListName.append('\'');
-            if (wordController.isLocal()) {
-                oldListName.append(wordController.getLocalWords().get(wordController.getIndexLocale()).getTitle());
+            if (GameUtility.getWordController().isLocal()) {
+                oldListName.append(GameUtility.getWordController().getLocalWords().get(GameUtility.getWordController().getIndexLocale()).getTitle());
             } else {
-                oldListName.append(wordController.getIndexRemote());
+                oldListName.append(GameUtility.getWordController().getIndexRemote());
             }
 
             oldListName.append("' ");
 
-            if (wordController.removeCurrentList()) {
+            if (GameUtility.getWordController().removeCurrentList()) {
                 oldListName.append("er slettet, liste sat til ");
-                oldListName.append(wordController.getLocalWords().get(wordController.getIndexLocale()).getTitle());
+                oldListName.append(GameUtility.getWordController().getLocalWords().get(GameUtility.getWordController().getIndexLocale()).getTitle());
                 refreshList();
             } else {
                 oldListName.append("kunne ikke slettes");
-                if (wordController.isLocal()) {
-                    if (wordController.getIndexLocale() == 0) {
+                if (GameUtility.getWordController().isLocal()) {
+                    if (GameUtility.getWordController().getIndexLocale() == 0) {
                         oldListName.append(", da det er en indbygget liste.");
                     } else {
                         oldListName.append('.');
@@ -284,9 +282,9 @@ public class WordListFragment extends Fragment implements
     }
 
     private boolean updateCurrentList() {
-        if (wordController.isLocal() && wordController.getIndexLocale() > 0) {
+        if (GameUtility.getWordController().isLocal() && GameUtility.getWordController().getIndexLocale() > 0) {
             WindowLayout.getLoadToast().show();
-            new WordListDownloader(this, wordController.getLocalWords().get(wordController.getIndexLocale()).getTitle(), wordController.getLocalWords().get(wordController.getIndexLocale()).getUrl()).execute();
+            new WordListDownloader(this, GameUtility.getWordController().getLocalWords().get(GameUtility.getWordController().getIndexLocale()).getTitle(), GameUtility.getWordController().getLocalWords().get(GameUtility.getWordController().getIndexLocale()).getUrl()).execute();
             return true;
         }
         WindowLayout.showSnack("Denne liste kan ikke opdateres.", refreshLayout, true);
@@ -331,18 +329,18 @@ public class WordListFragment extends Fragment implements
      * Updates the lists, both the shown words and the drawer layouts..
      */
     public void refreshList() {
-        adapterLocal = new WordTitleLocalAdapter(getContext(), R.layout.word_list_nav_drawer_list, wordController.getLocalWords());
+        adapterLocal = new WordTitleLocalAdapter(getContext(), R.layout.word_list_nav_drawer_list, GameUtility.getWordController().getLocalWords());
         adapterRemote = new WordTitleRemoteAdapter(getContext(), R.layout.word_list_nav_drawer_list, WordListController.getKeyList());
         adapterLocal.notifyDataSetChanged();
         adapterRemote.notifyDataSetChanged();
-        toolbar.setSubtitle("Antal lister : " + wordController.getListCount());
-        if (!wordController.getCurrentList().isEmpty()) {
-            mAdapter.restore(wordController.getCurrentList());
+        toolbar.setSubtitle("Antal lister : " + GameUtility.getWordController().getListCount());
+        if (!GameUtility.getWordController().getCurrentList().isEmpty()) {
+            mAdapter.restore(GameUtility.getWordController().getCurrentList());
         } else {
             mAdapter.clear();
             WindowLayout.showSnack("Listen er tom fætter.", refreshLayout, false);
         }
-        Log.d("Refresh", wordController.getCurrentList().toString());
+        Log.d("Refresh", GameUtility.getWordController().getCurrentList().toString());
     }
 
     /**
@@ -485,13 +483,13 @@ public class WordListFragment extends Fragment implements
         @Override
         public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
             Log.d(TAG, "Local : " + position);
-            if (!wordController.isLocal() || wordController.getIndexLocale() != position) {
-                wordController.setIndexLocale(position);
-                wordController.setIsLocal(true);
-                WindowLayout.showSnack("Ordliste skiftet til '" + wordController.getLocalWords().get(position).getTitle() + "'", stickyList, true);
+            if (!GameUtility.getWordController().isLocal() || GameUtility.getWordController().getIndexLocale() != position) {
+                GameUtility.getWordController().setIndexLocale(position);
+                GameUtility.getWordController().setIsLocal(true);
+                WindowLayout.showSnack("Ordliste skiftet til '" + GameUtility.getWordController().getLocalWords().get(position).getTitle() + "'", stickyList, true);
                 refreshList();
             } else {
-                WindowLayout.showSnack("'" + wordController.getLocalWords().get(position).getTitle() + "' er allerede din aktive ordliste.", stickyList, true);
+                WindowLayout.showSnack("'" + GameUtility.getWordController().getLocalWords().get(position).getTitle() + "' er allerede din aktive ordliste.", stickyList, true);
             }
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
@@ -502,10 +500,10 @@ public class WordListFragment extends Fragment implements
         public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
             Log.d(TAG, "Remote : " + view.getTag());
             final String tag = (String) view.getTag();
-            if (wordController.isLocal() || !Objects.equals(tag, wordController.getIndexRemote())) {
-                wordController.setIndexRemote((String) view.getTag());
-                wordController.setIsLocal(false);
-                wordController.setIndexLocale(-1);
+            if (GameUtility.getWordController().isLocal() || !Objects.equals(tag, GameUtility.getWordController().getIndexRemote())) {
+                GameUtility.getWordController().setIndexRemote((String) view.getTag());
+                GameUtility.getWordController().setIsLocal(false);
+                GameUtility.getWordController().setIndexLocale(-1);
                 WindowLayout.showSnack("Ordliste skiftet til '" + tag + "'", stickyList, true);
                 refreshList();
             } else {

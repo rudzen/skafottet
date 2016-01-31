@@ -28,8 +28,7 @@ import android.support.annotation.Nullable;
 public final class SettingsDTO {
 
     public final static byte AUTH_NONE = 0;
-    public final static byte AUTH_ANON = 1;
-    public final static byte AUTH_USER = 2;
+    public final static byte AUTH_USER = 1;
 
     public byte auth_status;
 

@@ -54,7 +54,6 @@ import com.undyingideas.thor.skafottet.interfaces.IGameSoundNotifier;
 import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.DrawableHelper;
-import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.SettingsDTO;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 import com.undyingideas.thor.skafottet.views.AutoScaleTextView;
@@ -66,8 +65,13 @@ import java.util.ArrayList;
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
 
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.SFX_MENU_CLICK;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getConnectionStatus;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getConnectionStatusName;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getMe;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getPrefs;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getSettings;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.imageRefs;
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.prefs;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.settings;
 
 /**
@@ -163,7 +167,7 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
         textView_buttom = (HTextView) root.findViewById(R.id.menu_buttom_text);
         textView_buttom.setAnimateType(HTextViewType.EVAPORATE);
         textView_buttom.setOnClickListener(new OnLoginClickListener(this));
-        textView_buttom.setTextColor(GameUtility.getSettings().textColour);
+        textView_buttom.setTextColor(getSettings().textColour);
 
         title = (ImageView) root.findViewById(R.id.menu_title);
         title.setClickable(true);
@@ -296,7 +300,7 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 
         try {
             // If previous game is found, add it to list :-)
-            final SaveGame saveGame = (SaveGame) prefs.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
+            final SaveGame saveGame = (SaveGame) getPrefs().getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
 //            Log.d(TAG, saveGame.getLogic().toString());
 //            if (saveGame.getLogic() != null && !saveGame.getLogic().isGameOver()) {
 //                if (mpc.name != null && saveGame.isMultiPlayer() && mpc.name.equals(saveGame.getPlayers()[0].getName())) {
@@ -309,8 +313,8 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
             // nothing happends here, its just for not adding the option to continue a game.
         } finally {
             startGameItems.add(new StartGameItem(Constant.MODE_SINGLE_PLAYER, "Nyt singleplayer", "Tilfældigt ord.", imageRefs[0]));
-            if (GameUtility.getSettings().auth_status == SettingsDTO.AUTH_USER && GameUtility.getConnectionStatus() > -1) {
-                if (!GameUtility.getMe().getGameList().isEmpty()) {
+            if (getSettings().auth_status == SettingsDTO.AUTH_USER && getConnectionStatus() > -1) {
+                if (!getMe().getGameList().isEmpty()) {
                     startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER, "Næste multiplayer", "Kæmp imod", imageRefs[0]));
                 }
                 startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_2, "Vælg multiplayer", "Jægeren er den jagtede", imageRefs[0]));
@@ -440,7 +444,7 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
         public void onClick(final View v) {
             final MenuFragment menuFragment = weakReference.get();
             if (menuFragment != null) {
-                menuFragment.iGameSoundNotifier.playGameSound(GameUtility.SFX_MENU_CLICK);
+                menuFragment.iGameSoundNotifier.playGameSound(SFX_MENU_CLICK);
                 boolean buttonStates = false;
                 if (v instanceof RelativeLayout) {
                     menuFragment.setMenuButtonsClickable(false);
@@ -454,7 +458,7 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 
                         menuFragment.button_clicked = BUTTON_LOGIN_OUT;
 
-                        if (GameUtility.getConnectionStatus() > -1) {
+                        if (getConnectionStatus() > -1) {
                             if (settings.auth_status == SettingsDTO.AUTH_USER) {
                                 menuFragment.iFragmentFlipper.flipFragment(Constant.MODE_LOGOUT);
                             } else {
@@ -469,7 +473,7 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 
                     } else if (v == menuFragment.buttons[BUTTON_HIGHSCORE]) {
 
-                        if (GameUtility.getConnectionStatus() > -1) {
+                        if (getConnectionStatus() > -1) {
                             menuFragment.button_clicked = BUTTON_HIGHSCORE;
                             menuFragment.endMenu(Constant.MODE_HIGHSCORE, menuFragment.buttons[BUTTON_HIGHSCORE]);
                         } else {
@@ -594,7 +598,7 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 //                    menuFragment.iFragmentFlipper.flipFragment(gameMode, mpc.lc.getFirstActiveGame());
                 } else {
                     final Bundle bundle = new Bundle();
-                    bundle.putParcelable(Constant.KEY_SAVE_GAME, (SaveGame) prefs.getObject(Constant.KEY_SAVE_GAME, SaveGame.class));
+                    bundle.putParcelable(Constant.KEY_SAVE_GAME, (SaveGame)  getPrefs().getObject(Constant.KEY_SAVE_GAME, SaveGame.class));
                     menuFragment.iFragmentFlipper.flipFragment(gameMode, bundle);
                 }
             }
@@ -737,7 +741,7 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
             // this is just a quick hack! but we need some basic info!
             final SaveGame sg;
             try {
-                sg = (SaveGame) prefs.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
+                sg = (SaveGame)  getPrefs().getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
                 if (sg.getLogic() != null && !sg.getLogic().isGameOver()) {
                     info.add(String.format(INFO_GAME, "Igang"));
                     info.add(String.format(INFO_GUESS, sg.getLogic().getUsedLetters().isEmpty() ? NONE : sg.getLogic().getUsedLetters()));
@@ -751,9 +755,9 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 
             final String logInName;
             if (settings.auth_status == SettingsDTO.AUTH_USER) {
-                logInName = me.getEmail();
-            } else if (settings.auth_status == SettingsDTO.AUTH_ANON) {
-                logInName = "Basis";
+                logInName = getMe().getName();
+//            } else if (settings.auth_status == SettingsDTO.AUTH_ANON) {
+//                logInName = "Basis";
             } else {
                 logInName = "Nej";
             }
@@ -765,7 +769,7 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 //                e.printStackTrace();
 //                info.add("Nej");
 //            }
-            info.add(String.format(INFO_CONNECTION, GameUtility.getConnectionStatusName()));
+            info.add(String.format(INFO_CONNECTION, getConnectionStatusName()));
 //        try {
 //            info.add(String.format(INFO_BATTERY, Integer.toString(batteryLevelRecieverData.getData().getLevel())));
 //        } catch (final Exception e) {
