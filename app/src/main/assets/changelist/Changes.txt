@@ -1,4 +1,48 @@
-(+ = new, - = removed, * = change, ! = fix)
+(+ = new, - = removed, * = change, ! = fix, / = subitem)
+--- VERION NUMBERING IS RESET!! ---
+v0.2 - 31-01-2016, rudz
+-----------------------
+[Score system]
++ New score system algorithm which integrates current with a time modifier.
+* Scores for multiplayer games are determined by each player's local score.
+  / The point difference is added to the winner.
+  / The point difference is subtracted from the looser.
+* When setting a new highscore in singleplayer and not logged in with user, the regular single player name is used.
+[Firebase]
++ Observer structure for firebase information listening with GC kindness.
+  / If any interface called to doesn't exists, nothing happends.
++ Completely re-wrote all firebase code to better utilize the new information structure.
+* Re-worked firebase database structure for higher flexibility and better performance.
++ Firebase basic annonymous login as standard, this is now required to be able to:
+  / Use firebase word lists.
+  / View online highscores.
+! Improved performance and reduced network stress for data retreival through firebase ALOT.
++ Online highscore listing.
++ Login / Create user system added :
+  / Uses Firebase password login system.
+  / Low memory footprint (< 5 bytes) login-detection structure.
+  / When a new user is signed up, the user gets an email with the password.
+  / The user then has to (within 24 hours) change that password.
+  / Option added in preferences to keep last used password in app,
+    and to use it to log in with the next time the application starts.
+  / Preparation is made for the ability to utilize google account sign in.
+* Only the relevant locations in the application applies firebase data listeners for their objectives.
+  / Earlier, the whole firebase database was downloaded on application start.
+[Game]
++ When playing a multiplayer game, the score of the opponents game is shown.
+* Highscore viewing is now more flexible, with navigation drawer for more stuff to do !!!
+! Improved sound playback performance by switching to ogg file format.
+[Code general]
+! Improved basic structure of activities which helps to facilitate firebase support.
+* The last remnants of the PlayerActivities and it's ascosiates are now pure fragments integrated into existing system.
+! Reduced memory usage a little.
+! Improved internal structure by applying the use of parcels more logically instead of global objects (use where/when needed principle).
++ More encaplusement.
+
+
+----------------------------------------------------------------------------------------------------------
+
+
 v1.1.3 - 28.01.2016, rudz
 -------------------------
 + Basic local highscore (10 rankings). Players name/score/word/date is kept.

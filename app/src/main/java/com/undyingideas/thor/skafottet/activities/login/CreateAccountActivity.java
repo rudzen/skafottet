@@ -257,7 +257,7 @@ public class CreateAccountActivity extends BaseActivity {
                      * Save name and email to sharedPreferences to create User database record
                      * when the registered user will sign in for the first time
                      */
-                    GameUtility.s_preferences.putString(Constant.KEY_SIGNUP_EMAIL, mUserEmail);
+                    GameUtility.getPrefs().putString(Constant.KEY_SIGNUP_EMAIL, mUserEmail);
 
                     /**
                      * Encode user email replacing "." with ","

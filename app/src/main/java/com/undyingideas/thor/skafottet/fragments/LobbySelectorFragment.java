@@ -143,7 +143,7 @@ public class LobbySelectorFragment extends Fragment {
         lobbys.clear();
 
 //        removeInactive(GameUtility.mpc.name);
-        lobbyAdapter = new MultiplayerLobbyAdapter(GameUtility.me, getContext(), R.layout.multiplayer_player_list_row, lobbys);
+        lobbyAdapter = new MultiplayerLobbyAdapter(GameUtility.getMe(), getContext(), R.layout.multiplayer_player_list_row, lobbys);
 
         listView.setAdapter(lobbyAdapter);
         listView.setOnItemClickListener(new OnLobbyClick(this));

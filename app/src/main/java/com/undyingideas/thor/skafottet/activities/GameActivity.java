@@ -114,11 +114,11 @@ public class GameActivity extends SoundAbstract implements
     @Override
     protected void onResume() {
         if (settings.prefsMusic) {
-            GameUtility.musicPLayIntent.setAction(MusicPlay.ACTION_PLAY);
-            startService(GameUtility.musicPLayIntent);
+            GameUtility.getMusicPLayIntent().setAction(MusicPlay.ACTION_PLAY);
+            startService(GameUtility.getMusicPLayIntent());
         } else {
-            GameUtility.musicPLayIntent.setAction(MusicPlay.ACTION_STOP);
-            startService(GameUtility.musicPLayIntent);
+            GameUtility.getMusicPLayIntent().setAction(MusicPlay.ACTION_STOP);
+            startService(GameUtility.getMusicPLayIntent());
         }
         if (soundThread == null) {
             initSound();
@@ -159,7 +159,7 @@ public class GameActivity extends SoundAbstract implements
         } else {
             if (currentFragment instanceof MenuFragment) {
                 if (backPressed + BACK_PRESSED_DELAY > System.currentTimeMillis()) {
-                    stopService(GameUtility.musicPLayIntent);
+                    stopService(GameUtility.getMusicPLayIntent());
                     finish();
                 } else {
                     WindowLayout.showSnack("Tryk tilbage igen for at flygte i rædsel.", findViewById(R.id.fragment_content), false);
@@ -209,7 +209,7 @@ public class GameActivity extends SoundAbstract implements
     public void startNewMultiplayerGame(final String opponentName, final String theWord) {
         Log.d(TAG, "Want to start new game against : " + opponentName + " with word : " + theWord);
 //        GameUtility.mpc.setRunnable(null); // hack til at fjerne updaterings fejl
-        replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(theWord), true, new PlayerDTO(GameUtility.me), new PlayerDTO(opponentName))));
+        replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(theWord), true, new PlayerDTO(GameUtility.getMe()), new PlayerDTO(opponentName))));
     }
 
     @SuppressWarnings({"OverlyComplexMethod", "OverlyLongMethod"})
@@ -221,7 +221,7 @@ public class GameActivity extends SoundAbstract implements
         if (gameMode == Constant.MODE_MENU) {
             replaceFragment(new MenuFragment());
         } else if (gameMode == Constant.MODE_SINGLE_PLAYER) {
-            replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(), false, new PlayerDTO(GameUtility.me))));
+            replaceFragment(HangmanGameFragment.newInstance(new SaveGame(new HangedMan(), false, new PlayerDTO(GameUtility.getMe()))));
         } else if (gameMode == Constant.MODE_MULTI_PLAYER_2) {
             replaceFragment(LobbySelectorFragment.newInstance(true));
         } else if (gameMode == Constant.MODE_MULTI_PLAYER_LOBBY) {
@@ -242,7 +242,7 @@ public class GameActivity extends SoundAbstract implements
         } else if (gameMode == Constant.MODE_FINISH) {
             quitMode = true;
             getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
-            stopService(GameUtility.musicPLayIntent);
+            stopService(GameUtility.getMusicPLayIntent());
             finish();
         } else if (gameMode == Constant.MODE_SETTINGS) {
             quitMode = false;
@@ -256,7 +256,7 @@ public class GameActivity extends SoundAbstract implements
         } else if (gameMode == Constant.MODE_LOGOUT) {
             logout();
             if (currentFragment instanceof MenuFragment) {
-                ((MenuFragment) currentFragment).setLoginButton(false);
+                ((MenuFragment) currentFragment).setLoginButton();
             }
         } else if (gameMode == Constant.MODE_CREATE_ACCOUNT) {
             final Intent intent = new Intent(this, CreateAccountActivity.class);

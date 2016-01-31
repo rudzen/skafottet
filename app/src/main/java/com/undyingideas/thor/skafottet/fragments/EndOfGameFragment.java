@@ -319,7 +319,7 @@ public class EndOfGameFragment extends Fragment {
     }
 
     private void showHighscores() {
-        scoreAdapter = new ScoreAdapter(getContext(), R.layout.highscore_list_row, GameUtility.highscoreManager.getScores());
+        scoreAdapter = new ScoreAdapter(getContext(), R.layout.highscore_list_row, GameUtility.getHighscoreManager().getScores());
         final ListView listViewItems = new ListView(getActivity().getApplicationContext());
         listViewItems.setAdapter(scoreAdapter);
 
@@ -443,15 +443,15 @@ public class EndOfGameFragment extends Fragment {
                 endOfGameFragment.buttons[2].setVisibility(View.VISIBLE);
 
                 if (!endOfGameFragment.endGame.isMultiPlayer()) {
-                    if (GameUtility.highscoreManager.checkScore(endOfGameFragment.endGame.getPlayers()[0].getScore()) > -1) {
-                        final int highscorePosition = GameUtility.highscoreManager.addScore(endOfGameFragment.endGame.getLogic().getTheWord(), endOfGameFragment.endGame.getPlayers()[0]);
+                    if (GameUtility.getHighscoreManager().checkScore(endOfGameFragment.endGame.getPlayers()[0].getScore()) > -1) {
+                        final int highscorePosition = GameUtility.getHighscoreManager().addScore(endOfGameFragment.endGame.getLogic().getTheWord(), endOfGameFragment.endGame.getPlayers()[0]);
                         Log.d("Highscore", "Tilføjet til position # : " + highscorePosition);
-                        GameUtility.highscoreManager.saveHighScore();
+                        GameUtility.getHighscoreManager().saveHighScore();
                         endOfGameFragment.textViewLower.setText(endOfGameFragment.textViewLower.getText().toString() + "\nDu har indtaget position nummer " + Integer.toString(highscorePosition + 1));
                     } else {
                         Log.d("Highscore", "Spiller " + endOfGameFragment.endGame.getPlayers()[0].getName() + " sux.");
                     }
-                    Log.d("Highscore", GameUtility.highscoreManager.getHighscoreString());
+                    Log.d("Highscore", GameUtility.getHighscoreManager().getHighscoreString());
                     endOfGameFragment.showHighscores();
                 }
 

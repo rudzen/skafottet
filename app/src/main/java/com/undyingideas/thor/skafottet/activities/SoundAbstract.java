@@ -105,8 +105,8 @@ public abstract class SoundAbstract extends BaseActivity implements SoundPool.On
     }
 
     void playSound(final int index) {
-        Log.d(TAG, String.valueOf(GameUtility.settings.prefsSfx));
-        if (GameUtility.settings.prefsSfx) {
+        Log.d(TAG, String.valueOf(GameUtility.getSettings().prefsSfx));
+        if (GameUtility.getSettings().prefsSfx) {
             if (loaded) {
                 soundThread.sounds.add(soundItems[index]);
             } else {

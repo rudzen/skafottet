@@ -94,7 +94,7 @@
     <string name="title_activity_create_account">Opret konto</string>
 
     <!-- Login and Create Account Screen  -->
-    <string name="text_dont_have_account">Ingen konto?</string>
+    <string name="text_dont_have_account">Ingen konto?  </string>
     <string name="text_already_have_account">Du har allerede en konto?</string>
     <string name="button_create_account">Opret dig!</string>
     <string name="button_sign_in">Log in</string>
@@ -139,6 +139,7 @@
     <!-- Log Messages -->
     <string name="log_message_password_changed_successfully">Kodeord ændret fra midligertidigt til </string>
     <string name="log_message_auth_successful">auth successfuld.</string>
+    <string name="title_activity_spasser">Sign in</string>
 
 
 </resources>

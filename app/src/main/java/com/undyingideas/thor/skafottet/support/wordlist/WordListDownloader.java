@@ -36,7 +36,7 @@ import java.util.HashSet;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_wordController;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.wordController;
 
 /**
  * Created on 09-01-2016, 16:06.
@@ -121,7 +121,7 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
             final WordItem wordItem = new WordItem(title, url, dude.size());
             wordItem.getWords().addAll(dude);
             Collections.sort(wordItem.getWords());
-            s_wordController.replaceLocalWordList(wordItem);
+            wordController.replaceLocalWordList(wordItem);
             return wordItem.getWords().isEmpty() ? null : wordItem;
         }
         return null;
@@ -134,7 +134,7 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
             WindowLayout.hideStatusBar(wordListFragment.getActivity().getWindow(), null); // sometimes the system just won't do as i ask!
             if (wordItem != null) {
                 Log.d("Downloader", wordItem.toString());
-                ListFetcher.listHandler.post(ListFetcher.listSaver);
+                ListFetcher.getListHandler().post(ListFetcher.getListSaver());
                 wordListFragment.refreshList();
 //                wordListFragment.onWindowFocusChanged(true);
                 WindowLayout.getLoadToast().success();

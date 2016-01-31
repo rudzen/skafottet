@@ -20,14 +20,14 @@ public class DrawableHelper {
     public static void setButtonColors(final RelativeLayout[] buttons, final AutoScaleTextView... button_text) {
         final int[] cols = new int[3];
         cols[0] = Color.BLACK;
-        cols[1] = GameUtility.settings.prefsColour;
+        cols[1] = GameUtility.getSettings().prefsColour;
         cols[2] = Color.BLACK;
         Drawable drawable;
         for (int i = 0; i < buttons.length; i++) {
             drawable = buttons[i].getBackground();
             ((GradientDrawable) drawable).setColors(cols);
             buttons[i].setBackground(drawable);
-            button_text[i].setTextColor(GameUtility.settings.textColour);
+            button_text[i].setTextColor(GameUtility.getSettings().textColour);
         }
     }
 

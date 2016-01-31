@@ -33,7 +33,7 @@ class Camera {
     public float northDegree;
 
     public Camera(final float sx, final float sy, final int ox, final int oy) {
-        z = GameUtility.s_preferences.getFloat("zoom", 6);
+        z = GameUtility.getPrefs().getFloat("zoom", 6);
         s2 = new S2(sx, sy, ox, oy);
         cameraCenter = new V3(12, 12, 6);
         moveCameraTo(cameraCenter);
@@ -125,7 +125,7 @@ class Camera {
 
     public void setZoom(final float zoom) {
         z = zoom;
-        GameUtility.s_preferences.putFloat("zoom", z);
+        GameUtility.getPrefs().putFloat("zoom", z);
     }
 
     public void drawLine(final Canvas c, final V3 v1, final V3 v2, final Paint paint) {

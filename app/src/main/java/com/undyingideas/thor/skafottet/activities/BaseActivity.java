@@ -23,6 +23,7 @@ import com.undyingideas.thor.skafottet.firebase.auth.AuthDataHolder;
 import com.undyingideas.thor.skafottet.firebase.auth.AuthListener;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
+import com.undyingideas.thor.skafottet.support.utility.SettingsDTO;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 /**
@@ -32,8 +33,7 @@ import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
  */
 public abstract class BaseActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
-        AuthDataHolder.AuthListenerData
-{
+        AuthDataHolder.AuthListenerData {
     protected String mProvider, mEncodedEmail;
     /* Client used to interact with Google APIs. */
     protected GoogleApiClient mGoogleApiClient;
@@ -68,8 +68,8 @@ public abstract class BaseActivity extends AppCompatActivity implements
              * Getting mProvider and mEncodedEmail from SharedPreferences
              */
             /* Get mEncodedEmail and mProvider from SharedPreferences, use null as default value */
-            mEncodedEmail = GameUtility.s_preferences.getString(Constant.KEY_ENCODED_EMAIL, null);
-            mProvider = GameUtility.s_preferences.getString(Constant.KEY_PROVIDER, null);
+            mEncodedEmail = GameUtility.getPrefs().getString(Constant.KEY_ENCODED_EMAIL, null);
+            mProvider = GameUtility.getPrefs().getString(Constant.KEY_PROVIDER, null);
 
             if (!(this instanceof LoginActivity || this instanceof CreateAccountActivity) && GameUtility.getFirebase() != null) {
                 GameUtility.setFirebase(new Firebase(Constant.FIREBASE_URL));
@@ -134,17 +134,17 @@ public abstract class BaseActivity extends AppCompatActivity implements
      * Also disconnects the mGoogleApiClient if connected and provider is Google
      */
     protected void logout() {
-
         /* Logout if mProvider is not null */
         if (mProvider != null) {
-            GameUtility.setIsLoggedIn(false);
-            GameUtility.getFirebase().unauth();
 
             if (mProvider.equals(Constant.GOOGLE_PROVIDER)) {
                 /* Logout from Google+ */
                 Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new GoogleStatusResultCallback());
             }
         }
+        GameUtility.setIsLoggedIn(false);
+        GameUtility.getFirebase().unauth();
+        GameUtility.getSettings().auth_status = SettingsDTO.AUTH_NONE;
     }
 
     private void takeUserToLoginScreenOnUnAuth() {
@@ -154,7 +154,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
         startActivity(intent);
         finish();
     }
-    
+
     @Override
     public void onConnectionFailed(@NonNull final ConnectionResult connectionResult) {
         // nothing here yet...
@@ -162,11 +162,11 @@ public abstract class BaseActivity extends AppCompatActivity implements
 
     @Override
     public void firebaseAuthDataReceived(final boolean loggedIn) {
-        WindowLayout.showSnack("Du er nu logged " + (loggedIn ?  "ind." : "ud."), getWindow().getDecorView(), true);
+        WindowLayout.showSnack("Du er nu logged " + (loggedIn ? "ind." : "ud."), getWindow().getDecorView(), true);
         GameUtility.setIsLoggedIn(loggedIn);
         if (!loggedIn) {
-            GameUtility.s_preferences.remove(Constant.KEY_ENCODED_EMAIL);
-            GameUtility.s_preferences.remove(Constant.KEY_PROVIDER);
+            GameUtility.getPrefs().remove(Constant.KEY_ENCODED_EMAIL);
+            GameUtility.getPrefs().remove(Constant.KEY_PROVIDER);
         }
     }
 
@@ -183,8 +183,8 @@ public abstract class BaseActivity extends AppCompatActivity implements
             if (authData == null) {
                 /* The user has been logged out */
                 /* Clear out shared preferences */
-                GameUtility.s_preferences.remove(Constant.KEY_ENCODED_EMAIL);
-                GameUtility.s_preferences.remove(Constant.KEY_PROVIDER);
+                GameUtility.getPrefs().remove(Constant.KEY_ENCODED_EMAIL);
+                GameUtility.getPrefs().remove(Constant.KEY_PROVIDER);
                 takeUserToLoginScreenOnUnAuth();
             }
         }

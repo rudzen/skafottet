@@ -76,7 +76,7 @@ public class HangmanGameFragment extends Fragment {
     @SuppressWarnings({"AccessStaticViaInstance", "deprecation"})
     @Override
     public void onCreate(final Bundle savedInstanceState) {
-        if (GameUtility.settings.prefsHeptic) {
+        if (GameUtility.getSettings().prefsHeptic) {
             try {
                 vibrator = (Vibrator) getActivity().getSystemService(getActivity().VIBRATOR_SERVICE);
             } catch (final Exception e) {
@@ -166,7 +166,7 @@ public class HangmanGameFragment extends Fragment {
 
     @Override
     public void onDetach() {
-        GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, currentGame);
+        GameUtility.getPrefs().putObject(Constant.KEY_SAVE_GAME, currentGame);
         iGameSoundNotifier = null;
         super.onDetach();
     }
@@ -191,15 +191,15 @@ public class HangmanGameFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(final Bundle outState) {
-        GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, currentGame);
+        GameUtility.getPrefs().putObject(Constant.KEY_SAVE_GAME, currentGame);
         outState.putParcelable(Constant.KEY_SAVE_GAME, currentGame);
         super.onSaveInstanceState(outState);
     }
 
     private void applyColours() {
         /* apply colours to all controls except guess buttons. */
-        textWord.setTextColor(GameUtility.settings.textColour);
-        textStatus.setTextColor(GameUtility.settings.textColour);
+        textWord.setTextColor(GameUtility.getSettings().textColour);
+        textStatus.setTextColor(GameUtility.getSettings().textColour);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -243,11 +243,11 @@ public class HangmanGameFragment extends Fragment {
         YoYo.with(Techniques.FadeIn).duration(400).playOn(buttonRows[3]);
         YoYo.with(Techniques.FadeIn).duration(400).playOn(noose);
         for (final Button button : listOfButtons) {
-            button.setBackgroundColor(GameUtility.settings.prefsColour);
-            button.setTextColor(GameUtility.settings.textColour);
+            button.setBackgroundColor(GameUtility.getSettings().prefsColour);
+            button.setTextColor(GameUtility.getSettings().textColour);
             YoYo.with(Techniques.FadeIn).duration(400).playOn(button);
             button.setVisibility(View.VISIBLE);
-            button.setBackgroundColor(GameUtility.settings.prefsColour);
+            button.setBackgroundColor(GameUtility.getSettings().prefsColour);
             button.setOnClickListener(onButtonClickListener);
         }
     }
@@ -288,7 +288,7 @@ public class HangmanGameFragment extends Fragment {
 
         if (!currentGame.getLogic().isGameOver()) {
             // save the game status!
-            GameUtility.s_preferences.putObject(Constant.KEY_SAVE_GAME, currentGame);
+            GameUtility.getPrefs().putObject(Constant.KEY_SAVE_GAME, currentGame);
             updateScreen();
         } else {
             GameUtility.writeNullGame();

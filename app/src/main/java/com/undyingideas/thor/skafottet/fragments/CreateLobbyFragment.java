@@ -73,7 +73,7 @@
 //        if (isOffline) {
 //            // read the last list used...
 //            try {
-//                final ArrayList<PlayerDTO> ply = (ArrayList<PlayerDTO>) GameUtility.s_preferences.getObject(KEY_LAST_PLAYER_LIST, ArrayList.class);
+//                final ArrayList<PlayerDTO> ply = (ArrayList<PlayerDTO>) GameUtility.prefs.getObject(KEY_LAST_PLAYER_LIST, ArrayList.class);
 //                players.clear();
 //                players.addAll(ply);
 //            } catch (final Exception e) {
@@ -234,7 +234,7 @@
 //
 //                players.remove(GameUtility.mpc.pc.playerList.get(GameUtility.mpc.name)); // remove logged in player TODO rewrite
 //                playerAdapter.notifyDataSetChanged();
-//                GameUtility.s_preferences.putObject(KEY_LAST_PLAYER_LIST, players);
+//                GameUtility.prefs.putObject(KEY_LAST_PLAYER_LIST, players);
 //            }
 //        }
 //    }

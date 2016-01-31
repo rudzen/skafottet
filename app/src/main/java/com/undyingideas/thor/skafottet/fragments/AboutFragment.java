@@ -16,7 +16,6 @@
 
 package com.undyingideas.thor.skafottet.fragments;
 
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -33,7 +32,6 @@ import android.widget.TextView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.undyingideas.thor.skafottet.R;
-import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
 
 import static android.text.util.Linkify.EMAIL_ADDRESSES;
 import static android.text.util.Linkify.WEB_URLS;
@@ -41,8 +39,6 @@ import static android.text.util.Linkify.addLinks;
 import static android.util.TypedValue.COMPLEX_UNIT_DIP;
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
 import static android.util.TypedValue.applyDimension;
-
-//import com.undyingideas.thor.skafottet.support.abstractions.FragmentOnBackClickListener;
 
 /**
  * Simple fragment to display some information about the app
@@ -53,8 +49,6 @@ public class AboutFragment extends Fragment {
 
     private static final String SEP = System.lineSeparator();
     private static final String RUDY = "Rudy", ADAM = "Adam", THEIS = "Theis";
-    @Nullable
-    private IFragmentFlipper iFragmentFlipper;
 
     private static final String[] ROWS = {
             "Skafottet v1.1 - et F15 3-ugers projekt, af Gruppe 23" + SEP +
@@ -154,16 +148,6 @@ public class AboutFragment extends Fragment {
     @Nullable
     private TextView[] tv = new TextView[ROWS.length];
 
-    @Override
-    public void onAttach(final Context context) {
-        super.onAttach(context);
-        if (context instanceof IFragmentFlipper) {
-            iFragmentFlipper = (IFragmentFlipper) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement IFragmentFlipper");
-        }
-    }
-
     @SuppressWarnings("deprecation")
     @Nullable
     @Override
@@ -203,17 +187,4 @@ public class AboutFragment extends Fragment {
         YoYo.with(Techniques.FadeIn).duration(1000).playOn(sv);
         return sv;
     }
-
-    @Override
-    public void onDestroy() {
-        tv = null;
-        super.onDestroy();
-    }
-
-    @Override
-    public void onDetach() {
-        iFragmentFlipper = null;
-        super.onDetach();
-    }
-
 }

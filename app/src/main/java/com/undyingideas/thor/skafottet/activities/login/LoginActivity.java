@@ -1,14 +1,27 @@
 package com.undyingideas.thor.skafottet.activities.login;
 
+import android.annotation.TargetApi;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,16 +53,25 @@ import com.undyingideas.thor.skafottet.support.firebase.Utils;
 import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
+import com.undyingideas.thor.skafottet.support.utility.SettingsDTO;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * Represents Sign in screen and functionality of the app
  */
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity  implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    // TODO : Integrate with application AuthListener.
+    // TODO : Make LogIn button like the rest of the application.
+    // TODO : Create change password button to the left of LogIn button.
 
     private static final String LOG_TAG = LoginActivity.class.getSimpleName();
     /* A dialog that is presented until the Firebase authentication finished. */
@@ -58,7 +80,15 @@ public class LoginActivity extends BaseActivity {
     private Firebase mFirebaseRef;
     /* Listener for Firebase session changes */
     private Firebase.AuthStateListener mAuthStateListener;
-    private EditText mEditTextEmailInput, mEditTextPasswordInput;
+    private AutoCompleteTextView mEditTextEmailInput;
+    private EditText mEditTextPasswordInput;
+
+    private Button buttonLogIn;
+
+    /**
+     * Id to identity READ_CONTACTS permission request.
+     */
+    private static final int REQUEST_READ_CONTACTS = 0;
 
     /**
      * Variables related to Google Login
@@ -78,7 +108,7 @@ public class LoginActivity extends BaseActivity {
         /**
          * Create Firebase references
          */
-        mFirebaseRef = new Firebase(Constant.FIREBASE_URL);
+        mFirebaseRef = GameUtility.firebase; // new Firebase(Constant.FIREBASE_URL);
 
         /**
          * Link layout elements from XML and setup progress dialog
@@ -100,11 +130,11 @@ public class LoginActivity extends BaseActivity {
         });
 
         /* if the user has chosen to keep their login/password, restore here and proceed with login */
-        if (GameUtility.settings.keepLogin) {
-            if (GameUtility.me.getEmail() != null) {
-                mEditTextEmailInput.setText(Utils.decodeEmail(GameUtility.me.getEmail()));
-                mEditTextPasswordInput.setText(GameUtility.s_preferences.getString(Constant.PASSWORD_LAST));
-                signInPassword();
+        if (GameUtility.getSettings().keepLogin && !GameUtility.getMe().isHasLoggedInWithPassword()) {
+            if (GameUtility.getMe().getEmail() != null && GameUtility.getSettings().lastPw != null) {
+                mEditTextEmailInput.setText(Utils.decodeEmail(GameUtility.getMe().getEmail()));
+                mEditTextPasswordInput.setText(GameUtility.getPrefs().getString(Constant.PASSWORD_LAST));
+//                signInPassword();
             }
         }
     }
@@ -120,14 +150,16 @@ public class LoginActivity extends BaseActivity {
         mAuthStateListener = new Firebase.AuthStateListener() {
             @Override
             public void onAuthStateChanged(final AuthData authData) {
-                WindowLayout.getMd().dismiss();
+                if (WindowLayout.getMd().isShowing()) {
+                    WindowLayout.getMd().dismiss();
+                }
 
                 /**
                  * If there is a valid session to be restored, start MainActivity.
                  * No need to pass data via SharedPreferences because app
                  * already holds userName/provider data from the latest session
                  */
-                if (authData != null) {
+                if (authData != null && GameUtility.getSettings().auth_status == SettingsDTO.AUTH_USER) {
                     final Intent intent = new Intent(LoginActivity.this, GameActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
@@ -141,7 +173,7 @@ public class LoginActivity extends BaseActivity {
         /**
          * Get the newly registered user email if present, use null as default value
          */
-        final String signupEmail = GameUtility.s_preferences.getString(Constant.KEY_SIGNUP_EMAIL, null);
+        final String signupEmail = GameUtility.getPrefs().getString(Constant.KEY_SIGNUP_EMAIL, null);
 
         /**
          * Fill in the email editText and remove value from SharedPreferences if email is present
@@ -152,7 +184,7 @@ public class LoginActivity extends BaseActivity {
             /**
              * Clear signupEmail sharedPreferences to make sure that they are used just once
              */
-            GameUtility.s_preferences.remove(Constant.KEY_SIGNUP_EMAIL);
+            GameUtility.getPrefs().remove(Constant.KEY_SIGNUP_EMAIL);
         }
     }
 
@@ -173,7 +205,6 @@ public class LoginActivity extends BaseActivity {
             WindowLayout.hideStatusBar(getWindow(), null);
         }
     }
-
 
     /**
      * Override onCreateOptionsMenu to inflate nothing
@@ -205,7 +236,9 @@ public class LoginActivity extends BaseActivity {
      * Link layout elements from XML and setup the progress dialog
      */
     public void initializeScreen() {
-        mEditTextEmailInput = (EditText) findViewById(R.id.edit_text_email);
+        buttonLogIn = (Button) findViewById(R.id.login_with_password);
+        buttonLogIn.setOnClickListener(new LogInOnClickListener());
+        mEditTextEmailInput = (AutoCompleteTextView) findViewById(R.id.edit_text_email);
         mEditTextPasswordInput = (EditText) findViewById(R.id.edit_text_password);
         final LinearLayout linearLayoutLoginActivity = (LinearLayout) findViewById(R.id.linear_layout_login_activity);
         initializeBackground(linearLayoutLoginActivity);
@@ -216,10 +249,43 @@ public class LoginActivity extends BaseActivity {
                 .cancelable(false)
                 .progress(true, 0));
 
+        /* set up autocomplete for email text field */
+        populateAutoComplete();
+
+
         /* Setup Google Sign In */
         setupGoogleSignIn();
     }
 
+    private void populateAutoComplete() {
+        if (!mayRequestContacts()) {
+            return;
+        }
+
+        getLoaderManager().initLoader(0, null, this);
+    }
+
+    private boolean mayRequestContacts() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true;
+        }
+        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
+            Snackbar.make(buttonLogIn, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(android.R.string.ok, new View.OnClickListener() {
+                        @Override
+                        @TargetApi(Build.VERSION_CODES.M)
+                        public void onClick(final View v) {
+                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+                        }
+                    });
+        } else {
+            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+        }
+        return false;
+    }
     /**
      * Sign in with Password provider (used when user taps "Done" action on keyboard)
      */
@@ -242,6 +308,63 @@ public class LoginActivity extends BaseActivity {
         WindowLayout.getMd().show();
         mFirebaseRef.authWithPassword(email, password, new MyAuthResultHandler(Constant.PASSWORD_PROVIDER));
     }
+
+    private interface ProfileQuery {
+        String[] PROJECTION = {
+                ContactsContract.CommonDataKinds.Email.ADDRESS,
+                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
+        };
+
+        int ADDRESS = 0;
+        int IS_PRIMARY = 1;
+    }
+
+    /**
+     * Callback received when a permissions request has been completed.
+     */
+    @Override
+    public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults) {
+        if (requestCode == REQUEST_READ_CONTACTS) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                populateAutoComplete();
+            }
+        }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(final int i, final Bundle bundle) {
+        return new CursorLoader(this,
+                // Retrieve data rows for the device user's 'profile' contact.
+                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI, ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
+
+                // Select only email addresses.
+                ContactsContract.Contacts.Data.MIMETYPE + " = ?", new String[]{ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE},
+
+                // Show primary email addresses first. Note that there won't be
+                // a primary email address if the user hasn't specified one.
+                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
+    }
+
+    @Override
+    public void onLoadFinished(final Loader<Cursor> cursorLoader, final Cursor cursor) {
+        final ArrayList<String> emails = new ArrayList<>();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            emails.add(cursor.getString(ProfileQuery.ADDRESS));
+            cursor.moveToNext();
+        }
+        addEmailsToAutoComplete(emails);
+    }
+
+    @Override
+    public void onLoaderReset(final Loader<Cursor> cursorLoader) { }
+
+    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
+        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
+        mEditTextEmailInput.setAdapter(adapter);
+    }
+
 
     /**
      * Handle user authentication that was initiated with mFirebaseRef.authWithPassword
@@ -281,8 +404,8 @@ public class LoginActivity extends BaseActivity {
                     }
 
                 /* Save provider name and encodedEmail for later use and start MainActivity */
-                GameUtility.s_preferences.putString(Constant.KEY_PROVIDER, authData.getProvider());
-                GameUtility.s_preferences.putString(Constant.KEY_ENCODED_EMAIL, mEncodedEmail);
+                GameUtility.getPrefs().putString(Constant.KEY_PROVIDER, authData.getProvider());
+                GameUtility.getPrefs().putString(Constant.KEY_ENCODED_EMAIL, mEncodedEmail);
 
                 /* Go to main activity */
                 final Intent intent = new Intent(LoginActivity.this, GameActivity.class);
@@ -340,15 +463,15 @@ public class LoginActivity extends BaseActivity {
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
-                final PlayerDTO user = dataSnapshot.getValue(PlayerDTO.class);
+                GameUtility.setMe(dataSnapshot.getValue(PlayerDTO.class));
 
-                if (user != null) {
+                if (GameUtility.getMe() != null) {
 
                     /**
                      * If recently registered user has hasLoggedInWithPassword = "false"
                      * (never logged in using password provider)
                      */
-                    if (!user.isHasLoggedInWithPassword()) {
+                    if (!GameUtility.getMe().isHasLoggedInWithPassword()) {
 
                         /**
                          * Change password if user that just signed in signed up recently
@@ -395,14 +518,14 @@ public class LoginActivity extends BaseActivity {
         final String unprocessedEmail;
         if (mGoogleApiClient.isConnected()) {
             unprocessedEmail = mGoogleAccount.getEmail().toLowerCase();
-            GameUtility.s_preferences.putString(Constant.KEY_GOOGLE_EMAIL, unprocessedEmail);
+            GameUtility.getPrefs().putString(Constant.KEY_GOOGLE_EMAIL, unprocessedEmail);
         } else {
 
             /**
              * Otherwise get email from sharedPreferences, use null as default value
              * (this mean that user resumes his session)
              */
-            unprocessedEmail = GameUtility.s_preferences.getString(Constant.KEY_GOOGLE_EMAIL, null);
+            unprocessedEmail = GameUtility.getPrefs().getString(Constant.KEY_GOOGLE_EMAIL, null);
         }
 
         /**
@@ -595,5 +718,12 @@ public class LoginActivity extends BaseActivity {
         };
 
         task.execute();
+    }
+
+    private class LogInOnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(final View v) {
+            signInPassword();
+        }
     }
 }

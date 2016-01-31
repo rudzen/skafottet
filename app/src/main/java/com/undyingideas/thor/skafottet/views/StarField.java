@@ -63,7 +63,7 @@ public class StarField extends RelativeLayout implements Foreground.Listener {
                 updater = new UpdateStarfield();
                 handleCalculate.post(calculator);
                 handleCalculate.post(updater);
-                p.setColor(GameUtility.settings.prefsColour);
+                p.setColor(GameUtility.getSettings().prefsColour);
             } else {
                 if (handleCalculate != null) {
                     handleCalculate.removeCallbacksAndMessages(null);
@@ -98,7 +98,7 @@ public class StarField extends RelativeLayout implements Foreground.Listener {
         height = h;
         if (p == null) {
             p = new Paint();
-            p.setColor(GameUtility.settings.prefsColour);
+            p.setColor(GameUtility.getSettings().prefsColour);
             p.setStrokeWidth(3f);
             //p.setShadowLayer(2f, 2f, 2f, Color.GRAY);
         }
@@ -117,14 +117,14 @@ public class StarField extends RelativeLayout implements Foreground.Listener {
 
     @Override
     public boolean hasFocus() {
-        if (!run) setRun(GameUtility.settings.prefsBlood);
+        if (!run) setRun(GameUtility.getSettings().prefsBlood);
         Log.d(TAG, "StarField focus");
         return super.hasFocus();
     }
 
     @Override
     public void onBecameForeground() {
-        setRun(GameUtility.settings.prefsBlood);
+        setRun(GameUtility.getSettings().prefsBlood);
         Log.d(TAG, "Starfield enabled itself.");
     }
 

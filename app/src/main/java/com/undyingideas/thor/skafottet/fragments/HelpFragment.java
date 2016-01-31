@@ -45,7 +45,7 @@ public class HelpFragment extends Fragment {
 //        final HelpFileDTO help = new HelpFileDTO();
 //        try {
 //            checkForNullKey(Constant.KEY_PREF_HELP);
-//            help.addStringData((HelpFileDTO) GameUtility.s_preferences.getObject(Constant.KEY_PREF_HELP, HelpFileDTO.class));
+//            help.addStringData((HelpFileDTO) GameUtility.prefs.getObject(Constant.KEY_PREF_HELP, HelpFileDTO.class));
 //            WindowLayout.showSnack("Gemt tekst hentet.", wv, true);
 //        } catch (final NullPointerException npe) {
         String theText;
@@ -59,7 +59,7 @@ public class HelpFragment extends Fragment {
                 input.close();
 //                help.addStringData(new String(buffer, "UTF-8"));
 //                buffer = emptyBytes; // clear it right away..
-//                GameUtility.s_preferences.putObject(Constant.KEY_PREF_HELP, help);
+//                GameUtility.prefs.putObject(Constant.KEY_PREF_HELP, help);
 //                WindowLayout.showSnack("Standard tekst hentet.", wv, true);
                 theText = new String(buffer, "UTF-8");
                 buffer = emptyBytes;

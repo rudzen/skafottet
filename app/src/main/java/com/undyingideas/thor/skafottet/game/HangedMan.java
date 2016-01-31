@@ -78,7 +78,7 @@ public class HangedMan implements Parcelable {
         numCorrectLettersLast = 0;
         isGameLost = false;
         isGameWon = false;
-        if (newWord) theWord = GameUtility.s_wordController.getRandomWord().toLowerCase();
+        if (newWord) theWord = GameUtility.getWordController().getRandomWord().toLowerCase();
         visibleWord = theWord != null ? updateVisibleWord(new StringBuilder(!theWord.isEmpty() ? theWord.length() : 0)).toString() : updateVisibleWord(new StringBuilder(0)).toString();
     }
 

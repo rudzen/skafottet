@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.undyingideas.thor.skafottet" >
+<manifest package="com.undyingideas.thor.skafottet"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.READ_PROFILE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
         android:allowBackup="true"
@@ -15,90 +20,85 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activities.SplashActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".activities.GameActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity
             android:name=".activities.PlayerListActivity"
             android:label="@string/title_player_list"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.GameActivity" />
+                android:value=".activities.GameActivity"/>
         </activity>
         <activity
             android:name=".activities.PlayerDetailActivity"
             android:label="@string/title_player_detail"
             android:parentActivityName=".activities.PlayerListActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.PlayerListActivity" />
+                android:value=".activities.PlayerListActivity"/>
         </activity>
         <activity
             android:name=".activities.PrefsActivity"
-            android:parentActivityName=".activities.GameActivity" />
-
-        <activity android:name=".activities.login.LoginActivity"
+            android:parentActivityName=".activities.GameActivity"/>
+        <activity
+            android:name=".activities.login.LoginActivity"
             android:parentActivityName=".activities.GameActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.GameActivity" />
+                android:value=".activities.GameActivity"/>
         </activity>
-
         <activity
             android:name=".activities.login.CreateAccountActivity"
             android:label="@string/title_activity_create_account"
             android:parentActivityName=".activities.login.LoginActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.login.LoginActivity" />
+                android:value=".activities.login.LoginActivity"/>
         </activity>
-
-
-
 
         <receiver
             android:name=".broadcastrecievers.InternetReciever"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
         </receiver>
         <receiver
             android:name=".broadcastrecievers.BatteryLevelReciever"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BATTERY_CHANGED" />
+                <action android:name="android.intent.action.BATTERY_CHANGED"/>
             </intent-filter>
         </receiver>
-
 
         <!-- This service is only used on devices with API v17+ -->
         <service
             android:name=".services.SkafotDream"
             android:exported="true"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.service.dreams.DreamService" />
+                <action android:name="android.service.dreams.DreamService"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
-        <service android:name=".services.MusicPlay" />
+        <service android:name=".services.MusicPlay"/>
 
     </application>
 

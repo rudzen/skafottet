@@ -214,7 +214,7 @@ public class Hangman3dView extends View {
 
     private void buildOther() {
         noosePainter.setStrokeWidth(10);
-        noosePainter.setColor(GameUtility.settings.prefsColour);
+        noosePainter.setColor(GameUtility.getSettings().prefsColour);
 //        final Handler h = new Handler();
 //        new Thread(new Runnable() {
 //            @Override
@@ -245,11 +245,11 @@ public class Hangman3dView extends View {
             cu.draw(S, canvas, noosePainter); // draw gallow
         }
         noosePainter.setStrokeWidth(3f);
-        noosePainter.setColor(GameUtility.settings.textColour == Color.BLACK ? Color.GRAY : GameUtility.settings.textColour);
+        noosePainter.setColor(GameUtility.getSettings().textColour == Color.BLACK ? Color.GRAY : GameUtility.getSettings().textColour);
         for (final Rope r : rope)
             r.draw(S, canvas, noosePainter);
         noosePainter.setStrokeWidth(7f);
-        noosePainter.setColor(GameUtility.settings.prefsColour);
+        noosePainter.setColor(GameUtility.getSettings().prefsColour);
         for (int i = 0; i < errors; i++) {
             body[i].draw(S, canvas, noosePainter); // draw inflicted bodyparts
         }

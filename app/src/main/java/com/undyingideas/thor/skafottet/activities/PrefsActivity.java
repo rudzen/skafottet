@@ -37,7 +37,7 @@ public class PrefsActivity extends PreferenceActivity implements SharedPreferenc
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.skafottet_preferences);
         final EditTextPreference playerNameEdit = (EditTextPreference) findPreference(Constant.KEY_PREFS_PLAYER_NAME);
-        playerNameEdit.setSummary(GameUtility.s_preferences.getString(Constant.KEY_PREFS_PLAYER_NAME, "Mig"));
+        playerNameEdit.setSummary(GameUtility.getPrefs().getString(Constant.KEY_PREFS_PLAYER_NAME, "Mig"));
     }
 
     @Override
@@ -65,21 +65,21 @@ public class PrefsActivity extends PreferenceActivity implements SharedPreferenc
     @Override
     public void finish() {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        GameUtility.settings.prefsMusic = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_MUSIC);
-        GameUtility.settings.prefsSfx = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_SFX);
-        GameUtility.settings.prefsBlood = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD);
-        GameUtility.settings.prefsColour = GameUtility.s_preferences.getInt(Constant.KEY_PREFS_COLOUR, Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? ContextCompat.getColor(getApplicationContext(), R.color.colorAccent) : getResources().getColor(R.color.colorAccent));
-        GameUtility.settings.prefsHeptic = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_HEPTIC);
-        GameUtility.settings.keepLogin = GameUtility.s_preferences.getBoolean(Constant.KEY_PREFS_KEEP_LOGIN);
-        if (!GameUtility.settings.keepLogin) {
-            GameUtility.settings.lastPw = null;
+        GameUtility.getSettings().prefsMusic = GameUtility.getPrefs().getBoolean(Constant.KEY_PREFS_MUSIC);
+        GameUtility.getSettings().prefsSfx = GameUtility.getPrefs().getBoolean(Constant.KEY_PREFS_SFX);
+        GameUtility.getSettings().prefsBlood = GameUtility.getPrefs().getBoolean(Constant.KEY_PREFS_BLOOD);
+        GameUtility.getSettings().prefsColour = GameUtility.getPrefs().getInt(Constant.KEY_PREFS_COLOUR, Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? ContextCompat.getColor(getApplicationContext(), R.color.colorAccent) : getResources().getColor(R.color.colorAccent));
+        GameUtility.getSettings().prefsHeptic = GameUtility.getPrefs().getBoolean(Constant.KEY_PREFS_HEPTIC);
+        GameUtility.getSettings().keepLogin = GameUtility.getPrefs().getBoolean(Constant.KEY_PREFS_KEEP_LOGIN);
+        if (!GameUtility.getSettings().keepLogin) {
+            GameUtility.getSettings().lastPw = null;
         }
 
-        final String newName = GameUtility.s_preferences.getString(Constant.KEY_PREFS_PLAYER_NAME);
-        if (!newName.isEmpty() && !newName.equalsIgnoreCase(GameUtility.me.getName())) {
-            GameUtility.me.setName(newName);
+        final String newName = GameUtility.getPrefs().getString(Constant.KEY_PREFS_PLAYER_NAME);
+        if (!newName.isEmpty() && !newName.equalsIgnoreCase(GameUtility.getMe().getName())) {
+            GameUtility.getMe().setName(newName);
         }
-        GameUtility.settings.setContrastColor();
+        GameUtility.getSettings().setContrastColor();
         startActivity(new Intent(this, GameActivity.class));
         super.finish();
     }

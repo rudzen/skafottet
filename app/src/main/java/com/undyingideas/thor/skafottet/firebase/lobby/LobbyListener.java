@@ -96,7 +96,7 @@ public class LobbyListener {
             Log.d(TAG, "onChildAdded : " + dataSnapshot.toString() + " and " + s);
             if (dataSnapshot.exists() && dataSnapshot.hasChildren()) {
                 for (final LobbyListenerSlave slave : slaves) {
-                    slave.addLobby(dataSnapshot.getKey(), (LobbyDTO) dataSnapshot.getValue());
+                    slave.addLobby(dataSnapshot.getKey(), dataSnapshot.getValue(LobbyDTO.class));
                     slave.setAborted(false);
                     handler.post(slave);
                 }

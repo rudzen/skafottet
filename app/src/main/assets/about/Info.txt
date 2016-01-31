@@ -1,0 +1,2 @@
+// This file contains the basic about information about the application.
+// It will be read as a inputstream and dual-slash lines will be ignored.

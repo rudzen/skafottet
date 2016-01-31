@@ -67,8 +67,7 @@ import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
 
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.imageRefs;
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.me;
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_preferences;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.prefs;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.settings;
 
 /**
@@ -164,7 +163,7 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
         textView_buttom = (HTextView) root.findViewById(R.id.menu_buttom_text);
         textView_buttom.setAnimateType(HTextViewType.EVAPORATE);
         textView_buttom.setOnClickListener(new OnLoginClickListener(this));
-        textView_buttom.setTextColor(GameUtility.settings.textColour);
+        textView_buttom.setTextColor(GameUtility.getSettings().textColour);
 
         title = (ImageView) root.findViewById(R.id.menu_title);
         title.setClickable(true);
@@ -273,7 +272,6 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
      */
     private void showAll() {
 //        Log.d("login showall", String.valueOf(mpc.name == null));
-        setLoginButton();
         YoYo.with(Techniques.FadeIn).duration(1000).withListener(new EnterAnimatorHandler(this)).playOn(title);
         for (final RelativeLayout button : buttons) {
             button.setClickable(true);
@@ -298,7 +296,7 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 
         try {
             // If previous game is found, add it to list :-)
-            final SaveGame saveGame = (SaveGame) s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
+            final SaveGame saveGame = (SaveGame) prefs.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
 //            Log.d(TAG, saveGame.getLogic().toString());
 //            if (saveGame.getLogic() != null && !saveGame.getLogic().isGameOver()) {
 //                if (mpc.name != null && saveGame.isMultiPlayer() && mpc.name.equals(saveGame.getPlayers()[0].getName())) {
@@ -311,11 +309,10 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
             // nothing happends here, its just for not adding the option to continue a game.
         } finally {
             startGameItems.add(new StartGameItem(Constant.MODE_SINGLE_PLAYER, "Nyt singleplayer", "Tilfældigt ord.", imageRefs[0]));
-            if (GameUtility.isLoggedIn() && GameUtility.getConnectionStatus() > -1) {
-                // TODO : Add callback listener for possible multiplayer games waiting..
-//                if (mpc.lc.getFirstActiveGame() != null) {
-//                    startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER, "Næste multiplayer", "Kæmp imod", imageRefs[0]));
-//                }
+            if (GameUtility.getSettings().auth_status == SettingsDTO.AUTH_USER && GameUtility.getConnectionStatus() > -1) {
+                if (!GameUtility.getMe().getGameList().isEmpty()) {
+                    startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER, "Næste multiplayer", "Kæmp imod", imageRefs[0]));
+                }
                 startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_2, "Vælg multiplayer", "Jægeren er den jagtede", imageRefs[0]));
                 startGameItems.add(new StartGameItem(Constant.MODE_MULTI_PLAYER_LOBBY, "Ny udfordring", "Udvælg dit offer", imageRefs[0]));
             }
@@ -458,10 +455,10 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
                         menuFragment.button_clicked = BUTTON_LOGIN_OUT;
 
                         if (GameUtility.getConnectionStatus() > -1) {
-                            if (GameUtility.isLoggedIn()) {
+                            if (settings.auth_status == SettingsDTO.AUTH_USER) {
                                 menuFragment.iFragmentFlipper.flipFragment(Constant.MODE_LOGOUT);
                             } else {
-                                menuFragment.endMenu(Constant.MODE_LOGIN, menuFragment.buttons[BUTTON_HIGHSCORE]);
+                                menuFragment.endMenu(Constant.MODE_LOGIN, menuFragment.buttons[BUTTON_LOGIN_OUT]);
                             }
 //                            menuFragment.textView_buttom.callOnClick();
                         } else {
@@ -597,7 +594,7 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 //                    menuFragment.iFragmentFlipper.flipFragment(gameMode, mpc.lc.getFirstActiveGame());
                 } else {
                     final Bundle bundle = new Bundle();
-                    bundle.putParcelable(Constant.KEY_SAVE_GAME, (SaveGame) s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class));
+                    bundle.putParcelable(Constant.KEY_SAVE_GAME, (SaveGame) prefs.getObject(Constant.KEY_SAVE_GAME, SaveGame.class));
                     menuFragment.iFragmentFlipper.flipFragment(gameMode, bundle);
                 }
             }
@@ -740,7 +737,7 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
             // this is just a quick hack! but we need some basic info!
             final SaveGame sg;
             try {
-                sg = (SaveGame) s_preferences.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
+                sg = (SaveGame) prefs.getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
                 if (sg.getLogic() != null && !sg.getLogic().isGameOver()) {
                     info.add(String.format(INFO_GAME, "Igang"));
                     info.add(String.format(INFO_GUESS, sg.getLogic().getUsedLetters().isEmpty() ? NONE : sg.getLogic().getUsedLetters()));
@@ -794,20 +791,16 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
         }
     }
 
-    public void setLoginButton(final boolean isLoggedIn) {
+    public void setLoginButton() {
         /* make sure the right button is set for the login/logout status */
         if (buttons[BUTTON_LOGIN_OUT] != null) { // guard for when application first comes into foreground
-            if (!isLoggedIn) {
+            if (settings.auth_status < SettingsDTO.AUTH_USER) {
                 buttons_text[BUTTON_LOGIN_OUT].setText(R.string.menu_button_login_in);
             } else {
                 buttons_text[BUTTON_LOGIN_OUT].setText(R.string.menu_button_login_out);
             }
             YoYo.with(Techniques.Pulse).duration(300).playOn(buttons[BUTTON_LOGIN_OUT]);
         }
-    }
-
-    public void setLoginButton() {
-        setLoginButton(GameUtility.isLoggedIn());
     }
 
 }

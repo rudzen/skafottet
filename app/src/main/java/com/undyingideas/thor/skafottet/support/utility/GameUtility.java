@@ -38,26 +38,19 @@ import com.undyingideas.thor.skafottet.support.wordlist.WordController;
  *
  * @author rudz
  */
-@SuppressWarnings("StaticVariableNamingConvention")
-public abstract class GameUtility {
+public final class GameUtility {
 
-    @SuppressWarnings("StaticVariableOfConcreteClass")
     public static Firebase firebase;
 
-    @SuppressWarnings("StaticVariableOfConcreteClass")
-    public static TinyDB s_preferences;
+    public static TinyDB prefs;
 
-    @SuppressWarnings("StaticVariableOfConcreteClass")
-    public static WordController s_wordController;
+    public static WordController wordController;
 
-    @SuppressWarnings("StaticVariableOfConcreteClass")
     public static SettingsDTO settings;
 
-    @SuppressWarnings("StaticVariableOfConcreteClass")
-    public static PlayerDTO me;
+    private static PlayerDTO me;
 
-    @SuppressWarnings("StaticVariableOfConcreteClass")
-    public static HighscoreManager highscoreManager;
+    private static HighscoreManager highscoreManager;
 
     private static int connectionStatus;
     private static String connectionStatusName;
@@ -75,7 +68,7 @@ public abstract class GameUtility {
     public static @DrawableRes
     final int[] imageRefs = new int[8];
 
-    public static Intent musicPLayIntent = new Intent();
+    private static Intent musicPLayIntent = new Intent();
 
     static {
         imageRefs[0] = R.drawable.terror0;
@@ -112,7 +105,7 @@ public abstract class GameUtility {
         return ret;
     }
 
-    public static void writeNullGame() { s_preferences.remove(Constant.KEY_SAVE_GAME); }
+    public static void writeNullGame() { getPrefs().remove(Constant.KEY_SAVE_GAME); }
 
     public static int getConnectionStatus() { return connectionStatus; }
 
@@ -134,5 +127,53 @@ public abstract class GameUtility {
 
     public static void setFirebase(Firebase firebase) {
         GameUtility.firebase = firebase;
+    }
+
+    public static PlayerDTO getMe() {
+        return me;
+    }
+
+    public static void setMe(PlayerDTO me) {
+        GameUtility.me = me;
+    }
+
+    public static TinyDB getPrefs() {
+        return prefs;
+    }
+
+    public static void setPrefs(TinyDB prefs) {
+        GameUtility.prefs = prefs;
+    }
+
+    public static SettingsDTO getSettings() {
+        return settings;
+    }
+
+    public static void setSettings(SettingsDTO settings) {
+        GameUtility.settings = settings;
+    }
+
+    public static HighscoreManager getHighscoreManager() {
+        return highscoreManager;
+    }
+
+    public static void setHighscoreManager(HighscoreManager highscoreManager) {
+        GameUtility.highscoreManager = highscoreManager;
+    }
+
+    public static Intent getMusicPLayIntent() {
+        return musicPLayIntent;
+    }
+
+    public static void setMusicPLayIntent(Intent musicPLayIntent) {
+        GameUtility.musicPLayIntent = musicPLayIntent;
+    }
+
+    public static WordController getWordController() {
+        return wordController;
+    }
+
+    public static void setWordController(WordController wordController) {
+        GameUtility.wordController = wordController;
     }
 }

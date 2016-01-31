@@ -23,7 +23,7 @@ public class WordListController {
     private static final String TAG = "WordListController";
 
     private final Firebase firebase;
-    public static HashMap<String, WordItem> wordList = new HashMap<>();
+    private static HashMap<String, WordItem> wordList = new HashMap<>();
 
     public WordListController(final Firebase firebase){
         this.firebase=firebase;
@@ -32,7 +32,15 @@ public class WordListController {
     }
 
     public static ArrayList<WordItem> getArray(){
-        return new ArrayList<>(wordList.values());
+        return new ArrayList<>(getWordList().values());
+    }
+
+    public static HashMap<String, WordItem> getWordList() {
+        return wordList;
+    }
+
+    public static void setWordList(HashMap<String, WordItem> wordList) {
+        WordListController.wordList = wordList;
     }
 
     public void addList(final WordItem wordItem) {
@@ -44,12 +52,12 @@ public class WordListController {
     }
 
     private static void saveList() {
-        GameUtility.s_preferences.putObject(Constant.KEY_WORDS_FIREBASE, wordList);
+        GameUtility.getPrefs().putObject(Constant.KEY_WORDS_FIREBASE, getWordList());
     }
 
     public static ArrayList<String> getKeyList() {
-        final ArrayList<String> returnList = new ArrayList<>(wordList.size());
-        returnList.addAll(wordList.keySet());
+        final ArrayList<String> returnList = new ArrayList<>(getWordList().size());
+        returnList.addAll(getWordList().keySet());
         Log.d(TAG, returnList.toString());
         Collections.sort(returnList);
         return returnList;
@@ -57,7 +65,7 @@ public class WordListController {
 
     @SuppressWarnings("unchecked")
     public static void loadList() {
-        wordList = (HashMap<String, WordItem>) GameUtility.s_preferences.getObject(Constant.KEY_WORDS_FIREBASE, HashMap.class);
+        setWordList((HashMap<String, WordItem>) GameUtility.getPrefs().getObject(Constant.KEY_WORDS_FIREBASE, HashMap.class));
     }
 
     static class WordGetter implements ChildEventListener {
@@ -69,20 +77,20 @@ public class WordListController {
         @Override
         public void onChildAdded(final DataSnapshot dataSnapshot, final String s) {
             Log.d("UpdateList", "firebase" + dataSnapshot.getKey());
-            wordList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
+            getWordList().put(dataSnapshot.getKey(), getDTO(dataSnapshot));
             saveList();
         }
 
         @Override
         public void onChildChanged(final DataSnapshot dataSnapshot, final String s) {
-            wordList.remove(s);
-            wordList.put(dataSnapshot.getKey(), getDTO(dataSnapshot));
+            getWordList().remove(s);
+            getWordList().put(dataSnapshot.getKey(), getDTO(dataSnapshot));
             saveList();
         }
 
         @Override
         public void onChildRemoved(final DataSnapshot dataSnapshot) {
-            wordList.remove(dataSnapshot.getKey());
+            getWordList().remove(dataSnapshot.getKey());
         }
 
         @Override

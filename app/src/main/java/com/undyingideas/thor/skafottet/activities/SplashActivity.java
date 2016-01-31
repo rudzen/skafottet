@@ -44,7 +44,6 @@ import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;
 import com.undyingideas.thor.skafottet.support.highscore.local.HighscoreManager;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.FontUtils;
-import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.ListFetcher;
 import com.undyingideas.thor.skafottet.support.utility.NetworkHelper;
 import com.undyingideas.thor.skafottet.support.utility.SettingsDTO;
@@ -59,14 +58,21 @@ import java.util.Map;
 
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.firebase;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getConnectionStatus;
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.highscoreManager;
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.me;
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.musicPLayIntent;
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_preferences;
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.s_wordController;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getHighscoreManager;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getMe;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getPrefs;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getSettings;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.getWordController;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setConnectionStatus;
 import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setConnectionStatusName;
-import static com.undyingideas.thor.skafottet.support.utility.GameUtility.settings;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setFirebase;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setHighscoreManager;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setIsLoggedIn;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setMe;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setMusicPLayIntent;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setPrefs;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setSettings;
+import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setWordController;
 
 /**
  * Created on 07-12-2015, 11:07.
@@ -148,44 +154,43 @@ public class SplashActivity extends AppCompatActivity {
 
     private class LoadConfig implements Runnable {
 
-        @SuppressWarnings({"AssignmentToStaticFieldFromInstanceMethod", "unchecked"})
+        @SuppressWarnings("unchecked")
         @Override
         public void run() {
             /* This is the first code executed, thus some configuration of the application takes place.. */
 
             // advarsel, dette er en test-zone.. alt hvad der reelt foregår her er udsat for underlige fremgangsmåder!..
 
-            if (s_preferences == null) {
-                s_preferences = new TinyDB(getApplicationContext());
-            }
+            setPrefs(new TinyDB(getApplicationContext()));
 
-            s_preferences.clear();
+            getPrefs().clear();
 
             /* set the highscore manager */
 //            HighscoreManager.deleteHighScore(getApplicationContext());
-            highscoreManager = new HighscoreManager(getApplicationContext());
-            highscoreManager.loadScoreFile();
+            setHighscoreManager(new HighscoreManager(getApplicationContext()));
+            getHighscoreManager().loadScoreFile();
 
-            settings = new SettingsDTO();
-            settings.prefsMusic = s_preferences.getBoolean(Constant.KEY_PREFS_MUSIC, true);
-            settings.prefsSfx = s_preferences.getBoolean(Constant.KEY_PREFS_SFX, true);
-            settings.prefsBlood = s_preferences.getBoolean(Constant.KEY_PREFS_BLOOD, true);
-            settings.prefsHeptic = s_preferences.getBoolean(Constant.KEY_PREFS_HEPTIC, true);
-            settings.keepLogin = s_preferences.getBoolean(Constant.KEY_PREFS_KEEP_LOGIN, false);
-            settings.prefsColour = s_preferences.getInt(Constant.KEY_PREFS_COLOUR, Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? ContextCompat.getColor(getApplicationContext(), R.color.colorAccent) : getResources().getColor(R.color.colorAccent));
-            settings.setContrastColor();
+            setSettings(new SettingsDTO());
+            getSettings().prefsMusic = getPrefs().getBoolean(Constant.KEY_PREFS_MUSIC, true);
+            getSettings().prefsSfx = getPrefs().getBoolean(Constant.KEY_PREFS_SFX, true);
+            getSettings().prefsBlood = getPrefs().getBoolean(Constant.KEY_PREFS_BLOOD, true);
+            getSettings().prefsHeptic = getPrefs().getBoolean(Constant.KEY_PREFS_HEPTIC, true);
+            getSettings().keepLogin = getPrefs().getBoolean(Constant.KEY_PREFS_KEEP_LOGIN, false);
+            getSettings().prefsColour = getPrefs().getInt(Constant.KEY_PREFS_COLOUR, Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? ContextCompat.getColor(getApplicationContext(), R.color.colorAccent) : getResources().getColor(R.color.colorAccent));
+            getSettings().setContrastColor();
 
-            me = new PlayerDTO(s_preferences.getString(Constant.KEY_PREFS_PLAYER_NAME, getString(R.string.default_player_name)));
+            // TODO : improve auth here to get the real DTO
+            setMe(new PlayerDTO(getPrefs().getString(Constant.KEY_PREFS_PLAYER_NAME, getString(R.string.default_player_name))));
 
             /* keep the preferences as we don't know if the user actually ran the app for the first time. */
-            s_preferences.putBoolean(Constant.KEY_PREFS_BLOOD, settings.prefsBlood);
-            s_preferences.putBoolean(Constant.KEY_PREFS_MUSIC, settings.prefsMusic);
-            s_preferences.putBoolean(Constant.KEY_PREFS_SFX, settings.prefsSfx);
-            s_preferences.putBoolean(Constant.KEY_PREFS_HEPTIC, settings.prefsHeptic);
-            s_preferences.putInt(Constant.KEY_PREFS_COLOUR, settings.prefsColour);
+            getPrefs().putBoolean(Constant.KEY_PREFS_BLOOD, getSettings().prefsBlood);
+            getPrefs().putBoolean(Constant.KEY_PREFS_MUSIC, getSettings().prefsMusic);
+            getPrefs().putBoolean(Constant.KEY_PREFS_SFX, getSettings().prefsSfx);
+            getPrefs().putBoolean(Constant.KEY_PREFS_HEPTIC, getSettings().prefsHeptic);
+            getPrefs().putInt(Constant.KEY_PREFS_COLOUR, getSettings().prefsColour);
 
             /* set the intent for the background music */
-            musicPLayIntent = new Intent(getApplicationContext(), MusicPlay.class);
+            setMusicPLayIntent(new Intent(getApplicationContext(), MusicPlay.class));
 
             setConnectionStatus(NetworkHelper.getConnectivityStatus(getApplicationContext()));
             setConnectionStatusName(NetworkHelper.getConnectivityStatusStringFromStatus(getConnectionStatus()));
@@ -198,58 +203,61 @@ public class SplashActivity extends AppCompatActivity {
 
             // only for testing stuff!!!!
 //            Log.d(TAG, "Wordlist deleted : " + ListFetcher.deleteList(getApplicationContext()));
-            ListFetcher.listHandler = new Handler();
-            ListFetcher.listSaver = new ListFetcher.ListSaver(getApplicationContext());
+            ListFetcher.setListHandler(new Handler());
+            ListFetcher.setListSaver(new ListFetcher.ListSaver(getApplicationContext()));
 
             /* begin loading wordlist
              * 1) Check if any existing word list exist already
              * 2) If so, load the list and continue to next list loading.
              * 3) If not, reset the list to default build in list.
             */
-            s_wordController = ListFetcher.loadWordList(getBaseContext());
-            if (s_wordController == null || s_wordController.getCurrentList() == null) {
-                s_wordController = new WordController(getResources().getStringArray(R.array.lande));
-                ListFetcher.listHandler.post(ListFetcher.listSaver);
-//                 ListFetcher.saveWordLists(s_wordController, getApplicationContext());
+            setWordController(ListFetcher.loadWordList(getBaseContext()));
+            if (getWordController() == null || getWordController().getCurrentList() == null) {
+                setWordController(new WordController(getResources().getStringArray(R.array.lande)));
+                ListFetcher.getListHandler().post(ListFetcher.getListSaver());
+//                 ListFetcher.saveWordLists(wordController, getApplicationContext());
             }
 
             try {
 //                TinyDB.checkForNullKey(Constant.KEY_WORDS_FIREBASE);
-                WordListController.wordList = (HashMap<String, WordItem>) s_preferences.getObject(Constant.KEY_WORDS_FIREBASE, Map.class);
+                WordListController.setWordList((HashMap<String, WordItem>) getPrefs().getObject(Constant.KEY_WORDS_FIREBASE, Map.class));
             } catch (final Exception e) {
                 Log.d(TAG, "Unable to load any remote cached word lists from preferences, log in to update.");
-                if (!s_wordController.isLocal()) {
-                    s_wordController.setIsLocal(true);
-                    s_wordController.setIndexLocale(0);
+                if (!getWordController().isLocal()) {
+                    getWordController().setIsLocal(true);
+                    getWordController().setIndexLocale(0);
                 }
             }
 
-            Log.d(TAG, String.valueOf(s_wordController.isLocal()));
+            Log.d(TAG, String.valueOf(getWordController().isLocal()));
 
-//            s_wordController.setIndexLocale(s_preferences.getInt(Constant.KEY_WORDS_LIST_LOCAL_INDEX, 0));
-//            s_wordController.setIsLocal(s_preferences.getBoolean(Constant.KEY_WORDS_IS_LIST_LOCAL));
-//            s_wordController.setIndexRemote(s_preferences.getString(Constant.KEY_WORDS_LIST_FIREBASE_KEY));
+//            wordController.setIndexLocale(prefs.getInt(Constant.KEY_WORDS_LIST_LOCAL_INDEX, 0));
+//            wordController.setIsLocal(prefs.getBoolean(Constant.KEY_WORDS_IS_LIST_LOCAL));
+//            wordController.setIndexRemote(prefs.getString(Constant.KEY_WORDS_LIST_FIREBASE_KEY));
 
-            s_wordController.setIsLocal(true);
+            getWordController().setIsLocal(true);
 
             Firebase.getDefaultConfig().setPersistenceEnabled(true);
             Firebase.setAndroidContext(getApplicationContext());
-            GameUtility.setFirebase(new Firebase(Constant.FIREBASE_URL));
+            setFirebase(new Firebase(Constant.FIREBASE_URL));
 
-//            GameUtility.firebase.child("wordList").child("Lande").setValue(s_wordController.getCurrentList());
+//            GameUtility.firebase.child("wordList").child("Lande").setValue(wordController.getCurrentList());
 
 //            firebase = new Firebase(Constant.FIREBASE_URL);
 //            firebase.keepSynced(true);
 //            mpc = new MultiplayerController(firebase);
 
-            Log.d(TAG, s_wordController.toString());
+            Log.d(TAG, getWordController().toString());
 
-            if (settings.keepLogin && settings.lastPw != null) {
-                firebase.authWithPassword(me.getEmail(), settings.lastPw, new StartupAuthResultHandler(true));
-            } else {
-                firebase.authAnonymously(new StartupAuthResultHandler(false));
-            }
-
+//            Log.d(TAG, "Trying to log in with email :" + Utils.decodeEmail(me.getEmail()) + " and password : " + "fFNG35gcGxA8vDXY");
+//            if (settings.keepLogin && settings.lastPw != null) {
+                firebase.authWithPassword("rudzen@gmail.com", "HTJc8eWs632R5cLC", new StartupAuthResultHandler(true));
+//            } else {
+//                firebase.authAnonymously(new StartupAuthResultHandler(false));
+//            } else {
+//                final Message message = loadHandler.obtainMessage(MSG_LOAD_COMPLETE);
+//                message.sendToTarget();
+//            }
         }
 
         private class StartupAuthResultHandler implements Firebase.AuthResultHandler {
@@ -263,8 +271,8 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onAuthenticated(final AuthData authData) {
                 Log.d(TAG, (withPassword ? "Logged in with password as : " : "Logged in without password as : ") + authData.getUid());
-                me.setHasLoggedInWithPassword(withPassword);
-                GameUtility.setIsLoggedIn(true);
+                getMe().setHasLoggedInWithPassword(withPassword);
+                setIsLoggedIn(true);
                 final Message message = loadHandler.obtainMessage(withPassword ? MSG_USER_AUTH_COMPLETE : MSG_ANON_AUTH_COMPLETE);
                 message.sendToTarget();
             }
@@ -272,8 +280,8 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationError(final FirebaseError firebaseError) {
                 Log.d(TAG, (withPassword ? "Failed to log in with password : " : "Failed to Log in without password : ") + firebaseError.getMessage());
-                me.setHasLoggedInWithPassword(false);
-                GameUtility.setIsLoggedIn(false);
+                getMe().setHasLoggedInWithPassword(false);
+                setIsLoggedIn(false);
                 final Message message = loadHandler.obtainMessage(MSG_LOAD_COMPLETE);
                 message.sendToTarget();
             }
@@ -295,13 +303,13 @@ public class SplashActivity extends AppCompatActivity {
             if (msg != null) {
                 if (msg.what == MSG_LOAD_COMPLETE) {
                     /* no connection was availble, so we just proceed with singleplayer mode. */
-                    settings.auth_status = SettingsDTO.AUTH_NONE;
+                    getSettings().auth_status = SettingsDTO.AUTH_NONE;
                 } else if (msg.what == MSG_ANON_AUTH_COMPLETE) {
                     /* user has read access to firebase (not able to play multiplayer) */
-                    settings.auth_status = SettingsDTO.AUTH_ANON;
+                    getSettings().auth_status = SettingsDTO.AUTH_ANON;
                 } else if (msg.what == MSG_USER_AUTH_COMPLETE) {
                     /* user has access to the full features of the game */
-                    settings.auth_status = SettingsDTO.AUTH_USER;
+                    getSettings().auth_status = SettingsDTO.AUTH_USER;
                 }
                 final SplashActivity splashActivity = splashActivityWeakReference.get();
                 if (splashActivity != null) {

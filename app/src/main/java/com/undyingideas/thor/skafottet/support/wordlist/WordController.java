@@ -78,7 +78,7 @@ public final class WordController implements Serializable, Parcelable {
             }
             return localWords.get(indexLocale).getWords();
         } else {
-            return WordListController.wordList.get(indexRemote).getWords();
+            return WordListController.getWordList().get(indexRemote).getWords();
         }
     }
 
@@ -100,11 +100,11 @@ public final class WordController implements Serializable, Parcelable {
     // hacked together...
     public String getRandomWord() {
         final String returnString;
-        if (isLocal || WordListController.wordList == null || WordListController.wordList.isEmpty()) {
+        if (isLocal || WordListController.getWordList() == null || WordListController.getWordList().isEmpty()) {
             // using inlined method for empty list fix..
             returnString = getCurrentList().get((int) (Math.random() * localWords.get(indexLocale).getWordListSize()));
         } else {
-            returnString = WordListController.wordList.get(indexRemote).getWords().get((int) (Math.random() * WordListController.wordList.get(indexRemote).getWordListSize()));
+            returnString = WordListController.getWordList().get(indexRemote).getWords().get((int) (Math.random() * WordListController.getWordList().get(indexRemote).getWordListSize()));
         }
         return returnString;
     }
@@ -135,7 +135,7 @@ public final class WordController implements Serializable, Parcelable {
     }
 
     public int getListCount() {
-        return localWords.size() + WordListController.wordList.size();
+        return localWords.size() + WordListController.getWordList().size();
     }
 
     /**

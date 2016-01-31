@@ -45,8 +45,8 @@ public final class ListFetcher {
 
     private static final String filename = "words.dat";
 
-    public static Handler listHandler = new Handler();
-    public static Runnable listSaver;
+    private static Handler listHandler = new Handler();
+    private static Runnable listSaver;
 
     private static byte[] compressWordList(final WordController wordController) {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -130,6 +130,22 @@ public final class ListFetcher {
         return context.getFileStreamPath(filename).getAbsolutePath();
     }
 
+    public static Handler getListHandler() {
+        return listHandler;
+    }
+
+    public static void setListHandler(Handler listHandler) {
+        ListFetcher.listHandler = listHandler;
+    }
+
+    public static Runnable getListSaver() {
+        return listSaver;
+    }
+
+    public static void setListSaver(Runnable listSaver) {
+        ListFetcher.listSaver = listSaver;
+    }
+
     public static class ListSaver extends WeakReferenceHolder<Context> implements Runnable {
 
         public ListSaver(final Context context) {
@@ -140,7 +156,7 @@ public final class ListFetcher {
         public void run() {
             final Context context = weakReference.get();
             if (context != null) {
-                Log.d("ListSaver", String.valueOf(saveWordLists(GameUtility.s_wordController, context)));
+                Log.d("ListSaver", String.valueOf(saveWordLists(GameUtility.getWordController(), context)));
             }
         }
     }
