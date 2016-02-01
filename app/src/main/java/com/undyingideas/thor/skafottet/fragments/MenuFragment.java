@@ -198,9 +198,6 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
         buttons[BUTTON_QUIT] = (RelativeLayout) root.findViewById(R.id.menu_button_quit);
         buttons_text[BUTTON_QUIT] = (AutoScaleTextView) root.findViewById(R.id.menu_button_quit_text);
 
-        /* configure the button colours */
-        DrawableHelper.setButtonColors(buttons, buttons_text);
-
         /* configure callback observer interfaces data classes */
 //        fireBaseLoginData = new FireBaseLoginData(this);
 
@@ -209,6 +206,10 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 
     @Override
     public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
+        /* configure the button colours */
+        DrawableHelper.setButtonColors(buttons, buttons_text);
+
+        /* register the sensor */
         registerSensor();
         super.onViewCreated(view, savedInstanceState);
     }
@@ -302,13 +303,13 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
             // If previous game is found, add it to list :-)
             final SaveGame saveGame = (SaveGame) getPrefs().getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
 //            Log.d(TAG, saveGame.getLogic().toString());
-//            if (saveGame.getLogic() != null && !saveGame.getLogic().isGameOver()) {
+            if (saveGame.getLogic() != null && !saveGame.getLogic().isGameOver()) {
 //                if (mpc.name != null && saveGame.isMultiPlayer() && mpc.name.equals(saveGame.getPlayers()[0].getName())) {
 //                    startGameItems.add(new StartGameItem(Constant.MODE_CONT_GAME, "Fortsæt sidste spil", "Type : Multiplayer / Modstander : " + saveGame.getPlayers()[1].getName(), imageRefs[saveGame.getLogic().getNumWrongLetters()]));
 //                } else {
                     startGameItems.add(new StartGameItem(Constant.MODE_CONT_GAME, "Fortsæt sidste spil", "Type : Singleplayer / Gæt : " + saveGame.getLogic().getVisibleWord(), imageRefs[saveGame.getLogic().getNumWrongLetters()]));
 //                }
-//            }
+            }
         } catch (final NullPointerException npe) {
             // nothing happends here, its just for not adding the option to continue a game.
         } finally {
@@ -719,8 +720,8 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 
     private static class TextUpdateRunner extends WeakReferenceHolder<MenuFragment> implements Runnable {
 
-        private final CharSequence NONE = "Ingen.";
-        private final CharSequence NOTHING = "Intet.";
+        private static final CharSequence NONE = "Ingen.";
+        private static final CharSequence NOTHING = "Intet.";
 
         private static final String INFO_GAME = "Spil: %s.";
         private static final String INFO_GUESS = "Dine gæt: %s.";
