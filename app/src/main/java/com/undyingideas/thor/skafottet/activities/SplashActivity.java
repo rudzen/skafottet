@@ -105,6 +105,9 @@ public class SplashActivity extends AppCompatActivity {
         /* Mint key! */
 //        Mint.initAndStartSession(this, "6adabf91");
 
+//        Firebase.getDefaultConfig().setPersistenceEnabled(true);
+        Firebase.setAndroidContext(getApplicationContext());
+
         setContentView(R.layout.activity_splash);
 
         loadHandler = new LoadHandler(this);
@@ -114,6 +117,7 @@ public class SplashActivity extends AppCompatActivity {
         logo.startAnimation(AnimationUtils.loadAnimation(this, R.anim.step_number_fader));
         title2 = (TextView) findViewById(R.id.splash_text_left);
         title1 = (TextView) findViewById(R.id.splash_text_right);
+
 
         if (savedInstanceState == null) {
             flyIn();
@@ -167,7 +171,7 @@ public class SplashActivity extends AppCompatActivity {
 
             setPrefs(new TinyDB(getApplicationContext()));
 
-            getPrefs().clear();
+//            getPrefs().clear();
 
             /* set the highscore manager */
 //            HighscoreManager.deleteHighScore(getApplicationContext());
@@ -238,8 +242,7 @@ public class SplashActivity extends AppCompatActivity {
 
             getWordController().setIsLocal(true);
 
-            Firebase.getDefaultConfig().setPersistenceEnabled(true);
-            Firebase.setAndroidContext(getApplicationContext());
+
             setFirebase(new Firebase(Constant.FIREBASE_URL));
 
             final String lastPw = getPrefs().getString(Constant.PASSWORD_LAST, null);
@@ -289,25 +292,26 @@ public class SplashActivity extends AppCompatActivity {
                 /**
                  * Check if current user has logged in at least once
                  */
-                userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(final DataSnapshot dataSnapshot) {
-                        final Message message;
-                        GameUtility.setMe(dataSnapshot.getValue(PlayerDTO.class));
-                        message = loadHandler.obtainMessage(GameUtility.getMe() != null ? MSG_USER_AUTH_COMPLETE : MSG_LOAD_COMPLETE);
-                        message.sendToTarget();
-                    }
-
-                    @Override
-                    public void onCancelled(final FirebaseError firebaseError) {
-                        Log.e(TAG, getString(R.string.log_error_the_read_failed) + firebaseError.getMessage());
-                        final Message message = loadHandler.obtainMessage(MSG_LOAD_COMPLETE);
-                        message.sendToTarget();
-                    }
-                });
+                userRef.addListenerForSingleValueEvent(new AppStartLoginValueEventListener());
 
             }
 
+            private class AppStartLoginValueEventListener implements ValueEventListener {
+                @Override
+                public void onDataChange(final DataSnapshot dataSnapshot) {
+                    final Message message;
+                    GameUtility.setMe(dataSnapshot.getValue(PlayerDTO.class));
+                    message = loadHandler.obtainMessage(GameUtility.getMe() != null ? MSG_USER_AUTH_COMPLETE : MSG_LOAD_COMPLETE);
+                    message.sendToTarget();
+                }
+
+                @Override
+                public void onCancelled(final FirebaseError firebaseError) {
+                    Log.e(TAG, getString(R.string.log_error_the_read_failed) + firebaseError.getMessage());
+                    final Message message = loadHandler.obtainMessage(MSG_LOAD_COMPLETE);
+                    message.sendToTarget();
+                }
+            }
         }
     }
 

@@ -169,7 +169,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     @Override
     public void onBecameBackground() {
         Log.d(TAG, "Music stopped");
-        pauseMusic();
+        stopMusic();
     }
 
 }

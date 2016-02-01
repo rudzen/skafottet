@@ -21,9 +21,9 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,7 +83,7 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
     private AutoCompleteTextView mEditTextEmailInput;
     private EditText mEditTextPasswordInput;
 
-    private Button buttonLogIn;
+    private final RelativeLayout[] buttons = new RelativeLayout[3];
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -236,8 +236,17 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
      * Link layout elements from XML and setup the progress dialog
      */
     public void initializeScreen() {
-        buttonLogIn = (Button) findViewById(R.id.login_with_password);
-        buttonLogIn.setOnClickListener(new LogInOnClickListener());
+
+        buttons[0] = (RelativeLayout) findViewById(R.id.login_with_password);
+        buttons[1] = (RelativeLayout) findViewById(R.id.login_button_change_password);
+        buttons[2] = (RelativeLayout) findViewById(R.id.login_button_reset_password);
+
+        final LogInOnClickListener logInOnClickListener = new LogInOnClickListener();
+
+        for (final RelativeLayout relativeLayout : buttons) {
+            relativeLayout.setOnClickListener(logInOnClickListener);
+        }
+
         mEditTextEmailInput = (AutoCompleteTextView) findViewById(R.id.edit_text_email);
         mEditTextPasswordInput = (EditText) findViewById(R.id.edit_text_password);
         final LinearLayout linearLayoutLoginActivity = (LinearLayout) findViewById(R.id.linear_layout_login_activity);
@@ -273,7 +282,7 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
             return true;
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(buttonLogIn, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(buttons[0], R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
@@ -609,10 +618,12 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
     private void setupGoogleSignIn() {
         final SignInButton signInButton = (SignInButton) findViewById(R.id.login_with_google);
         signInButton.setSize(SignInButton.SIZE_WIDE);
+        // TODO : Use regular click listener.
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                onSignInGooglePressed(v);
+                WindowLayout.showSnack("Ikke tilføjet endnu.", signInButton, true);
+//                onSignInGooglePressed(v);
             }
         });
     }
@@ -673,50 +684,7 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
      */
     private void getGoogleOAuthTokenAndLogin() {
         /* Get OAuth token in Background */
-        final AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
-            String mErrorMessage;
-
-            @Override
-            protected String doInBackground(final Void... params) {
-                String token = null;
-
-                try {
-                    final String scope = String.format(getString(R.string.oauth2_format), new Scope(Scopes.PROFILE)) + " email";
-
-                    token = GoogleAuthUtil.getToken(LoginActivity.this, mGoogleAccount.getEmail(), scope);
-                } catch (final IOException transientEx) {
-                    /* Network or server error */
-                    Log.e(LOG_TAG, getString(R.string.google_error_auth_with_google) + transientEx);
-                    mErrorMessage = getString(R.string.google_error_network_error) + transientEx.getMessage();
-                } catch (final UserRecoverableAuthException e) {
-                    Log.w(LOG_TAG, getString(R.string.google_error_recoverable_oauth_error) + e.toString());
-
-                    /* We probably need to ask for permissions, so start the intent if there is none pending */
-                    if (!mGoogleIntentInProgress) {
-                        mGoogleIntentInProgress = true;
-                        final Intent recover = e.getIntent();
-                        startActivityForResult(recover, RC_GOOGLE_LOGIN);
-                    }
-                } catch (final GoogleAuthException authEx) {
-                    /* The call is not ever expected to succeed assuming you have already verified that
-                     * Google Play services is installed. */
-                    Log.e(LOG_TAG, " " + authEx.getMessage(), authEx);
-                    mErrorMessage = getString(R.string.google_error_auth_with_google) + authEx.getMessage();
-                }
-                return token;
-            }
-
-            @Override
-            protected void onPostExecute(final String token) {
-                WindowLayout.getMd().dismiss();
-                if (token != null) {
-                    /* Successfully got OAuth token, now login with Google */
-                    loginWithGoogle(token);
-                } else if (mErrorMessage != null) {
-                    showErrorToast(mErrorMessage);
-                }
-            }
-        };
+        final AsyncTask<Void, Void, String> task = new GoogleLoginAsyncTask();
 
         task.execute();
     }
@@ -724,7 +692,58 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
     private class LogInOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(final View v) {
-            signInPassword();
+            if (v == buttons[0]) {
+                signInPassword();
+            } else if (v == buttons[1]) {
+                WindowLayout.showSnack("Ikke tilføjet endnu.", buttons[1], true);
+            } else if (v == buttons[2]) {
+                WindowLayout.showSnack("Ikke tilføjet endnu.", buttons[2], true);
+            }
+        }
+    }
+
+    private class GoogleLoginAsyncTask extends AsyncTask<Void, Void, String> {
+        String mErrorMessage;
+
+        @Override
+        protected String doInBackground(final Void... params) {
+            String token = null;
+
+            try {
+                final String scope = String.format(getString(R.string.oauth2_format), new Scope(Scopes.PROFILE)) + " email";
+
+                token = GoogleAuthUtil.getToken(LoginActivity.this, mGoogleAccount.getEmail(), scope);
+            } catch (final IOException transientEx) {
+                /* Network or server error */
+                Log.e(LOG_TAG, getString(R.string.google_error_auth_with_google) + transientEx);
+                mErrorMessage = getString(R.string.google_error_network_error) + transientEx.getMessage();
+            } catch (final UserRecoverableAuthException e) {
+                Log.w(LOG_TAG, getString(R.string.google_error_recoverable_oauth_error) + e.toString());
+
+                /* We probably need to ask for permissions, so start the intent if there is none pending */
+                if (!mGoogleIntentInProgress) {
+                    mGoogleIntentInProgress = true;
+                    final Intent recover = e.getIntent();
+                    startActivityForResult(recover, RC_GOOGLE_LOGIN);
+                }
+            } catch (final GoogleAuthException authEx) {
+                /* The call is not ever expected to succeed assuming you have already verified that
+                 * Google Play services is installed. */
+                Log.e(LOG_TAG, " " + authEx.getMessage(), authEx);
+                mErrorMessage = getString(R.string.google_error_auth_with_google) + authEx.getMessage();
+            }
+            return token;
+        }
+
+        @Override
+        protected void onPostExecute(final String token) {
+            WindowLayout.getMd().dismiss();
+            if (token != null) {
+                /* Successfully got OAuth token, now login with Google */
+                loginWithGoogle(token);
+            } else if (mErrorMessage != null) {
+                showErrorToast(mErrorMessage);
+            }
         }
     }
 }

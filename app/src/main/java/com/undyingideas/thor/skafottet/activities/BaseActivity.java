@@ -19,6 +19,7 @@ import com.google.android.gms.common.api.Status;
 import com.undyingideas.thor.skafottet.R;
 import com.undyingideas.thor.skafottet.activities.login.CreateAccountActivity;
 import com.undyingideas.thor.skafottet.activities.login.LoginActivity;
+import com.undyingideas.thor.skafottet.activities.support.Foreground;
 import com.undyingideas.thor.skafottet.firebase.auth.AuthDataHolder;
 import com.undyingideas.thor.skafottet.firebase.auth.AuthListener;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
@@ -32,7 +33,9 @@ import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
  */
 public abstract class BaseActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
-        AuthDataHolder.AuthListenerData {
+        AuthDataHolder.AuthListenerData,
+        Foreground.Listener
+{
     protected String mProvider, mEncodedEmail;
     /* Client used to interact with Google APIs. */
     protected GoogleApiClient mGoogleApiClient;
@@ -45,6 +48,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Foreground.get(this).addListener(this);
 
         if (GameUtility.getConnectionStatus() > -1 && !GameUtility.isLoggedIn()) {
         /* Setup the Google API object to allow Google logins */
@@ -166,6 +170,16 @@ public abstract class BaseActivity extends AppCompatActivity implements
             GameUtility.getPrefs().remove(Constant.KEY_ENCODED_EMAIL);
             GameUtility.getPrefs().remove(Constant.KEY_PROVIDER);
         }
+    }
+
+    @Override
+    public void onBecameForeground() {
+
+    }
+
+    @Override
+    public void onBecameBackground() {
+
     }
 
     private static class GoogleStatusResultCallback implements ResultCallback<Status> {
