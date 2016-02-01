@@ -100,11 +100,11 @@
 
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/login_with_password"
         style="@style/menu_button_style"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:layout_margin="10dp"
         android:background="@drawable/menu_button_shape">
 
@@ -112,7 +112,7 @@
             android:id="@+id/login_with_password_text"
             style="@style/menu_button_style_text"
             android:text="@string/button_signin_with_password"/>
-    </RelativeLayout>
+    </LinearLayout>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/login_with_google"

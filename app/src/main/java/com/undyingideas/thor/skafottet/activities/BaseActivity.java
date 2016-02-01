@@ -90,7 +90,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
     public void onDestroy() {
         super.onDestroy();
         /* Cleanup the AuthStateListener */
-        if (!(this instanceof LoginActivity || this instanceof CreateAccountActivity) && GameUtility.getFirebase() != null) {
+        if (!(this instanceof LoginActivity || this instanceof CreateAccountActivity) && GameUtility.getFirebase() != null && mAuthListener != null) {
             GameUtility.getFirebase().removeAuthStateListener(mAuthListener);
         }
     }
