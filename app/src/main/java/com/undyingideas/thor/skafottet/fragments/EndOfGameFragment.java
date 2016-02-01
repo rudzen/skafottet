@@ -83,26 +83,26 @@ public class EndOfGameFragment extends Fragment {
     private static final String MSG_KEY_IMG = "ki";
 
     @Nullable
-    private ImageView imageViewResult;
+    private ImageView mImageViewResult;
 
-    private final RelativeLayout[] buttons = new RelativeLayout[3];
-    private final AutoScaleTextView[] button_text = new AutoScaleTextView[3];
+    private final RelativeLayout[] mButtons = new RelativeLayout[3];
+    private final AutoScaleTextView[] mButton_text = new AutoScaleTextView[3];
 
-    private AutoScaleTextView textViewTop;
-    private AutoScaleTextView textViewMiddle;
-    private AutoScaleTextView textViewLower;
+    private AutoScaleTextView mTextViewTop;
+    private AutoScaleTextView mTextViewMiddle;
+    private AutoScaleTextView mTextViewLower;
 
-    private SaveGame endGame;
+    private SaveGame mEndGame;
 
-    private EndGameClickListener endGameClickListener;
-
-    @Nullable
-    private IGameSoundNotifier iGameSoundNotifier;
+    private EndGameClickListener mEndGameClickListener;
 
     @Nullable
-    private IFragmentFlipper iFragmentFlipper;
+    private IGameSoundNotifier mGameSoundNotifier;
 
-    private ScoreAdapter scoreAdapter;
+    @Nullable
+    private IFragmentFlipper mFragmentFlipper;
+
+    private ScoreAdapter mScoreAdapter;
 
     /**
      * Constructs a new EndOfGameFragment.
@@ -129,41 +129,41 @@ public class EndOfGameFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_end_game, container, false);
 
-        imageViewResult = (ImageView) root.findViewById(R.id.end_game_image_view);
+        mImageViewResult = (ImageView) root.findViewById(R.id.end_game_image_view);
 
-        textViewTop = (AutoScaleTextView) root.findViewById(R.id.end_game_text_view_top);
-        textViewMiddle = (AutoScaleTextView) root.findViewById(R.id.end_game_middle_status_text_view);
-        textViewLower = (AutoScaleTextView) root.findViewById(R.id.end_game_lower_status_text_view);
-        textViewTop.setVisibility(View.INVISIBLE);
-        textViewMiddle.setVisibility(View.INVISIBLE);
-        textViewLower.setVisibility(View.INVISIBLE);
+        mTextViewTop = (AutoScaleTextView) root.findViewById(R.id.end_game_text_view_top);
+        mTextViewMiddle = (AutoScaleTextView) root.findViewById(R.id.end_game_middle_status_text_view);
+        mTextViewLower = (AutoScaleTextView) root.findViewById(R.id.end_game_lower_status_text_view);
+        mTextViewTop.setVisibility(View.INVISIBLE);
+        mTextViewMiddle.setVisibility(View.INVISIBLE);
+        mTextViewLower.setVisibility(View.INVISIBLE);
 
-        if (endGameClickListener == null) {
-            endGameClickListener = new EndGameClickListener(this);
+        if (mEndGameClickListener == null) {
+            mEndGameClickListener = new EndGameClickListener(this);
             Log.d(TAG, "ClickListener initiated");
         }
 
-        buttons[0] = (RelativeLayout) root.findViewById(R.id.end_game_button_new_game);
-        buttons[0].setClickable(false);
-        buttons[0].setOnClickListener(endGameClickListener);
-        buttons[0].setVisibility(View.INVISIBLE);
+        mButtons[0] = (RelativeLayout) root.findViewById(R.id.end_game_button_new_game);
+        mButtons[0].setClickable(false);
+        mButtons[0].setOnClickListener(mEndGameClickListener);
+        mButtons[0].setVisibility(View.INVISIBLE);
 
-        buttons[1] = (RelativeLayout) root.findViewById(R.id.end_game_button_main_menu);
-        buttons[1].setClickable(false);
-        buttons[1].setOnClickListener(endGameClickListener);
-        buttons[1].setVisibility(View.INVISIBLE);
+        mButtons[1] = (RelativeLayout) root.findViewById(R.id.end_game_button_main_menu);
+        mButtons[1].setClickable(false);
+        mButtons[1].setOnClickListener(mEndGameClickListener);
+        mButtons[1].setVisibility(View.INVISIBLE);
 
-        buttons[2] = (RelativeLayout) root.findViewById(R.id.end_game_button_highscore);
-        buttons[2].setClickable(false);
-        buttons[2].setOnClickListener(endGameClickListener);
-        buttons[2].setVisibility(View.INVISIBLE);
+        mButtons[2] = (RelativeLayout) root.findViewById(R.id.end_game_button_highscore);
+        mButtons[2].setClickable(false);
+        mButtons[2].setOnClickListener(mEndGameClickListener);
+        mButtons[2].setVisibility(View.INVISIBLE);
 
 
-        button_text[0] = (AutoScaleTextView) root.findViewById(R.id.end_game_button_new_game_text);
-        button_text[1] = (AutoScaleTextView) root.findViewById(R.id.end_game_button_main_menu_text);
-        button_text[2] = (AutoScaleTextView) root.findViewById(R.id.end_game_button_highscore_text);
+        mButton_text[0] = (AutoScaleTextView) root.findViewById(R.id.end_game_button_new_game_text);
+        mButton_text[1] = (AutoScaleTextView) root.findViewById(R.id.end_game_button_main_menu_text);
+        mButton_text[2] = (AutoScaleTextView) root.findViewById(R.id.end_game_button_highscore_text);
 
-        DrawableHelper.setButtonColors(buttons, button_text);
+        DrawableHelper.setButtonColors(mButtons, mButton_text);
 
         displayResults(getArguments());
 
@@ -172,15 +172,15 @@ public class EndOfGameFragment extends Fragment {
 
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
-        YoYo.with(Techniques.FadeIn).duration(2000).withListener(new EnterAnimatorHandler(this)).playOn(imageViewResult);
+        YoYo.with(Techniques.FadeIn).duration(2000).withListener(new EnterAnimatorHandler(this)).playOn(mImageViewResult);
     }
 
     @Override
     public void onAttach(final Context context) {
         super.onAttach(context);
         if (context instanceof IFragmentFlipper && context instanceof IGameSoundNotifier) {
-            iFragmentFlipper = (IFragmentFlipper) context;
-            iGameSoundNotifier = (IGameSoundNotifier) context;
+            mFragmentFlipper = (IFragmentFlipper) context;
+            mGameSoundNotifier = (IGameSoundNotifier) context;
         } else {
             throw new RuntimeException(context.toString() + " must implement IFragmentFlipper & IGameSoundNotifier.");
         }
@@ -189,23 +189,23 @@ public class EndOfGameFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (endGameClickListener == null) {
-            endGameClickListener = new EndGameClickListener(this);
+        if (mEndGameClickListener == null) {
+            mEndGameClickListener = new EndGameClickListener(this);
         }
     }
 
     @Override
     public void onDestroy() {
-        imageViewResult = null;
-        buttons[0] = null;
-        buttons[1] = null;
+        mImageViewResult = null;
+        mButtons[0] = null;
+        mButtons[1] = null;
         super.onDestroy();
     }
 
     @Override
     public void onDetach() {
-        iFragmentFlipper = null;
-        iGameSoundNotifier = null;
+        mFragmentFlipper = null;
+        mGameSoundNotifier = null;
         super.onDetach();
     }
 
@@ -220,7 +220,7 @@ public class EndOfGameFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(final Bundle outState) {
-        outState.putParcelable(Constant.KEY_SAVE_GAME, endGame);
+        outState.putParcelable(Constant.KEY_SAVE_GAME, mEndGame);
         super.onSaveInstanceState(outState);
     }
 
@@ -238,25 +238,25 @@ public class EndOfGameFragment extends Fragment {
             /* set the correct response depending on the game just played */
             final Bundle results = new Bundle();
 
-            if (!endGame.isMultiPlayer()) {
-                if (endGame.getLogic().isGameLost()) {
+            if (!mEndGame.isMultiPlayer()) {
+                if (mEndGame.getLogic().isGameLost()) {
                     results.putInt(MSG_KEY_IMG, R.drawable.reaper);
                     results.putString(MSG_KEY_UPPER, getString(R.string.game_lost));
-                    results.putString(MSG_KEY_MIDDLE, "Dine gæt : " + endGame.getLogic().getUsedLetters());
-                    results.putString(MSG_KEY_LOWER, WORD_WAS + endGame.getLogic().getTheWord() + " / Point : " + Integer.toString(endGame.getPlayers()[0].getScore()));
+                    results.putString(MSG_KEY_MIDDLE, "Dine gæt : " + mEndGame.getLogic().getUsedLetters());
+                    results.putString(MSG_KEY_LOWER, WORD_WAS + mEndGame.getLogic().getTheWord() + " / Point : " + Integer.toString(mEndGame.getPlayers()[0].getScore()));
                 } else {
                     results.putInt(MSG_KEY_IMG, R.drawable.trophy);
                     results.putString(MSG_KEY_UPPER, getString(R.string.game_won));
-                    if (endGame.getLogic().getNumWrongLetters() == 0) {
-                        results.putString(MSG_KEY_MIDDLE, "Dine gæt var : " + endGame.getLogic().getUsedLetters() + ", og du havde ingen fejl!");
+                    if (mEndGame.getLogic().getNumWrongLetters() == 0) {
+                        results.putString(MSG_KEY_MIDDLE, "Dine gæt var : " + mEndGame.getLogic().getUsedLetters() + ", og du havde ingen fejl!");
                     } else {
-                        results.putString(MSG_KEY_MIDDLE, "Dine gæt var : " + endGame.getLogic().getUsedLetters() + " og du gættede forkert " + endGame.getLogic().getNumWrongLetters() + " gange. tsktsk.");
+                        results.putString(MSG_KEY_MIDDLE, "Dine gæt var : " + mEndGame.getLogic().getUsedLetters() + " og du gættede forkert " + mEndGame.getLogic().getNumWrongLetters() + " gange. tsktsk.");
                     }
-                    results.putString(MSG_KEY_LOWER, WORD_WAS + endGame.getLogic().getTheWord() + " / Point : " + Integer.toString(endGame.getPlayers()[0].getScore()));
+                    results.putString(MSG_KEY_LOWER, WORD_WAS + mEndGame.getLogic().getTheWord() + " / Point : " + Integer.toString(mEndGame.getPlayers()[0].getScore()));
                 }
             } else {
-//                GameUtility.mpc.lc.updateLobby(endGame.getPlayers()[1].getName(), GameUtility.mpc.name, endGame.getLogic().getNumWrongLetters());
-//                final LobbyDTO dto = GameUtility.mpc.lc.lobbyList.get(endGame.getPlayers()[1].getName());
+//                GameUtility.mpc.lc.updateLobby(mEndGame.getPlayers()[1].getName(), GameUtility.mpc.name, mEndGame.getLogic().getNumWrongLetters());
+//                final LobbyDTO dto = GameUtility.mpc.lc.lobbyList.get(mEndGame.getPlayers()[1].getName());
 //                boolean gameisDone = true;
 //                for (final LobbyPlayerStatus lps : dto.getPlayerList()) {
 //                    if (!lps.getName().equals(GameUtility.mpc.name) && lps.getScore() == -1) gameisDone = false;
@@ -264,35 +264,35 @@ public class EndOfGameFragment extends Fragment {
 //                if (gameisDone) {
 //                    for (final LobbyPlayerStatus lps : dto.getPlayerList()) {
 //                        if (!lps.getName().equals(GameUtility.mpc.name)) {
-//                            if (lps.getScore() < endGame.getLogic().getNumWrongLetters()) {
+//                            if (lps.getScore() < mEndGame.getLogic().getNumWrongLetters()) {
 //                                GameUtility.mpc.pc.updatePlayerScore(lps.getName(), 1);
 //                            } else {
 //                                GameUtility.mpc.pc.updatePlayerScore(GameUtility.mpc.name, 1);
 //                            }
 //                        }
 //                    }
-//                    if (endGame.getLogic().isGameLost()) {
+//                    if (mEndGame.getLogic().isGameLost()) {
 //                        results.putInt(MSG_KEY_IMG, R.drawable.reaper);
 //                        results.putString(MSG_KEY_UPPER, "Du er blever henrettet af");
 //                        results.putString(MSG_KEY_MIDDLE, getWinner(dto));
-//                        results.putString(MSG_KEY_LOWER, WORD_WAS + endGame.getLogic().getTheWord());
+//                        results.putString(MSG_KEY_LOWER, WORD_WAS + mEndGame.getLogic().getTheWord());
 //                    } else {
 //                        results.putInt(MSG_KEY_IMG, R.drawable.trophy);
 //                        results.putString(MSG_KEY_UPPER, "Du undslap galgen! - Triumf over ");
 //                        results.putString(MSG_KEY_MIDDLE, getOther(dto, GameUtility.mpc.name));
-//                        results.putString(MSG_KEY_LOWER, "Du gættede ordet " + endGame.getLogic().getTheWord() + ", derved har du undgået at blive klynget op");
+//                        results.putString(MSG_KEY_LOWER, "Du gættede ordet " + mEndGame.getLogic().getTheWord() + ", derved har du undgået at blive klynget op");
 //                    }
 //                } else {
-//                    if (endGame.getLogic().isGameLost()) {
+//                    if (mEndGame.getLogic().isGameLost()) {
 //                        results.putInt(MSG_KEY_IMG, R.drawable.reaper);
 //                        results.putString(MSG_KEY_UPPER, "Du er blevet hængt");
 //                        results.putString(MSG_KEY_MIDDLE, "men din modstander kan også nå at blive det");
-//                        results.putString(MSG_KEY_LOWER, WORD_WAS + endGame.getLogic().getTheWord());
+//                        results.putString(MSG_KEY_LOWER, WORD_WAS + mEndGame.getLogic().getTheWord());
 //                    } else {
 //                        results.putInt(MSG_KEY_IMG, R.drawable.trophy);
 //                        results.putString(MSG_KEY_UPPER, "Du undslap galgen!");
 //                        results.putString(MSG_KEY_MIDDLE, "Din modstander kan dog stadig nå at gøre det bedre.");
-//                        results.putString(MSG_KEY_LOWER, "Du gættede ordet " + endGame.getLogic().getTheWord() + ", derved har du undgået at blive klynget op");
+//                        results.putString(MSG_KEY_LOWER, "Du gættede ordet " + mEndGame.getLogic().getTheWord() + ", derved har du undgået at blive klynget op");
 //                    }
 //                }
             }
@@ -305,10 +305,10 @@ public class EndOfGameFragment extends Fragment {
     @SuppressWarnings("ConstantConditions")
     private void displayResults(final Bundle gameData) throws NullPointerException {
         /* Reads the savegame and set up the views according to it's content. */
-        endGame = gameData.getParcelable(Constant.KEY_SAVE_GAME);
+        mEndGame = gameData.getParcelable(Constant.KEY_SAVE_GAME);
 
         // if this is null, we are screwed...
-        if (endGame == null) {
+        if (mEndGame == null) {
             throw new NullPointerException("SaveGame not functional.");
         }
         Log.d(TAG, "SaveGame was loaded OK.");
@@ -319,9 +319,9 @@ public class EndOfGameFragment extends Fragment {
     }
 
     private void showHighscores() {
-        scoreAdapter = new ScoreAdapter(getContext(), R.layout.highscore_list_row, GameUtility.getHighscoreManager().getScores());
+        mScoreAdapter = new ScoreAdapter(getContext(), R.layout.highscore_list_row, GameUtility.getHighscoreManager().getScores());
         final ListView listViewItems = new ListView(getActivity().getApplicationContext());
-        listViewItems.setAdapter(scoreAdapter);
+        listViewItems.setAdapter(mScoreAdapter);
 
         WindowLayout.setMd(new MaterialDialog.Builder(getActivity())
                 .customView(listViewItems, false)
@@ -348,10 +348,10 @@ public class EndOfGameFragment extends Fragment {
                 if (result != null) {
                     final EndOfGameFragment endOfGameFragment = endOfGameFragmentWeakReference.get();
                     if (endOfGameFragment != null) {
-                        endOfGameFragment.imageViewResult.setImageResource(result.getInt(MSG_KEY_IMG));
-                        endOfGameFragment.textViewTop.setText(result.getString(MSG_KEY_UPPER));
-                        endOfGameFragment.textViewMiddle.setText(result.getString(MSG_KEY_MIDDLE));
-                        endOfGameFragment.textViewLower.setText(result.getString(MSG_KEY_LOWER));
+                        endOfGameFragment.mImageViewResult.setImageResource(result.getInt(MSG_KEY_IMG));
+                        endOfGameFragment.mTextViewTop.setText(result.getString(MSG_KEY_UPPER));
+                        endOfGameFragment.mTextViewMiddle.setText(result.getString(MSG_KEY_MIDDLE));
+                        endOfGameFragment.mTextViewLower.setText(result.getString(MSG_KEY_LOWER));
                     }
                 }
             }
@@ -391,22 +391,22 @@ public class EndOfGameFragment extends Fragment {
         @SuppressWarnings("ConstantConditions")
         @Override
         public void onClick(final View v) {
-            final EndOfGameFragment endOfGameFragment = weakReference.get();
+            final EndOfGameFragment endOfGameFragment = mWeakReference.get();
             if (endOfGameFragment != null) {
-                endOfGameFragment.iGameSoundNotifier.playGameSound(GameUtility.SFX_MENU_CLICK);
-                if (v != endOfGameFragment.buttons[2]) { // not the highscore button!
+                endOfGameFragment.mGameSoundNotifier.playGameSound(GameUtility.SFX_MENU_CLICK);
+                if (v != endOfGameFragment.mButtons[2]) { // not the highscore button!
                     v.setClickable(false);
-                    if (v == endOfGameFragment.buttons[1]) {
-                        endOfGameFragment.buttons[0].setClickable(false);
-                        YoYo.with(Techniques.FadeOut).duration(300).playOn(endOfGameFragment.buttons[0]);
+                    if (v == endOfGameFragment.mButtons[1]) {
+                        endOfGameFragment.mButtons[0].setClickable(false);
+                        YoYo.with(Techniques.FadeOut).duration(300).playOn(endOfGameFragment.mButtons[0]);
                     } else {
-                        endOfGameFragment.buttons[1].setClickable(false);
-                        YoYo.with(Techniques.FadeOut).duration(300).playOn(endOfGameFragment.buttons[1]);
+                        endOfGameFragment.mButtons[1].setClickable(false);
+                        YoYo.with(Techniques.FadeOut).duration(300).playOn(endOfGameFragment.mButtons[1]);
                     }
-                    YoYo.with(Techniques.ZoomOut).duration(300).playOn(endOfGameFragment.imageViewResult);
-                    YoYo.with(Techniques.ZoomOut).duration(400).playOn(endOfGameFragment.textViewTop);
-                    YoYo.with(Techniques.ZoomOut).duration(400).playOn(endOfGameFragment.textViewMiddle);
-                    YoYo.with(Techniques.ZoomOut).duration(400).playOn(endOfGameFragment.textViewLower);
+                    YoYo.with(Techniques.ZoomOut).duration(300).playOn(endOfGameFragment.mImageViewResult);
+                    YoYo.with(Techniques.ZoomOut).duration(400).playOn(endOfGameFragment.mTextViewTop);
+                    YoYo.with(Techniques.ZoomOut).duration(400).playOn(endOfGameFragment.mTextViewMiddle);
+                    YoYo.with(Techniques.ZoomOut).duration(400).playOn(endOfGameFragment.mTextViewLower);
                     YoYo.with(Techniques.Pulse).duration(400).withListener(new ExitAnimatorHandler(endOfGameFragment, (RelativeLayout) v)).playOn(v);
                 } else {
                     endOfGameFragment.showHighscores();
@@ -427,29 +427,29 @@ public class EndOfGameFragment extends Fragment {
         @SuppressWarnings("ConstantConditions")
         @Override
         public void onAnimationEnd(final Animator animation) {
-            final EndOfGameFragment endOfGameFragment = weakReference.get();
+            final EndOfGameFragment endOfGameFragment = mWeakReference.get();
             if (endOfGameFragment != null) {
-                YoYo.with(Techniques.ZoomIn).duration(1000).playOn(endOfGameFragment.textViewTop);
-                endOfGameFragment.textViewTop.setVisibility(View.VISIBLE);
-                YoYo.with(Techniques.BounceInRight).duration(1000).playOn(endOfGameFragment.textViewMiddle);
-                endOfGameFragment.textViewMiddle.setVisibility(View.VISIBLE);
-                YoYo.with(Techniques.BounceInLeft).duration(1000).playOn(endOfGameFragment.textViewLower);
-                endOfGameFragment.textViewLower.setVisibility(View.VISIBLE);
-                YoYo.with(Techniques.BounceInRight).duration(1000).playOn(endOfGameFragment.buttons[1]);
-                endOfGameFragment.buttons[1].setVisibility(View.VISIBLE);
-                YoYo.with(Techniques.BounceInLeft).duration(1000).playOn(endOfGameFragment.buttons[0]);
-                endOfGameFragment.buttons[0].setVisibility(View.VISIBLE);
-                YoYo.with(Techniques.BounceIn).duration(1000).playOn(endOfGameFragment.buttons[2]);
-                endOfGameFragment.buttons[2].setVisibility(View.VISIBLE);
+                YoYo.with(Techniques.ZoomIn).duration(1000).playOn(endOfGameFragment.mTextViewTop);
+                endOfGameFragment.mTextViewTop.setVisibility(View.VISIBLE);
+                YoYo.with(Techniques.BounceInRight).duration(1000).playOn(endOfGameFragment.mTextViewMiddle);
+                endOfGameFragment.mTextViewMiddle.setVisibility(View.VISIBLE);
+                YoYo.with(Techniques.BounceInLeft).duration(1000).playOn(endOfGameFragment.mTextViewLower);
+                endOfGameFragment.mTextViewLower.setVisibility(View.VISIBLE);
+                YoYo.with(Techniques.BounceInRight).duration(1000).playOn(endOfGameFragment.mButtons[1]);
+                endOfGameFragment.mButtons[1].setVisibility(View.VISIBLE);
+                YoYo.with(Techniques.BounceInLeft).duration(1000).playOn(endOfGameFragment.mButtons[0]);
+                endOfGameFragment.mButtons[0].setVisibility(View.VISIBLE);
+                YoYo.with(Techniques.BounceIn).duration(1000).playOn(endOfGameFragment.mButtons[2]);
+                endOfGameFragment.mButtons[2].setVisibility(View.VISIBLE);
 
-                if (!endOfGameFragment.endGame.isMultiPlayer()) {
-                    if (GameUtility.getHighscoreManager().checkScore(endOfGameFragment.endGame.getPlayers()[0].getScore()) > -1) {
-                        final int highscorePosition = GameUtility.getHighscoreManager().addScore(endOfGameFragment.endGame.getLogic().getTheWord(), endOfGameFragment.endGame.getPlayers()[0]);
+                if (!endOfGameFragment.mEndGame.isMultiPlayer()) {
+                    if (GameUtility.getHighscoreManager().checkScore(endOfGameFragment.mEndGame.getPlayers()[0].getScore()) > -1) {
+                        final int highscorePosition = GameUtility.getHighscoreManager().addScore(endOfGameFragment.mEndGame.getLogic().getTheWord(), endOfGameFragment.mEndGame.getPlayers()[0]);
                         Log.d("Highscore", "Tilføjet til position # : " + highscorePosition);
                         GameUtility.getHighscoreManager().saveHighScore();
-                        endOfGameFragment.textViewLower.setText(endOfGameFragment.textViewLower.getText().toString() + "\nDu har indtaget position nummer " + Integer.toString(highscorePosition + 1));
+                        endOfGameFragment.mTextViewLower.setText(endOfGameFragment.mTextViewLower.getText().toString() + "\nDu har indtaget position nummer " + Integer.toString(highscorePosition + 1));
                     } else {
-                        Log.d("Highscore", "Spiller " + endOfGameFragment.endGame.getPlayers()[0].getName() + " sux.");
+                        Log.d("Highscore", "Spiller " + endOfGameFragment.mEndGame.getPlayers()[0].getName() + " sux.");
                     }
                     Log.d("Highscore", GameUtility.getHighscoreManager().getHighscoreString());
                     endOfGameFragment.showHighscores();
@@ -486,9 +486,9 @@ public class EndOfGameFragment extends Fragment {
         @SuppressWarnings("ConstantConditions")
         @Override
         public void onAnimationEnd(final Animator animation) {
-            final EndOfGameFragment endOfGameFragment = weakReference.get();
+            final EndOfGameFragment endOfGameFragment = mWeakReference.get();
             if (endOfGameFragment != null) {
-                endOfGameFragment.iFragmentFlipper.flipFragment(clickedView == endOfGameFragment.buttons[0] ? Constant.MODE_SINGLE_PLAYER : Constant.MODE_MENU);
+                endOfGameFragment.mFragmentFlipper.flipFragment(clickedView == endOfGameFragment.mButtons[0] ? Constant.MODE_SINGLE_PLAYER : Constant.MODE_MENU);
             }
         }
 

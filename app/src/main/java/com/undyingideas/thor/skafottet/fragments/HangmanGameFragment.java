@@ -44,30 +44,30 @@ import java.util.ArrayList;
  */
 public class HangmanGameFragment extends Fragment {
 
-    private final LinearLayout[] buttonRows = new LinearLayout[4];
+    private final LinearLayout[] mButtonRows = new LinearLayout[4];
 
-    private ArrayList<Button> listOfButtons;
-    private SaveGame currentGame;
+    private ArrayList<Button> mListOfButtons;
+    private SaveGame mCurrentGame;
 
-    private Hangman3dView noose;
+    private Hangman3dView mNoose;
 
-    private HTextView textWord;
-    private HTextView textStatus;
-    private Vibrator vibrator;
-    private View sepKnown, sepStatus;
+    private HTextView mTextWord;
+    private HTextView mTextStatus;
+    private Vibrator mVibrator;
+    private View mSeperatorKnown, mSeperatorStatus;
 
-    private Animation sepAnimation;
-    private OnButtonClickListener onButtonClickListener;
+    private Animation mSeperatorAnimation;
+    private OnButtonClickListener mOnButtonClickListener;
 
-    private Drawable menuButton;
+    private Drawable mMenuButton;
 
-    private IGameSoundNotifier iGameSoundNotifier;
+    private IGameSoundNotifier mGameSoundNotifier;
 
     @Override
     public void onAttach(final Context context) {
         super.onAttach(context);
         if (context instanceof IGameSoundNotifier && context instanceof IFragmentFlipper) {
-            iGameSoundNotifier = (IGameSoundNotifier) context;
+            mGameSoundNotifier = (IGameSoundNotifier) context;
         } else {
             throw new RuntimeException(context.toString() + " must implement IGameSoundNotifier.");
         }
@@ -78,7 +78,7 @@ public class HangmanGameFragment extends Fragment {
     public void onCreate(final Bundle savedInstanceState) {
         if (GameUtility.getSettings().prefsHeptic) {
             try {
-                vibrator = (Vibrator) getActivity().getSystemService(getActivity().VIBRATOR_SERVICE);
+                mVibrator = (Vibrator) getActivity().getSystemService(getActivity().VIBRATOR_SERVICE);
             } catch (final Exception e) {
                 e.printStackTrace();
             }
@@ -90,34 +90,34 @@ public class HangmanGameFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_hangman_game, container, false);
 
-        noose = (Hangman3dView) root.findViewById(R.id.imageView);
+        mNoose = (Hangman3dView) root.findViewById(R.id.imageView);
 
-        listOfButtons = new ArrayList<>(28);
+        mListOfButtons = new ArrayList<>(28);
 
-        buttonRows[0] = (LinearLayout) root.findViewById(R.id.linearLayout1);
-        buttonRows[1] = (LinearLayout) root.findViewById(R.id.linearLayout2);
-        buttonRows[2] = (LinearLayout) root.findViewById(R.id.linearLayout3);
-        buttonRows[3] = (LinearLayout) root.findViewById(R.id.linearLayout4);
+        mButtonRows[0] = (LinearLayout) root.findViewById(R.id.linearLayout1);
+        mButtonRows[1] = (LinearLayout) root.findViewById(R.id.linearLayout2);
+        mButtonRows[2] = (LinearLayout) root.findViewById(R.id.linearLayout3);
+        mButtonRows[3] = (LinearLayout) root.findViewById(R.id.linearLayout4);
 
-        for (final LinearLayout linearLayout : buttonRows) {
-            listOfButtons.addAll(getChildren(linearLayout));
+        for (final LinearLayout linearLayout : mButtonRows) {
+            mListOfButtons.addAll(getChildren(linearLayout));
         }
 
-        textWord = (HTextView) root.findViewById(R.id.hangman_game_known_letters);
-        textWord.setAnimateType(HTextViewType.SCALE);
+        mTextWord = (HTextView) root.findViewById(R.id.hangman_game_known_letters);
+        mTextWord.setAnimateType(HTextViewType.SCALE);
 
-        textStatus = (HTextView) root.findViewById(R.id.hangman_game_status);
-        textStatus.setAnimateType(HTextViewType.SCALE);
+        mTextStatus = (HTextView) root.findViewById(R.id.hangman_game_status);
+        mTextStatus.setAnimateType(HTextViewType.SCALE);
 
-        sepKnown = root.findViewById(R.id.sepKnown);
-        sepStatus = root.findViewById(R.id.sepStatus);
+        mSeperatorKnown = root.findViewById(R.id.sepKnown);
+        mSeperatorStatus = root.findViewById(R.id.sepStatus);
 
-        sepAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_repeat_backwards);
+        mSeperatorAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_repeat_backwards);
 
-        sepKnown.setAnimation(sepAnimation);
-        sepStatus.setAnimation(sepAnimation);
+        mSeperatorKnown.setAnimation(mSeperatorAnimation);
+        mSeperatorStatus.setAnimation(mSeperatorAnimation);
 
-        onButtonClickListener = new OnButtonClickListener(this);
+        mOnButtonClickListener = new OnButtonClickListener(this);
 
         resetButtons();
 
@@ -135,10 +135,10 @@ public class HangmanGameFragment extends Fragment {
         applySaveGameStatus();
 
         // testing :
-//        if (currentGame.isMultiPlayer()) {
-//            WindowLayout.showSnack(getOppNames(currentGame.getNames()[1], currentGame.getNames()[0]), textWord, true);
+//        if (mCurrentGame.isMultiPlayer()) {
+//            WindowLayout.showSnack(getOppNames(mCurrentGame.getNames()[1], mCurrentGame.getNames()[0]), mTextWord, true);
 //        }
-        //Toast.makeText(getContext(), currentGame.getLogic().getTheWord(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), mCurrentGame.getLogic().getTheWord(), Toast.LENGTH_SHORT).show();
 
     }
 
@@ -151,23 +151,23 @@ public class HangmanGameFragment extends Fragment {
 
     @Override
     public void onResume() {
-        sepKnown.setAnimation(sepAnimation);
-        sepStatus.setAnimation(sepAnimation);
+        mSeperatorKnown.setAnimation(mSeperatorAnimation);
+        mSeperatorStatus.setAnimation(mSeperatorAnimation);
         applyColours();
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        sepKnown.setAnimation(null);
-        sepStatus.setAnimation(null);
+        mSeperatorKnown.setAnimation(null);
+        mSeperatorStatus.setAnimation(null);
         super.onPause();
     }
 
     @Override
     public void onDetach() {
-        GameUtility.getPrefs().putObject(Constant.KEY_SAVE_GAME, currentGame);
-        iGameSoundNotifier = null;
+        GameUtility.getPrefs().putObject(Constant.KEY_SAVE_GAME, mCurrentGame);
+        mGameSoundNotifier = null;
         super.onDetach();
     }
 
@@ -191,64 +191,64 @@ public class HangmanGameFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(final Bundle outState) {
-        GameUtility.getPrefs().putObject(Constant.KEY_SAVE_GAME, currentGame);
-        outState.putParcelable(Constant.KEY_SAVE_GAME, currentGame);
+        GameUtility.getPrefs().putObject(Constant.KEY_SAVE_GAME, mCurrentGame);
+        outState.putParcelable(Constant.KEY_SAVE_GAME, mCurrentGame);
         super.onSaveInstanceState(outState);
     }
 
     private void applyColours() {
         /* apply colours to all controls except guess buttons. */
-        textWord.setTextColor(GameUtility.getSettings().textColour);
-        textStatus.setTextColor(GameUtility.getSettings().textColour);
+        mTextWord.setTextColor(GameUtility.getSettings().textColour);
+        mTextStatus.setTextColor(GameUtility.getSettings().textColour);
     }
 
     @SuppressWarnings("ConstantConditions")
     private void applySaveGameStatus() {
-        textWord.animateText(currentGame.getLogic().getVisibleWord());
-//        if (currentGame.isMultiPlayer()) {
-//            textStatus.animateText(GameUtility.mpc.lc.getOppNames(currentGame.getPlayers()[1].getName(), currentGame.getPlayers()[0].getName()) + " / " + Integer.toString(currentGame.getPlayers()[0].getScore()));
+        mTextWord.animateText(mCurrentGame.getLogic().getVisibleWord());
+//        if (mCurrentGame.isMultiPlayer()) {
+//            mTextStatus.animateText(GameUtility.mpc.lc.getOppNames(mCurrentGame.getPlayers()[1].getName(), mCurrentGame.getPlayers()[0].getName()) + " / " + Integer.toString(mCurrentGame.getPlayers()[0].getScore()));
 //        } else {
-            textStatus.animateText(Integer.toString(currentGame.getPlayers()[0].getScore()));
+            mTextStatus.animateText(Integer.toString(mCurrentGame.getPlayers()[0].getScore()));
 //        }
         resetButtons();
 
         // set the button status for the already guessed letters, this is just a quick and dirty hack :-)
-        Log.d("Game", String.valueOf(currentGame.getLogic().getNumWrongLetters()));
-        if (currentGame.getLogic().getNumWrongLetters() > 0) {
-            Log.d("Game", currentGame.getLogic().getUsedLetters().toString());
-            for (final Button button : listOfButtons) {
-                if (currentGame.getLogic().getUsedLetters().contains(button.getText().toString())) {
+        Log.d("Game", String.valueOf(mCurrentGame.getLogic().getNumWrongLetters()));
+        if (mCurrentGame.getLogic().getNumWrongLetters() > 0) {
+            Log.d("Game", mCurrentGame.getLogic().getUsedLetters().toString());
+            for (final Button button : mListOfButtons) {
+                if (mCurrentGame.getLogic().getUsedLetters().contains(button.getText().toString())) {
                     button.setClickable(false);
                     button.setVisibility(View.INVISIBLE);
                 }
             }
         }
-        listOfButtons.clear();
+        mListOfButtons.clear();
 
-        noose.setErrors(currentGame.getLogic().getNumWrongLetters());
-        //noose.setImageBitmap(GameUtility.invert(getContext(), currentGame.getLogic().getNumWrongLetters()));
+        mNoose.setErrors(mCurrentGame.getLogic().getNumWrongLetters());
+        //mNoose.setImageBitmap(GameUtility.invert(getContext(), mCurrentGame.getLogic().getNumWrongLetters()));
     }
 
     private void readFromBundle(final Bundle bundle) {
         if (bundle != null && bundle.containsKey(Constant.KEY_SAVE_GAME)) {
             // restore complete game state!!
-            currentGame = bundle.getParcelable(Constant.KEY_SAVE_GAME);
+            mCurrentGame = bundle.getParcelable(Constant.KEY_SAVE_GAME);
         }
     }
 
     private void resetButtons() {
-        YoYo.with(Techniques.FadeIn).duration(400).playOn(buttonRows[0]);
-        YoYo.with(Techniques.FadeIn).duration(400).playOn(buttonRows[1]);
-        YoYo.with(Techniques.FadeIn).duration(400).playOn(buttonRows[2]);
-        YoYo.with(Techniques.FadeIn).duration(400).playOn(buttonRows[3]);
-        YoYo.with(Techniques.FadeIn).duration(400).playOn(noose);
-        for (final Button button : listOfButtons) {
+        YoYo.with(Techniques.FadeIn).duration(400).playOn(mButtonRows[0]);
+        YoYo.with(Techniques.FadeIn).duration(400).playOn(mButtonRows[1]);
+        YoYo.with(Techniques.FadeIn).duration(400).playOn(mButtonRows[2]);
+        YoYo.with(Techniques.FadeIn).duration(400).playOn(mButtonRows[3]);
+        YoYo.with(Techniques.FadeIn).duration(400).playOn(mNoose);
+        for (final Button button : mListOfButtons) {
             button.setBackgroundColor(GameUtility.getSettings().prefsColour);
             button.setTextColor(GameUtility.getSettings().textColour);
             YoYo.with(Techniques.FadeIn).duration(400).playOn(button);
             button.setVisibility(View.VISIBLE);
             button.setBackgroundColor(GameUtility.getSettings().prefsColour);
-            button.setOnClickListener(onButtonClickListener);
+            button.setOnClickListener(mOnButtonClickListener);
         }
     }
 
@@ -259,43 +259,43 @@ public class HangmanGameFragment extends Fragment {
     }
 
     private void updateScreen() {
-        textWord.animateText(currentGame.getLogic().getVisibleWord());
-        textStatus.animateText(Integer.toString(currentGame.getPlayers()[0].getScore()));
-        if (!currentGame.getLogic().isLastLetterCorrect()) {
-            noose.setErrors(currentGame.getLogic().getNumWrongLetters());
-            YoYo.with(Techniques.Flash).duration(100).playOn(noose);
+        mTextWord.animateText(mCurrentGame.getLogic().getVisibleWord());
+        mTextStatus.animateText(Integer.toString(mCurrentGame.getPlayers()[0].getScore()));
+        if (!mCurrentGame.getLogic().isLastLetterCorrect()) {
+            mNoose.setErrors(mCurrentGame.getLogic().getNumWrongLetters());
+            YoYo.with(Techniques.Flash).duration(100).playOn(mNoose);
         }
     }
 
     private void startEndgame() {
         // TODO : Erstat DU med spillerens navn og HAM med modstanderens navn..
-        getFragmentManager().beginTransaction().replace(R.id.fragment_content, EndOfGameFragment.newInstance(currentGame)).commit();
+        getFragmentManager().beginTransaction().replace(R.id.fragment_content, EndOfGameFragment.newInstance(mCurrentGame)).commit();
         Log.d("play", "finishing");
     }
 
     private void guess(final String guess) {
-        currentGame.getLogic().guessLetter(guess);
+        mCurrentGame.getLogic().guessLetter(guess);
 
-        if (!currentGame.getLogic().isLastLetterCorrect()) {
-            currentGame.getPlayers()[0].addPoints(-100);
-            iGameSoundNotifier.playGameSound(GameUtility.SFX_GUESS_WRONG);
-            if (vibrator != null) vibrator.vibrate(50);
-            YoYo.with(Techniques.Flash).duration(300).playOn(textWord);
+        if (!mCurrentGame.getLogic().isLastLetterCorrect()) {
+            mCurrentGame.getPlayers()[0].addPoints(-100);
+            mGameSoundNotifier.playGameSound(GameUtility.SFX_GUESS_WRONG);
+            if (mVibrator != null) mVibrator.vibrate(50);
+            YoYo.with(Techniques.Flash).duration(300).playOn(mTextWord);
         } else {
-            currentGame.getPlayers()[0].addPoints(500 * currentGame.getLogic().getNumCorrectLettersLast());
-            iGameSoundNotifier.playGameSound(GameUtility.SFX_GUESS_RIGHT);
+            mCurrentGame.getPlayers()[0].addPoints(500 * mCurrentGame.getLogic().getNumCorrectLettersLast());
+            mGameSoundNotifier.playGameSound(GameUtility.SFX_GUESS_RIGHT);
         }
 
-        if (!currentGame.getLogic().isGameOver()) {
+        if (!mCurrentGame.getLogic().isGameOver()) {
             // save the game status!
-            GameUtility.getPrefs().putObject(Constant.KEY_SAVE_GAME, currentGame);
+            GameUtility.getPrefs().putObject(Constant.KEY_SAVE_GAME, mCurrentGame);
             updateScreen();
         } else {
             GameUtility.writeNullGame();
-            if (currentGame.getLogic().isGameWon()) {
-                iGameSoundNotifier.playGameSound(GameUtility.SFX_INTRO);
+            if (mCurrentGame.getLogic().isGameWon()) {
+                mGameSoundNotifier.playGameSound(GameUtility.SFX_INTRO);
             } else {
-                iGameSoundNotifier.playGameSound(GameUtility.SFX_LOST);
+                mGameSoundNotifier.playGameSound(GameUtility.SFX_LOST);
             }
             startEndgame();
         }
@@ -309,12 +309,12 @@ public class HangmanGameFragment extends Fragment {
 
         @Override
         public void onClick(final View v) {
-            final HangmanGameFragment hangmanGameFragment = weakReference.get();
+            final HangmanGameFragment hangmanGameFragment = mWeakReference.get();
             if (hangmanGameFragment != null) {
                 final Button button = (Button) v;
                 button.setClickable(false);
                 YoYo.with(Techniques.FadeOut).duration(200).withListener(new OnButtonClickAnimatorListener(v)).playOn(v);
-                hangmanGameFragment.listOfButtons.add(button);
+                hangmanGameFragment.mListOfButtons.add(button);
                 hangmanGameFragment.guess(button.getText().toString());
             }
         }
@@ -331,7 +331,7 @@ public class HangmanGameFragment extends Fragment {
 
         @Override
         public void onAnimationEnd(final Animator animation) {
-            final View view = weakReference.get();
+            final View view = mWeakReference.get();
             if (view != null) {
                 view.setVisibility(View.INVISIBLE);
             }

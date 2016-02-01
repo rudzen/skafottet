@@ -36,15 +36,15 @@ import java.util.ArrayList;
  */
 public class WordTitleLocalAdapter extends ArrayAdapter<WordItem> {
 
-    private final Context context;
-    private final int layoutResourceId;
-    private final ArrayList<WordItem> data;
+    private final Context mContext;
+    private final int mLayoutResourceId;
+    private final ArrayList<WordItem> mData;
 
-    public WordTitleLocalAdapter(final Context context, final int layoutResourceId, final ArrayList<WordItem> data) {
-        super(context, layoutResourceId, data);
-        this.layoutResourceId = layoutResourceId;
-        this.context = context;
-        this.data = data;
+    public WordTitleLocalAdapter(final Context context, final int mLayoutResourceId, final ArrayList<WordItem> data) {
+        super(context, mLayoutResourceId, data);
+        this.mLayoutResourceId = mLayoutResourceId;
+        mContext = context;
+        mData = data;
     }
 
     private static final class ViewHolder {
@@ -57,12 +57,12 @@ public class WordTitleLocalAdapter extends ArrayAdapter<WordItem> {
     public View getView(final int position, final View convertView, final ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            final LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-            view = inflater.inflate(layoutResourceId, parent, false);
+            final LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+            view = inflater.inflate(mLayoutResourceId, parent, false);
             ViewHolder.s_textViewItemTitle = (TextView) view.findViewById(R.id.word_title_item_title);
             ViewHolder.s_textViewDesc = (TextView) view.findViewById(R.id.word_title_item_desc);
         }
-        final WordItem wordItem = data.get(position);
+        final WordItem wordItem = mData.get(position);
         ViewHolder.s_textViewItemTitle.setText(wordItem.getTitle());
         ViewHolder.s_textViewDesc.setText(wordItem.getUrl());
         view.setTag(position);

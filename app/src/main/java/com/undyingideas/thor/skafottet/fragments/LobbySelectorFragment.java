@@ -51,24 +51,24 @@ public class LobbySelectorFragment extends Fragment {
     private static final String KEY_IS_ONLINE = "o";
     private static final String KEY_LAST_PLAYER_LIST = "lpl";
     private boolean isOffline = true;
-    private ListView listView;
+    private ListView mListView;
 
-    private final ArrayList<LobbyDTO> lobbys = new ArrayList<>();
-    private MultiplayerLobbyAdapter lobbyAdapter;
-    private Runnable updater;
+    private final ArrayList<LobbyDTO> mLobbys = new ArrayList<>();
+    private MultiplayerLobbyAdapter mLobbyAdapter;
+    private Runnable mUpdater;
 
     @Nullable
     private OnMultiPlayerPlayerFragmentInteractionListener mListener;
 
     @Nullable
-    private IFragmentFlipper iFragmentFlipper;
+    private IFragmentFlipper mFragmentFlipper;
 
     @Override
     public void onAttach(final Context context) {
         super.onAttach(context);
         if (context instanceof OnMultiPlayerPlayerFragmentInteractionListener && context instanceof IFragmentFlipper) {
             mListener = (OnMultiPlayerPlayerFragmentInteractionListener) context;
-            iFragmentFlipper = (IFragmentFlipper) context;
+            mFragmentFlipper = (IFragmentFlipper) context;
         } else {
             throw new RuntimeException(context.toString() + " must implement OnMultiPlayerPlayerFragmentInteractionListener & IFragmentFlipper.");
         }
@@ -81,7 +81,7 @@ public class LobbySelectorFragment extends Fragment {
             isOffline = !getArguments().getBoolean(KEY_IS_ONLINE);
         }
         if (isOffline) {
-            WindowLayout.showSnack("Kunne ikke få fat i en spilliste. Slå internet forbindelsen til og prøv igen.", listView, false);
+            WindowLayout.showSnack("Kunne ikke få fat i en spilliste. Slå internet forbindelsen til og prøv igen.", mListView, false);
         } else {
             // TODO MAYBE
         }
@@ -94,7 +94,7 @@ public class LobbySelectorFragment extends Fragment {
         final FloatingActionButton fab = (FloatingActionButton) root.findViewById(R.id.fab);
         fab.setOnClickListener(new FloatListener());
 
-        listView = (ListView) root.findViewById(R.id.multiplayer_player_list);
+        mListView = (ListView) root.findViewById(R.id.multiplayer_player_list);
 
         updateList();
 
@@ -107,7 +107,7 @@ public class LobbySelectorFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        iFragmentFlipper = null;
+        mFragmentFlipper = null;
     }
 
     /**
@@ -136,28 +136,28 @@ public class LobbySelectorFragment extends Fragment {
     }
 
     private void onButtonPressed(final int position) {
-        if (mListener != null) mListener.onPlayerClicked(lobbys.get(position).getPlayerList().get(0).getName());
+        if (mListener != null) mListener.onPlayerClicked(mLobbys.get(position).getPlayerList().get(0).getName());
     }
 
     private void configureAdapter() {
-        lobbys.clear();
+        mLobbys.clear();
 
 //        removeInactive(GameUtility.mpc.name);
-        lobbyAdapter = new MultiplayerLobbyAdapter(GameUtility.getMe(), getContext(), R.layout.multiplayer_player_list_row, lobbys);
+        mLobbyAdapter = new MultiplayerLobbyAdapter(GameUtility.getMe(), getContext(), R.layout.multiplayer_player_list_row, mLobbys);
 
-        listView.setAdapter(lobbyAdapter);
-        listView.setOnItemClickListener(new OnLobbyClick(this));
-        lobbyAdapter.notifyDataSetChanged();
-        if (lobbys.isEmpty()) WindowLayout.showSnack("Du har ingen udfordringer klar", listView, false);
+        mListView.setAdapter(mLobbyAdapter);
+        mListView.setOnItemClickListener(new OnLobbyClick(this));
+        mLobbyAdapter.notifyDataSetChanged();
+        if (mLobbys.isEmpty()) WindowLayout.showSnack("Du har ingen udfordringer klar", mListView, false);
     }
 
     private void updateList() {
-        if (updater == null)
-            updater = new UpdateList();
+        if (mUpdater == null)
+            mUpdater = new UpdateList();
 
         configureAdapter();
 
-//        GameUtility.mpc.setRunnable(updater);
+//        GameUtility.mpc.setRunnable(mUpdater);
     }
 
     public void setOnlineStatus(final boolean newStatus) {
@@ -178,7 +178,7 @@ public class LobbySelectorFragment extends Fragment {
 
         @Override
         public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-            final LobbySelectorFragment lobbySelectorFragment = weakReference.get();
+            final LobbySelectorFragment lobbySelectorFragment = mWeakReference.get();
             if (lobbySelectorFragment != null) {
                 Log.d("NG", String.valueOf(id));
                 // do stuff!!!
@@ -186,13 +186,13 @@ public class LobbySelectorFragment extends Fragment {
 //                if (GameUtility.mpc.name == null)
 //                    Log.e("lobbyselectorfrag", "error : name == null");
 //                else {
-//                    for (final LobbyPlayerStatus lobbyPlayerStatus : lobbySelectorFragment.lobbys.get(position).getPlayerList()) {
+//                    for (final LobbyPlayerStatus lobbyPlayerStatus : lobbySelectorFragment.mLobbys.get(position).getPlayerList()) {
 //                        if (lobbyPlayerStatus.getName().equals(GameUtility.mpc.name)) {
 //                            if (lobbyPlayerStatus.getScore() == -1) {
-//                                Log.d("firebaseopengame", lobbySelectorFragment.lobbys.get(position).getWord());
+//                                Log.d("firebaseopengame", lobbySelectorFragment.mLobbys.get(position).getWord());
 //                                //noinspection ConstantConditions
 //                                String k = "";
-//                                final LobbyDTO dto = lobbySelectorFragment.lobbys.get(position);
+//                                final LobbyDTO dto = lobbySelectorFragment.mLobbys.get(position);
 //                                final Set<String> keys = GameUtility.mpc.lc.lobbyList.keySet();
 //                                for (final String key : keys)
 //                                    if (dto.equals(GameUtility.mpc.lc.lobbyList.get(key))) {
@@ -226,12 +226,12 @@ public class LobbySelectorFragment extends Fragment {
 //            if (GameUtility.mpc.name == null) {
 //                // TODO not logged in
 //            } else {
-//                lobbys.clear();
+//                mLobbys.clear();
 //
 //                removeInactive(GameUtility.mpc.name);
-//                lobbyAdapter = new MultiplayerLobbyAdapter(GameUtility.mpc.name, getContext(), R.layout.multiplayer_player_list_row, lobbys);
-//                listView.setAdapter(lobbyAdapter);
-//                lobbyAdapter.notifyDataSetChanged();
+//                mLobbyAdapter = new MultiplayerLobbyAdapter(GameUtility.mpc.name, getContext(), R.layout.multiplayer_player_list_row, mLobbys);
+//                mListView.setAdapter(mLobbyAdapter);
+//                mLobbyAdapter.notifyDataSetChanged();
 //            }
         }
     }
@@ -249,7 +249,7 @@ public class LobbySelectorFragment extends Fragment {
 //                        break;
 //                    }
 //                }
-//                if (b) lobbys.add(dto);
+//                if (b) mLobbys.add(dto);
 //            } catch (final NullPointerException e) {
 //                Log.e("NullPointer", e.toString());
 //            }

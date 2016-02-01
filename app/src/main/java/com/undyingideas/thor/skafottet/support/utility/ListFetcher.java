@@ -43,9 +43,9 @@ import java.util.zip.GZIPOutputStream;
  */
 public final class ListFetcher {
 
-    private static final String filename = "words.dat";
+    private static final String sFilename = "words.dat";
 
-    private static Handler listHandler = new Handler();
+    private static Handler sListHandler = new Handler();
     private static Runnable listSaver;
 
     private static byte[] compressWordList(final WordController wordController) {
@@ -91,7 +91,7 @@ public final class ListFetcher {
     public static WordController loadWordList(final Context context) {
         try {
             // load data
-            final FileInputStream inputStream = context.openFileInput(filename);
+            final FileInputStream inputStream = context.openFileInput(sFilename);
             final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             int nRead;
             final byte[] data = new byte[16384];
@@ -99,7 +99,7 @@ public final class ListFetcher {
                 buffer.write(data, 0, nRead);
             buffer.flush();
             final byte[] returnBytes = buffer.toByteArray();
-            Log.d(filename, filename + " file size (on disk) : " + buffer.size());
+            Log.d(sFilename, sFilename + " file size (on disk) : " + buffer.size());
             buffer.close();
             return decompressWordList(returnBytes);
         } catch (IOException | ClassNotFoundException e) {
@@ -112,7 +112,7 @@ public final class ListFetcher {
     private static boolean saveWordLists(final WordController wordController, final Context context) {
         try {
             final byte[] comp = compressWordList(wordController);
-            final FileOutputStream outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
+            final FileOutputStream outputStream = context.openFileOutput(sFilename, Context.MODE_PRIVATE);
             outputStream.write(comp);
             outputStream.close();
             return true;
@@ -123,19 +123,19 @@ public final class ListFetcher {
     }
 
     public static boolean deleteList(final Context context) {
-        return context.deleteFile(filename);
+        return context.deleteFile(sFilename);
     }
 
     public static String fileLocation(final Context context) {
-        return context.getFileStreamPath(filename).getAbsolutePath();
+        return context.getFileStreamPath(sFilename).getAbsolutePath();
     }
 
     public static Handler getListHandler() {
-        return listHandler;
+        return sListHandler;
     }
 
     public static void setListHandler(final Handler listHandler) {
-        ListFetcher.listHandler = listHandler;
+        ListFetcher.sListHandler = listHandler;
     }
 
     public static Runnable getListSaver() {
@@ -154,7 +154,7 @@ public final class ListFetcher {
 
         @Override
         public void run() {
-            final Context context = weakReference.get();
+            final Context context = mWeakReference.get();
             if (context != null) {
                 Log.d("ListSaver", String.valueOf(saveWordLists(GameUtility.getWordController(), context)));
             }

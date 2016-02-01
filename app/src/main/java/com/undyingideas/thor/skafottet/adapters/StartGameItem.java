@@ -26,17 +26,17 @@ import android.support.annotation.DrawableRes;
  */
 public class StartGameItem {
 
-    public final int itemId;
-    public final CharSequence itemName;
-    public final CharSequence description;
+    public final int mItemId;
+    public final CharSequence mItemName;
+    public final CharSequence mDescription;
     public @DrawableRes
-    final int resourceIcon;
+    final int mResourceIcon;
 
     // constructor
     public StartGameItem(final int itemId, final CharSequence itemName, final CharSequence description, final @DrawableRes int resourceIcon) {
-        this.itemId = itemId;
-        this.itemName = itemName;
-        this.description = description;
-        this.resourceIcon = resourceIcon;
+        mItemId = itemId;
+        mItemName = itemName;
+        mDescription = description;
+        mResourceIcon = resourceIcon;
     }
 }

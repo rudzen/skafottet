@@ -26,10 +26,10 @@ import java.lang.ref.WeakReference;
  */
 public abstract class WeakReferenceHolder<E> {
 
-    protected final WeakReference<E> weakReference;
+    protected final WeakReference<E> mWeakReference;
 
     protected WeakReferenceHolder(final E objectReference) {
-        weakReference = new WeakReference<>(objectReference);
+        mWeakReference = new WeakReference<>(objectReference);
     }
 
 }

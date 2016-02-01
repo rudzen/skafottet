@@ -36,7 +36,7 @@ import java.io.InputStream;
  */
 public class HelpFragment extends Fragment {
 
-    private static final byte[] emptyBytes = new byte[0];
+    private static final byte[] EMPTY_BYTES = new byte[0];
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
@@ -58,11 +58,11 @@ public class HelpFragment extends Fragment {
                 input.read(buffer);
                 input.close();
 //                help.addStringData(new String(buffer, "UTF-8"));
-//                buffer = emptyBytes; // clear it right away..
+//                buffer = EMPTY_BYTES; // clear it right away..
 //                GameUtility.prefs.putObject(Constant.KEY_PREF_HELP, help);
 //                WindowLayout.showSnack("Standard tekst hentet.", wv, true);
                 theText = new String(buffer, "UTF-8");
-                buffer = emptyBytes;
+                buffer = EMPTY_BYTES;
             } catch (final IOException e) {
                 e.printStackTrace();
                 theText = "Fejl ved indhentning af fil.";

@@ -46,7 +46,7 @@ public class PlayerListenerSlave extends WeakReferenceHolder<PlayerListenerSlave
 
     @Override
     public void run() {
-        final PlayerListenerReceiver playerListenerReceiver = weakReference.get();
+        final PlayerListenerReceiver playerListenerReceiver = mWeakReference.get();
         if (playerListenerReceiver != null) {
             if (!aborted) {
                 playerListenerReceiver.onPlayerDataReceived(this);

@@ -78,7 +78,7 @@ final class BatteryLevelRecieverData extends WeakReferenceHolder<BatteryLevelRec
     @Override
     public void run() {
         Log.d(TAG, "Observer runnable started.");
-        final BatteryLevelRecieveDataInterface internetRecieverInterface = weakReference.get();
+        final BatteryLevelRecieveDataInterface internetRecieverInterface = mWeakReference.get();
         if (internetRecieverInterface != null) {
             internetRecieverInterface.onBatteryStatusChanged(data);
         }

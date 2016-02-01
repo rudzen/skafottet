@@ -43,7 +43,7 @@ public abstract class SoundAbstract extends BaseActivity implements SoundPool.On
     /* sound stuff */
     @RawRes
     final
-    private int[] sound_raw = {
+    private int[] mSoundRaw = {
             R.raw.guess_wrong,
             R.raw.guess_right,
             R.raw.intro,
@@ -52,31 +52,31 @@ public abstract class SoundAbstract extends BaseActivity implements SoundPool.On
             R.raw.challenge
     };
 
-    private SoundPool soundPool;
-    private float volume;
+    private SoundPool mSoundPool;
+    private float mVolume;
 
     private final static int SOUND_COUNT = 6;
-    private final SoundItem[] soundItems = new SoundItem[SOUND_COUNT];
+    private final SoundItem[] mSoundItems = new SoundItem[SOUND_COUNT];
 
-    SoundThread soundThread;
-    private boolean loaded;
+    SoundThread mSoundThread;
+    private boolean mLoaded;
 
     void initSound() {
         final AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         final float actVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         final float maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        volume = actVolume / maxVolume;
+        mVolume = actVolume / maxVolume;
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-        soundPool = makeSoundPool();
-        soundPool.setOnLoadCompleteListener(this);
+        mSoundPool = makeSoundPool();
+        mSoundPool.setOnLoadCompleteListener(this);
 
         loadSounds();
 
         // If the thread isnt initialized or it was accidently GC'd..
-        if (soundThread == null) {
-            soundThread = new SoundThread(soundPool);
-            soundThread.start();
+        if (mSoundThread == null) {
+            mSoundThread = new SoundThread(mSoundPool);
+            mSoundThread.start();
         }
     }
 
@@ -100,15 +100,15 @@ public abstract class SoundAbstract extends BaseActivity implements SoundPool.On
     @SuppressWarnings("ObjectAllocationInLoop")
     private void loadSounds() {
         for (int i = 0; i < SOUND_COUNT; i++) {
-            soundItems[i] = new SoundItem(soundPool.load(this, sound_raw[i], 1), volume);
+            mSoundItems[i] = new SoundItem(mSoundPool.load(this, mSoundRaw[i], 1), mVolume);
         }
     }
 
     void playSound(final int index) {
         Log.d(TAG, String.valueOf(GameUtility.getSettings().prefsSfx));
         if (GameUtility.getSettings().prefsSfx) {
-            if (loaded) {
-                soundThread.sounds.add(soundItems[index]);
+            if (mLoaded) {
+                mSoundThread.sounds.add(mSoundItems[index]);
             } else {
                 WindowLayout.showSnack("Lydfil ikke indhentet endnu,", findViewById(R.id.fragment_content), true);
             }
@@ -117,6 +117,6 @@ public abstract class SoundAbstract extends BaseActivity implements SoundPool.On
 
     @Override
     public void onLoadComplete(final SoundPool soundPool, final int sampleId, final int status) {
-        loaded = true;
+        mLoaded = true;
     }
 }

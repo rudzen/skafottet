@@ -88,10 +88,10 @@ import static com.undyingideas.thor.skafottet.support.utility.GameUtility.setWor
  */
 public class SplashActivity extends AppCompatActivity {
 
-    private Animation animation;
-    private RelativeLayout logo;
-    private TextView title1, title2;
-    private Handler loadHandler;
+    private Animation mAnimation;
+    private RelativeLayout mLogo;
+    private TextView mTitleRight, mTitleLeft;
+    private Handler mLoadHandler;
     private static final int MSG_LOAD_COMPLETE = 1;
     private static final int MSG_ANON_AUTH_COMPLETE = 2;
     private static final int MSG_USER_AUTH_COMPLETE = 3;
@@ -110,13 +110,13 @@ public class SplashActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_splash);
 
-        loadHandler = new LoadHandler(this);
-        loadHandler.post(new LoadConfig());
+        mLoadHandler = new LoadHandler(this);
+        mLoadHandler.post(new LoadConfig());
 
-        logo = (RelativeLayout) findViewById(R.id.splash_center_circle);
-        logo.startAnimation(AnimationUtils.loadAnimation(this, R.anim.step_number_fader));
-        title2 = (TextView) findViewById(R.id.splash_text_left);
-        title1 = (TextView) findViewById(R.id.splash_text_right);
+        mLogo = (RelativeLayout) findViewById(R.id.splash_center_circle);
+        mLogo.startAnimation(AnimationUtils.loadAnimation(this, R.anim.step_number_fader));
+        mTitleLeft = (TextView) findViewById(R.id.splash_text_left);
+        mTitleRight = (TextView) findViewById(R.id.splash_text_right);
 
 
         if (savedInstanceState == null) {
@@ -141,23 +141,23 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void flyIn() {
-        animation = AnimationUtils.loadAnimation(this, R.anim.app_name_animation);
-        title1.startAnimation(animation);
+        mAnimation = AnimationUtils.loadAnimation(this, R.anim.app_name_animation);
+        mTitleRight.startAnimation(mAnimation);
 
-        animation = AnimationUtils.loadAnimation(this, R.anim.pro_animation);
-        title2.startAnimation(animation);
+        mAnimation = AnimationUtils.loadAnimation(this, R.anim.pro_animation);
+        mTitleLeft.startAnimation(mAnimation);
     }
 
     private void endSplash() {
-        logo.setAnimation(null);
-        // just use YoYo for the nice animation :-)
-        YoYo.with(Techniques.Pulse).duration(700).withListener(new SplashEndAnimatorListener(this)).playOn(logo);
+        mLogo.setAnimation(null);
+        // just use YoYo for the nice mAnimation :-)
+        YoYo.with(Techniques.Pulse).duration(700).withListener(new SplashEndAnimatorListener(this)).playOn(mLogo);
 
-        animation = AnimationUtils.loadAnimation(this, R.anim.app_name_animation_back);
-        title1.startAnimation(animation);
+        mAnimation = AnimationUtils.loadAnimation(this, R.anim.app_name_animation_back);
+        mTitleRight.startAnimation(mAnimation);
 
-        animation = AnimationUtils.loadAnimation(this, R.anim.pro_animation_back);
-        title2.startAnimation(animation);
+        mAnimation = AnimationUtils.loadAnimation(this, R.anim.pro_animation_back);
+        mTitleLeft.startAnimation(mAnimation);
     }
 
     private class LoadConfig implements Runnable {
@@ -252,7 +252,7 @@ public class SplashActivity extends AppCompatActivity {
                 Log.d(TAG, "Loggin in with u/p : " + lastUser + "/" + lastPw);
                 getFirebase().authWithPassword(lastUser, lastPw, new StartupAuthResultHandler(true));
             } else {
-                final Message message = loadHandler.obtainMessage(MSG_LOAD_COMPLETE);
+                final Message message = mLoadHandler.obtainMessage(MSG_LOAD_COMPLETE);
                 message.sendToTarget();
             }
         }
@@ -271,7 +271,7 @@ public class SplashActivity extends AppCompatActivity {
                     Log.d(TAG, (withPassword ? "Logged in with password as : " : "Logged in without password as : ") + authData.getUid());
                     setAuthenticatedUserPasswordProvider(authData);
                 } else {
-                    final Message message = loadHandler.obtainMessage(MSG_LOAD_COMPLETE);
+                    final Message message = mLoadHandler.obtainMessage(MSG_LOAD_COMPLETE);
                     message.sendToTarget();
                 }
             }
@@ -280,7 +280,7 @@ public class SplashActivity extends AppCompatActivity {
             public void onAuthenticationError(final FirebaseError firebaseError) {
                 Log.d(TAG, (withPassword ? "Failed to log in with password : " : "Failed to Log in without password : ") + firebaseError.getMessage());
                 getMe().setHasLoggedInWithPassword(false);
-                final Message message = loadHandler.obtainMessage(MSG_LOAD_COMPLETE);
+                final Message message = mLoadHandler.obtainMessage(MSG_LOAD_COMPLETE);
                 message.sendToTarget();
             }
 
@@ -301,14 +301,14 @@ public class SplashActivity extends AppCompatActivity {
                 public void onDataChange(final DataSnapshot dataSnapshot) {
                     final Message message;
                     GameUtility.setMe(dataSnapshot.getValue(PlayerDTO.class));
-                    message = loadHandler.obtainMessage(GameUtility.getMe() != null ? MSG_USER_AUTH_COMPLETE : MSG_LOAD_COMPLETE);
+                    message = mLoadHandler.obtainMessage(GameUtility.getMe() != null ? MSG_USER_AUTH_COMPLETE : MSG_LOAD_COMPLETE);
                     message.sendToTarget();
                 }
 
                 @Override
                 public void onCancelled(final FirebaseError firebaseError) {
                     Log.e(TAG, getString(R.string.log_error_the_read_failed) + firebaseError.getMessage());
-                    final Message message = loadHandler.obtainMessage(MSG_LOAD_COMPLETE);
+                    final Message message = mLoadHandler.obtainMessage(MSG_LOAD_COMPLETE);
                     message.sendToTarget();
                 }
             }
@@ -343,7 +343,7 @@ public class SplashActivity extends AppCompatActivity {
                 }
                 final SplashActivity splashActivity = splashActivityWeakReference.get();
                 if (splashActivity != null) {
-                    splashActivity.loadHandler.postDelayed(new EndSplash(splashActivity), 1000);
+                    splashActivity.mLoadHandler.postDelayed(new EndSplash(splashActivity), 1000);
                 }
             }
         }
@@ -361,7 +361,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     /**
-     * Class to execute code when a specific animation ends.
+     * Class to execute code when a specific mAnimation ends.
      */
     private static class SplashEndAnimatorListener extends WeakReferenceHolder<SplashActivity> implements Animator.AnimatorListener {
 
@@ -374,7 +374,7 @@ public class SplashActivity extends AppCompatActivity {
 
         @Override
         public void onAnimationEnd(final Animator animation) {
-            final SplashActivity splashActivity = weakReference.get();
+            final SplashActivity splashActivity = mWeakReference.get();
             if (splashActivity != null) {
                 final Intent intent = new Intent(splashActivity, GameActivity.class);
                 final Bundle bundle;

@@ -19,10 +19,10 @@ import com.undyingideas.thor.skafottet.R;
  *          Cleanup of the mess.
  */
 public class AutoScaleTextView extends TextView {
-    private final Paint textPaint;
+    private final Paint mTextPaint;
 
-    private float preferredTextSize;
-    private float minTextSize;
+    private float mPreferredTextSize;
+    private float mMinTextSize;
 
     public AutoScaleTextView(final Context context) {
         this(context, null);
@@ -37,13 +37,13 @@ public class AutoScaleTextView extends TextView {
     public AutoScaleTextView(final Context context, final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
 
-        textPaint = new Paint();
+        mTextPaint = new Paint();
 
         final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AutoScaleTextView, defStyle, 0);
-        minTextSize = a.getDimension(R.styleable.AutoScaleTextView_minTextSize, 10f);
+        mMinTextSize = a.getDimension(R.styleable.AutoScaleTextView_minTextSize, 10f);
         a.recycle();
 
-        preferredTextSize = getTextSize();
+        mPreferredTextSize = getTextSize();
     }
 
     /**
@@ -53,7 +53,7 @@ public class AutoScaleTextView extends TextView {
      *         The minimum text size
      */
     public void setMinTextSize(final float minTextSize) {
-        this.minTextSize = minTextSize;
+        this.mMinTextSize = minTextSize;
     }
 
     /**
@@ -73,18 +73,18 @@ public class AutoScaleTextView extends TextView {
 
         final float threshold = 0.5f; // How close we have to be
 
-        textPaint.set(getPaint());
+        mTextPaint.set(getPaint());
 
-        while (preferredTextSize - minTextSize > threshold) {
-            final float size = (preferredTextSize + minTextSize) / 2;
-            textPaint.setTextSize(size);
-            if (textPaint.measureText(text) >= targetWidth)
-                preferredTextSize = size; // too big
+        while (mPreferredTextSize - mMinTextSize > threshold) {
+            final float size = (mPreferredTextSize + mMinTextSize) / 2;
+            mTextPaint.setTextSize(size);
+            if (mTextPaint.measureText(text) >= targetWidth)
+                mPreferredTextSize = size; // too big
             else
-                minTextSize = size; // too small
+                mMinTextSize = size; // too small
         }
         // Use min size so that we undershoot rather than overshoot
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, minTextSize);
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, mMinTextSize);
     }
 
     @Override

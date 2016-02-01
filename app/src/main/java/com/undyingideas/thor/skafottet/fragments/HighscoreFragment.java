@@ -69,26 +69,27 @@ public class HighscoreFragment extends Fragment implements
     private HighscoreListAdapter mAdapter;
     public DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    private NavigationView navigationView;
+    private NavigationView mNavigationView;
 
-    private StickyListHeadersListView stickyList;
-    private SwipeRefreshLayout refreshLayout;
+    private StickyListHeadersListView mStickyList;
+    private SwipeRefreshLayout mRefreshLayout;
 
-    private Toolbar toolbar;
+    private Toolbar mToolbar;
 
-    private Handler handler;
-    private Runnable refreshStopper;
+    private Handler mHandler;
+    private Runnable mRefreshStopper;
 
-    private static IFragmentFlipper iFragmentFlipper;
+    private static IFragmentFlipper mFragmentFlipper;
 
-    private static boolean local;
+    private static boolean sLocal;
     private static final String LOCAL_KEY = "lkey";
+
 
     @Override
     public void onAttach(final Context context) {
         super.onAttach(context);
         if (context instanceof IFragmentFlipper) {
-            iFragmentFlipper = (IFragmentFlipper) context;
+            mFragmentFlipper = (IFragmentFlipper) context;
         } else {
             throw new RuntimeException(context.toString() + " must implement IFragmentFlipper.");
         }
@@ -97,8 +98,8 @@ public class HighscoreFragment extends Fragment implements
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        refreshStopper = new RefreshStopper();
-        handler = new Handler();
+        mRefreshStopper = new RefreshStopper();
+        mHandler = new Handler();
     }
 
     @Nullable
@@ -107,19 +108,19 @@ public class HighscoreFragment extends Fragment implements
         final View root = inflater.inflate(R.layout.fragment_highscore, container, false);
 
         /* set up the view */
-        refreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.highscore_refresh_layout);
-        stickyList = (StickyListHeadersListView) root.findViewById(R.id.list);
-        stickyList.addHeaderView(inflater.inflate(R.layout.word_list_header, null));
-        stickyList.addFooterView(inflater.inflate(R.layout.word_list_footer, null));
-        stickyList.setEmptyView(root.findViewById(R.id.highscore_empty));
-        stickyList.setDrawingListUnderStickyHeader(true);
-        stickyList.setAreHeadersSticky(true);
+        mRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.highscore_refresh_layout);
+        mStickyList = (StickyListHeadersListView) root.findViewById(R.id.list);
+        mStickyList.addHeaderView(inflater.inflate(R.layout.word_list_header, null));
+        mStickyList.addFooterView(inflater.inflate(R.layout.word_list_footer, null));
+        mStickyList.setEmptyView(root.findViewById(R.id.highscore_empty));
+        mStickyList.setDrawingListUnderStickyHeader(true);
+        mStickyList.setAreHeadersSticky(true);
 
-        toolbar = (Toolbar) root.findViewById(R.id.toolbar);
+        mToolbar = (Toolbar) root.findViewById(R.id.toolbar);
 
         mDrawerLayout = (DrawerLayout) root.findViewById(R.id.highscore_drawer_layout);
 
-        navigationView = (NavigationView) root.findViewById(R.id.highscore_nav_view);
+        mNavigationView = (NavigationView) root.findViewById(R.id.highscore_nav_view);
 
         setHasOptionsMenu(true);
 
@@ -129,27 +130,27 @@ public class HighscoreFragment extends Fragment implements
     @Override
     public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
         /* configure the view */
-        refreshLayout.setOnRefreshListener(new SwipeOnRefreshListener(this));
+        mRefreshLayout.setOnRefreshListener(new SwipeOnRefreshListener(this));
 
         mAdapter = new HighscoreListAdapter(getContext(), GameUtility.getHighscoreManager().getScores());
 
-        stickyList.setOnItemClickListener(this);
-        stickyList.setOnHeaderClickListener(this);
-        stickyList.setOnStickyHeaderChangedListener(this);
-        stickyList.setOnStickyHeaderOffsetChangedListener(this);
-        stickyList.setAdapter(mAdapter);
-        stickyList.setStickyHeaderTopOffset(0);
+        mStickyList.setOnItemClickListener(this);
+        mStickyList.setOnHeaderClickListener(this);
+        mStickyList.setOnStickyHeaderChangedListener(this);
+        mStickyList.setOnStickyHeaderOffsetChangedListener(this);
+        mStickyList.setAdapter(mAdapter);
+        mStickyList.setStickyHeaderTopOffset(0);
 
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        toolbar.setTitle(getString(R.string.highscore_title));
-        toolbar.setSubtitle("Lokal");
-        toolbar.setCollapsible(false);
-        toolbar.setLogo(R.mipmap.ic_launcher);
-        toolbar.setLogoDescription("Applikations logo");
-        toolbar.setNavigationContentDescription("Home icon");
-//        toolbar.inflateMenu(R.menu.menu_word_list);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        mToolbar.setTitle(getString(R.string.highscore_title));
+        mToolbar.setSubtitle("Lokal");
+        mToolbar.setCollapsible(false);
+        mToolbar.setLogo(R.mipmap.ic_launcher);
+        mToolbar.setLogoDescription("Applikations logo");
+        mToolbar.setNavigationContentDescription("Home icon");
+//        mToolbar.inflateMenu(R.menu.menu_word_list);
 
-        mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, toolbar, R.string.highscore_drawer_open, R.string.highscore_drawer_close);
+        mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, mToolbar, R.string.highscore_drawer_open, R.string.highscore_drawer_close);
 
         final ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (ab != null) {
@@ -163,7 +164,7 @@ public class HighscoreFragment extends Fragment implements
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
 
-        navigationView.setNavigationItemSelectedListener(this);
+        mNavigationView.setNavigationItemSelectedListener(this);
 
         super.onViewCreated(view, savedInstanceState);
     }
@@ -171,22 +172,22 @@ public class HighscoreFragment extends Fragment implements
     @Override
     public void onViewStateRestored(@Nullable final Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            local = savedInstanceState.getBoolean(LOCAL_KEY);
+            sLocal = savedInstanceState.getBoolean(LOCAL_KEY);
         } else {
-            local = true;
+            sLocal = true;
         }
         super.onViewStateRestored(savedInstanceState);
     }
 
     @Override
     public void onDetach() {
-        iFragmentFlipper = null;
+        mFragmentFlipper = null;
         super.onDetach();
     }
 
     @Override
     public void onSaveInstanceState(final Bundle outState) {
-        outState.putBoolean(LOCAL_KEY, local);
+        outState.putBoolean(LOCAL_KEY, sLocal);
         super.onSaveInstanceState(outState);
     }
 
@@ -206,7 +207,7 @@ public class HighscoreFragment extends Fragment implements
 
     @Override
     public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_word_list, menu);
+        inflater.inflate(R.menu.nav_highscore, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -216,7 +217,7 @@ public class HighscoreFragment extends Fragment implements
     }
 
     private boolean updateCurrentList() {
-        if (!local) {
+        if (!sLocal) {
             // TODO : re-read data from dataholder into adapter and reset the listview
         }
         return true;
@@ -275,7 +276,7 @@ public class HighscoreFragment extends Fragment implements
 
     private class RefreshStopper implements Runnable {
         @Override
-        public void run() { refreshLayout.setRefreshing(false); }
+        public void run() { mRefreshLayout.setRefreshing(false); }
     }
 
     private static class SwipeOnRefreshListener extends WeakReferenceHolder<HighscoreFragment> implements SwipeRefreshLayout.OnRefreshListener {
@@ -286,12 +287,12 @@ public class HighscoreFragment extends Fragment implements
 
         @Override
         public void onRefresh() {
-            final HighscoreFragment wordListFragment = weakReference.get();
+            final HighscoreFragment wordListFragment = mWeakReference.get();
             if (wordListFragment != null) {
                 if (!wordListFragment.updateCurrentList()) {
-                    wordListFragment.handler.postDelayed(wordListFragment.refreshStopper, 500);
+                    wordListFragment.mHandler.postDelayed(wordListFragment.mRefreshStopper, 500);
                 } else {
-                    wordListFragment.handler.post(wordListFragment.refreshStopper);
+                    wordListFragment.mHandler.post(wordListFragment.mRefreshStopper);
                 }
             }
         }

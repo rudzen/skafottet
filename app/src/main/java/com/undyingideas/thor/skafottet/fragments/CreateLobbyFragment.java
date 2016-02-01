@@ -172,7 +172,7 @@
 //
 //        @Override
 //        public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-//            final CreateLobbyFragment createLobbyFragment =  weakReference.get();
+//            final CreateLobbyFragment createLobbyFragment =  mWeakReference.get();
 //            if (createLobbyFragment != null) {
 //                Log.d("NG", String.valueOf(id));
 //                // do stuff!!!

@@ -19,7 +19,6 @@ package com.undyingideas.thor.skafottet.fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
@@ -86,8 +85,8 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 
     private static final int BUTTON_COUNT = 8;
     private ImageView title;
-    private final RelativeLayout[] buttons = new RelativeLayout[BUTTON_COUNT];
-    private final AutoScaleTextView[] buttons_text = new AutoScaleTextView[BUTTON_COUNT];
+    private final RelativeLayout[] mButtons = new RelativeLayout[BUTTON_COUNT];
+    private final AutoScaleTextView[] mButtons_text = new AutoScaleTextView[BUTTON_COUNT];
 
     private static final int BUTTON_PLAY = 0;
     private static final int BUTTON_HIGHSCORE = 1;
@@ -99,45 +98,43 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
     private static final int BUTTON_QUIT = 7;
 
     /* star field stuff */
-    private StarField sf;
+    private StarField mStarField;
 
     /* buttom text display fields */
     private static final int MSG_UPDATE_TEXT = 1;
     private static final String MSG_STRING = "m";
-    private HTextView textView_buttom;
-    private TextUpdateRunner textUpdateRunner; //  the runnable
-    private TextUpdateHandler textUpdateHandler; // the handler
+    private HTextView mTextView_buttom;
+    private TextUpdateRunner mTextUpdateRunner; //  the runnable
+    private TextUpdateHandler mTextUpdateHandler; // the handler
 
-    /* sensor stuff */
+    /* mSensor stuff */
     @Nullable
-    private SensorManager sensorManager;
+    private SensorManager mSensorManager;
     @Nullable
-    private Sensor sensor;
-    private MenuSensorEventListener sensorListener;
+    private Sensor mSensor;
+    private MenuSensorEventListener mSensorListener;
 
     /* other fields */
     private int button_clicked; // not used atm
-    private boolean click_status;
-    private View.OnClickListener s_buttonListener;
+    private boolean mClickStatus;
+    private View.OnClickListener mButtonListener;
     private static final String TAG = "MenuFragment";
-
-    private GradientDrawable menuButton;
 
     /* observer data receiving classes */
 //    private FireBaseLoginData fireBaseLoginData;
 
     /* interfaces to control the activity's actions */
     @Nullable
-    private IFragmentFlipper iFragmentFlipper;
+    private IFragmentFlipper mFragmentFlipper;
     @Nullable
-    private IGameSoundNotifier iGameSoundNotifier;
+    private IGameSoundNotifier mGameSoundNotifier;
 
     @Override
     public void onAttach(final Context context) {
         super.onAttach(context);
         if (context instanceof IFragmentFlipper && context instanceof IGameSoundNotifier) {
-            iFragmentFlipper = (IFragmentFlipper) context;
-            iGameSoundNotifier = (IGameSoundNotifier) context;
+            mFragmentFlipper = (IFragmentFlipper) context;
+            mGameSoundNotifier = (IGameSoundNotifier) context;
         } else {
             throw new RuntimeException(context.toString() + " must implement IFragmentFlipper & IGameSoundNotifier");
         }
@@ -156,47 +153,47 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_menu, container, false);
 
-        if (s_buttonListener == null) {
-            s_buttonListener = new MenuButtonClickHandler(this);
+        if (mButtonListener == null) {
+            mButtonListener = new MenuButtonClickHandler(this);
         }
 
-        /* begin configuration for starfield and sensor */
-        sf = (StarField) root.findViewById(R.id.sf);
-        sf.init(WindowLayout.screenDimension.x, WindowLayout.screenDimension.y, settings.prefsColour);
+        /* begin configuration for starfield and mSensor */
+        mStarField = (StarField) root.findViewById(R.id.sf);
+        mStarField.init(WindowLayout.screenDimension.x, WindowLayout.screenDimension.y, settings.prefsColour);
 
-        textView_buttom = (HTextView) root.findViewById(R.id.menu_buttom_text);
-        textView_buttom.setAnimateType(HTextViewType.EVAPORATE);
-        textView_buttom.setOnClickListener(new OnLoginClickListener(this));
-        textView_buttom.setTextColor(getSettings().textColour);
+        mTextView_buttom = (HTextView) root.findViewById(R.id.menu_buttom_text);
+        mTextView_buttom.setAnimateType(HTextViewType.EVAPORATE);
+        mTextView_buttom.setOnClickListener(new OnLoginClickListener(this));
+        mTextView_buttom.setTextColor(getSettings().textColour);
 
         title = (ImageView) root.findViewById(R.id.menu_title);
         title.setClickable(true);
-        title.setOnClickListener(s_buttonListener);
+        title.setOnClickListener(mButtonListener);
 
-        buttons[BUTTON_PLAY] = (RelativeLayout) root.findViewById(R.id.menu_button_play);
-        buttons_text[BUTTON_PLAY] = (AutoScaleTextView) root.findViewById(R.id.menu_button_play_text);
+        mButtons[BUTTON_PLAY] = (RelativeLayout) root.findViewById(R.id.menu_button_play);
+        mButtons_text[BUTTON_PLAY] = (AutoScaleTextView) root.findViewById(R.id.menu_button_play_text);
 
-        buttons[BUTTON_HIGHSCORE] = (RelativeLayout) root.findViewById(R.id.menu_button_highscore);
-        buttons_text[BUTTON_HIGHSCORE] = (AutoScaleTextView) root.findViewById(R.id.menu_button_highscore_text);
+        mButtons[BUTTON_HIGHSCORE] = (RelativeLayout) root.findViewById(R.id.menu_button_highscore);
+        mButtons_text[BUTTON_HIGHSCORE] = (AutoScaleTextView) root.findViewById(R.id.menu_button_highscore_text);
 
-        buttons[BUTTON_WORD_LISTS] = (RelativeLayout) root.findViewById(R.id.menu_button_word_lists);
-        buttons_text[BUTTON_WORD_LISTS] = (AutoScaleTextView) root.findViewById(R.id.menu_button_word_lists_text);
+        mButtons[BUTTON_WORD_LISTS] = (RelativeLayout) root.findViewById(R.id.menu_button_word_lists);
+        mButtons_text[BUTTON_WORD_LISTS] = (AutoScaleTextView) root.findViewById(R.id.menu_button_word_lists_text);
 
-        buttons[BUTTON_SETTINGS] = (RelativeLayout) root.findViewById(R.id.menu_button_settings);
-        buttons_text[BUTTON_SETTINGS] = (AutoScaleTextView) root.findViewById(R.id.menu_button_settings_text);
+        mButtons[BUTTON_SETTINGS] = (RelativeLayout) root.findViewById(R.id.menu_button_settings);
+        mButtons_text[BUTTON_SETTINGS] = (AutoScaleTextView) root.findViewById(R.id.menu_button_settings_text);
 
-        buttons[BUTTON_ABOUT] = (RelativeLayout) root.findViewById(R.id.menu_button_about);
-        buttons_text[BUTTON_ABOUT] = (AutoScaleTextView) root.findViewById(R.id.menu_button_about_text);
+        mButtons[BUTTON_ABOUT] = (RelativeLayout) root.findViewById(R.id.menu_button_about);
+        mButtons_text[BUTTON_ABOUT] = (AutoScaleTextView) root.findViewById(R.id.menu_button_about_text);
 
-        buttons[BUTTON_HELP] = (RelativeLayout) root.findViewById(R.id.menu_button_help);
-        buttons_text[BUTTON_HELP] = (AutoScaleTextView) root.findViewById(R.id.menu_button_help_text);
+        mButtons[BUTTON_HELP] = (RelativeLayout) root.findViewById(R.id.menu_button_help);
+        mButtons_text[BUTTON_HELP] = (AutoScaleTextView) root.findViewById(R.id.menu_button_help_text);
 
-        buttons[BUTTON_LOGIN_OUT] = (RelativeLayout) root.findViewById(R.id.menu_button_login_out);
-        buttons_text[BUTTON_LOGIN_OUT] = (AutoScaleTextView) root.findViewById(R.id.menu_button_login_out_text);
-        buttons[BUTTON_LOGIN_OUT].setTag(false); // logged in or not :)
+        mButtons[BUTTON_LOGIN_OUT] = (RelativeLayout) root.findViewById(R.id.menu_button_login_out);
+        mButtons_text[BUTTON_LOGIN_OUT] = (AutoScaleTextView) root.findViewById(R.id.menu_button_login_out_text);
+        mButtons[BUTTON_LOGIN_OUT].setTag(false); // logged in or not :)
 
-        buttons[BUTTON_QUIT] = (RelativeLayout) root.findViewById(R.id.menu_button_quit);
-        buttons_text[BUTTON_QUIT] = (AutoScaleTextView) root.findViewById(R.id.menu_button_quit_text);
+        mButtons[BUTTON_QUIT] = (RelativeLayout) root.findViewById(R.id.menu_button_quit);
+        mButtons_text[BUTTON_QUIT] = (AutoScaleTextView) root.findViewById(R.id.menu_button_quit_text);
 
         /* configure callback observer interfaces data classes */
 //        fireBaseLoginData = new FireBaseLoginData(this);
@@ -207,67 +204,67 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
     @Override
     public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
         /* configure the button colours */
-        DrawableHelper.setButtonColors(buttons, buttons_text);
+        DrawableHelper.setButtonColors(mButtons, mButtons_text);
 
-        /* register the sensor */
+        /* register the mSensor */
         registerSensor();
         super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
     public void onResume() {
-        if (sensor != null && sensorManager != null) sensorManager.registerListener(sensorListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
-        textUpdateRunner = new TextUpdateRunner(this); //  the runnable
-        textUpdateHandler = new TextUpdateHandler(this);
-        textUpdateHandler.post(textUpdateRunner);
+        if (mSensor != null && mSensorManager != null) mSensorManager.registerListener(mSensorListener, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        mTextUpdateRunner = new TextUpdateRunner(this); //  the runnable
+        mTextUpdateHandler = new TextUpdateHandler(this);
+        mTextUpdateHandler.post(mTextUpdateRunner);
         showAll();
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        textUpdateHandler.removeCallbacksAndMessages(null);
+        mTextUpdateHandler.removeCallbacksAndMessages(null);
         super.onPause();
     }
 
     @Override
     public void onStop() {
-        if (sensor != null && sensorManager != null) sensorManager.unregisterListener(sensorListener, sensor);
+        if (mSensor != null && mSensorManager != null) mSensorManager.unregisterListener(mSensorListener, mSensor);
         super.onStop();
     }
 
     @Override
     public void onDetach() {
-        for (int i = 0; i < buttons.length; i++) {
-            buttons[i].setBackground(null);
-            buttons[i] = null;
+        for (int i = 0; i < mButtons.length; i++) {
+            mButtons[i].setBackground(null);
+            mButtons[i] = null;
         }
-        iFragmentFlipper = null;
-        iGameSoundNotifier = null;
+        mFragmentFlipper = null;
+        mGameSoundNotifier = null;
         super.onDetach();
     }
 
     private void setMenuButtonsClickable(final boolean value) {
-        for (final RelativeLayout relativeLayout : buttons) relativeLayout.setClickable(value);
+        for (final RelativeLayout relativeLayout : mButtons) relativeLayout.setClickable(value);
     }
 
     private void registerSensor() {
-        sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
-        if (sensor != null) {
-            sensorListener = new MenuSensorEventListener(this);
-            sensorManager.registerListener(sensorListener, sensor, SensorManager.SENSOR_DELAY_UI);
-            Log.i(TAG, "TYPE_GRAVITY sensor registered");
+        mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        if (mSensor != null) {
+            mSensorListener = new MenuSensorEventListener(this);
+            mSensorManager.registerListener(mSensorListener, mSensor, SensorManager.SENSOR_DELAY_UI);
+            Log.i(TAG, "TYPE_GRAVITY mSensor registered");
         } else {
-            Log.e(TAG, "TYPE_GRAVITY sensor NOT registered");
-            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-            if (sensor != null) {
-                sensorListener = new MenuSensorEventListener(this);
-                sensorManager.registerListener(sensorListener, sensor, SensorManager.SENSOR_DELAY_UI);
-                Log.i(TAG, "TYPE_ACCELEROMETER sensor registered");
+            Log.e(TAG, "TYPE_GRAVITY mSensor NOT registered");
+            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            if (mSensor != null) {
+                mSensorListener = new MenuSensorEventListener(this);
+                mSensorManager.registerListener(mSensorListener, mSensor, SensorManager.SENSOR_DELAY_UI);
+                Log.i(TAG, "TYPE_ACCELEROMETER mSensor registered");
             } else {
-                sensorManager = null;
-                Log.e(TAG, "TYPE_ACCELEROMETER sensor NOT registered");
+                mSensorManager = null;
+                Log.e(TAG, "TYPE_ACCELEROMETER mSensor NOT registered");
             }
         }
     }
@@ -278,17 +275,17 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
     private void showAll() {
 //        Log.d("login showall", String.valueOf(mpc.name == null));
         YoYo.with(Techniques.FadeIn).duration(1000).withListener(new EnterAnimatorHandler(this)).playOn(title);
-        for (final RelativeLayout button : buttons) {
+        for (final RelativeLayout button : mButtons) {
             button.setClickable(true);
-            button.setOnClickListener(s_buttonListener);
+            button.setOnClickListener(mButtonListener);
         }
         setLoginButton();
     }
 
     private void endMenu(final int gameMode, final RelativeLayout clickedView) {
-        if (click_status) {
-            click_status = false;
-            for (final RelativeLayout iv : buttons) if (iv != clickedView) YoYo.with(Techniques.ZoomOut).duration(100).playOn(iv);
+        if (mClickStatus) {
+            mClickStatus = false;
+            for (final RelativeLayout iv : mButtons) if (iv != clickedView) YoYo.with(Techniques.ZoomOut).duration(100).playOn(iv);
             YoYo.with(Techniques.Pulse).duration(500).withListener(new ExitAnimatorHandler(this, gameMode)).playOn(clickedView);
         }
     }
@@ -358,13 +355,13 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 //        if (result) {
 //            WindowLayout.getLoadToast().success();
 //            GameUtility.me.setName(mpc.name);
-//            WindowLayout.showSnack("Du er nu logged ind som " + mpc.name, sf, true);
+//            WindowLayout.showSnack("Du er nu logged ind som " + mpc.name, mStarField, true);
 //        } else {
 //            WindowLayout.getLoadToast().error();
 //            GameUtility.me.setName("Mig");
-//            WindowLayout.showSnack("Kunne ikke logge på.", sf, true);
+//            WindowLayout.showSnack("Kunne ikke logge på.", mStarField, true);
 //        }
-//        buttons[BUTTON_LOGIN_OUT].setTag(result);
+//        mButtons[BUTTON_LOGIN_OUT].setTag(result);
 //        setLoginButton();
 //    }
 
@@ -383,9 +380,9 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 
         @Override
         public void onSensorChanged(final SensorEvent event) {
-            final MenuFragment menuFragment = weakReference.get();
-            if (menuFragment != null && menuFragment.sf != null) {
-                menuFragment.sf.setGravity(event.values[0], event.values[1]);
+            final MenuFragment menuFragment = mWeakReference.get();
+            if (menuFragment != null && menuFragment.mStarField != null) {
+                menuFragment.mStarField.setGravity(event.values[0], event.values[1]);
 //                Log.d("GRAV", "Starfield gravity updated to x: " + event.values[0] + ", y: " + event.values[1]);
             }
         }
@@ -403,12 +400,12 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 
         @Override
         public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
-            final MenuFragment menuFragment = weakReference.get();
+            final MenuFragment menuFragment = mWeakReference.get();
             if (menuFragment != null) {
                 if (which == DialogAction.POSITIVE) {
-                    menuFragment.endMenu(Constant.MODE_FINISH, menuFragment.buttons[menuFragment.BUTTON_QUIT]);
+                    menuFragment.endMenu(Constant.MODE_FINISH, menuFragment.mButtons[menuFragment.BUTTON_QUIT]);
                 } else {
-                    menuFragment.click_status = true;
+                    menuFragment.mClickStatus = true;
                     menuFragment.setMenuButtonsClickable(true);
                 }
             }
@@ -426,11 +423,11 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
         @Override
         public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
             // TODO : Call back to act to play the sound.
-            final MenuFragment menuFragment = weakReference.get();
+            final MenuFragment menuFragment = mWeakReference.get();
             if (menuFragment != null) {
                 WindowLayout.getMd().dismiss();
                 Log.d(TAG, "New game mode selected : " + view.getTag());
-                menuFragment.endMenu((int) view.getTag(), menuFragment.buttons[BUTTON_PLAY]);
+                menuFragment.endMenu((int) view.getTag(), menuFragment.mButtons[BUTTON_PLAY]);
             }
         }
     }
@@ -443,75 +440,75 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 
         @Override
         public void onClick(final View v) {
-            final MenuFragment menuFragment = weakReference.get();
+            final MenuFragment menuFragment = mWeakReference.get();
             if (menuFragment != null) {
-                menuFragment.iGameSoundNotifier.playGameSound(SFX_MENU_CLICK);
+                menuFragment.mGameSoundNotifier.playGameSound(SFX_MENU_CLICK);
                 boolean buttonStates = false;
                 if (v instanceof RelativeLayout) {
                     menuFragment.setMenuButtonsClickable(false);
 
-                    if (v == menuFragment.buttons[BUTTON_PLAY]) {
+                    if (v == menuFragment.mButtons[BUTTON_PLAY]) {
 
                         menuFragment.button_clicked = BUTTON_PLAY;
                         menuFragment.showNewGame();
 
-                    } else if (v == menuFragment.buttons[BUTTON_LOGIN_OUT]) {
+                    } else if (v == menuFragment.mButtons[BUTTON_LOGIN_OUT]) {
 
                         menuFragment.button_clicked = BUTTON_LOGIN_OUT;
 
                         if (getConnectionStatus() > -1) {
                             if (GameUtility.isLoggedIn()) {
-                                menuFragment.iFragmentFlipper.flipFragment(Constant.MODE_LOGOUT);
+                                menuFragment.mFragmentFlipper.flipFragment(Constant.MODE_LOGOUT);
                             } else {
-                                menuFragment.endMenu(Constant.MODE_LOGIN, menuFragment.buttons[BUTTON_LOGIN_OUT]);
+                                menuFragment.endMenu(Constant.MODE_LOGIN, menuFragment.mButtons[BUTTON_LOGIN_OUT]);
                             }
-//                            menuFragment.textView_buttom.callOnClick();
+//                            menuFragment.mTextView_buttom.callOnClick();
                         } else {
                             WindowLayout.showDialog(menuFragment.getContext(), "Fejl", "Ingen internetforbindelse tilstede.");
                         }
 
                         buttonStates = true;
 
-                    } else if (v == menuFragment.buttons[BUTTON_HIGHSCORE]) {
+                    } else if (v == menuFragment.mButtons[BUTTON_HIGHSCORE]) {
 
-                        if (getConnectionStatus() > -1) {
+//                        if (getConnectionStatus() > -1) {
                             menuFragment.button_clicked = BUTTON_HIGHSCORE;
-                            menuFragment.endMenu(Constant.MODE_HIGHSCORE, menuFragment.buttons[BUTTON_HIGHSCORE]);
-                        } else {
-                            buttonStates = true;
-                            WindowLayout.showDialog(menuFragment.getContext(), "Fejl", "Ingen internetforbindelse tilstede.");
-                        }
+                            menuFragment.endMenu(Constant.MODE_HIGHSCORE, menuFragment.mButtons[BUTTON_HIGHSCORE]);
+//                        } else {
+//                            buttonStates = true;
+//                            WindowLayout.showDialog(menuFragment.getContext(), "Fejl", "Ingen internetforbindelse tilstede.");
+//                        }
 
-                    } else if (v == menuFragment.buttons[BUTTON_WORD_LISTS]) {
+                    } else if (v == menuFragment.mButtons[BUTTON_WORD_LISTS]) {
 
                         menuFragment.button_clicked = BUTTON_WORD_LISTS;
-                        menuFragment.endMenu(Constant.MODE_WORD_LIST, menuFragment.buttons[BUTTON_WORD_LISTS]);
+                        menuFragment.endMenu(Constant.MODE_WORD_LIST, menuFragment.mButtons[BUTTON_WORD_LISTS]);
 
-                    } else if (v == menuFragment.buttons[BUTTON_ABOUT]) {
+                    } else if (v == menuFragment.mButtons[BUTTON_ABOUT]) {
 
                         menuFragment.button_clicked = BUTTON_ABOUT;
-                        menuFragment.endMenu(Constant.MODE_ABOUT, menuFragment.buttons[BUTTON_ABOUT]);
+                        menuFragment.endMenu(Constant.MODE_ABOUT, menuFragment.mButtons[BUTTON_ABOUT]);
 
-                    } else if (v == menuFragment.buttons[BUTTON_HELP]) {
+                    } else if (v == menuFragment.mButtons[BUTTON_HELP]) {
 
                         menuFragment.button_clicked = BUTTON_HELP;
-                        menuFragment.endMenu(Constant.MODE_HELP, menuFragment.buttons[BUTTON_HELP]);
+                        menuFragment.endMenu(Constant.MODE_HELP, menuFragment.mButtons[BUTTON_HELP]);
 
-                    } else if (v == menuFragment.buttons[BUTTON_QUIT]) {
+                    } else if (v == menuFragment.mButtons[BUTTON_QUIT]) {
 
                         menuFragment.dialogQuit();
                         menuFragment.button_clicked = BUTTON_QUIT;
 
-                    } else if (v == menuFragment.buttons[BUTTON_SETTINGS]) {
+                    } else if (v == menuFragment.mButtons[BUTTON_SETTINGS]) {
 
                         menuFragment.button_clicked = BUTTON_SETTINGS;
-                        menuFragment.endMenu(Constant.MODE_SETTINGS, menuFragment.buttons[BUTTON_SETTINGS]);
+                        menuFragment.endMenu(Constant.MODE_SETTINGS, menuFragment.mButtons[BUTTON_SETTINGS]);
 
 //                        WindowLayout.showDialog(menuFragment.getContext(), "Hov!", "Denne funktion er ikke klar endnu.");
 //                        buttonStates = true;
                     }
 
-                    // we don't want to disable the buttons for the action that doesn't switch the fragment/act
+                    // we don't want to disable the mButtons for the action that doesn't switch the fragment/act
                     if (buttonStates) {
                         menuFragment.setMenuButtonsClickable(true);
                     }
@@ -531,10 +528,10 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 
         @Override
         public void onAnimationStart(final Animator animation) {
-            final MenuFragment menuFragment = weakReference.get();
+            final MenuFragment menuFragment = mWeakReference.get();
             if (menuFragment != null) {
                 new AllFadeIn(menuFragment).run();
-                menuFragment.click_status = true;
+                menuFragment.mClickStatus = true;
                 menuFragment.setMenuButtonsClickable(true);
             }
         }
@@ -554,17 +551,17 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 
             @Override
             public void run() {
-                final MenuFragment menuFragment = weakReference.get();
+                final MenuFragment menuFragment = mWeakReference.get();
                 if (menuFragment != null) {
                     YoYo.with(Techniques.Pulse).duration(800).playOn(menuFragment.title);
-                    YoYo.with(Techniques.FadeIn).duration(900).playOn(menuFragment.buttons[0]);
-                    YoYo.with(Techniques.FadeIn).duration(900).playOn(menuFragment.buttons[1]);
-                    YoYo.with(Techniques.FadeIn).duration(800).playOn(menuFragment.buttons[2]);
-                    YoYo.with(Techniques.FadeIn).duration(800).playOn(menuFragment.buttons[3]);
-                    YoYo.with(Techniques.FadeIn).duration(700).playOn(menuFragment.buttons[4]);
-                    YoYo.with(Techniques.FadeIn).duration(700).playOn(menuFragment.buttons[5]);
-                    YoYo.with(Techniques.FadeIn).duration(600).playOn(menuFragment.buttons[6]);
-                    YoYo.with(Techniques.FadeIn).duration(600).playOn(menuFragment.buttons[7]);
+                    YoYo.with(Techniques.FadeIn).duration(900).playOn(menuFragment.mButtons[0]);
+                    YoYo.with(Techniques.FadeIn).duration(900).playOn(menuFragment.mButtons[1]);
+                    YoYo.with(Techniques.FadeIn).duration(800).playOn(menuFragment.mButtons[2]);
+                    YoYo.with(Techniques.FadeIn).duration(800).playOn(menuFragment.mButtons[3]);
+                    YoYo.with(Techniques.FadeIn).duration(700).playOn(menuFragment.mButtons[4]);
+                    YoYo.with(Techniques.FadeIn).duration(700).playOn(menuFragment.mButtons[5]);
+                    YoYo.with(Techniques.FadeIn).duration(600).playOn(menuFragment.mButtons[6]);
+                    YoYo.with(Techniques.FadeIn).duration(600).playOn(menuFragment.mButtons[7]);
                 }
             }
         }
@@ -581,26 +578,26 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 
         @Override
         public void onAnimationStart(final Animator animation) {
-//            final MenuFragment menuFragment = weakReference.get();
+//            final MenuFragment menuFragment = mWeakReference.get();
 //            if (menuFragment != null) {
-//                if (menuFragment.button_clicked >= 0 && menuFragment.button_clicked < menuFragment.buttons.length) {
-//                    menuFragment.buttons[menuFragment.button_clicked].setColorFilter(null);
+//                if (menuFragment.button_clicked >= 0 && menuFragment.button_clicked < menuFragment.mButtons.length) {
+//                    menuFragment.mButtons[menuFragment.button_clicked].setColorFilter(null);
 //                }
 //            }
         }
 
         @Override
         public void onAnimationEnd(final Animator animation) {
-            final MenuFragment menuFragment = weakReference.get();
+            final MenuFragment menuFragment = mWeakReference.get();
             if (menuFragment != null) {
                 if (gameMode != Constant.MODE_CONT_GAME) {
-                    menuFragment.iFragmentFlipper.flipFragment(gameMode);
+                    menuFragment.mFragmentFlipper.flipFragment(gameMode);
 //                } else if (gameMode == Constant.MODE_MULTI_PLAYER) {
-//                    menuFragment.iFragmentFlipper.flipFragment(gameMode, mpc.lc.getFirstActiveGame());
+//                    menuFragment.mFragmentFlipper.flipFragment(gameMode, mpc.lc.getFirstActiveGame());
                 } else {
                     final Bundle bundle = new Bundle();
                     bundle.putParcelable(Constant.KEY_SAVE_GAME, (SaveGame)  getPrefs().getObject(Constant.KEY_SAVE_GAME, SaveGame.class));
-                    menuFragment.iFragmentFlipper.flipFragment(gameMode, bundle);
+                    menuFragment.mFragmentFlipper.flipFragment(gameMode, bundle);
                 }
             }
         }
@@ -620,9 +617,9 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 
         @Override
         public void onClick(final View v) {
-            final MenuFragment menuFragment = weakReference.get();
+            final MenuFragment menuFragment = mWeakReference.get();
             if (menuFragment != null) {
-                menuFragment.iFragmentFlipper.flipFragment(Constant.MODE_LOGIN);
+                menuFragment.mFragmentFlipper.flipFragment(Constant.MODE_LOGIN);
 //                WindowLayout.setMd(new MaterialDialog.Builder(menuFragment.getActivity())
 //                        .customView(R.layout.login, false)
 //                        .cancelable(true)
@@ -651,7 +648,7 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 //
 //        @Override
 //        public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
-//            final MenuFragment menuFragment = weakReference.get();
+//            final MenuFragment menuFragment = mWeakReference.get();
 //            if (menuFragment != null) {
 //                if (which == DialogAction.POSITIVE) {
 //                    /* let's inflate the dialog view... */
@@ -673,7 +670,7 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 //                                GameUtility.mpc.login(user, pass, menuFragment.fireBaseLoginData);
 //                            }
 //                        } else {
-//                            WindowLayout.showSnack("Ugyldig information indtastet.", menuFragment.textView_buttom, true);
+//                            WindowLayout.showSnack("Ugyldig information indtastet.", menuFragment.mTextView_buttom, true);
 //                        }
 //                    }
 //                } else {
@@ -710,7 +707,7 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 //                    Log.d(TAG, "Got data : " + msg.getData().getString(MSG_STRING));
                     final String theText = msg.getData().getString(MSG_STRING);
                     if (theText != null) {
-                        menuFragment.textView_buttom.animateText(theText);
+                        menuFragment.mTextView_buttom.animateText(theText);
                     }
                 }
             }
@@ -780,7 +777,7 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
 
         @Override
         public void run() {
-            final MenuFragment menuFragment = weakReference.get();
+            final MenuFragment menuFragment = mWeakReference.get();
             if (menuFragment != null) {
                 if (info.isEmpty()) {
                     updateMargueeScroller();
@@ -788,23 +785,23 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
                 }
                 bundle.clear();
                 bundle.putString(MSG_STRING, info.pollFirst());
-                final Message message = menuFragment.textUpdateHandler.obtainMessage(MSG_UPDATE_TEXT);
+                final Message message = menuFragment.mTextUpdateHandler.obtainMessage(MSG_UPDATE_TEXT);
                 message.setData(bundle);
                 message.sendToTarget();
-                menuFragment.textUpdateHandler.postDelayed(menuFragment.textUpdateRunner, 2000);
+                menuFragment.mTextUpdateHandler.postDelayed(menuFragment.mTextUpdateRunner, 2000);
             }
         }
     }
 
     public void setLoginButton() {
         /* make sure the right button is set for the login/logout status */
-        if (buttons[BUTTON_LOGIN_OUT] != null) { // guard for when application first comes into foreground
+        if (mButtons[BUTTON_LOGIN_OUT] != null) { // guard for when application first comes into foreground
             if (!GameUtility.isLoggedIn()) {
-                buttons_text[BUTTON_LOGIN_OUT].setText(R.string.menu_button_login_in);
+                mButtons_text[BUTTON_LOGIN_OUT].setText(R.string.menu_button_login_in);
             } else {
-                buttons_text[BUTTON_LOGIN_OUT].setText(R.string.menu_button_login_out);
+                mButtons_text[BUTTON_LOGIN_OUT].setText(R.string.menu_button_login_out);
             }
-            YoYo.with(Techniques.Pulse).duration(300).playOn(buttons[BUTTON_LOGIN_OUT]);
+            YoYo.with(Techniques.Pulse).duration(300).playOn(mButtons[BUTTON_LOGIN_OUT]);
         }
     }
 

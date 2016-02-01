@@ -34,8 +34,8 @@ import java.util.ArrayList;
  */
 public class BatteryLevelReciever extends BroadcastReceiver {
 
-    private final Handler handler = new Handler();
-    private static final ArrayList<BatteryLevelRecieverData> observers = new ArrayList<>();
+    private final Handler mHandler = new Handler();
+    private static final ArrayList<BatteryLevelRecieverData> mObservers = new ArrayList<>();
 
     private final static String TAG = "BatteryLevelReciever";
 
@@ -45,7 +45,7 @@ public class BatteryLevelReciever extends BroadcastReceiver {
         if (intent.getExtras() != null) {
 
             // notify the observers who cares about the current battery state!
-            for (final BatteryLevelRecieverData internetRecieverData : observers) {
+            for (final BatteryLevelRecieverData internetRecieverData : mObservers) {
                 internetRecieverData.setData(BatteryDTO.newBuilder()
                         .level(intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0))
                         .health(intent.getIntExtra(BatteryManager.EXTRA_HEALTH, 0))
@@ -59,7 +59,7 @@ public class BatteryLevelReciever extends BroadcastReceiver {
                         .voltage(intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0))
                         .build()
                 );
-                handler.post(internetRecieverData);
+                mHandler.post(internetRecieverData);
                 if (!internetRecieverData.isKeepInReciever()) {
                     if (removeObserver(internetRecieverData)) {
                         Log.d(TAG, "Observer removed");
@@ -68,25 +68,25 @@ public class BatteryLevelReciever extends BroadcastReceiver {
                     }
                 }
             }
-            observers.trimToSize();
+            mObservers.trimToSize();
         }
 
     }
 
     public static void addObserver(final BatteryLevelRecieverData newObserver) {
-        if (!observers.contains(newObserver)) {
-            observers.add(newObserver);
+        if (!mObservers.contains(newObserver)) {
+            mObservers.add(newObserver);
             Log.d(TAG, "Observer added");
-            Log.d(TAG, "Observers current in stack :" + observers.size());
+            Log.d(TAG, "Observers current in stack :" + mObservers.size());
         }
     }
 
     private static boolean removeObserver(final BatteryLevelRecieverData observerToRemove) {
-        return observers.remove(observerToRemove);
+        return mObservers.remove(observerToRemove);
     }
 
     public static boolean containsObserver(final BatteryLevelRecieverData batteryLevelRecieverData) {
-        return observers.contains(batteryLevelRecieverData);
+        return mObservers.contains(batteryLevelRecieverData);
     }
 
 }

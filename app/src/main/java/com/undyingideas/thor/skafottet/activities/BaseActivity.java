@@ -22,6 +22,8 @@ import com.undyingideas.thor.skafottet.activities.login.LoginActivity;
 import com.undyingideas.thor.skafottet.activities.support.Foreground;
 import com.undyingideas.thor.skafottet.firebase.auth.AuthDataHolder;
 import com.undyingideas.thor.skafottet.firebase.auth.AuthListener;
+import com.undyingideas.thor.skafottet.firebase.players.PlayerListener;
+import com.undyingideas.thor.skafottet.firebase.players.PlayerListenerSlave;
 import com.undyingideas.thor.skafottet.support.utility.Constant;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
@@ -29,8 +31,13 @@ import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 /**
  * BaseActivity class is used as a base class for all activities in the app
  * It implements GoogleApiClient callbacks to enable "Logout" in all activities
- * and defines variables that are being shared across all activities
+ * and defines variables that are being shared across all activities.
+ * <p>
+ * Furthermore it contains the listeners for received data changes in the firebase database.
+ * This is to ensure that things like #1 highscore taking + challenges can be observes across the game through mini notifications.
+ * </p>
  */
+@SuppressWarnings("AbstractClassExtendsConcreteClass")
 public abstract class BaseActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         AuthDataHolder.AuthListenerData,
@@ -40,8 +47,11 @@ public abstract class BaseActivity extends AppCompatActivity implements
     /* Client used to interact with Google APIs. */
     protected GoogleApiClient mGoogleApiClient;
 
+    protected PlayerListener mPlayerListener;
+    protected PlayerListenerSlave mPlayerListenerSlave;
+
     protected AuthListener mAuthListener;
-    protected AuthDataHolder authDataHolder;
+    protected AuthDataHolder mAuthDataHolder;
 
     // TODO : Move connection state observer to here
 
@@ -77,8 +87,8 @@ public abstract class BaseActivity extends AppCompatActivity implements
             if (!(this instanceof LoginActivity || this instanceof CreateAccountActivity)) {
 //                GameUtility.setFirebase(new Firebase(Constant.FIREBASE_URL));
                 mAuthListener = new AuthListener();
-                authDataHolder = new AuthDataHolder(this);
-                mAuthListener.addSlave(authDataHolder);
+                mAuthDataHolder = new AuthDataHolder(this);
+                mAuthListener.addSlave(mAuthDataHolder);
                 GameUtility.getFirebase().addAuthStateListener(mAuthListener);
             }
         } else {

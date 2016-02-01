@@ -43,17 +43,17 @@ import java.util.ArrayList;
 public class MultiplayerLobbyAdapter extends ArrayAdapter<LobbyDTO> {
 
     private final Context mContext;
-    private final int layoutResourceId;
-    private final ArrayList<LobbyDTO> data;
-    private static final ViewHolder viewHolder = new ViewHolder();
-    private final PlayerDTO activePlayer;
+    private final int mLayoutResourceId;
+    private final ArrayList<LobbyDTO> mData;
+    private static final ViewHolder mViewHolder = new ViewHolder();
+    private final PlayerDTO mActivePlayer;
 
-    public MultiplayerLobbyAdapter(final PlayerDTO player, final Context mContext, final int layoutResourceId, final ArrayList<LobbyDTO> data) {
-        super(mContext, layoutResourceId, data);
-        activePlayer = player;
-        this.layoutResourceId = layoutResourceId;
+    public MultiplayerLobbyAdapter(final PlayerDTO player, final Context mContext, final int mLayoutResourceId, final ArrayList<LobbyDTO> mData) {
+        super(mContext, mLayoutResourceId, mData);
+        mActivePlayer = player;
+        this.mLayoutResourceId = mLayoutResourceId;
         this.mContext = mContext;
-        this.data = data;
+        this.mData = mData;
     }
 
     static class ViewHolder {
@@ -67,23 +67,23 @@ public class MultiplayerLobbyAdapter extends ArrayAdapter<LobbyDTO> {
         View view = convertView;
         if (view == null) {
             final LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
-            view = inflater.inflate(layoutResourceId, parent, false);
-            viewHolder.textViewName = (TextView) view.findViewById(R.id.multiplayer_player_title);
-            viewHolder.textViewScore = (TextView) view.findViewById(R.id.multiplayer_player_desc);
-            viewHolder.icon = (ImageView) view.findViewById(R.id.multiplayer_player_icon);
-            viewHolder.icon.setImageResource(R.drawable.game_end_won);
+            view = inflater.inflate(mLayoutResourceId, parent, false);
+            mViewHolder.textViewName = (TextView) view.findViewById(R.id.multiplayer_player_title);
+            mViewHolder.textViewScore = (TextView) view.findViewById(R.id.multiplayer_player_desc);
+            mViewHolder.icon = (ImageView) view.findViewById(R.id.multiplayer_player_icon);
+            mViewHolder.icon.setImageResource(R.drawable.game_end_won);
         }
-        final LobbyDTO dto = data.get(position);
+        final LobbyDTO dto = mData.get(position);
         StringBuilder sb = new StringBuilder(100);
 
         for (final LobbyPlayerStatus lobbyPlayerStatus : dto.getPlayerList().values()) {
-            if (!lobbyPlayerStatus.getName().equals(activePlayer))
+            if (!lobbyPlayerStatus.getName().equals(mActivePlayer))
                 sb.append(lobbyPlayerStatus.getName()).append(" , ");
         }
         if (sb.length() > 3) {
             sb.delete(sb.length() - 3, sb.length());
         }
-        viewHolder.textViewName.setText(sb.toString());
+        mViewHolder.textViewName.setText(sb.toString());
 
         sb = new StringBuilder(100);
         for (final LobbyPlayerStatus status : dto.getPlayerList().values()) {
@@ -92,7 +92,7 @@ public class MultiplayerLobbyAdapter extends ArrayAdapter<LobbyDTO> {
         if (sb.length() > 3) {
             sb.delete(sb.length() - 3, sb.length());
         }
-        viewHolder.textViewScore.setText(sb.toString());
+        mViewHolder.textViewScore.setText(sb.toString());
 
         return view;
     }

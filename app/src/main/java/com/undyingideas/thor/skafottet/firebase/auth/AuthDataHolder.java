@@ -27,7 +27,7 @@ public class AuthDataHolder extends WeakReferenceHolder<AuthDataHolder.AuthListe
 
     @Override
     public void run() {
-        final AuthListenerData authListenerData = weakReference.get();
+        final AuthListenerData authListenerData = mWeakReference.get();
         if (authListenerData != null) {
             authListenerData.firebaseAuthDataReceived(isLoggedIn);
         }

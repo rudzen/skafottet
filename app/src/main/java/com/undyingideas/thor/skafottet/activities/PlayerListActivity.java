@@ -43,10 +43,10 @@ public class PlayerListActivity extends AppCompatActivity implements PlayerListe
      * device.
      */
     private boolean mTwoPane;
-    private RecyclerView recyclerView;
+    private RecyclerView mRecyclerView;
 
-    private PlayerListener playerListener;
-    private PlayerListenerSlave playerListenerSlave;
+    private PlayerListener mPlayerListener;
+    private PlayerListenerSlave mPlayerListenerSlave;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -69,14 +69,14 @@ public class PlayerListActivity extends AppCompatActivity implements PlayerListe
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new FloaterClickHandler());
 
-        recyclerView = (RecyclerView) findViewById(R.id.player_list);
-        assert recyclerView != null;
+        mRecyclerView = (RecyclerView) findViewById(R.id.player_list);
+        assert mRecyclerView != null;
         //Uncomment here if needed.
-        //setupRecyclerView((RecyclerView) recyclerView);
+        //setupRecyclerView((RecyclerView) mRecyclerView);
 
-        playerListener = new PlayerListener();
-        playerListenerSlave = new PlayerListenerSlave(this);
-        playerListener.addSlave(playerListenerSlave);
+        mPlayerListener = new PlayerListener();
+        mPlayerListenerSlave = new PlayerListenerSlave(this);
+        mPlayerListener.addSlave(mPlayerListenerSlave);
 
         if (findViewById(R.id.player_detail_container) != null) {
             mTwoPane = true;
@@ -93,13 +93,13 @@ public class PlayerListActivity extends AppCompatActivity implements PlayerListe
 
     @Override
     protected void onResume() {
-        playerListener.setListeners();
+        mPlayerListener.setListeners();
         super.onResume();
     }
 
     @Override
     protected void onStop() {
-        playerListener.removeListeners();
+        mPlayerListener.removeListeners();
         super.onStop();
     }
 
@@ -132,12 +132,12 @@ public class PlayerListActivity extends AppCompatActivity implements PlayerListe
 
     @Override
     public void onPlayerDataReceived(final PlayerListenerSlave playerListenerReceiver) {
-        setupRecyclerView(recyclerView, playerListenerReceiver.getHighScoreItems());
+        setupRecyclerView(mRecyclerView, playerListenerReceiver.getHighScoreItems());
     }
 
     @Override
     public void onPlayerDataTransferAbort(final boolean aborted) {
-        WindowLayout.showSnack("Spillerliste opdatering afbrudt.", recyclerView, false);
+        WindowLayout.showSnack("Spillerliste opdatering afbrudt.", mRecyclerView, false);
     }
 
     private static class FloaterClickHandler implements View.OnClickListener {

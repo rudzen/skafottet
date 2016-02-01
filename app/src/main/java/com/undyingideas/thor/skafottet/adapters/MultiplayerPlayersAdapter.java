@@ -39,16 +39,16 @@ import java.util.ArrayList;
 public class MultiplayerPlayersAdapter extends ArrayAdapter<PlayerDTO> {
 
     private final Context mContext;
-    private final int layoutResourceId;
-    private final ArrayList<PlayerDTO> data;
-    private static final ViewHolder viewHolder = new ViewHolder();
+    private final int mLayoutResourceId;
+    private final ArrayList<PlayerDTO> mData;
+    private static final ViewHolder mViewHolder = new ViewHolder();
 
-    public MultiplayerPlayersAdapter(final Context mContext, final int layoutResourceId, final ArrayList<PlayerDTO> data) {
-        super(mContext, layoutResourceId, data);
+    public MultiplayerPlayersAdapter(final Context mContext, final int mLayoutResourceId, final ArrayList<PlayerDTO> data) {
+        super(mContext, mLayoutResourceId, data);
 
-        this.layoutResourceId = layoutResourceId;
+        this.mLayoutResourceId = mLayoutResourceId;
         this.mContext = mContext;
-        this.data = data;
+        mData = data;
     }
 
     static class ViewHolder {
@@ -62,20 +62,20 @@ public class MultiplayerPlayersAdapter extends ArrayAdapter<PlayerDTO> {
         View view = convertView;
         if (view == null) {
             final LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
-            view = inflater.inflate(layoutResourceId, parent, false);
-            viewHolder.textViewName = (TextView) view.findViewById(R.id.multiplayer_player_title);
-            viewHolder.textViewScore = (TextView) view.findViewById(R.id.multiplayer_player_desc);
-            viewHolder.icon = (ImageView) view.findViewById(R.id.multiplayer_player_icon);
-            viewHolder.icon.setImageResource(R.drawable.game_end_won);
+            view = inflater.inflate(mLayoutResourceId, parent, false);
+            mViewHolder.textViewName = (TextView) view.findViewById(R.id.multiplayer_player_title);
+            mViewHolder.textViewScore = (TextView) view.findViewById(R.id.multiplayer_player_desc);
+            mViewHolder.icon = (ImageView) view.findViewById(R.id.multiplayer_player_icon);
+            mViewHolder.icon.setImageResource(R.drawable.game_end_won);
         }
 
-        final PlayerDTO playerDTO = data.get(position);
+        final PlayerDTO playerDTO = mData.get(position);
 
-        viewHolder.textViewName.setText(playerDTO.getName());
-        //viewHolder.textViewName.setTag(playerDTO.hashCode());
+        mViewHolder.textViewName.setText(playerDTO.getName());
+        //mViewHolder.textViewName.setTag(playerDTO.hashCode());
 
-        viewHolder.textViewScore.setText(Integer.toString(playerDTO.getScore()));
-        //viewHolder.textViewScore.setTag(playerDTO.hashCode());
+        mViewHolder.textViewScore.setText(Integer.toString(playerDTO.getScore()));
+        //mViewHolder.textViewScore.setTag(playerDTO.hashCode());
 
 
         return view;

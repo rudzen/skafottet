@@ -52,13 +52,13 @@ public class SkafotDream extends DreamService {
     @Override
     public void onDreamingStarted() {
         sf.init(WindowLayout.screenDimension.x, WindowLayout.screenDimension.y, Color.RED);
-        sf.setRun(true);
+        sf.setmIsRunning(true);
         super.onDreamingStarted();
     }
 
     @Override
     public void onDreamingStopped() {
-        sf.setRun(false);
+        sf.setmIsRunning(false);
         super.onDreamingStopped();
     }
 

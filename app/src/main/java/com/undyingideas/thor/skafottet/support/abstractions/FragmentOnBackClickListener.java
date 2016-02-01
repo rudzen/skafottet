@@ -39,19 +39,19 @@ import com.undyingideas.thor.skafottet.interfaces.IFragmentFlipper;
  */
 class FragmentOnBackClickListener extends WeakReferenceHolder<IFragmentFlipper> implements View.OnKeyListener {
 
-    private final int newMode;
+    private final int mNewMode;
 
     public FragmentOnBackClickListener(final IFragmentFlipper iFragmentFlipper, final int newMode) {
         super(iFragmentFlipper);
-        this.newMode = newMode;
+        mNewMode = newMode;
     }
 
     @Override
     public boolean onKey(final View v, final int keyCode, final KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-            final IFragmentFlipper iFragmentFlipper = weakReference.get();
+            final IFragmentFlipper iFragmentFlipper = mWeakReference.get();
             if (iFragmentFlipper != null) {
-                iFragmentFlipper.flipFragment(newMode);
+                iFragmentFlipper.flipFragment(mNewMode);
             }
         }
         return false;

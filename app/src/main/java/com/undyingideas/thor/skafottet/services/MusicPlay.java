@@ -36,11 +36,11 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     public static final String ACTION_PLAY = "SKAFOTMUSIK";
     public static final String ACTION_STOP = "STOPSKAFOTT";
     private static final int music = R.raw.insidious;
-    private static MusicPlay musicPlayInstance;
+    private static MusicPlay mMusicPlayInstance;
 
     private MediaPlayer mMediaPlayer;
 
-    private byte state;
+    private byte mState;
     private static final byte STATE_RETRIEVING = 0;
     private static final byte STATE_STOPPED = 1;
     private static final byte STATE_PREPARING = 2;
@@ -49,7 +49,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
 
     @Override
     public void onCreate() {
-        musicPlayInstance = this;
+        mMusicPlayInstance = this;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
                 mMediaPlayer.setOnErrorListener(this);
                 mMediaPlayer.setLooping(true);
                 mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                Foreground.get(musicPlayInstance).addListener(this);
+                Foreground.get(mMusicPlayInstance).addListener(this);
                 initMediaPlayer();
             } else if (intent.getAction().equals(ACTION_STOP)) {
                 if (isPlaying()) {
@@ -98,7 +98,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
         } catch (final IllegalStateException | IOException e) {
             e.printStackTrace();
         }
-        state = STATE_PREPARING;
+        mState = STATE_PREPARING;
     }
 
     @Override
@@ -116,9 +116,9 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     public void onDestroy() {
         if (mMediaPlayer != null) {
             mMediaPlayer.release();
-            Foreground.get(musicPlayInstance).removeListener(this);
+            Foreground.get(mMusicPlayInstance).removeListener(this);
         }
-        state = STATE_RETRIEVING;
+        mState = STATE_RETRIEVING;
     }
 
     public MediaPlayer getMediaPlayer() {
@@ -126,38 +126,38 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     }
 
     private void pauseMusic() {
-        if (state == STATE_PLAYING) {
+        if (mState == STATE_PLAYING) {
             mMediaPlayer.pause();
-            state = STATE_PAUSED;
+            mState = STATE_PAUSED;
         }
     }
 
     private void startMusic() {
         try {
             mMediaPlayer.start();
-            state = STATE_PLAYING;
+            mState = STATE_PLAYING;
         } catch (final Exception e) {
             e.printStackTrace();
-            state = STATE_STOPPED;
+            mState = STATE_STOPPED;
         }
-//        if (state != STATE_PREPARING && state != STATE_RETRIEVING) {
+//        if (mState != STATE_PREPARING && mState != STATE_RETRIEVING) {
 //        } else {
 //        }
     }
 
     private void stopMusic() {
-        if (state == STATE_PLAYING || state == STATE_PAUSED) {
+        if (mState == STATE_PLAYING || mState == STATE_PAUSED) {
             mMediaPlayer.stop();
-            state = STATE_STOPPED;
+            mState = STATE_STOPPED;
         }
     }
 
     public boolean isPlaying() {
-        return state == STATE_PLAYING;
+        return mState == STATE_PLAYING;
     }
 
     public static MusicPlay getInstance() {
-        return musicPlayInstance;
+        return mMusicPlayInstance;
     }
 
     @Override

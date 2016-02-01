@@ -23,7 +23,7 @@ public class SetLoadToaster extends WeakReferenceHolder<Context> implements Runn
 
     @Override
     public void run() {
-        final Context context = weakReference.get();
+        final Context context = mWeakReference.get();
         if (context != null) {
             WindowLayout.setLoadToast(new LoadToast(context));
             WindowLayout.getLoadToast().setProgressColor(Color.BLACK);

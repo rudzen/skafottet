@@ -85,28 +85,28 @@ public class WordListFragment extends Fragment implements
     public DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
 
-    private StickyListHeadersListView stickyList;
-    private SwipeRefreshLayout refreshLayout;
+    private StickyListHeadersListView mStickyList;
+    private SwipeRefreshLayout mRefreshLayout;
 
-    private Toolbar toolbar;
+    private Toolbar mToolbar;
 
-    private ListView listRemote, listLocal;
+    private ListView mListRemote, mListLocal;
 
-    private WordTitleLocalAdapter adapterLocal;
-    private WordTitleRemoteAdapter adapterRemote;
+    private WordTitleLocalAdapter mAdapterLocal;
+    private WordTitleRemoteAdapter mAdapterRemote;
 
-    private Handler handler;
-    private Runnable refreshStopper;
+    private Handler mHandler;
+    private Runnable mRefreshStopper;
 
-    private InternetRecieverData internetRecieverData;
+    private InternetRecieverData mInternetRecieverData;
 
-    private static IFragmentFlipper iFragmentFlipper;
+    private static IFragmentFlipper sFragmentFlipper;
 
     @Override
     public void onAttach(final Context context) {
         super.onAttach(context);
         if (context instanceof IFragmentFlipper) {
-            iFragmentFlipper = (IFragmentFlipper) context;
+            sFragmentFlipper = (IFragmentFlipper) context;
         } else {
             throw new RuntimeException(context.toString() + " must implement IFragmentFlipper.");
         }
@@ -116,8 +116,8 @@ public class WordListFragment extends Fragment implements
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        refreshStopper = new RefreshStopper();
-        handler = new Handler();
+        mRefreshStopper = new RefreshStopper();
+        mHandler = new Handler();
     }
 
     @Nullable
@@ -126,21 +126,21 @@ public class WordListFragment extends Fragment implements
         final View root = inflater.inflate(R.layout.fragment_word_list, container, false);
 
         /* set up the view */
-        refreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.word_list_refresh_layout);
-        stickyList = (StickyListHeadersListView) root.findViewById(R.id.list);
-        stickyList.addHeaderView(inflater.inflate(R.layout.word_list_header, null));
-        stickyList.addFooterView(inflater.inflate(R.layout.word_list_footer, null));
-        stickyList.setEmptyView(root.findViewById(R.id.word_list_empty));
-        stickyList.setDrawingListUnderStickyHeader(true);
-        stickyList.setAreHeadersSticky(true);
+        mRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.word_list_refresh_layout);
+        mStickyList = (StickyListHeadersListView) root.findViewById(R.id.list);
+        mStickyList.addHeaderView(inflater.inflate(R.layout.word_list_header, null));
+        mStickyList.addFooterView(inflater.inflate(R.layout.word_list_footer, null));
+        mStickyList.setEmptyView(root.findViewById(R.id.word_list_empty));
+        mStickyList.setDrawingListUnderStickyHeader(true);
+        mStickyList.setAreHeadersSticky(true);
 
-        toolbar = (Toolbar) root.findViewById(R.id.toolbar);
+        mToolbar = (Toolbar) root.findViewById(R.id.toolbar);
 
         mDrawerLayout = (DrawerLayout) root.findViewById(R.id.word_item_drawer_layout);
 
         /* configure the side bar lists */
-        listRemote = (ListView) mDrawerLayout.findViewById(R.id.nav_drawer_remote_lists);
-        listLocal = (ListView) mDrawerLayout.findViewById(R.id.nav_drawer_local_lists);
+        mListRemote = (ListView) mDrawerLayout.findViewById(R.id.nav_drawer_remote_lists);
+        mListLocal = (ListView) mDrawerLayout.findViewById(R.id.nav_drawer_local_lists);
 
         setHasOptionsMenu(true);
 
@@ -150,27 +150,27 @@ public class WordListFragment extends Fragment implements
     @Override
     public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
         /* configure the view */
-        refreshLayout.setOnRefreshListener(new SwipeOnRefreshListener(this));
+        mRefreshLayout.setOnRefreshListener(new SwipeOnRefreshListener(this));
 
         mAdapter = new WordListAdapter(getContext(), GameUtility.getWordController().getCurrentList());
 
-        stickyList.setOnItemClickListener(this);
-        stickyList.setOnHeaderClickListener(this);
-        stickyList.setOnStickyHeaderChangedListener(this);
-        stickyList.setOnStickyHeaderOffsetChangedListener(this);
-        stickyList.setAdapter(mAdapter);
-        stickyList.setStickyHeaderTopOffset(0);
+        mStickyList.setOnItemClickListener(this);
+        mStickyList.setOnHeaderClickListener(this);
+        mStickyList.setOnStickyHeaderChangedListener(this);
+        mStickyList.setOnStickyHeaderOffsetChangedListener(this);
+        mStickyList.setAdapter(mAdapter);
+        mStickyList.setStickyHeaderTopOffset(0);
 
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        toolbar.setTitle(getString(R.string.word_list_title));
-        toolbar.setSubtitle("Antal Lister : " + GameUtility.getWordController().getListCount()); // "<nuværende liste>"); // vil blive sat dynamisk ved klik på liste og ved opstart!
-        toolbar.setCollapsible(false);
-        toolbar.setLogo(R.mipmap.ic_launcher);
-        toolbar.setLogoDescription("Applikations logo");
-        toolbar.setNavigationContentDescription("Home icon");
-        toolbar.inflateMenu(R.menu.menu_word_list);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        mToolbar.setTitle(getString(R.string.word_list_title));
+        mToolbar.setSubtitle("Antal Lister : " + GameUtility.getWordController().getListCount()); // "<nuværende liste>"); // vil blive sat dynamisk ved klik på liste og ved opstart!
+        mToolbar.setCollapsible(false);
+        mToolbar.setLogo(R.mipmap.ic_launcher);
+        mToolbar.setLogoDescription("Applikations logo");
+        mToolbar.setNavigationContentDescription("Home icon");
+        mToolbar.inflateMenu(R.menu.menu_word_list);
 
-        mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, toolbar, R.string.word_list_drawer_open, R.string.word_list_drawer_close);
+        mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, mToolbar, R.string.word_list_drawer_open, R.string.word_list_drawer_close);
 
         final ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (ab != null) {
@@ -182,14 +182,14 @@ public class WordListFragment extends Fragment implements
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         /* configure the adapters for the side bar lists */
-        adapterLocal = new WordTitleLocalAdapter(getContext(), R.layout.word_list_nav_drawer_list, GameUtility.getWordController().getLocalWords());
-        adapterRemote = new WordTitleRemoteAdapter(getContext(), R.layout.word_list_nav_drawer_list, WordListController.getKeyList());
+        mAdapterLocal = new WordTitleLocalAdapter(getContext(), R.layout.word_list_nav_drawer_list, GameUtility.getWordController().getLocalWords());
+        mAdapterRemote = new WordTitleRemoteAdapter(getContext(), R.layout.word_list_nav_drawer_list, WordListController.getKeyList());
 
-        listRemote.setAdapter(adapterRemote);
-        listLocal.setAdapter(adapterLocal);
+        mListRemote.setAdapter(mAdapterRemote);
+        mListLocal.setAdapter(mAdapterLocal);
 
-        listRemote.setOnItemClickListener(new ListRemoteTitleClickListener());
-        listLocal.setOnItemClickListener(new ListLocalTitleClickListener());
+        mListRemote.setOnItemClickListener(new ListRemoteTitleClickListener());
+        mListLocal.setOnItemClickListener(new ListLocalTitleClickListener());
 
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
@@ -199,7 +199,7 @@ public class WordListFragment extends Fragment implements
 
     @Override
     public void onDetach() {
-        iFragmentFlipper = null;
+        sFragmentFlipper = null;
         super.onDetach();
     }
 
@@ -239,7 +239,7 @@ public class WordListFragment extends Fragment implements
                         .title("Tilføj Ordliste"));
                 WindowLayout.getMd().show();
             } else {
-                WindowLayout.showSnack("Ingen forbindelse til internettet.", stickyList, true);
+                WindowLayout.showSnack("Ingen forbindelse til internettet.", mStickyList, true);
             }
             returnValue = true;
         } else if (id == R.id.action_word_list_remove) {
@@ -270,7 +270,7 @@ public class WordListFragment extends Fragment implements
                     oldListName.append(", da det er en firebase liste.");
                 }
             }
-            WindowLayout.showSnack(oldListName, stickyList, false);
+            WindowLayout.showSnack(oldListName, mStickyList, false);
             returnValue = true;
         } else if (id == R.id.action_word_list_update) {
             updateCurrentList();
@@ -287,7 +287,7 @@ public class WordListFragment extends Fragment implements
             new WordListDownloader(this, GameUtility.getWordController().getLocalWords().get(GameUtility.getWordController().getIndexLocale()).getTitle(), GameUtility.getWordController().getLocalWords().get(GameUtility.getWordController().getIndexLocale()).getUrl()).execute();
             return true;
         }
-        WindowLayout.showSnack("Denne liste kan ikke opdateres.", refreshLayout, true);
+        WindowLayout.showSnack("Denne liste kan ikke opdateres.", mRefreshLayout, true);
         return false;
     }
 
@@ -329,16 +329,16 @@ public class WordListFragment extends Fragment implements
      * Updates the lists, both the shown words and the drawer layouts..
      */
     public void refreshList() {
-        adapterLocal = new WordTitleLocalAdapter(getContext(), R.layout.word_list_nav_drawer_list, GameUtility.getWordController().getLocalWords());
-        adapterRemote = new WordTitleRemoteAdapter(getContext(), R.layout.word_list_nav_drawer_list, WordListController.getKeyList());
-        adapterLocal.notifyDataSetChanged();
-        adapterRemote.notifyDataSetChanged();
-        toolbar.setSubtitle("Antal lister : " + GameUtility.getWordController().getListCount());
+        mAdapterLocal = new WordTitleLocalAdapter(getContext(), R.layout.word_list_nav_drawer_list, GameUtility.getWordController().getLocalWords());
+        mAdapterRemote = new WordTitleRemoteAdapter(getContext(), R.layout.word_list_nav_drawer_list, WordListController.getKeyList());
+        mAdapterLocal.notifyDataSetChanged();
+        mAdapterRemote.notifyDataSetChanged();
+        mToolbar.setSubtitle("Antal lister : " + GameUtility.getWordController().getListCount());
         if (!GameUtility.getWordController().getCurrentList().isEmpty()) {
             mAdapter.restore(GameUtility.getWordController().getCurrentList());
         } else {
             mAdapter.clear();
-            WindowLayout.showSnack("Listen er tom fætter.", refreshLayout, false);
+            WindowLayout.showSnack("Listen er tom fætter.", mRefreshLayout, false);
         }
         Log.d("Refresh", GameUtility.getWordController().getCurrentList().toString());
     }
@@ -369,8 +369,8 @@ public class WordListFragment extends Fragment implements
     @Override
     public void onInternetStatusChanged(final String connectionState) {
         GameUtility.setConnectionStatusName(connectionState);
-        if (stickyList != null) {
-            WindowLayout.showSnack(connectionState + " forbindelse oprettet.", stickyList, true);
+        if (mStickyList != null) {
+            WindowLayout.showSnack(connectionState + " forbindelse oprettet.", mStickyList, true);
         }
     }
 
@@ -383,7 +383,7 @@ public class WordListFragment extends Fragment implements
     private class RefreshStopper implements Runnable {
         @Override
         public void run() {
-            refreshLayout.setRefreshing(false);
+            mRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -395,12 +395,12 @@ public class WordListFragment extends Fragment implements
 
         @Override
         public void onRefresh() {
-            final WordListFragment wordListFragment = weakReference.get();
+            final WordListFragment wordListFragment = mWeakReference.get();
             if (wordListFragment != null) {
                 if (!wordListFragment.updateCurrentList()) {
-                    wordListFragment.handler.postDelayed(wordListFragment.refreshStopper, 500);
+                    wordListFragment.mHandler.postDelayed(wordListFragment.mRefreshStopper, 500);
                 } else {
-                    wordListFragment.handler.post(wordListFragment.refreshStopper);
+                    wordListFragment.mHandler.post(wordListFragment.mRefreshStopper);
                 }
             }
         }
@@ -421,7 +421,7 @@ public class WordListFragment extends Fragment implements
 
         @Override
         public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
-            final WordListFragment wordListFragment = weakReference.get();
+            final WordListFragment wordListFragment = mWeakReference.get();
             if (wordListFragment != null) {
                 if (which == DialogAction.POSITIVE) {
                     /* let's inflate the dialog view... */
@@ -438,7 +438,7 @@ public class WordListFragment extends Fragment implements
                         if (isValid(title, url)) {
                             wordListFragment.onFinishAddWordDialog(title, url);
                         } else {
-                            WindowLayout.showSnack("Forkert indtastede informationer", wordListFragment.stickyList, true);
+                            WindowLayout.showSnack("Forkert indtastede informationer", wordListFragment.mStickyList, true);
                         }
                     }
                 }
@@ -486,10 +486,10 @@ public class WordListFragment extends Fragment implements
             if (!GameUtility.getWordController().isLocal() || GameUtility.getWordController().getIndexLocale() != position) {
                 GameUtility.getWordController().setIndexLocale(position);
                 GameUtility.getWordController().setIsLocal(true);
-                WindowLayout.showSnack("Ordliste skiftet til '" + GameUtility.getWordController().getLocalWords().get(position).getTitle() + "'", stickyList, true);
+                WindowLayout.showSnack("Ordliste skiftet til '" + GameUtility.getWordController().getLocalWords().get(position).getTitle() + "'", mStickyList, true);
                 refreshList();
             } else {
-                WindowLayout.showSnack("'" + GameUtility.getWordController().getLocalWords().get(position).getTitle() + "' er allerede din aktive ordliste.", stickyList, true);
+                WindowLayout.showSnack("'" + GameUtility.getWordController().getLocalWords().get(position).getTitle() + "' er allerede din aktive ordliste.", mStickyList, true);
             }
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
@@ -504,10 +504,10 @@ public class WordListFragment extends Fragment implements
                 GameUtility.getWordController().setIndexRemote((String) view.getTag());
                 GameUtility.getWordController().setIsLocal(false);
                 GameUtility.getWordController().setIndexLocale(-1);
-                WindowLayout.showSnack("Ordliste skiftet til '" + tag + "'", stickyList, true);
+                WindowLayout.showSnack("Ordliste skiftet til '" + tag + "'", mStickyList, true);
                 refreshList();
             } else {
-                WindowLayout.showSnack("'" + tag + "' er allerede din aktive ordliste.", stickyList, true);
+                WindowLayout.showSnack("'" + tag + "' er allerede din aktive ordliste.", mStickyList, true);
             }
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }

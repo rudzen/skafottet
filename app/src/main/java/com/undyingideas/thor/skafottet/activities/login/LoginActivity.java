@@ -83,7 +83,7 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
     private AutoCompleteTextView mEditTextEmailInput;
     private EditText mEditTextPasswordInput;
 
-    private final RelativeLayout[] buttons = new RelativeLayout[3];
+    private final RelativeLayout[] mButtons = new RelativeLayout[3];
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -237,13 +237,13 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
      */
     public void initializeScreen() {
 
-        buttons[0] = (RelativeLayout) findViewById(R.id.login_with_password);
-        buttons[1] = (RelativeLayout) findViewById(R.id.login_button_change_password);
-        buttons[2] = (RelativeLayout) findViewById(R.id.login_button_reset_password);
+        mButtons[0] = (RelativeLayout) findViewById(R.id.login_with_password);
+        mButtons[1] = (RelativeLayout) findViewById(R.id.login_button_change_password);
+        mButtons[2] = (RelativeLayout) findViewById(R.id.login_button_reset_password);
 
         final LogInOnClickListener logInOnClickListener = new LogInOnClickListener();
 
-        for (final RelativeLayout relativeLayout : buttons) {
+        for (final RelativeLayout relativeLayout : mButtons) {
             relativeLayout.setOnClickListener(logInOnClickListener);
         }
 
@@ -282,7 +282,7 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
             return true;
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(buttons[0], R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(mButtons[0], R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
@@ -692,12 +692,12 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
     private class LogInOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(final View v) {
-            if (v == buttons[0]) {
+            if (v == mButtons[0]) {
                 signInPassword();
-            } else if (v == buttons[1]) {
-                WindowLayout.showSnack("Ikke tilføjet endnu.", buttons[1], true);
-            } else if (v == buttons[2]) {
-                WindowLayout.showSnack("Ikke tilføjet endnu.", buttons[2], true);
+            } else if (v == mButtons[1]) {
+                WindowLayout.showSnack("Ikke tilføjet endnu.", mButtons[1], true);
+            } else if (v == mButtons[2]) {
+                WindowLayout.showSnack("Ikke tilføjet endnu.", mButtons[2], true);
             }
         }
     }

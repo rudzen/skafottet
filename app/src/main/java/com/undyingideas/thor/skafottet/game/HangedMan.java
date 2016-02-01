@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
  */
 public class HangedMan implements Parcelable {
 
-    private static final Pattern ambersamRepl = Pattern.compile("&");
+    private static final Pattern sAmbersamRepl = Pattern.compile("&");
 
     private static final String TAG = "HangedMan";
 

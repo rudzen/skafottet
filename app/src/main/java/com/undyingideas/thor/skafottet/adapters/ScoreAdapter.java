@@ -36,15 +36,15 @@ import java.util.ArrayList;
  */
 public class ScoreAdapter extends ArrayAdapter<Score> {
 
-    private final Context context;
+    private final Context mContext;
     private final int layoutResourceId;
-    private final ArrayList<Score> data;
+    private final ArrayList<Score> mData;
 
     public ScoreAdapter(final Context context, final int layoutResourceId, final ArrayList<Score> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
-        this.context = context;
-        this.data = data;
+        mContext = context;
+        mData = data;
     }
 
     @SuppressWarnings("StaticVariableOfConcreteClass")
@@ -60,7 +60,7 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
     public View getView(final int position, final View convertView, final ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            final LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+            final LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
             view = inflater.inflate(layoutResourceId, parent, false);
             ViewHolder.s_Name = (AutoScaleTextView) view.findViewById(R.id.highscore_name);
             ViewHolder.s_Word = (AutoScaleTextView) view.findViewById(R.id.highscore_word);
@@ -68,7 +68,7 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
             ViewHolder.s_Points = (AutoScaleTextView) view.findViewById(R.id.highscore_points);
         }
 
-        final Score score = data.get(position);
+        final Score score = mData.get(position);
         ViewHolder.s_Name.setText(score.getName());
         ViewHolder.s_Word.setText(score.getWord());
         ViewHolder.s_Date.setText(score.getDateString());

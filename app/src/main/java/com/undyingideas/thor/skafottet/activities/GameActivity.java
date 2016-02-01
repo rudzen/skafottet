@@ -75,12 +75,12 @@ public class GameActivity extends SoundAbstract implements
     /* to handle backpressed when in the menu fragment */
     private static final int BACK_PRESSED_DELAY = 2000;
     /* what where when how who why? */
-    private Fragment currentFragment; // what are we?
-    private int currentMode; // where are we?
-    private long backPressed;
-    private boolean quitMode;
+    private Fragment mCurrentFragment; // what are we?
+    private int mCurrentMode; // where are we?
+    private long mBackPressed;
+    private boolean mQuitMode;
 
-    private InternetRecieverData internetRecieverData;
+    private InternetRecieverData mInternetRecieverData;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -99,14 +99,14 @@ public class GameActivity extends SoundAbstract implements
                 final int gameMode = bundle.containsKey(Constant.KEY_MODE) ? bundle.getInt(Constant.KEY_MODE) : Constant.MODE_MENU;
                 switch (gameMode) {
                     case Constant.MODE_MENU:
-                        currentMode = Constant.MODE_MENU;
+                        mCurrentMode = Constant.MODE_MENU;
                         addFragment(new MenuFragment());
                         break;
                 }
                 return;
             }
         }
-        currentMode = Constant.MODE_MENU;
+        mCurrentMode = Constant.MODE_MENU;
         addFragment(new MenuFragment());
     }
 
@@ -119,33 +119,33 @@ public class GameActivity extends SoundAbstract implements
             GameUtility.getMusicPLayIntent().setAction(MusicPlay.ACTION_STOP);
             startService(GameUtility.getMusicPLayIntent());
         }
-        if (soundThread == null) {
+        if (mSoundThread == null) {
             initSound();
             Log.d(TAG, "Sound started");
         }
-        internetRecieverData = new InternetRecieverData(this);
-        InternetReciever.addObserver(internetRecieverData);
+        mInternetRecieverData = new InternetRecieverData(this);
+        InternetReciever.addObserver(mInternetRecieverData);
         super.onResume();
     }
 
     @Override
     protected void onStop() {
-        InternetReciever.removeObserver(internetRecieverData);
+        InternetReciever.removeObserver(mInternetRecieverData);
         super.onStop();
     }
 
     @Override
     public void onDestroy() {
-        soundThread.interrupt();
-        soundThread = null;
+        mSoundThread.interrupt();
+        mSoundThread = null;
         Log.d(TAG, "Sound removed");
         super.onDestroy();
     }
 
     @Override
     public void finish() {
-        if (quitMode) playSound(GameUtility.SFX_LOST);
-        getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
+        if (mQuitMode) playSound(GameUtility.SFX_LOST);
+        getSupportFragmentManager().beginTransaction().remove(mCurrentFragment).commit();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         super.finish();
     }
@@ -156,16 +156,16 @@ public class GameActivity extends SoundAbstract implements
         if (WindowLayout.getMd() != null && WindowLayout.getMd().isShowing()) {
             WindowLayout.getMd().dismiss();
         } else {
-            if (currentFragment instanceof MenuFragment) {
-                if (backPressed + BACK_PRESSED_DELAY > System.currentTimeMillis()) {
+            if (mCurrentFragment instanceof MenuFragment) {
+                if (mBackPressed + BACK_PRESSED_DELAY > System.currentTimeMillis()) {
                     stopService(GameUtility.getMusicPLayIntent());
                     finish();
                 } else {
                     WindowLayout.showSnack("Tryk tilbage igen for at flygte i rædsel.", findViewById(R.id.fragment_content), false);
-                    backPressed = System.currentTimeMillis();
+                    mBackPressed = System.currentTimeMillis();
                 }
-            } else if (currentFragment instanceof WordListFragment && ((WordListFragment) currentFragment).mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-                ((WordListFragment) currentFragment).mDrawerLayout.closeDrawer(GravityCompat.START);
+            } else if (mCurrentFragment instanceof WordListFragment && ((WordListFragment) mCurrentFragment).mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+                ((WordListFragment) mCurrentFragment).mDrawerLayout.closeDrawer(GravityCompat.START);
             } else {
                 replaceFragment(new MenuFragment());
             }
@@ -182,12 +182,12 @@ public class GameActivity extends SoundAbstract implements
     }
 
     private void addFragment(final Fragment fragment) {
-        currentFragment = fragment;
+        mCurrentFragment = fragment;
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_content, fragment).addToBackStack(null).commit();
     }
 
     private void replaceFragment(final Fragment fragment) {
-        currentFragment = fragment;
+        mCurrentFragment = fragment;
         playSound(GameUtility.SFX_MENU_CLICK);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content, fragment).commit();
     }
@@ -214,7 +214,7 @@ public class GameActivity extends SoundAbstract implements
     @SuppressWarnings({"OverlyComplexMethod", "OverlyLongMethod"})
     @Override
     public final void flipFragment(@NonNull final int gameMode) {
-        currentMode = gameMode;
+        mCurrentMode = gameMode;
 //        if (gameMode == Constant.MODE_BACK_PRESSED) {
 //            onBackPressed();
         if (gameMode == Constant.MODE_MENU) {
@@ -232,21 +232,21 @@ public class GameActivity extends SoundAbstract implements
         } else if (gameMode == Constant.MODE_WORD_LIST) {
             replaceFragment(WordListFragment.newInstance());
         } else if (gameMode == Constant.MODE_HIGHSCORE) {
-//            quitMode = false;
+//            mQuitMode = false;
             // TODO : Facilitate local highscore..
-//            getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
+//            getSupportFragmentManager().beginTransaction().remove(mCurrentFragment).commit();
 //            final Intent intent = new Intent(this, PlayerListActivity.class);
 //            startActivity(intent);
 //            finish();
             replaceFragment(HighscoreFragment.newInstance(true));
         } else if (gameMode == Constant.MODE_FINISH) {
-            quitMode = true;
-            getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
+            mQuitMode = true;
+            getSupportFragmentManager().beginTransaction().remove(mCurrentFragment).commit();
             stopService(GameUtility.getMusicPLayIntent());
             finish();
         } else if (gameMode == Constant.MODE_SETTINGS) {
-            quitMode = false;
-            getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
+            mQuitMode = false;
+            getSupportFragmentManager().beginTransaction().remove(mCurrentFragment).commit();
             final Intent intent = new Intent(this, PrefsActivity.class);
             startActivity(intent);
             finish();
@@ -255,8 +255,8 @@ public class GameActivity extends SoundAbstract implements
             startActivity(intent);
         } else if (gameMode == Constant.MODE_LOGOUT) {
             logout();
-            if (currentFragment instanceof MenuFragment) {
-                ((MenuFragment) currentFragment).setLoginButton();
+            if (mCurrentFragment instanceof MenuFragment) {
+                ((MenuFragment) mCurrentFragment).setLoginButton();
             }
         } else if (gameMode == Constant.MODE_CREATE_ACCOUNT) {
             final Intent intent = new Intent(this, CreateAccountActivity.class);
@@ -289,8 +289,8 @@ public class GameActivity extends SoundAbstract implements
 //        if (connectionState == -1) {
 //            GameUtility.mpc.name = null;
 //        }
-//        if (currentFragment instanceof MenuFragment) {
-//            ((MenuFragment) currentFragment).setLoginButton();
+//        if (mCurrentFragment instanceof MenuFragment) {
+//            ((MenuFragment) mCurrentFragment).setLoginButton();
 //        }
     }
 

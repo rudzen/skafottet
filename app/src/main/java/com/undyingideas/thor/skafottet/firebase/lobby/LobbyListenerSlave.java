@@ -41,7 +41,7 @@ public class LobbyListenerSlave extends WeakReferenceHolder<LobbyListenerSlave.L
 
     @Override
     public void run() {
-        final LobbyListenerReceiver playerListenerReceiver = weakReference.get();
+        final LobbyListenerReceiver playerListenerReceiver = mWeakReference.get();
         if (playerListenerReceiver != null) {
             if (!aborted) {
                 playerListenerReceiver.onLobbyDataReceived(this);
