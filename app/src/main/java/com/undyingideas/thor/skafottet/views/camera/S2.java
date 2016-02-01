@@ -19,8 +19,7 @@ class S2 {
 
     public S2(final float sx, final float sy, final float ox, final float oy) {
         o = new V2(ox, oy);
-        M2 s = new M2(sx, 0, 0, sy);
-        T = F.mul(s);
+        T = F.mul(new M2(sx, 0, 0, sy));
     }
 
     private V2 transform(final V2 v) {

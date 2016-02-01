@@ -125,7 +125,7 @@ public final class GameUtility {
         return firebase;
     }
 
-    public static void setFirebase(Firebase firebase) {
+    public static void setFirebase(final Firebase firebase) {
         GameUtility.firebase = firebase;
     }
 
@@ -133,7 +133,7 @@ public final class GameUtility {
         return me;
     }
 
-    public static void setMe(PlayerDTO me) {
+    public static void setMe(final PlayerDTO me) {
         GameUtility.me = me;
     }
 
@@ -141,7 +141,7 @@ public final class GameUtility {
         return prefs;
     }
 
-    public static void setPrefs(TinyDB prefs) {
+    public static void setPrefs(final TinyDB prefs) {
         GameUtility.prefs = prefs;
     }
 
@@ -149,7 +149,7 @@ public final class GameUtility {
         return settings;
     }
 
-    public static void setSettings(SettingsDTO settings) {
+    public static void setSettings(final SettingsDTO settings) {
         GameUtility.settings = settings;
     }
 
@@ -157,7 +157,7 @@ public final class GameUtility {
         return highscoreManager;
     }
 
-    public static void setHighscoreManager(HighscoreManager highscoreManager) {
+    public static void setHighscoreManager(final HighscoreManager highscoreManager) {
         GameUtility.highscoreManager = highscoreManager;
     }
 
@@ -165,7 +165,7 @@ public final class GameUtility {
         return musicPLayIntent;
     }
 
-    public static void setMusicPLayIntent(Intent musicPLayIntent) {
+    public static void setMusicPLayIntent(final Intent musicPLayIntent) {
         GameUtility.musicPLayIntent = musicPLayIntent;
     }
 
@@ -173,7 +173,7 @@ public final class GameUtility {
         return wordController;
     }
 
-    public static void setWordController(WordController wordController) {
+    public static void setWordController(final WordController wordController) {
         GameUtility.wordController = wordController;
     }
 }

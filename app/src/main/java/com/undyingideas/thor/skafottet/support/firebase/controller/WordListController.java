@@ -32,7 +32,7 @@ public class WordListController {
     }
 
     public static ArrayList<WordItem> getArray(){
-        return new ArrayList<>(getWordList().values());
+        return new ArrayList<>(wordList.values());
     }
 
     public static HashMap<String, WordItem> getWordList() {
@@ -52,12 +52,12 @@ public class WordListController {
     }
 
     private static void saveList() {
-        GameUtility.getPrefs().putObject(Constant.KEY_WORDS_FIREBASE, getWordList());
+        GameUtility.getPrefs().putObject(Constant.KEY_WORDS_FIREBASE, wordList);
     }
 
     public static ArrayList<String> getKeyList() {
-        final ArrayList<String> returnList = new ArrayList<>(getWordList().size());
-        returnList.addAll(getWordList().keySet());
+        final ArrayList<String> returnList = new ArrayList<>(wordList.size());
+        returnList.addAll(wordList.keySet());
         Log.d(TAG, returnList.toString());
         Collections.sort(returnList);
         return returnList;

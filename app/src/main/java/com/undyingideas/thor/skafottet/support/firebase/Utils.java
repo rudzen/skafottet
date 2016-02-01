@@ -23,13 +23,13 @@ public class Utils {
     public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.US);
     private static final Pattern EMAIL_DECODE = Pattern.compile(",", Pattern.LITERAL);
     private static final Pattern EMAIL_ENCODE = Pattern.compile(".", Pattern.LITERAL);
-    private Context mContext = null;
+    private Context mContext;
 
 
     /**
      * Public constructor that takes mContext for later use
      */
-    public Utils(Context con) {
+    public Utils(final Context con) {
         mContext = con;
     }
 
@@ -46,7 +46,7 @@ public class Utils {
      * Encode user email to use it as a Firebase key (Firebase does not allow "." in the key name)
      * Encoded email is also used as "userEmail", list and item "owner" value
      */
-    public static String encodeEmail(String userEmail) {
+    public static String encodeEmail(final String userEmail) {
         return EMAIL_ENCODE.matcher(userEmail).replaceAll(",");
     }
     
@@ -55,7 +55,7 @@ public class Utils {
      *
 //     * @see com.udacity.firebase.shoppinglistplusplus.ui.sharing.AutocompleteFriendAdapter
      */
-    public static String decodeEmail(String userEmail) {
+    public static String decodeEmail(final String userEmail) {
         return EMAIL_DECODE.matcher(userEmail).replaceAll(".");
     }
 

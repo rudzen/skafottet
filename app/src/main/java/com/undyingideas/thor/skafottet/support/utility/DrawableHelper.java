@@ -15,7 +15,7 @@ import com.undyingideas.thor.skafottet.views.AutoScaleTextView;
  * On : jan.26.2016 - 18:00
  * </p>
  */
-public class DrawableHelper {
+public final class DrawableHelper {
 
     public static void setButtonColors(final RelativeLayout[] buttons, final AutoScaleTextView... button_text) {
         final int[] cols = new int[3];

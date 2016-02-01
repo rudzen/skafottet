@@ -134,7 +134,7 @@ public final class ListFetcher {
         return listHandler;
     }
 
-    public static void setListHandler(Handler listHandler) {
+    public static void setListHandler(final Handler listHandler) {
         ListFetcher.listHandler = listHandler;
     }
 
@@ -142,7 +142,7 @@ public final class ListFetcher {
         return listSaver;
     }
 
-    public static void setListSaver(Runnable listSaver) {
+    public static void setListSaver(final Runnable listSaver) {
         ListFetcher.listSaver = listSaver;
     }
 

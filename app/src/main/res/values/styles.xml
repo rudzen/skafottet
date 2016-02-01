@@ -127,11 +127,11 @@
     <style name="autoScaleTextView">
 
         <!-- use the next line to alter the minimum text size (uncomment first)-->
-         <item name="@attr/minTextSize">10dp</item>
+         <item name="@attr/minTextSize">10sp</item>
     </style>
 
     <style name="HintText">
-        <item name="android:textSize">0dp</item>
+        <item name="android:textSize">0sp</item>
     </style>
 
 </resources>
