@@ -1,6 +1,5 @@
 /*
- * Copyright 2016 Rudy Alex Kohn
- *
+ * Copyright 2016 Rudy Alex Kohn [s133235@student.dtu.dk]
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -149,6 +148,10 @@ public final class WordController implements Serializable, Parcelable {
             return true;
         }
         return false;
+    }
+
+    public WordItem getWordItem(final int index) {
+        return localWords.get(index);
     }
 
 //    /**
