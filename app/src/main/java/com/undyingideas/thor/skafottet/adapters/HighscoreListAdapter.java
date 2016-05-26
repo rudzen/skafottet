@@ -19,8 +19,10 @@ package com.undyingideas.thor.skafottet.adapters;
  * Created on 12-01-2016, 07:52.
  * Project : skafottet
  * Modofied from the stickylistheaders example
+ *
  * @author rudz
  */
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -153,17 +155,16 @@ public class HighscoreListAdapter extends BaseAdapter implements StickyListHeade
     }
 
     @Override
-    public int getPositionForSection(int section) {
+    public int getPositionForSection(final int section) {
         if (mSectionIndices.length == 0) {
             return 0;
         }
 
         if (section >= mSectionIndices.length) {
-            section = mSectionIndices.length - 1;
-        } else if (section < 0) {
-            section = 0;
+            return mSectionIndices[mSectionIndices.length - 1];
+        } else { // if (section < 0) {
+            return mSectionIndices[0];
         }
-        return mSectionIndices[section];
     }
 
     @Override

@@ -20,6 +20,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.undyingideas.thor.skafottet.support.firebase.dto.PlayerDTO;
+import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -101,10 +102,12 @@ public class HighscoreManager {
     }
 
     public void loadScoreFile() {
+        boolean loaded = false;
         try {
             final ObjectInputStream inputStream = new ObjectInputStream(context.openFileInput(HIGHSCORE_FILE));
             scores = (ArrayList<Score>) inputStream.readObject();
             Collections.sort(scores);
+            loaded = true;
         } catch (final FileNotFoundException e) {
             Log.e(TAG, "[Load] FNF Error: " + e.getMessage());
         } catch (final IOException e) {
@@ -119,6 +122,13 @@ public class HighscoreManager {
                 }
             } catch (final IOException e) {
                 Log.e(TAG, "[Load] IO Error: " + e.getMessage());
+            }
+            if (!loaded) {
+                /* generate an empty highscore list to avoid crashes */
+                for (int i = 0; i < 10; i++) {
+                    GameUtility.getHighscoreManager().addScore("skafottet", "rudz", 100 + i);
+                }
+                GameUtility.getHighscoreManager().saveHighScore();
             }
         }
     }
