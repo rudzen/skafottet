@@ -109,7 +109,7 @@ public class PlayerListener {
 //            try {
 //                final PlayerDTO dto = new PlayerDTO(dataSnapshot.getKey());
 //                dto.setHasLoggedInWithPassword(dataSnapshot.child());
-//                dto.setScore(Integer.valueOf(dataSnapshot.child(SCORE).getValue().toString()));
+//                dto.setmScore(Integer.valueOf(dataSnapshot.child(SCORE).getValue().toString()));
 //                dto.setPassword(dataSnapshot.child(PASSWORD).getValue().toString());
 //                if (dataSnapshot.hasChild(GAME_LIST)) {
 //                    for (final DataSnapshot ds : dataSnapshot.child(GAME_LIST).getChildren()) {

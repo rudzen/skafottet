@@ -109,7 +109,7 @@ public class V2 {
 
     @Override
     public String toString() {
-        return "[" + Float.toString(x) + " , " + Float.toString(y) + "]";
+        return '[' + Float.toString(x) + " , " + Float.toString(y) + ']';
     }
 
     public boolean equals(final V2 o) {

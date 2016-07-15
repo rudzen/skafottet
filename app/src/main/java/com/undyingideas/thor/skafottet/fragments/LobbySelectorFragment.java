@@ -186,9 +186,9 @@ public class LobbySelectorFragment extends Fragment {
 //                    Log.e("lobbyselectorfrag", "error : name == null");
 //                else {
 //                    for (final LobbyPlayerStatus lobbyPlayerStatus : lobbySelectorFragment.mLobbys.get(position).getPlayerList()) {
-//                        if (lobbyPlayerStatus.getName().equals(GameUtility.mpc.name)) {
-//                            if (lobbyPlayerStatus.getScore() == -1) {
-//                                Log.d("firebaseopengame", lobbySelectorFragment.mLobbys.get(position).getWord());
+//                        if (lobbyPlayerStatus.getmName().equals(GameUtility.mpc.name)) {
+//                            if (lobbyPlayerStatus.getmScore() == -1) {
+//                                Log.d("firebaseopengame", lobbySelectorFragment.mLobbys.get(position).getmWord());
 //                                //noinspection ConstantConditions
 //                                String k = "";
 //                                final LobbyDTO dto = lobbySelectorFragment.mLobbys.get(position);
@@ -200,7 +200,7 @@ public class LobbySelectorFragment extends Fragment {
 //                                    }
 //
 //                                GameUtility.mpc.setRunnable(null);
-//                                lobbySelectorFragment.mListener.startNewMultiplayerGame(k, dto.getWord());
+//                                lobbySelectorFragment.mListener.startNewMultiplayerGame(k, dto.getmWord());
 //                                //TODO
 //                                return;
 //                            }
@@ -243,7 +243,7 @@ public class LobbySelectorFragment extends Fragment {
 //            b = false;
 //            try {
 //                for (final LobbyPlayerStatus status : dto.getPlayerList()) {
-//                    if (status.getScore() == -1 && status.getName().equals(name)) {
+//                    if (status.getmScore() == -1 && status.getmName().equals(name)) {
 //                        b = true;
 //                        break;
 //                    }

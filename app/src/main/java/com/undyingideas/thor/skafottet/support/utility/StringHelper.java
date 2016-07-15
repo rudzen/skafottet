@@ -124,7 +124,7 @@ public final class StringHelper {
     }
 
     private static Pattern setWordLength(final String regEx, final int length) {
-        return Pattern.compile(regEx + "|" + regEx.toUpperCase() + "{" + Integer.toString(length) + ",25}");
+        return Pattern.compile(regEx + '|' + regEx.toUpperCase() + '{' + Integer.toString(length) + ",25}");
     }
 
     public static void setPatterns() {

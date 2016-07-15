@@ -214,22 +214,22 @@ public class ColorPickerPreference
         String blue = Integer.toHexString(Color.blue(color));
 
         if (alpha.length() == 1) {
-            alpha = "0" + alpha;
+            alpha = '0' + alpha;
         }
 
         if (red.length() == 1) {
-            red = "0" + red;
+            red = '0' + red;
         }
 
         if (green.length() == 1) {
-            green = "0" + green;
+            green = '0' + green;
         }
 
         if (blue.length() == 1) {
-            blue = "0" + blue;
+            blue = '0' + blue;
         }
 
-        return "#" + alpha + red + green + blue;
+        return '#' + alpha + red + green + blue;
     }
 
     /**
@@ -247,18 +247,18 @@ public class ColorPickerPreference
         String blue = Integer.toHexString(Color.blue(color));
 
         if (red.length() == 1) {
-            red = "0" + red;
+            red = '0' + red;
         }
 
         if (green.length() == 1) {
-            green = "0" + green;
+            green = '0' + green;
         }
 
         if (blue.length() == 1) {
-            blue = "0" + blue;
+            blue = '0' + blue;
         }
 
-        return "#" + red + green + blue;
+        return '#' + red + green + blue;
     }
 
     /**
@@ -269,7 +269,7 @@ public class ColorPickerPreference
      * @author Unknown
      */
     public static int convertToColorInt(final String argb) throws IllegalArgumentException {
-        return !(!argb.isEmpty() && argb.charAt(0) == '#') ? Color.parseColor("#" + argb) : Color.parseColor(argb);
+        return !(!argb.isEmpty() && argb.charAt(0) == '#') ? Color.parseColor('#' + argb) : Color.parseColor(argb);
     }
 
     @Override

@@ -77,6 +77,7 @@ public final class HighScoreContent {
     }
 
     //This is a list of games that the player has played.
+    @SuppressWarnings("StringBufferReplaceableByString")
     private static String makeDetails(final int position, final ArrayList<LobbyPlayerStatus> playedGames, final String playerName) {
         //This list should be sorted for the player only.
         final StringBuilder builder = new StringBuilder();

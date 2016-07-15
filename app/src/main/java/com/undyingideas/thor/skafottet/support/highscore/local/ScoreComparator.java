@@ -24,8 +24,8 @@ class ScoreComparator implements Comparator<Score>, Serializable {
 
     @Override
     public int compare(final Score score1, final Score score2) {
-        final int sc1 = score1.getScore();
-        final int sc2 = score2.getScore();
+        final int sc1 = score1.getmScore();
+        final int sc2 = score2.getmScore();
 
         if (sc1 > sc2) return -1;
         if (sc1 < sc2) return 1;

@@ -132,7 +132,7 @@
 //
 //    private void onButtonPressed(final int position) {
 //        if (onCreateLobbyFragmentInteractionListener != null)
-//            if (opponentName == null ) onCreateLobbyFragmentInteractionListener.onPlayerClicked(players.get(position).getName());
+//            if (opponentName == null ) onCreateLobbyFragmentInteractionListener.onPlayerClicked(players.get(position).getmName());
 //            else onCreateLobbyFragmentInteractionListener.onPlayerClicked(wordList.get(position).getTitle());
 //    }
 //
@@ -178,7 +178,7 @@
 //                // do stuff!!!
 //                createLobbyFragment.onButtonPressed(position);
 //                if(GameUtility.mpc.name == null) {
-//                    //GameUtility.mpc.login(multiPlayerPlayerFragment.players.get(position).getName());
+//                    //GameUtility.mpc.login(multiPlayerPlayerFragment.players.get(position).getmName());
 //                } else if (opponentName != null) {
 //                    final WordItem item = createLobbyFragment.wordList.get(position);
 //                    Log.d("createlobbyfragment", opponentName + " wordlist size = " + item.getWords().size() + " random ord " + item.getWords().get(getRandom(item.getWords().size())));
@@ -193,7 +193,7 @@
 ////                    createLobbyFragment.getActivity().onBackPressed();// TODO design return
 //                    //opponentName = null ;GameUtility.mpc.update();
 //                } else {
-//                    opponentName = createLobbyFragment.players.get(position).getName();
+//                    opponentName = createLobbyFragment.players.get(position).getmName();
 //                    GameUtility.mpc.update();
 //                }
 //            }

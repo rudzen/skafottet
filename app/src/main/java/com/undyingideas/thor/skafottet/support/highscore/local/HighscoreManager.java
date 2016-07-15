@@ -81,7 +81,7 @@ public class HighscoreManager {
         if (scores.size() < MAX) {
             return scores.size();
         }
-        if (scores.size() >= MAX && score >= scores.get(MAX - 1).getScore()) {
+        if (scores.size() >= MAX && score >= scores.get(MAX - 1).getmScore()) {
             return MAX - 1;
         }
         return -1;
@@ -161,9 +161,9 @@ public class HighscoreManager {
         for (int i = 0; i < x; i++) {
             sb.append(i + 1);
             sb.append(".\t"); // padding can be inserted here if wanted!!!!
-            sb.append(scores.get(i).getName());
+            sb.append(scores.get(i).getmName());
             sb.append(" [");
-            sb.append(scores.get(i).getScore());
+            sb.append(scores.get(i).getmScore());
             sb.append(']');
             sb.append('\n');
         }

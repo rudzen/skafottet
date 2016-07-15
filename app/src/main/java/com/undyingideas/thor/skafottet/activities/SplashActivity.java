@@ -248,7 +248,7 @@ public class SplashActivity extends AppCompatActivity {
             final String lastUser = getPrefs().getString(Constant.USER_LAST, null);
 
             if (lastPw != null && lastUser != null) {
-                Log.d(TAG, "Loggin in with u/p : " + lastUser + "/" + lastPw);
+                Log.d(TAG, "Loggin in with u/p : " + lastUser + '/' + lastPw);
                 getFirebase().authWithPassword(lastUser, lastPw, new StartupAuthResultHandler(true));
             } else {
                 final Message message = mLoadHandler.obtainMessage(MSG_LOAD_COMPLETE);

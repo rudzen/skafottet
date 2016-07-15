@@ -300,8 +300,8 @@ public class MenuFragment extends Fragment implements PreferenceChangeListener {
             final SaveGame saveGame = (SaveGame) getPrefs().getObject(Constant.KEY_SAVE_GAME, SaveGame.class);
 //            Log.d(TAG, saveGame.getLogic().toString());
             if (saveGame.getLogic() != null && !saveGame.getLogic().isGameOver()) {
-//                if (mpc.name != null && saveGame.isMultiPlayer() && mpc.name.equals(saveGame.getPlayers()[0].getName())) {
-//                    startGameItems.add(new StartGameItem(Constant.MODE_CONT_GAME, "Fortsæt sidste spil", "Type : Multiplayer / Modstander : " + saveGame.getPlayers()[1].getName(), imageRefs[saveGame.getLogic().getNumWrongLetters()]));
+//                if (mpc.name != null && saveGame.isMultiPlayer() && mpc.name.equals(saveGame.getPlayers()[0].getmName())) {
+//                    startGameItems.add(new StartGameItem(Constant.MODE_CONT_GAME, "Fortsæt sidste spil", "Type : Multiplayer / Modstander : " + saveGame.getPlayers()[1].getmName(), imageRefs[saveGame.getLogic().getNumWrongLetters()]));
 //                } else {
                     startGameItems.add(new StartGameItem(Constant.MODE_CONT_GAME, "Fortsæt sidste spil", "Type : Singleplayer / Gæt : " + saveGame.getLogic().getVisibleWord(), imageRefs[saveGame.getLogic().getNumWrongLetters()]));
 //                }

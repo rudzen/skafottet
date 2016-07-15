@@ -80,7 +80,7 @@ public class LobbyDTO implements Parcelable {
         sb.append("names = ");
 //        s += "Word = " + word;
 //        s += " , names = ";
-        for (final LobbyPlayerStatus status : playerList.values()) sb.append(status.getName()).append(' '); // += status.getName() + " ";
+        for (final LobbyPlayerStatus status : playerList.values()) sb.append(status.getName()).append(' '); // += status.getmName() + " ";
         return sb.toString();
     }
 

@@ -485,10 +485,10 @@ public class WordListFragment extends Fragment implements
             if (!GameUtility.getWordController().isLocal() || GameUtility.getWordController().getIndexLocale() != position) {
                 GameUtility.getWordController().setIndexLocale(position);
                 GameUtility.getWordController().setIsLocal(true);
-                WindowLayout.showSnack("Ordliste skiftet til '" + GameUtility.getWordController().getLocalWords().get(position).getTitle() + "'", mStickyList, true);
+                WindowLayout.showSnack("Ordliste skiftet til '" + GameUtility.getWordController().getLocalWords().get(position).getTitle() + '\'', mStickyList, true);
                 refreshList();
             } else {
-                WindowLayout.showSnack("'" + GameUtility.getWordController().getLocalWords().get(position).getTitle() + "' er allerede din aktive ordliste.", mStickyList, true);
+                WindowLayout.showSnack('\'' + GameUtility.getWordController().getLocalWords().get(position).getTitle() + "' er allerede din aktive ordliste.", mStickyList, true);
             }
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
@@ -503,10 +503,10 @@ public class WordListFragment extends Fragment implements
                 GameUtility.getWordController().setIndexRemote((String) view.getTag());
                 GameUtility.getWordController().setIsLocal(false);
                 GameUtility.getWordController().setIndexLocale(-1);
-                WindowLayout.showSnack("Ordliste skiftet til '" + tag + "'", mStickyList, true);
+                WindowLayout.showSnack("Ordliste skiftet til '" + tag + '\'', mStickyList, true);
                 refreshList();
             } else {
-                WindowLayout.showSnack("'" + tag + "' er allerede din aktive ordliste.", mStickyList, true);
+                WindowLayout.showSnack('\'' + tag + "' er allerede din aktive ordliste.", mStickyList, true);
             }
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }

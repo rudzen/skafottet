@@ -124,11 +124,11 @@ public final class Constant {
      * Constants for Firebase URL
      */
     public static final String FIREBASE_URL = BuildConfig.UNIQUE_FIREBASE_ROOT_URL;
-    public static final String FIREBASE_URL_SHOPPING_LIST_ITEMS = FIREBASE_URL + "/" + FIREBASE_LOCATION_SHOPPING_LIST_ITEMS;
-    public static final String FIREBASE_URL_USERS = FIREBASE_URL + "/" + FIREBASE_LOCATION_USERS;
-    public static final String FIREBASE_URL_USER_LISTS = FIREBASE_URL + "/" + FIREBASE_LOCATION_USER_LISTS;
-    public static final String FIREBASE_URL_USER_FRIENDS = FIREBASE_URL + "/" + FIREBASE_LOCATION_USER_FRIENDS;
-    public static final String FIREBASE_URL_LISTS_SHARED_WITH = FIREBASE_URL + "/" + FIREBASE_LOCATION_LISTS_SHARED_WITH;
+    public static final String FIREBASE_URL_SHOPPING_LIST_ITEMS = FIREBASE_URL + '/' + FIREBASE_LOCATION_SHOPPING_LIST_ITEMS;
+    public static final String FIREBASE_URL_USERS = FIREBASE_URL + '/' + FIREBASE_LOCATION_USERS;
+    public static final String FIREBASE_URL_USER_LISTS = FIREBASE_URL + '/' + FIREBASE_LOCATION_USER_LISTS;
+    public static final String FIREBASE_URL_USER_FRIENDS = FIREBASE_URL + '/' + FIREBASE_LOCATION_USER_FRIENDS;
+    public static final String FIREBASE_URL_LISTS_SHARED_WITH = FIREBASE_URL + '/' + FIREBASE_LOCATION_LISTS_SHARED_WITH;
 
 
     /* Constants for Firebase login */

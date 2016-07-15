@@ -254,17 +254,17 @@ public class EndOfGameFragment extends Fragment {
                     results.putString(MSG_KEY_LOWER, WORD_WAS + mEndGame.getLogic().getTheWord() + " / Point : " + Integer.toString(mEndGame.getPlayers()[0].getScore()));
                 }
             } else {
-//                GameUtility.mpc.lc.updateLobby(mEndGame.getPlayers()[1].getName(), GameUtility.mpc.name, mEndGame.getLogic().getNumWrongLetters());
-//                final LobbyDTO dto = GameUtility.mpc.lc.lobbyList.get(mEndGame.getPlayers()[1].getName());
+//                GameUtility.mpc.lc.updateLobby(mEndGame.getPlayers()[1].getmName(), GameUtility.mpc.name, mEndGame.getLogic().getNumWrongLetters());
+//                final LobbyDTO dto = GameUtility.mpc.lc.lobbyList.get(mEndGame.getPlayers()[1].getmName());
 //                boolean gameisDone = true;
 //                for (final LobbyPlayerStatus lps : dto.getPlayerList()) {
-//                    if (!lps.getName().equals(GameUtility.mpc.name) && lps.getScore() == -1) gameisDone = false;
+//                    if (!lps.getmName().equals(GameUtility.mpc.name) && lps.getmScore() == -1) gameisDone = false;
 //                }
 //                if (gameisDone) {
 //                    for (final LobbyPlayerStatus lps : dto.getPlayerList()) {
-//                        if (!lps.getName().equals(GameUtility.mpc.name)) {
-//                            if (lps.getScore() < mEndGame.getLogic().getNumWrongLetters()) {
-//                                GameUtility.mpc.pc.updatePlayerScore(lps.getName(), 1);
+//                        if (!lps.getmName().equals(GameUtility.mpc.name)) {
+//                            if (lps.getmScore() < mEndGame.getLogic().getNumWrongLetters()) {
+//                                GameUtility.mpc.pc.updatePlayerScore(lps.getmName(), 1);
 //                            } else {
 //                                GameUtility.mpc.pc.updatePlayerScore(GameUtility.mpc.name, 1);
 //                            }

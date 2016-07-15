@@ -68,10 +68,10 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
         }
 
         final Score score = mData.get(position);
-        ViewHolder.s_Name.setText(score.getName());
-        ViewHolder.s_Word.setText(score.getWord());
+        ViewHolder.s_Name.setText(score.getmName());
+        ViewHolder.s_Word.setText(score.getmWord());
         ViewHolder.s_Date.setText(score.getDateString());
-        ViewHolder.s_Points.setText(Integer.toString(score.getScore()));
+        ViewHolder.s_Points.setText(Integer.toString(score.getmScore()));
         view.setTag(ViewHolder.s_Name);
         return view;
     }

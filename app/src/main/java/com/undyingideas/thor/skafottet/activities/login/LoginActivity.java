@@ -409,7 +409,7 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
         @Override
         public void onAuthenticated(final AuthData authData) {
             WindowLayout.getMd().dismiss();
-            Log.i(LOG_TAG, provider + " " + getString(R.string.log_message_auth_successful));
+            Log.i(LOG_TAG, provider + ' ' + getString(R.string.log_message_auth_successful));
 
             if (authData != null) {
                 /**
@@ -575,9 +575,9 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
         final HashMap<String, Object> newUserMap = (HashMap<String, Object>) new ObjectMapper().convertValue(newUser, Map.class);
 
         /* Add the user and UID to the update map */
-        userAndUidMapping.put("/" + Constant.FIREBASE_LOCATION_USERS + "/" + mEncodedEmail,
+        userAndUidMapping.put('/' + Constant.FIREBASE_LOCATION_USERS + '/' + mEncodedEmail,
                 newUserMap);
-        userAndUidMapping.put("/" + Constant.FIREBASE_LOCATION_UID_MAPPINGS + "/" + authData.getUid(), mEncodedEmail);
+        userAndUidMapping.put('/' + Constant.FIREBASE_LOCATION_UID_MAPPINGS + '/' + authData.getUid(), mEncodedEmail);
 
         /* Update the database; it will fail if a user already exists */
         GameUtility.getFirebase().updateChildren(userAndUidMapping, new Firebase.CompletionListener() {
@@ -744,7 +744,7 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
             } catch (final GoogleAuthException authEx) {
                 /* The call is not ever expected to succeed assuming you have already verified that
                  * Google Play services is installed. */
-                Log.e(LOG_TAG, " " + authEx.getMessage(), authEx);
+                Log.e(LOG_TAG, ' ' + authEx.getMessage(), authEx);
                 mErrorMessage = getString(R.string.google_error_auth_with_google) + authEx.getMessage();
             }
             return token;

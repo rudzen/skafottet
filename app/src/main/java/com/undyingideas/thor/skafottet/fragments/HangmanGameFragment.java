@@ -221,7 +221,7 @@ public class HangmanGameFragment extends Fragment {
     private void applySaveGameStatus() {
         mTextWord.animateText(mCurrentGame.getLogic().getVisibleWord());
 //        if (mCurrentGame.isMultiPlayer()) {
-//            mTextStatus.animateText(GameUtility.mpc.lc.getOppNames(mCurrentGame.getPlayers()[1].getName(), mCurrentGame.getPlayers()[0].getName()) + " / " + Integer.toString(mCurrentGame.getPlayers()[0].getScore()));
+//            mTextStatus.animateText(GameUtility.mpc.lc.getOppNames(mCurrentGame.getPlayers()[1].getmName(), mCurrentGame.getPlayers()[0].getmName()) + " / " + Integer.toString(mCurrentGame.getPlayers()[0].getmScore()));
 //        } else {
             mTextStatus.animateText(Integer.toString(mCurrentGame.getPlayers()[0].getScore()));
 //        }

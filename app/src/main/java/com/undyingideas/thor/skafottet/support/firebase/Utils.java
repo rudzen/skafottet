@@ -94,10 +94,10 @@ public class Utils {
      final String owner, final HashMap<String, Object> mapToUpdate,
      final String propertyToUpdate, final Object valueToUpdate) {
 
-        mapToUpdate.put("/" + Constant.FIREBASE_LOCATION_USER_LISTS + "/" + owner + "/" + listId + "/" + propertyToUpdate, valueToUpdate);
+        mapToUpdate.put('/' + Constant.FIREBASE_LOCATION_USER_LISTS + '/' + owner + '/' + listId + '/' + propertyToUpdate, valueToUpdate);
         if (sharedWith != null) {
             for (final PlayerDTO playerDTO : sharedWith.values()) {
-                mapToUpdate.put("/" + Constant.FIREBASE_LOCATION_USER_LISTS + "/" + playerDTO.getEmail() + "/" + listId + "/" + propertyToUpdate, valueToUpdate);
+                mapToUpdate.put('/' + Constant.FIREBASE_LOCATION_USER_LISTS + '/' + playerDTO.getEmail() + '/' + listId + '/' + propertyToUpdate, valueToUpdate);
             }
         }
 

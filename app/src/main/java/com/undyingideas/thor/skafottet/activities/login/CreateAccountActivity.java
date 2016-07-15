@@ -161,8 +161,8 @@ public class CreateAccountActivity extends BaseActivity {
         final HashMap<String, Object> newUserMap = (HashMap<String, Object>) new ObjectMapper().convertValue(newUser, Map.class);
 
         /* Add the user and UID to the update map */
-        userAndUidMapping.put("/" + Constant.FIREBASE_LOCATION_USERS + "/" + encodedEmail, newUserMap);
-        userAndUidMapping.put("/" + Constant.FIREBASE_LOCATION_UID_MAPPINGS + "/" + authUserId, encodedEmail);
+        userAndUidMapping.put('/' + Constant.FIREBASE_LOCATION_USERS + '/' + encodedEmail, newUserMap);
+        userAndUidMapping.put('/' + Constant.FIREBASE_LOCATION_UID_MAPPINGS + '/' + authUserId, encodedEmail);
 
         /* Try to update the database; if there is already a user, this will fail */
         mFirebaseRef.updateChildren(userAndUidMapping, new UserCreateCompletionListener(authUserId, encodedEmail));

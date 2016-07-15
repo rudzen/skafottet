@@ -206,7 +206,7 @@ public class PlayerListActivity extends AppCompatActivity implements PlayerListe
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
+                return super.toString() + " '" + mContentView.getText() + '\'';
             }
         }
 

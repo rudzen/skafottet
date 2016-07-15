@@ -166,7 +166,7 @@ public class VerbalExpression {
          * @return this builder
          */
         public Builder then(final String pValue) {
-            return add("(?:" + sanitize(pValue) + ")");
+            return add("(?:" + sanitize(pValue) + ')');
         }
 
         /**
@@ -357,7 +357,7 @@ public class VerbalExpression {
 
 
         public Builder anyOf(final String pValue) {
-            add("[" + sanitize(pValue) + "]");
+            add('[' + sanitize(pValue) + ']');
             return this;
         }
 
@@ -386,9 +386,9 @@ public class VerbalExpression {
                 final String from = sanitize(pArgs[firstInPairPosition - 1]);
                 final String to = sanitize(pArgs[firstInPairPosition]);
 
-                value.append(from).append("-").append(to);
+                value.append(from).append('-').append(to);
             }
-            value.append("]");
+            value.append(']');
 
             return add(value.toString());
         }
@@ -546,7 +546,7 @@ public class VerbalExpression {
          * @return this Builder
          */
         public Builder count(final int count) {
-            source.append("{").append(count).append("}");
+            source.append('{').append(count).append('}');
             return this;
         }
 
@@ -561,7 +561,7 @@ public class VerbalExpression {
          * @see #count(int)
          */
         public Builder count(final int from, final int to) {
-            source.append("{").append(from).append(",").append(to).append("}");
+            source.append('{').append(from).append(',').append(to).append('}');
             return this;
         }
 
@@ -637,7 +637,7 @@ public class VerbalExpression {
          * @return this builder
          */
         public Builder capture() {
-            suffixes.append(")");
+            suffixes.append(')');
             return add("(");
         }
 
@@ -665,7 +665,7 @@ public class VerbalExpression {
          * @since 1.2
          */
         public Builder group() {
-            suffixes.append(")");
+            suffixes.append(')');
             return add("(?:");
         }
 

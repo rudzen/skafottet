@@ -25,45 +25,70 @@ import java.util.Locale;
 
 public class Score implements Comparable<Score>, Serializable, Parcelable {
     private static final long serialVersionUID = -7482559749006887621L;
-    private final String name;
-    private final String word;
-    private int score;
-    private Date date;
+    private final String mName;
+    private final String mWord;
+    private int mScore;
+    private Date mDate;
     private static final SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh.mm.ss", Locale.US);
 
     public Score(final String word, final String name, final int score, final Date date) {
-        this.word = word;
-        this.score = score;
-        this.name = name;
-        this.date = date;
+        mWord = word;
+        mScore = score;
+        mName = name;
+        mDate = date;
     }
 
     public Score(final Score score) {
-        this(score.getWord(), score.getName(), score.getScore(), score.getDate());
+        this(score.getmWord(), score.getmName(), score.getmScore(), score.getmDate());
     }
 
-    public String getWord() { return word; }
+    public String getmWord() { return mWord; }
 
-    public int getScore() { return score; }
+    public int getmScore() { return mScore; }
 
-    public String getName() { return name; }
+    public String getmName() { return mName; }
 
-    public void setScore(final int score) { this.score = score; }
+    public void setmScore(final int mScore) { this.mScore = mScore; }
 
-    public Date getDate() { return date; }
+    public Date getmDate() { return mDate; }
 
-    public void setDate(final Date date) { this.date = date; }
+    public void setmDate(final Date mDate) { this.mDate = mDate; }
 
-    public String getDateString() { return formatter.format(date); }
+    public String getDateString() { return formatter.format(mDate); }
 
     @Override
     public String toString() {
-        return "Score {" + "name='" + name + '\'' + ", word='" + word + '\'' + ", score=" + score + ", " + getDateString() + '}';
+        return "Score {" + "mName='" + mName + '\'' + ", mWord='" + mWord + '\'' + ", mScore=" + mScore + ", " + getDateString() + '}';
     }
 
     @Override
     public int compareTo(@NonNull final Score anotherScore) {
-        return anotherScore.getScore() - score;
+        return anotherScore.getmScore() - mScore;
+    }
+
+    @SuppressWarnings("OverlyComplexBooleanExpression")
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        final Score score1 = (Score) o;
+
+        return mScore == score1.getmScore() && mName.equals(score1.getmName()) && mWord.equals(score1.getmWord()) && mDate.equals(score1.getmDate());
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = mName.hashCode();
+        result = 31 * result + mWord.hashCode();
+        result = 31 * result + mScore;
+        result = 31 * result + mDate.hashCode();
+        return result;
     }
 
     @Override
@@ -73,18 +98,18 @@ public class Score implements Comparable<Score>, Serializable, Parcelable {
 
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
-        dest.writeString(name);
-        dest.writeString(word);
-        dest.writeInt(score);
-        dest.writeLong(date != null ? date.getTime() : -1);
+        dest.writeString(mName);
+        dest.writeString(mWord);
+        dest.writeInt(mScore);
+        dest.writeLong(mDate != null ? mDate.getTime() : -1);
     }
 
     protected Score(final Parcel in) {
-        name = in.readString();
-        word = in.readString();
-        score = in.readInt();
+        mName = in.readString();
+        mWord = in.readString();
+        mScore = in.readInt();
         final long tmpDate = in.readLong();
-        date = tmpDate == -1 ? null : new Date(tmpDate);
+        mDate = tmpDate == -1 ? null : new Date(tmpDate);
     }
 
     public static final Parcelable.Creator<Score> CREATOR = new ScoreCreator();
