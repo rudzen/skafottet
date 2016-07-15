@@ -36,12 +36,6 @@ import com.firebase.client.FirebaseError;
 public class ChallengeListener implements Firebase.ResultHandler, ChildEventListener {
 
 
-
-
-    public ChallengeListener() {
-
-    }
-
     @Override
     public void onSuccess() {
 
@@ -54,12 +48,12 @@ public class ChallengeListener implements Firebase.ResultHandler, ChildEventList
 
 
     @Override
-    public void onChildAdded(final DataSnapshot dataSnapshot, String s) {
+    public void onChildAdded(final DataSnapshot dataSnapshot, final String s) {
 
     }
 
     @Override
-    public void onChildChanged(final DataSnapshot dataSnapshot, String s) {
+    public void onChildChanged(final DataSnapshot dataSnapshot, final String s) {
 
     }
 

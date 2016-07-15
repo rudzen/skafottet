@@ -145,7 +145,7 @@ public class AboutFragment extends Fragment {
     };
 
     @Nullable
-    private TextView[] tv = new TextView[ROWS.length];
+    private TextView[] mTextViews = new TextView[ROWS.length];
 
     @SuppressWarnings("deprecation")
     @Nullable
@@ -169,7 +169,7 @@ public class AboutFragment extends Fragment {
         final int colHead = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? ContextCompat.getColor(getContext(), R.color.colorAccent) : getResources().getColor(R.color.colorAccent);
 
         //noinspection ConstantConditions
-        for (TextView t : tv) {
+        for (TextView t : mTextViews) {
             //noinspection ObjectAllocationInLoop
             t = new TextView(getContext());
             t.setPadding(padding, padding, padding, padding);
@@ -181,7 +181,7 @@ public class AboutFragment extends Fragment {
             ll.addView(t);
             YoYo.with(Techniques.BounceIn).duration(50).playOn(t);
         }
-        tv = null;
+        mTextViews = null;
         sv.addView(ll);
         YoYo.with(Techniques.FadeIn).duration(1000).playOn(sv);
         return sv;

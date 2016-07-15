@@ -30,7 +30,7 @@ public class GameList {
     private String opponent; // who are you playing against?
     private String theWord; // what word are being guessed on?
     private boolean isPlayed; // have you played this game?
-    private int score = -10000; // how many points did you get? -10000 if not played yet.
+    private final int score = -10000; // how many points did you get? -10000 if not played yet.
 
 
 

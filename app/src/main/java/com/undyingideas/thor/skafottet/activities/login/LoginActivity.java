@@ -383,7 +383,7 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
     @Override
     public void onLoaderReset(final Loader<Cursor> cursorLoader) { }
 
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
+    private void addEmailsToAutoComplete(final List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
         mEditTextEmailInput.setAdapter(adapter);

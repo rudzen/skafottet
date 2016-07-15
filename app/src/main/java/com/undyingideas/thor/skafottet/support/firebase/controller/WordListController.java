@@ -54,7 +54,7 @@ public class WordListController {
         return wordList;
     }
 
-    public static void setWordList(HashMap<String, WordItem> wordList) {
+    public static void setWordList(final HashMap<String, WordItem> wordList) {
         WordListController.wordList = wordList;
     }
 

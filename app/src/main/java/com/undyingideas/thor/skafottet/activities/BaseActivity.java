@@ -145,7 +145,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
         return returnVal || super.onOptionsItemSelected(item);
     }
 
-    protected void initializeBackground(LinearLayout linearLayout) {
+    protected void initializeBackground(final LinearLayout linearLayout) {
 
 //        /**
 //         * Set different background image for landscape and portrait layouts

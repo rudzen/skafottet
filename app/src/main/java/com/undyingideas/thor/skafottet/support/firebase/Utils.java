@@ -38,7 +38,7 @@ public class Utils {
     public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.US);
     private static final Pattern EMAIL_DECODE = Pattern.compile(",", Pattern.LITERAL);
     private static final Pattern EMAIL_ENCODE = Pattern.compile(".", Pattern.LITERAL);
-    private Context mContext;
+    private final Context mContext;
 
 
     /**
