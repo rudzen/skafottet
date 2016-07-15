@@ -111,12 +111,7 @@ public class ColorPickerPreference
         final LinearLayout widgetFrameView = (LinearLayout) mView.findViewById(android.R.id.widget_frame);
         if (widgetFrameView == null) return;
         widgetFrameView.setVisibility(View.VISIBLE);
-        widgetFrameView.setPadding(
-                widgetFrameView.getPaddingLeft(),
-                widgetFrameView.getPaddingTop(),
-                (int) (mDensity * 8),
-                widgetFrameView.getPaddingBottom()
-        );
+        widgetFrameView.setPadding(widgetFrameView.getPaddingLeft(), widgetFrameView.getPaddingTop(), (int) (mDensity * 8), widgetFrameView.getPaddingBottom());
         // remove already create preview image
         final int count = widgetFrameView.getChildCount();
         if (count > 0) {
@@ -125,14 +120,14 @@ public class ColorPickerPreference
         widgetFrameView.addView(iView);
         widgetFrameView.setMinimumWidth(0);
         iView.setBackground(new AlphaPatternDrawable((int) (5 * mDensity)));
-//        iView.setBackgroundDrawable(new AlphaPatternDrawable((int) (5 * mDensity)));
         iView.setImageBitmap(getPreviewBitmap());
     }
 
+    @SuppressWarnings("OverlyComplexBooleanExpression")
     private Bitmap getPreviewBitmap() {
-        final int d = (int) (mDensity * 31); //30dip
+        final int imageDensity = (int) (mDensity * 31); //30dip
         final int color = mValue;
-        final Bitmap bm = Bitmap.createBitmap(d, d, Config.ARGB_8888);
+        final Bitmap bm = Bitmap.createBitmap(imageDensity, imageDensity, Config.ARGB_8888);
         final int w = bm.getWidth();
         final int h = bm.getHeight();
         int c;
@@ -163,6 +158,7 @@ public class ColorPickerPreference
         }
     }
 
+    @Override
     public boolean onPreferenceClick(final Preference preference) {
         showDialog(null);
         return false;
