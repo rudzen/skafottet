@@ -28,7 +28,7 @@
         style="@style/word_list_section_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="start|left"
+        android:layout_gravity="start"
         android:text="Highscorelister"
         android:textStyle="bold"/>
 

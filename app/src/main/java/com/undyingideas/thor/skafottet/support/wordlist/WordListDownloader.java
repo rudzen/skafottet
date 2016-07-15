@@ -45,12 +45,11 @@ import java.util.regex.Pattern;
  */
 public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
 
-    //    private static final Pattern removeSpaces = Pattern.compile("  ");
     private static final Pattern removeNonDK = Pattern.compile("[^a-zæøå]");
-    //    private static final Pattern removeTags = Pattern.compile(".<+?>");
-    private final WeakReference<WordListFragment> wordListFragmentWeakReference;
-    private final String title, url;
-    private WordListFragment wordListFragment;
+    private final WeakReference<WordListFragment> mWordListFragmentWeakReference;
+    private final String mTitle;
+    private final String mURL;
+    private WordListFragment mWordListFragment;
     private final boolean multi;
 
     public WordListDownloader(final WordListFragment wordListFragment, final String title, final String url) {
@@ -58,18 +57,18 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
     }
 
     private WordListDownloader(final WordListFragment wordListFragment, final String title, final String url, final boolean multi) {
-        wordListFragmentWeakReference = new WeakReference<>(wordListFragment);
-        this.title = title;
-        this.url = url.toLowerCase();
+        mWordListFragmentWeakReference = new WeakReference<>(wordListFragment);
+        mTitle = title;
+        mURL = url.toLowerCase();
         this.multi = multi;
     }
 
     @Override
     protected WordItem doInBackground(final Void... params) {
-        wordListFragment = wordListFragmentWeakReference.get();
-        if (wordListFragment != null) {
+        mWordListFragment = mWordListFragmentWeakReference.get();
+        if (mWordListFragment != null) {
 
-            publishProgress("Henter fra " + url); //"Henter fra\n" + url, "Henter ordliste.");
+            publishProgress("Henter fra " + mURL);
             try {
                 Thread.sleep(300);
             } catch (final InterruptedException e) {
@@ -77,7 +76,7 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
             }
             final StringBuilder sb = new StringBuilder(500);
             int count = 1;
-            try (final BufferedReader br = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
+            try (final BufferedReader br = new BufferedReader(new InputStreamReader(new URL(mURL).openStream()))) {
                 while (true) {
                     final String line = br.readLine();
                     if (line == null) break;
@@ -116,7 +115,7 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
             final HashSet<String> dude = new HashSet<>(wordSize);
             publishProgress("Rydder op.");
             dude.addAll(words);
-            final WordItem wordItem = new WordItem(title, url, dude.size());
+            final WordItem wordItem = new WordItem(mTitle, mURL, dude.size());
             wordItem.getWords().addAll(dude);
             Collections.sort(wordItem.getWords());
             GameUtility.getWordController().replaceLocalWordList(wordItem);
@@ -127,17 +126,16 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
 
     @Override
     protected void onPostExecute(final WordItem wordItem) {
-        wordListFragment = wordListFragmentWeakReference.get();
-        if (wordListFragment != null) {
-            WindowLayout.hideStatusBar(wordListFragment.getActivity().getWindow(), null); // sometimes the system just won't do as i ask!
+        mWordListFragment = mWordListFragmentWeakReference.get();
+        if (mWordListFragment != null) {
+            WindowLayout.hideStatusBar(mWordListFragment.getActivity().getWindow(), null); // sometimes the system just won't do as i ask!
             if (wordItem != null) {
                 Log.d("Downloader", wordItem.toString());
                 ListFetcher.getListHandler().post(ListFetcher.getListSaver());
-                wordListFragment.refreshList();
-//                wordListFragment.onWindowFocusChanged(true);
+                mWordListFragment.refreshList();
                 WindowLayout.getLoadToast().success();
             } else {
-                WindowLayout.showSnack("Fejl ved indhentning af listen", wordListFragment.getActivity().getWindow().getDecorView(), true);
+                WindowLayout.showSnack("Fejl ved indhentning af listen", mWordListFragment.getActivity().getWindow().getDecorView(), true);
                 WindowLayout.getLoadToast().error();
             }
         }
@@ -146,8 +144,8 @@ public class WordListDownloader extends AsyncTask<Void, String, WordItem> {
 
     @Override
     protected void onProgressUpdate(final String... values) {
-        wordListFragment = wordListFragmentWeakReference.get();
-        if (wordListFragment != null) {
+        mWordListFragment = mWordListFragmentWeakReference.get();
+        if (mWordListFragment != null) {
             WindowLayout.getLoadToast().setText(values[0]);
         }
     }

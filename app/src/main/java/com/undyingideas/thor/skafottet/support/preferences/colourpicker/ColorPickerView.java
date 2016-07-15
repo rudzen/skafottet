@@ -673,7 +673,7 @@ public class ColorPickerView extends View {
         int width = getPrefferedHeight();
 
         if (mShowAlphaPanel) {
-            width -= PANEL_SPACING + ALPHA_PANEL_HEIGHT;
+            width -= (int) (PANEL_SPACING + ALPHA_PANEL_HEIGHT);
         }
 
 

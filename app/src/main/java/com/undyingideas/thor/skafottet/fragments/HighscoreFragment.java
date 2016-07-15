@@ -78,6 +78,7 @@ public class HighscoreFragment extends Fragment implements
     private Handler mHandler;
     private Runnable mRefreshStopper;
 
+    @Nullable
     private static IFragmentFlipper mFragmentFlipper;
 
     private static boolean sLocal;
@@ -146,8 +147,8 @@ public class HighscoreFragment extends Fragment implements
         mToolbar.setCollapsible(false);
         mToolbar.setLogo(R.mipmap.ic_launcher);
         mToolbar.setLogoDescription("Applikations logo");
-        mToolbar.setNavigationContentDescription("Home icon");
-//        mToolbar.inflateMenu(R.menu.menu_word_list);
+        mToolbar.setNavigationContentDescription("Home icon");//
+        mToolbar.inflateMenu(R.menu.menu_word_list);
 
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, mToolbar, R.string.highscore_drawer_open, R.string.highscore_drawer_close);
 
@@ -158,7 +159,7 @@ public class HighscoreFragment extends Fragment implements
         }
 
         // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
 
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
@@ -170,14 +171,11 @@ public class HighscoreFragment extends Fragment implements
 
     @Override
     public void onViewStateRestored(@Nullable final Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            sLocal = savedInstanceState.getBoolean(LOCAL_KEY);
-        } else {
-            sLocal = true;
-        }
+        sLocal = savedInstanceState == null || savedInstanceState.getBoolean(LOCAL_KEY);
         super.onViewStateRestored(savedInstanceState);
     }
 
+    @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
     @Override
     public void onDetach() {
         mFragmentFlipper = null;

@@ -35,6 +35,7 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
     public static final String ACTION_PLAY = "SKAFOTMUSIK";
     public static final String ACTION_STOP = "STOPSKAFOTT";
     private static final int music = R.raw.insidious;
+    private static final String PLAYER = "Player";
     private static MusicPlay mMusicPlayInstance;
 
     private MediaPlayer mMediaPlayer;
@@ -58,10 +59,10 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
 
     @Override
     public int onStartCommand(final Intent intent, final int flags, final int startId) {
-        Log.d("Player", "onStartCommand");
+        Log.d(PLAYER, "onStartCommand");
         if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals(ACTION_PLAY)) {
-                Log.d("Player", "Filter was correct");
+                Log.d(PLAYER, "Filter was correct");
 //            InputStream inputStream = getResources().openRawResource(R.raw.reign_supreme);
                 mMediaPlayer = MediaPlayer.create(this, music); // initialize it here
                 mMediaPlayer.setVolume(0.3f, 0.3f);
@@ -94,10 +95,14 @@ public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener
             mMediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
             afd.close();
             mMediaPlayer.prepareAsync(); // prepare async to not block main thread
-        } catch (final IllegalStateException | IOException e) {
+            mState = STATE_PREPARING;
+            return;
+        } catch (final IllegalStateException ise) {
+            Log.d(TAG, "initMediaPlayer: IllegaState, perhaps it's too eager!");
+        } catch (final IOException e) {
             e.printStackTrace();
         }
-        mState = STATE_PREPARING;
+        mState = STATE_STOPPED;
     }
 
     @Override

@@ -59,6 +59,7 @@ public class UnderlinedTextView extends TextView {
     protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
         mPaint.setColor(getTextColors().getDefaultColor());
-        canvas.drawRect(0, getHeight() - mUnderlineHeight, getWidth(), getHeight(), mPaint);
+        final int h = getHeight();
+        canvas.drawRect(0, h - mUnderlineHeight, getWidth(), h, mPaint);
     }
 }

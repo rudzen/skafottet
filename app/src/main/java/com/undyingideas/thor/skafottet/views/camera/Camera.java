@@ -60,8 +60,8 @@ class Camera {
         if (d < 0) return null;
         final float u = EP.dot(U);
         final float r = EP.dot(R);
-        final float rm = (r / d) * z;
-        final float um = (u / d) * z;
+        final float rm = r / d * z;
+        final float um = u / d * z;
         return new V2(rm, um);
     }
 

@@ -16,12 +16,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 24
+    buildToolsVersion '24.0.0'
     defaultConfig {
         applicationId "com.undyingideas.thor.skafottet"
-        minSdkVersion 19
-        targetSdkVersion 23
+        minSdkVersion 21
+        targetSdkVersion 24
         versionCode 1
         versionName "1.1"
     }
@@ -65,12 +65,14 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     // Support libraries
-    compile 'com.android.support:support-v4:23.4.0'
-    compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:support-v4:24.0.0'
+    compile 'com.android.support:design:24.0.0'
     // Material design dialogs.
-    compile('com.github.afollestad.material-dialogs:commons:0.8.5.4@aar') {
-        transitive = true
-    }
+    compile 'com.afollestad.material-dialogs:core:0.8.5.9'
+    //compile 'com.afollestad.material-dialogs:commons:0.8.5.9'
+    //    compile('com.github.afollestad.material-dialogs:commons:0.8.5.4@aar') {
+    //        transitive = true
+    //    }
     //compile('com.github.afollestad.material-dialogs:commons:0.8.5.4@aar') {
     //    transitive = true
     // }
@@ -96,6 +98,6 @@ dependencies {
     // for high speed compression.
     compile 'net.jpountz.lz4:lz4:1.3.0'
     // for Google Play Services
-    compile 'com.google.android.gms:play-services-safetynet:9.0.0'
-    compile 'com.google.android.gms:play-services-auth:9.0.0'
+    compile 'com.google.android.gms:play-services-safetynet:9.2.1'
+    compile 'com.google.android.gms:play-services-auth:9.2.1'
 }
