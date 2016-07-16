@@ -1,10 +1,23 @@
 (+ = new, - = removed, * = change, ! = fix, / = subitem)
---- VERION NUMBERING IS RESET!! ---
-v0.2 - 31-01-2016, rudz
------------------------
+
+v2016.0.3 - 17-07-2016, rudz
+----------------------------
+[Generic]
+* Updated Build-Tools and SDK -> 24
+* Updated several libraries used, to newer version(s).
+* Minor optimizations.
+! Several potential crashes.
+
 [Score system]
-+ New mScore system algorithm which integrates current with a time modifier.
-* Scores for multiplayer games are determined by each player's local mScore.
+! Reduced overhead for date/time.
+! Better (and faster) sorting.
+
+--- VERION NUMBERING IS RESET!! ---
+v2016.0.2 - 31-01-2016, rudz
+----------------------------
+[Score system]
++ New Score system algorithm which integrates current with a time modifier.
+* Scores for multiplayer games are determined by each player's local Score.
   / The point difference is added to the winner.
   / The point difference is subtracted from the looser.
 * When setting a new highscore in singleplayer and not logged in with user, the regular single player name is used.

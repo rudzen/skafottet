@@ -109,6 +109,7 @@ public class HighscoreFragment extends Fragment implements
 
         /* set up the view */
         mRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.highscore_refresh_layout);
+
         mStickyList = (StickyListHeadersListView) root.findViewById(R.id.list);
         mStickyList.addHeaderView(inflater.inflate(R.layout.word_list_header, null));
         mStickyList.addFooterView(inflater.inflate(R.layout.word_list_footer, null));
@@ -214,6 +215,7 @@ public class HighscoreFragment extends Fragment implements
     }
 
     private boolean updateCurrentList() {
+
         if (!sLocal) {
             // TODO : re-read data from dataholder into adapter and reset the listview
         }
@@ -260,7 +262,6 @@ public class HighscoreFragment extends Fragment implements
 
     @Override
     public boolean onNavigationItemSelected(final MenuItem item) {
-
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }

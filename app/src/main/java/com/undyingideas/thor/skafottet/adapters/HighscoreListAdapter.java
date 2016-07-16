@@ -24,6 +24,7 @@ package com.undyingideas.thor.skafottet.adapters;
  */
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +67,7 @@ public class HighscoreListAdapter extends BaseAdapter implements StickyListHeade
         char lastFirstChar = mItems.get(0).getName().charAt(0);
         sectionIndices.add(0);
         for (int i = 1; i < mItems.size(); i++) {
+            //
             if (mItems.get(i).getName() != null && mItems.get(i).getName().charAt(0) != lastFirstChar) {
                 lastFirstChar = mItems.get(i).getName().charAt(0);
                 sectionIndices.add(i);
@@ -104,7 +106,7 @@ public class HighscoreListAdapter extends BaseAdapter implements StickyListHeade
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
         final ViewHolder holder;
-
+        Log.d("ARGH", mItems.toString());
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.highscore_list_row, parent, false);
@@ -150,6 +152,9 @@ public class HighscoreListAdapter extends BaseAdapter implements StickyListHeade
      */
     @Override
     public long getHeaderId(final int position) {
+        if (mItems.get(position).getName() == null) {
+            return 0;
+        }
         // return the first character
         return mItems.get(position).getName().subSequence(0, 1).charAt(0);
     }

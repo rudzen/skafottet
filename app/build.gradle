@@ -81,6 +81,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.7'
     // Sticky list headers for word list
     compile 'se.emilsjolander:stickylistheaders:2.7.0'
+    //compile 'se.emilsjolander.stickylistheaders:library:2.1.0'
     // JSoup to handle HTML tag filtering
     compile 'org.jsoup:jsoup:1.9.2'
     // Text view with build-in text change animations
@@ -94,4 +95,7 @@ dependencies {
     // for Google Play Services
     compile 'com.google.android.gms:play-services-safetynet:9.2.1'
     compile 'com.google.android.gms:play-services-auth:9.2.1'
+    compile('com.mikepenz:materialdrawer:5.3.6@aar') {
+        transitive = true
+    }
 }
