@@ -66,7 +66,7 @@ public class HighscoreListAdapter extends BaseAdapter implements StickyListHeade
         char lastFirstChar = mItems.get(0).getName().charAt(0);
         sectionIndices.add(0);
         for (int i = 1; i < mItems.size(); i++) {
-            if (mItems.get(i).getName().charAt(0) != lastFirstChar) {
+            if (mItems.get(i).getName() != null && mItems.get(i).getName().charAt(0) != lastFirstChar) {
                 lastFirstChar = mItems.get(i).getName().charAt(0);
                 sectionIndices.add(i);
             }
