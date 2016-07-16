@@ -147,7 +147,6 @@ public class AboutFragment extends Fragment {
     @Nullable
     private TextView[] mTextViews = new TextView[ROWS.length];
 
-    @SuppressWarnings("deprecation")
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
@@ -160,13 +159,12 @@ public class AboutFragment extends Fragment {
         ll.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         ll.setOrientation(LinearLayout.VERTICAL);
 
-        /* configure toolbar home button */
-
-
-        final int padding = (int) applyDimension(COMPLEX_UNIT_DIP, 4, getActivity().getResources().getDisplayMetrics());
         int i = 0;
 
+        @SuppressWarnings("deprecation")
         final int colHead = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? ContextCompat.getColor(getContext(), R.color.colorAccent) : getResources().getColor(R.color.colorAccent);
+
+        final int padding = (int) applyDimension(COMPLEX_UNIT_DIP, 4, getActivity().getResources().getDisplayMetrics());
 
         //noinspection ConstantConditions
         for (TextView t : mTextViews) {
@@ -179,7 +177,7 @@ public class AboutFragment extends Fragment {
             t.setTextColor(colHead);
             addLinks(t, WEB_URLS | EMAIL_ADDRESSES);
             ll.addView(t);
-            YoYo.with(Techniques.BounceIn).duration(50).playOn(t);
+            YoYo.with(Techniques.BounceIn).duration(100).playOn(t);
         }
         mTextViews = null;
         sv.addView(ll);

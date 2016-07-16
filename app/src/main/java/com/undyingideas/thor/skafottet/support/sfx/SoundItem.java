@@ -38,7 +38,6 @@ public class SoundItem implements Parcelable {
 
     public SoundItem(final boolean stop) { this.stop = stop; }
 
-
     @Override
     public int describeContents() { return 0; }
 

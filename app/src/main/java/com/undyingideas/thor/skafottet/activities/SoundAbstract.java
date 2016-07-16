@@ -107,7 +107,7 @@ public abstract class SoundAbstract extends BaseActivity implements SoundPool.On
         Log.d(TAG, String.valueOf(GameUtility.getSettings().prefsSfx));
         if (GameUtility.getSettings().prefsSfx) {
             if (mLoaded) {
-                mSoundThread.sounds.add(mSoundItems[index]);
+                mSoundThread.mSoundItems.add(mSoundItems[index]);
             } else {
                 WindowLayout.showSnack("Lydfil ikke indhentet endnu,", findViewById(R.id.fragment_content), true);
             }

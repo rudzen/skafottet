@@ -29,6 +29,8 @@ import com.undyingideas.thor.skafottet.activities.support.Foreground;
 import com.undyingideas.thor.skafottet.support.utility.GameUtility;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class StarField extends RelativeLayout implements Foreground.Listener {
 
@@ -40,20 +42,21 @@ public class StarField extends RelativeLayout implements Foreground.Listener {
     private final ArrayList<Star2D> mStars = new ArrayList<>(50);
     private Paint mPainter;
     private Handler mHandleCalculate, mHandleUpdate;
-    private volatile boolean mIsRunning;
+    private final AtomicBoolean mIsRunning = new AtomicBoolean();
     private int mWidth, mHeight;
-    private volatile PointF mGravity;
-    private Runnable mCalculator, mUpdater;
+    private final AtomicReference<PointF> mGravity = new AtomicReference<>();
+    private Runnable mCalculator;
+    private Runnable mUpdater;
 
     private static final String TAG = "Starfield";
 
     public boolean ismIsRunning() {
-        return mIsRunning;
+        return mIsRunning.get();
     }
 
     public void setmIsRunning(final boolean mIsRunning) {
-        if (this.mIsRunning != mIsRunning) {
-            this.mIsRunning = mIsRunning;
+        if (this.mIsRunning.get() != mIsRunning) {
+            this.mIsRunning.set(mIsRunning);
             if (mIsRunning) {
                 mHandleCalculate = new Handler();
                 mHandleUpdate = new Handler();
@@ -91,7 +94,7 @@ public class StarField extends RelativeLayout implements Foreground.Listener {
     }
 
     public void init(final int w, final int h, final int color) {
-        mGravity = new PointF(0f, 0f);
+        mGravity.set(new PointF(0f, 0f));
         mWidth = w;
         mHeight = h;
         if (mPainter == null) {
@@ -115,31 +118,31 @@ public class StarField extends RelativeLayout implements Foreground.Listener {
 
     @Override
     public boolean hasFocus() {
-        if (!mIsRunning) setmIsRunning(GameUtility.getSettings().prefsBlood);
-        Log.d(TAG, "StarField focus");
+        if (!mIsRunning.get()) setmIsRunning(GameUtility.getSettings().prefsBlood);
+        Log.d(TAG, "Focus");
         return super.hasFocus();
     }
 
     @Override
     public void onBecameForeground() {
         setmIsRunning(GameUtility.getSettings().prefsBlood);
-        Log.d(TAG, "Starfield enabled itself.");
+        Log.d(TAG, "Enabled itself.");
     }
 
     @Override
     public void onBecameBackground() {
-        Log.d(TAG, "Starfield disabled itself.");
+        Log.d(TAG, "Disabled itself.");
         setmIsRunning(false);
     }
 
     private class CalculateStarfield implements Runnable {
         @Override
         public void run() {
-            if (mIsRunning) {
+            if (mIsRunning.get()) {
                 //final long time = System.nanoTime();
                 for (final Star2D star2D : mStars) {
-                    star2D.xy.x -= star2D.speedX + mGravity.x;
-                    star2D.xy.y += mGravity.y + star2D.weight;
+                    star2D.xy.x -= star2D.speedX + mGravity.get().x;
+                    star2D.xy.y += mGravity.get().y + star2D.weight;
 
                     if (star2D.xy.x > mWidth) star2D.xy.x = 0;
                     else if (star2D.xy.x < 0) star2D.xy.x = mWidth;
@@ -166,7 +169,7 @@ public class StarField extends RelativeLayout implements Foreground.Listener {
             invalidate();
             if (getMeasuredHeight() > mHeight && getMeasuredWidth() > mWidth) {
                 init(getMeasuredWidth(), getMeasuredHeight(), Color.RED);
-            } else if (mIsRunning) {
+            } else if (mIsRunning.get()) {
                 mHandleUpdate.postDelayed(mUpdater, DRAW_FPS);
             }
         }
@@ -177,24 +180,25 @@ public class StarField extends RelativeLayout implements Foreground.Listener {
      * @param x The adjustment for X
      * @param y The adjustment for Y
      */
+    @SuppressWarnings("SuspiciousNameCombination")
     public void setGravity(final float x, final float y) {
-        if (mIsRunning) {
-            mGravity.x = x >= LOW_PASS_FILTER || x <= -LOW_PASS_FILTER ? x : 0f;
-            mGravity.y = y >= LOW_PASS_FILTER || y <= -LOW_PASS_FILTER ? y : 0f;
-            if (x > HIGH_PASS_FILTER) mGravity.x = HIGH_PASS_FILTER;
-            else if (x < -HIGH_PASS_FILTER) mGravity.x = -HIGH_PASS_FILTER;
-            if (y > HIGH_PASS_FILTER) mGravity.y = HIGH_PASS_FILTER;
-            else if (y < -HIGH_PASS_FILTER) mGravity.y = -HIGH_PASS_FILTER;
+        if (mIsRunning.get()) {
+            mGravity.get().x = x >= LOW_PASS_FILTER || x <= -LOW_PASS_FILTER ? x : 0f;
+            mGravity.get().y = y >= LOW_PASS_FILTER || y <= -LOW_PASS_FILTER ? y : 0f;
+            if (x > HIGH_PASS_FILTER) mGravity.get().x = HIGH_PASS_FILTER;
+            else if (x < -HIGH_PASS_FILTER) mGravity.get().x = -HIGH_PASS_FILTER;
+            if (y > HIGH_PASS_FILTER) mGravity.get().y = HIGH_PASS_FILTER;
+            else if (y < -HIGH_PASS_FILTER) mGravity.get().y = -HIGH_PASS_FILTER;
         } else {
-            mGravity.x = 0.0f;
-            mGravity.y = 0.0f;
+            mGravity.get().x = 0.0f;
+            mGravity.get().y = mGravity.get().x;
         }
     }
 
     @Override
     protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
-        if (mIsRunning) {
+        if (mIsRunning.get()) {
             for (final Star2D star : mStars) {
                 mPainter.setAlpha(star.fade);
                 canvas.drawCircle(star.xy.x, star.xy.y, 7, mPainter);

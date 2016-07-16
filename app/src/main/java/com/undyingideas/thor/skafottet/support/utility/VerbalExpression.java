@@ -36,6 +36,7 @@ public class VerbalExpression {
 
     private final Pattern pattern;
 
+    @SuppressWarnings("ReturnOfThis")
     public static class Builder {
 
         private static final Pattern patEndOfLine = Pattern.compile("$", Pattern.LITERAL);
@@ -79,8 +80,7 @@ public class VerbalExpression {
         }
 
         public VerbalExpression build() {
-            final Pattern pattern = Pattern.compile(prefixes.append(source).append(suffixes).toString(), modifiers);
-            return new VerbalExpression(pattern);
+            return new VerbalExpression(Pattern.compile(prefixes.append(source).append(suffixes).toString(), modifiers));
         }
 
         /**
@@ -142,7 +142,7 @@ public class VerbalExpression {
          * @return this builder
          */
         public Builder endOfLine(final boolean pEnable) {
-            suffixes.append(pEnable ? "$" : "");
+            suffixes.append(pEnable ? '$' : "");
             if (!pEnable) {
                 suffixes = new StringBuilder(patEndOfLine.matcher(suffixes.toString()).replaceAll(""));
             }

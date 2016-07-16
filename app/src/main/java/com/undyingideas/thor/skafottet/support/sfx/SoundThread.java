@@ -19,38 +19,40 @@ import android.media.SoundPool;
 import android.util.Log;
 
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created on 17-01-2016, 17:34.
  * Project : skafottet
- * Sound thread to playback sounds.
+ * Sound thread to playback mSoundItems.
  *
  * @author rudz
  */
 public class SoundThread extends Thread {
-    private final SoundPool soundPool;
-    public final LinkedBlockingQueue<SoundItem> sounds = new LinkedBlockingQueue<>();
-    private volatile boolean stop;
+    private final SoundPool mSoundPool;
+    public final LinkedBlockingQueue<SoundItem> mSoundItems = new LinkedBlockingQueue<>();
+    private final AtomicBoolean mStop = new AtomicBoolean();
 
-    public SoundThread(final SoundPool soundPool) { this.soundPool = soundPool; }
+    private static final String TAG = "SoundThread";
 
-    public void unloadSound(final int id) { soundPool.unload(id); }
+    public SoundThread(final SoundPool soundPool) { mSoundPool = soundPool; }
+
+    public void unloadSound(final int id) { mSoundPool.unload(id); }
 
     @Override
     public void run() {
         try {
             SoundItem item;
-            while (!stop) {
-                item = sounds.take();
+            while (!mStop.get()) {
+                item = mSoundItems.take();
                 if (item.stop) {
-                    stop = true;
+                    mStop.set(true);
                     break;
                 }
-                soundPool.play(item.id, item.volume, item.volume, 0, 0, 1);
+                mSoundPool.play(item.id, item.volume, item.volume, 0, 0, 1);
             }
         } catch (final InterruptedException e) {
-            Log.d("SoundThread", "Interrupted");
-//            e.printStackTrace();
+            Log.d(TAG, "Interrupted");
         }
     }
 }
