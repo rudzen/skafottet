@@ -41,6 +41,8 @@ public class HighscoreManager {
 
     private ArrayList<Score> scores;
 
+    private static ScoreComparator mScoreComparator = new ScoreComparator();
+
     private final static int MAX = 10;
 
     public HighscoreManager(final Context context) {
@@ -55,7 +57,7 @@ public class HighscoreManager {
     private void sort() {
 //        HashSet<Score> mmYeah = new HashSet<>();
         Log.d(TAG, "Before sort : " + scores.toString());
-        Collections.sort(scores);
+        Collections.sort(scores, mScoreComparator);
 //        mmYeah.addAll(scores);
 //        scores.clear();
 //        int count = 0;
@@ -80,7 +82,7 @@ public class HighscoreManager {
         if (scores.size() < MAX) {
             return scores.size();
         }
-        if (scores.size() >= MAX && score >= scores.get(MAX - 1).getmScore()) {
+        if (scores.size() >= MAX && score >= scores.get(MAX - 1).getScore()) {
             return MAX - 1;
         }
         return -1;
@@ -160,9 +162,9 @@ public class HighscoreManager {
         for (int i = 0; i < x; i++) {
             sb.append(i + 1);
             sb.append(".\t"); // padding can be inserted here if wanted!!!!
-            sb.append(scores.get(i).getmName());
+            sb.append(scores.get(i).getName());
             sb.append(" [");
-            sb.append(scores.get(i).getmScore());
+            sb.append(scores.get(i).getScore());
             sb.append(']');
             sb.append('\n');
         }

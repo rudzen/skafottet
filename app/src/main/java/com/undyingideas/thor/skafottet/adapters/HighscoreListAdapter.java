@@ -63,11 +63,11 @@ public class HighscoreListAdapter extends BaseAdapter implements StickyListHeade
 
     private int[] getSectionIndices() {
         final ArrayList<Integer> sectionIndices = new ArrayList<>();
-        char lastFirstChar = mItems.get(0).getmName().charAt(0);
+        char lastFirstChar = mItems.get(0).getName().charAt(0);
         sectionIndices.add(0);
         for (int i = 1; i < mItems.size(); i++) {
-            if (mItems.get(i).getmName().charAt(0) != lastFirstChar) {
-                lastFirstChar = mItems.get(i).getmName().charAt(0);
+            if (mItems.get(i).getName().charAt(0) != lastFirstChar) {
+                lastFirstChar = mItems.get(i).getName().charAt(0);
                 sectionIndices.add(i);
             }
         }
@@ -81,7 +81,7 @@ public class HighscoreListAdapter extends BaseAdapter implements StickyListHeade
     private Character[] getSectionLetters() {
         final Character[] letters = new Character[mSectionIndices.length];
         for (int i = 0; i < mSectionIndices.length; i++) {
-            letters[i] = mItems.get(mSectionIndices[i]).getmName().charAt(0);
+            letters[i] = mItems.get(mSectionIndices[i]).getName().charAt(0);
         }
         return letters;
     }
@@ -117,10 +117,10 @@ public class HighscoreListAdapter extends BaseAdapter implements StickyListHeade
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.name.setText(mItems.get(position).getmName());
-        holder.points.setText(Integer.toString(mItems.get(position).getmScore()));
+        holder.name.setText(mItems.get(position).getName());
+        holder.points.setText(Integer.toString(mItems.get(position).getScore()));
         holder.date.setText(mItems.get(position).getDateString());
-        holder.word.setText(mItems.get(position).getmWord());
+        holder.word.setText(mItems.get(position).getWord());
 
         return convertView;
     }
@@ -139,7 +139,7 @@ public class HighscoreListAdapter extends BaseAdapter implements StickyListHeade
         }
 
         // set header text as first char in name
-        holder.text.setText(mItems.get(position).getmName().subSequence(0, 1));
+        holder.text.setText(mItems.get(position).getName().subSequence(0, 1));
 
         return convertView;
     }
@@ -151,7 +151,7 @@ public class HighscoreListAdapter extends BaseAdapter implements StickyListHeade
     @Override
     public long getHeaderId(final int position) {
         // return the first character
-        return mItems.get(position).getmName().subSequence(0, 1).charAt(0);
+        return mItems.get(position).getName().subSequence(0, 1).charAt(0);
     }
 
     @Override
