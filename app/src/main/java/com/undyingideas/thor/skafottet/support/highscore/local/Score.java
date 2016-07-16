@@ -46,20 +46,20 @@ public class Score implements Comparable<Score>, Serializable, Parcelable {
     }
 
     public Score(final Score score) {
-        this(score.getmWord(), score.getmName(), score.getmScore(), score.getmDate());
+        this(score.getWord(), score.getName(), score.getScore(), score.getmDate());
     }
 
-    public String getmWord() { return mWord; }
+    public String getWord() { return mWord; }
 
-    public int getmScore() { return mScore; }
+    public int getScore() { return mScore; }
 
-    public String getmName() { return mName; }
+    public String getName() { return mName; }
 
-    public void setmScore(final int mScore) { this.mScore = mScore; }
+    public void setScore(final int score) { mScore = score; }
 
     public long getmDate() { return mDate; }
 
-    public void setmDate(final long mDate) { this.mDate = mDate; }
+    public void setDate(final long date) { mDate = date; }
 
     public String getDateString() { return formatter.format(mDate); }
 
@@ -70,7 +70,7 @@ public class Score implements Comparable<Score>, Serializable, Parcelable {
 
     @Override
     public int compareTo(@NonNull final Score anotherScore) {
-        return anotherScore.getmScore() - mScore;
+        return anotherScore.getScore() - mScore;
     }
 
     @SuppressWarnings("OverlyComplexBooleanExpression")
@@ -85,7 +85,7 @@ public class Score implements Comparable<Score>, Serializable, Parcelable {
 
         final Score score1 = (Score) o;
 
-        return mDate == score1.getmDate() && mScore == score1.getmScore() && mName.equals(score1.getmName()) && mWord.equals(score1.getmWord());
+        return mDate == score1.getmDate() && mScore == score1.getScore() && mName.equals(score1.getName()) && mWord.equals(score1.getWord());
 
     }
 
