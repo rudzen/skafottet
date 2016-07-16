@@ -68,7 +68,8 @@ dependencies {
     compile 'com.android.support:support-v4:24.0.0'
     compile 'com.android.support:design:24.0.0'
     // Material design dialogs.
-    compile 'com.afollestad.material-dialogs:core:0.8.5.9'
+    compile 'com.afollestad.material-dialogs:core:0.8.6.1'
+    compile 'com.afollestad.material-dialogs:commons:0.8.6.1'
     // Android View Animations
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.daimajia.easing:library:1.0.2@aar'
