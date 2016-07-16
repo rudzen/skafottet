@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 
 public class HighscoreManager {
@@ -91,7 +90,7 @@ public class HighscoreManager {
         sort();
         final int pos = checkScore(points);
         if (pos > -1) {
-            scores.add(pos, new Score(word, name, points, Calendar.getInstance().getTime()));
+            scores.add(pos, new Score(word, name, points));
             sort();
         }
         return pos;

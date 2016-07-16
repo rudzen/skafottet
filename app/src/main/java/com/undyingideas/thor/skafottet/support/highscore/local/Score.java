@@ -20,7 +20,7 @@ import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Locale;
 
 public class Score implements Comparable<Score>, Serializable, Parcelable {
@@ -28,10 +28,17 @@ public class Score implements Comparable<Score>, Serializable, Parcelable {
     private final String mName;
     private final String mWord;
     private int mScore;
-    private Date mDate;
+    private long mDate;
     private static final SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh.mm.ss", Locale.US);
 
-    public Score(final String word, final String name, final int score, final Date date) {
+    public Score(final String word, final String name, final int score) {
+        mWord = word;
+        mScore = score;
+        mName = name;
+        mDate = Calendar.getInstance().getTime().getTime();
+    }
+
+    public Score(final String word, final String name, final int score, final long date) {
         mWord = word;
         mScore = score;
         mName = name;
@@ -50,9 +57,9 @@ public class Score implements Comparable<Score>, Serializable, Parcelable {
 
     public void setmScore(final int mScore) { this.mScore = mScore; }
 
-    public Date getmDate() { return mDate; }
+    public long getmDate() { return mDate; }
 
-    public void setmDate(final Date mDate) { this.mDate = mDate; }
+    public void setmDate(final long mDate) { this.mDate = mDate; }
 
     public String getDateString() { return formatter.format(mDate); }
 
@@ -78,7 +85,7 @@ public class Score implements Comparable<Score>, Serializable, Parcelable {
 
         final Score score1 = (Score) o;
 
-        return mScore == score1.getmScore() && mName.equals(score1.getmName()) && mWord.equals(score1.getmWord()) && mDate.equals(score1.getmDate());
+        return mDate == score1.getmDate() && mScore == score1.getmScore() && mName.equals(score1.getmName()) && mWord.equals(score1.getmWord());
 
     }
 
@@ -87,29 +94,26 @@ public class Score implements Comparable<Score>, Serializable, Parcelable {
         int result = mName.hashCode();
         result = 31 * result + mWord.hashCode();
         result = 31 * result + mScore;
-        result = 31 * result + mDate.hashCode();
+        result = 31 * result + (int) (mDate ^ mDate >>> 32);
         return result;
     }
 
     @Override
-    public int describeContents() {
-        return 0;
-    }
+    public int describeContents() { return 0; }
 
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeString(mName);
         dest.writeString(mWord);
         dest.writeInt(mScore);
-        dest.writeLong(mDate != null ? mDate.getTime() : -1);
+        dest.writeLong(mDate);
     }
 
     protected Score(final Parcel in) {
         mName = in.readString();
         mWord = in.readString();
         mScore = in.readInt();
-        final long tmpDate = in.readLong();
-        mDate = tmpDate == -1 ? null : new Date(tmpDate);
+        mDate = in.readLong();
     }
 
     public static final Parcelable.Creator<Score> CREATOR = new ScoreCreator();
@@ -125,4 +129,5 @@ public class Score implements Comparable<Score>, Serializable, Parcelable {
             return new Score[size];
         }
     }
+
 }
