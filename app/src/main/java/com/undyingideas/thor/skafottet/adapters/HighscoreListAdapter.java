@@ -18,7 +18,7 @@ package com.undyingideas.thor.skafottet.adapters;
 /**
  * Created on 12-01-2016, 07:52.
  * Project : skafottet
- * Modofied from the stickylistheaders example
+ * Modified from the stickylistheaders example
  *
  * @author rudz
  */
@@ -160,11 +160,7 @@ public class HighscoreListAdapter extends BaseAdapter implements StickyListHeade
             return 0;
         }
 
-        if (section >= mSectionIndices.length) {
-            return mSectionIndices[mSectionIndices.length - 1];
-        } else { // if (section < 0) {
-            return mSectionIndices[0];
-        }
+        return section >= mSectionIndices.length ? mSectionIndices[mSectionIndices.length - 1] : mSectionIndices[0];
     }
 
     @Override
