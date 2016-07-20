@@ -44,14 +44,14 @@ public class HighscoreListAdapter extends BaseAdapter implements StickyListHeade
 
     private static final int[] INTS = new int[0];
     private static final Character[] CHARACTERS = new Character[0];
-    private ArrayList<Score> mItems;
+    private ArrayList<Score> mItems = new ArrayList<>();
     private int[] mSectionIndices;
     private Character[] mSectionLetters;
     private final LayoutInflater mInflater;
 
     public HighscoreListAdapter(final Context mContext, final ArrayList<Score> mItems) {
         mInflater = LayoutInflater.from(mContext);
-        this.mItems = mItems;
+        this.mItems.addAll(mItems);
         mSectionIndices = getSectionIndices();
         mSectionLetters = getSectionLetters();
     }
@@ -141,7 +141,11 @@ public class HighscoreListAdapter extends BaseAdapter implements StickyListHeade
         }
 
         // set header text as first char in name
-        holder.text.setText(mItems.get(position).getName().subSequence(0, 1));
+        try {
+            holder.text.setText(mItems.get(position).getName().subSequence(0, 1));
+        } catch (final Exception e) {
+            // nothing...
+        }
 
         return convertView;
     }

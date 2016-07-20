@@ -173,7 +173,7 @@ public class SplashActivity extends AppCompatActivity {
 //            getPrefs().clear();
 
             /* set the highscore manager */
-//            HighscoreManager.deleteHighScore(getApplicationContext());
+            //HighscoreManager.deleteHighScore(getApplicationContext());
             setHighscoreManager(new HighscoreManager(getApplicationContext()));
             getHighscoreManager().loadScoreFile();
 
