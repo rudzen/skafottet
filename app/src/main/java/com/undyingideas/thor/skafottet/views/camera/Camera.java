@@ -66,9 +66,9 @@ class Camera {
     }
 
     public void drawAxis(final Canvas canvas, final Paint paint) {
-        drawLine(canvas, new V3(0, 0, 0), new V3(10, 0, 0), paint);
-        drawLine(canvas, new V3(0, 0, 0), new V3(0, 10, 0), paint);
-        drawLine(canvas, new V3(0, 0, 0), new V3(0, 0, 10), paint);
+        drawLine(canvas, O, new V3(10, 0, 0), paint);
+        drawLine(canvas, O, new V3(0, 10, 0), paint);
+        drawLine(canvas, O, new V3(0, 0, 10), paint);
 
     }
 
