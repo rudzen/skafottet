@@ -43,8 +43,13 @@ public class InternetReciever extends BroadcastReceiver {
     public void onReceive(final Context context, final Intent intent) {
         Log.d(TAG, "Network connectivity change");
         final ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm == null) {
+            Log.d(TAG, "ConnectivityManager could not be fetched.");
+            return;
+        }
         final NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         final int connectionStatus = activeNetwork != null ? activeNetwork.getType() : -1;
+        boolean updateObserverSize = false;
 
         // notify the observers who cares about the current internet state!
         for (final InternetRecieverData internetRecieverData : OBSERVERS) {
@@ -52,21 +57,26 @@ public class InternetReciever extends BroadcastReceiver {
             mHandler.post(internetRecieverData);
             if (!internetRecieverData.isKeepInReciever()) {
                 if (removeObserver(internetRecieverData)) {
+                    updateObserverSize = true;
                     Log.d(TAG, "Observer removed");
                 } else {
                     Log.d(TAG, "Observer kept");
                 }
             }
         }
-        OBSERVERS.trimToSize();
+        if (updateObserverSize) {
+            OBSERVERS.trimToSize();
+        }
     }
 
     public static void addObserver(final InternetRecieverData newObserver) {
-        if (!OBSERVERS.contains(newObserver)) {
-            OBSERVERS.add(newObserver);
-            Log.d(TAG, "Observer added");
-            Log.d(TAG, "Observers current in stack :" + OBSERVERS.size());
+        if (OBSERVERS.contains(newObserver)) {
+            Log.d(TAG, "Attmpted to add existing observer to list.");
+            return;
         }
+        OBSERVERS.add(newObserver);
+        Log.d(TAG, "Observer added");
+        Log.d(TAG, "Observers current in stack :" + OBSERVERS.size());
     }
 
     public static boolean removeObserver(final InternetRecieverData observerToRemove) {

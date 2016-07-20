@@ -91,15 +91,15 @@ public class HighscoreFragment extends Fragment implements
         if (context instanceof IFragmentFlipper) {
             mFragmentFlipper = (IFragmentFlipper) context;
         } else {
-            throw new RuntimeException(context.toString() + " must implement IFragmentFlipper.");
+            throw new RuntimeException(context.getPackageName() + " must implement IFragmentFlipper.");
         }
     }
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setmRefreshStopper(new RefreshStopper());
-        setmHandler(new Handler());
+        mRefreshStopper = new RefreshStopper();
+        mHandler = new Handler();
     }
 
     @Nullable

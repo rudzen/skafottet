@@ -141,12 +141,9 @@ public class HighscoreListAdapter extends BaseAdapter implements StickyListHeade
         }
 
         // set header text as first char in name
-        try {
+        if (position <= mItems.size()) {
             holder.text.setText(mItems.get(position).getName().subSequence(0, 1));
-        } catch (final Exception e) {
-            // nothing...
         }
-
         return convertView;
     }
 
@@ -168,7 +165,6 @@ public class HighscoreListAdapter extends BaseAdapter implements StickyListHeade
         if (mSectionIndices.length == 0) {
             return 0;
         }
-
         return section >= mSectionIndices.length ? mSectionIndices[mSectionIndices.length - 1] : mSectionIndices[0];
     }
 
