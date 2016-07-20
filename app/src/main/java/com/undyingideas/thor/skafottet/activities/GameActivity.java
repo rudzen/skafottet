@@ -69,7 +69,6 @@ public class GameActivity extends SoundAbstract implements
     protected Firebase.AuthStateListener authStateListener;
     protected Firebase firebase;
 
-
     private static final String TAG = "GameActivity";
     /* to handle backpressed when in the menu fragment */
     private static final int BACK_PRESSED_DELAY = 2000;

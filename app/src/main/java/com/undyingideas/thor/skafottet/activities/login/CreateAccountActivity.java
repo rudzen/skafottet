@@ -46,10 +46,18 @@ import java.util.Map;
  */
 public class CreateAccountActivity extends BaseActivity {
     private static final String LOG_TAG = CreateAccountActivity.class.getSimpleName();
+
     //    private ProgressDialog mAuthProgressDialog;
+
     private Firebase mFirebaseRef;
-    private EditText mEditTextUsernameCreate, mEditTextEmailCreate;
-    private String mUserName, mUserEmail, mPassword;
+
+    private EditText mEditTextUsernameCreate;
+    private EditText mEditTextEmailCreate;
+
+    private String mUserName;
+    private String mUserEmail;
+    private String mPassword;
+
     private final SecureRandom mRandom = new SecureRandom();
 
     @Override

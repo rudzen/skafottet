@@ -23,6 +23,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Usage:
@@ -60,16 +61,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  * @author steveliles
  */
-@SuppressWarnings({"StaticVariableOfConcreteClass", "StaticMethodNamingConvention", "OverloadedMethodsWithSameNumberOfParameters", "StaticVariableNamingConvention", "StandardVariableNames", "unused"})
+@SuppressWarnings({"StaticVariableOfConcreteClass", "StaticMethodNamingConvention", "OverloadedMethodsWithSameNumberOfParameters", "HardcodedFileSeparator", "StandardVariableNames"})
 public class Foreground implements Application.ActivityLifecycleCallbacks {
-
 
     public static final long CHECK_DELAY = 500;
     public static final String TAG = Foreground.class.getName();
 
     private static final String STILL_FOREGROUND = "still foreground";
     private static final String LISTENER_THREW_EXCEPTION = "Listener threw exception!";
-
 
     public interface Listener {
         void onBecameForeground();
@@ -78,10 +77,12 @@ public class Foreground implements Application.ActivityLifecycleCallbacks {
 
     private static Foreground instance;
 
-    private boolean foreground, paused = true;
-    private final Handler handler = new Handler();
-    private final CopyOnWriteArrayList<Listener> listeners = new CopyOnWriteArrayList<>();
-    private Runnable check;
+    private final AtomicBoolean mForeground = new AtomicBoolean();
+    private final AtomicBoolean mPaused = new AtomicBoolean(true);
+
+    private final Handler mHandler = new Handler();
+    private final CopyOnWriteArrayList<Listener> mListeners = new CopyOnWriteArrayList<>();
+    private Runnable mCheck;
 
     /**
      * Its not strictly necessary to use this method - _usually_ invoking
@@ -126,26 +127,27 @@ public class Foreground implements Application.ActivityLifecycleCallbacks {
         return instance;
     }
 
-    public boolean isForeground() { return foreground; }
+    public boolean isForeground() { return mForeground.get(); }
 
-    public boolean isBackground() { return !foreground; }
+    public boolean isBackground() { return !mForeground.get(); }
 
-    public void addListener(final Listener listener) { listeners.add(listener); }
+    public void addListener(final Listener listener) { mListeners.add(listener); }
 
-    public void removeListener(final Listener listener) { listeners.remove(listener); }
+    public void removeListener(final Listener listener) { mListeners.remove(listener); }
 
     @Override
     public void onActivityResumed(final Activity activity) {
-        paused = false;
-        final boolean wasBackground = !foreground;
-        foreground = true;
+        mPaused.set(false);
+        final boolean wasBackground = !mForeground.get();
+        mForeground.set(true);
 
-        if (check != null)
-            handler.removeCallbacks(check);
+        if (mCheck != null) {
+            mHandler.removeCallbacks(mCheck);
+        }
 
         if (wasBackground) {
             Log.i(TAG, "went foreground");
-            for (final Listener l : listeners) {
+            for (final Listener l : mListeners) {
                 try {
                     l.onBecameForeground();
                 } catch (final Exception e) {
@@ -159,12 +161,13 @@ public class Foreground implements Application.ActivityLifecycleCallbacks {
 
     @Override
     public void onActivityPaused(final Activity activity) {
-        paused = true;
+        mPaused.set(true);
 
-        if (check != null)
-            handler.removeCallbacks(check);
-        check = new ListenerRunnable();
-        handler.postDelayed(check, CHECK_DELAY);
+        if (mCheck != null) {
+            mHandler.removeCallbacks(mCheck);
+        }
+        mCheck = new ListenerRunnable();
+        mHandler.postDelayed(mCheck, CHECK_DELAY);
     }
 
     @Override
@@ -184,12 +187,13 @@ public class Foreground implements Application.ActivityLifecycleCallbacks {
 
     private class ListenerRunnable implements Runnable {
 
+        @SuppressWarnings("StandardVariableNames")
         @Override
         public void run() {
-            if (foreground && paused) {
-                foreground = false;
+            if (mForeground.get() && mPaused.get()) {
+                mForeground.set(false);
                 Log.i(TAG, "went background");
-                for (final Listener l : listeners) {
+                for (final Listener l : mListeners) {
                     try {
                         l.onBecameBackground();
                     } catch (final Exception e) {
