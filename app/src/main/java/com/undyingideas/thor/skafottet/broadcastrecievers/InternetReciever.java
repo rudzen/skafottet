@@ -34,8 +34,8 @@ import java.util.ArrayList;
  */
 public class InternetReciever extends BroadcastReceiver {
 
-    private final Handler handler = new Handler();
-    private static final ArrayList<InternetRecieverData> observers = new ArrayList<>();
+    private final Handler mHandler = new Handler();
+    private static final ArrayList<InternetRecieverData> OBSERVERS = new ArrayList<>();
 
     private final static String TAG = "InternetReciever";
 
@@ -49,9 +49,9 @@ public class InternetReciever extends BroadcastReceiver {
             connectionStatus = -1;
         }
         // notify the observers who cares about the current internet state!
-        for (final InternetRecieverData internetRecieverData : observers) {
+        for (final InternetRecieverData internetRecieverData : OBSERVERS) {
             internetRecieverData.setData(connectionStatus);
-            handler.post(internetRecieverData);
+            mHandler.post(internetRecieverData);
             if (!internetRecieverData.isKeepInReciever()) {
                 if (removeObserver(internetRecieverData)) {
                     Log.d(TAG, "Observer removed");
@@ -60,18 +60,18 @@ public class InternetReciever extends BroadcastReceiver {
                 }
             }
         }
-        observers.trimToSize();
+        OBSERVERS.trimToSize();
     }
 
     public static void addObserver(final InternetRecieverData newObserver) {
-        if (!observers.contains(newObserver)) {
-            observers.add(newObserver);
+        if (!OBSERVERS.contains(newObserver)) {
+            OBSERVERS.add(newObserver);
             Log.d(TAG, "Observer added");
-            Log.d(TAG, "Observers current in stack :" + observers.size());
+            Log.d(TAG, "Observers current in stack :" + OBSERVERS.size());
         }
     }
 
     public static boolean removeObserver(final InternetRecieverData observerToRemove) {
-        return observers.remove(observerToRemove);
+        return OBSERVERS.remove(observerToRemove);
     }
 }
