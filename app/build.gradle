@@ -17,7 +17,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion '24.0.0'
+    buildToolsVersion '24.0.1'
     defaultConfig {
         applicationId "com.undyingideas.thor.skafottet"
         minSdkVersion 21
@@ -65,8 +65,8 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     // Support libraries
-    compile 'com.android.support:support-v4:24.0.0'
-    compile 'com.android.support:design:24.0.0'
+    compile 'com.android.support:support-v4:24.1.0'
+    compile 'com.android.support:design:24.1.0'
     // Material design dialogs.
     compile 'com.afollestad.material-dialogs:core:0.8.6.1'
     compile 'com.afollestad.material-dialogs:commons:0.8.6.1'
@@ -81,7 +81,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.7'
     // Sticky list headers for word list
     compile 'se.emilsjolander:stickylistheaders:2.7.0'
-    //compile 'se.emilsjolander.stickylistheaders:library:2.1.0'
     // JSoup to handle HTML tag filtering
     compile 'org.jsoup:jsoup:1.9.2'
     // Text view with build-in text change animations
