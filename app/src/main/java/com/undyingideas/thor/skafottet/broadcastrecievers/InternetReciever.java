@@ -42,12 +42,10 @@ public class InternetReciever extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, final Intent intent) {
         Log.d(TAG, "Network connectivity change");
-        final ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        int connectionStatus = intent.getExtras().getInt(ConnectivityManager.EXTRA_NETWORK_TYPE);
-        final NetworkInfo networkInfo = connectivityManager.getNetworkInfo(connectionStatus);
-        if (!networkInfo.isConnected()) {
-            connectionStatus = -1;
-        }
+        final ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        final NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        final int connectionStatus = activeNetwork != null ? activeNetwork.getType() : -1;
+
         // notify the observers who cares about the current internet state!
         for (final InternetRecieverData internetRecieverData : OBSERVERS) {
             internetRecieverData.setData(connectionStatus);
