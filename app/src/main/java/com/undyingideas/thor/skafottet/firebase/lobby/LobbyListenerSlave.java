@@ -67,24 +67,24 @@ public class LobbyListenerSlave extends WeakReferenceHolder<LobbyListenerSlave.L
 
     }
 
-    public HashMap<String, LobbyDTO> getLobbyList() {
+    public static HashMap<String, LobbyDTO> getLobbyList() {
         return lobbyList;
     }
 
-    public void addLobby(final String key, final LobbyDTO lobbyDTO) {
+    public static void addLobby(final String key, final LobbyDTO lobbyDTO) {
         /* to avoid potential reference issues, just duplicate the parsed dto */
         lobbyList.put(key, new LobbyDTO(lobbyDTO));
     }
 
-    public LobbyDTO getLobby(final String key) {
+    public static LobbyDTO getLobby(final String key) {
         return lobbyList.get(key);
     }
 
-    public void setAborted(final boolean newValue) {
+    public static void setAborted(final boolean newValue) {
         aborted = newValue;
     }
 
-    public boolean isAborted() {
+    public static boolean isAborted() {
         return aborted;
     }
 

@@ -43,8 +43,8 @@ public class LobbyDTO implements Parcelable {
     }
 
     public LobbyDTO(final LobbyDTO lobbyDTO) {
-        word = lobbyDTO.getWord();
-        playerList = lobbyDTO.getPlayerList();
+        word = lobbyDTO.word;
+        playerList = lobbyDTO.playerList;
     }
 
     public void add(final LobbyPlayerStatus lps) { playerList.put(lps.getName(), lps); }

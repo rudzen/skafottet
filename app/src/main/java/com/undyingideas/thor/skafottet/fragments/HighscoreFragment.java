@@ -254,7 +254,7 @@ public class HighscoreFragment extends Fragment implements
     /* ************************************************************************ */
     /* ************************************************************************ */
 
-    private boolean updateCurrentList() {
+    private static boolean updateCurrentList() {
 
         if (!sLocal) {
             // TODO : re-read data from dataholder into adapter and reset the listview
@@ -303,7 +303,7 @@ public class HighscoreFragment extends Fragment implements
         public void onRefresh() {
             final HighscoreFragment wordListFragment = mWeakReference.get();
             if (wordListFragment != null) {
-                if (!wordListFragment.updateCurrentList()) {
+                if (!updateCurrentList()) {
                     wordListFragment.getmHandler().postDelayed(wordListFragment.getmRefreshStopper(), 500);
                 } else {
                     wordListFragment.getmHandler().post(wordListFragment.getmRefreshStopper());

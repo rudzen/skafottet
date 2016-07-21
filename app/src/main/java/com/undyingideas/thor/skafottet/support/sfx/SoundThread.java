@@ -28,31 +28,44 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author rudz
  */
-public class SoundThread extends Thread {
-    private final SoundPool mSoundPool;
+public class SoundThread {
     public final LinkedBlockingQueue<SoundItem> mSoundItems = new LinkedBlockingQueue<>();
+
+    private final SoundPool mSoundPool;
     private final AtomicBoolean mStop = new AtomicBoolean();
 
     private static final String TAG = "SoundThread";
+    private final MyThread mThread = new MyThread();
 
     public SoundThread(final SoundPool soundPool) { mSoundPool = soundPool; }
 
     public void unloadSound(final int id) { mSoundPool.unload(id); }
 
-    @Override
-    public void run() {
-        try {
-            SoundItem item;
-            while (!mStop.get()) {
-                item = mSoundItems.take();
-                if (item.stop) {
-                    mStop.set(true);
-                    break;
+    public void start() {
+        mThread.start();
+    }
+
+    public void interrupt() {
+        mThread.interrupt();
+    }
+
+    @SuppressWarnings("ClassExplicitlyExtendsThread")
+    private class MyThread extends Thread {
+        @Override
+        public void run() {
+            try {
+                SoundItem item;
+                while (!mStop.get()) {
+                    item = mSoundItems.take();
+                    if (item.stop) {
+                        mStop.set(true);
+                        break;
+                    }
+                    mSoundPool.play(item.id, item.volume, item.volume, 0, 0, 1);
                 }
-                mSoundPool.play(item.id, item.volume, item.volume, 0, 0, 1);
+            } catch (final InterruptedException e) {
+                Log.d(TAG, "Interrupted");
             }
-        } catch (final InterruptedException e) {
-            Log.d(TAG, "Interrupted");
         }
     }
 }

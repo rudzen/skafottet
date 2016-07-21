@@ -615,6 +615,7 @@ public class TinyDB {
      * @param key
      *         SharedPreferences key
      */
+    @SuppressWarnings("ConstantConditions")
     public static void checkForNullKey(final String key) {
         if (key == null) throw new NullPointerException("Key : " + key + " does not exist in preferences");
     }
@@ -625,6 +626,7 @@ public class TinyDB {
      * @param value
      *         SharedPreferences key
      */
+    @SuppressWarnings("ConstantConditions")
     public static void checkForNullValue(final String value) {
         if (value == null) throw new NullPointerException("Value : " + value + " does not exist in preferences");
     }

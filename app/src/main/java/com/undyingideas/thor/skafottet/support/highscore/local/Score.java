@@ -46,7 +46,7 @@ public class Score implements Comparable<Score>, Serializable, Parcelable {
     }
 
     public Score(final Score score) {
-        this(score.getWord(), score.getName(), score.getScore(), score.getDate());
+        this(score.mWord, score.mName, score.mScore, score.mDate);
     }
 
     public String getWord() { return mWord; }
@@ -70,7 +70,7 @@ public class Score implements Comparable<Score>, Serializable, Parcelable {
 
     @Override
     public int compareTo(@NonNull final Score anotherScore) {
-        return anotherScore.getScore() - mScore;
+        return anotherScore.mScore - mScore;
     }
 
     @SuppressWarnings("OverlyComplexBooleanExpression")
@@ -85,7 +85,7 @@ public class Score implements Comparable<Score>, Serializable, Parcelable {
 
         final Score score1 = (Score) o;
 
-        return mDate == score1.getDate() && mScore == score1.getScore() && mName.equals(score1.getName()) && mWord.equals(score1.getWord());
+        return mDate == score1.mDate && mScore == score1.mScore && mName.equals(score1.mName) && mWord.equals(score1.mWord);
 
     }
 

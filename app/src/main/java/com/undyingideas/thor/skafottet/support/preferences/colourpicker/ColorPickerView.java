@@ -209,10 +209,12 @@ public class ColorPickerView extends View {
     private static int[] buildHueColorArray() {
 
         final int[] hue = new int[361];
+        final float[] def = {0f, 1.0f, 1.0f};
 
         int count = 0;
         for (int i = hue.length - 1; i >= 0; i--, count++) {
-            hue[count] = Color.HSVToColor(new float[]{i, 1.0f, 1.0f});
+            def[0] = i;
+            hue[count] = Color.HSVToColor(def);
         }
 
         return hue;

@@ -25,6 +25,7 @@ import java.util.ArrayList;
 /**
  * Created on 08-01-2016, 12:13.
  * Project : skafottet
+ *
  * @author Gump
  */
 public class HighScoreDTO implements Comparable {
@@ -39,7 +40,6 @@ public class HighScoreDTO implements Comparable {
     }
 
 
-
     public PlayerDTO getPlayer() {
         return player;
     }
@@ -52,7 +52,7 @@ public class HighScoreDTO implements Comparable {
         return lobbyList;
     }
 
-    public void addLobbyStatus(final LobbyPlayerStatus l){
+    public void addLobbyStatus(final LobbyPlayerStatus l) {
         lobbyList.add(l);
     }
 
@@ -65,8 +65,10 @@ public class HighScoreDTO implements Comparable {
     public int compareTo(@NonNull final Object temp) {
         final HighScoreDTO other = (HighScoreDTO) temp;
         //High score gets highest
-        if(player.getScore() < other.getPlayer().getScore()){
+        if (player.getScore() < other.player.getScore()) {
             return 1;
-        }else return player.getScore() > other.getPlayer().getScore() ? -1 : 0;
+        } else {
+            return player.getScore() > other.player.getScore() ? -1 : 0;
+        }
     }
 }

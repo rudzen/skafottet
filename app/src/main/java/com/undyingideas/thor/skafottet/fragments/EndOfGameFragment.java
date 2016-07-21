@@ -347,7 +347,9 @@ public class EndOfGameFragment extends Fragment {
                 if (result != null) {
                     final EndOfGameFragment endOfGameFragment = endOfGameFragmentWeakReference.get();
                     if (endOfGameFragment != null) {
-                        endOfGameFragment.mImageViewResult.setImageResource(result.getInt(MSG_KEY_IMG));
+                        if (endOfGameFragment.mImageViewResult != null) {
+                            endOfGameFragment.mImageViewResult.setImageResource(result.getInt(MSG_KEY_IMG));
+                        }
                         endOfGameFragment.mTextViewTop.setText(result.getString(MSG_KEY_UPPER));
                         endOfGameFragment.mTextViewMiddle.setText(result.getString(MSG_KEY_MIDDLE));
                         endOfGameFragment.mTextViewLower.setText(result.getString(MSG_KEY_LOWER));

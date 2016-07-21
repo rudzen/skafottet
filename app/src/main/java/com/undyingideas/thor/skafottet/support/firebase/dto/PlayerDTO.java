@@ -58,9 +58,9 @@ public class PlayerDTO implements Parcelable, Serializable {
     }
 
     public PlayerDTO(final PlayerDTO playerDTO) {
-        name = playerDTO.getName();
-        email = playerDTO.getEmail();
-        score = playerDTO.getScore();
+        name = playerDTO.name;
+        email = playerDTO.email;
+        score = playerDTO.score;
     }
 
     public PlayerDTO(final String userName, final String mEncodedEmail, final HashMap<String, Object> timestampJoined) {
