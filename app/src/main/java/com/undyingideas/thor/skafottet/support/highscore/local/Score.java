@@ -46,7 +46,7 @@ public class Score implements Comparable<Score>, Serializable, Parcelable {
     }
 
     public Score(final Score score) {
-        this(score.getWord(), score.getName(), score.getScore(), score.getmDate());
+        this(score.getWord(), score.getName(), score.getScore(), score.getDate());
     }
 
     public String getWord() { return mWord; }
@@ -57,7 +57,7 @@ public class Score implements Comparable<Score>, Serializable, Parcelable {
 
     public void setScore(final int score) { mScore = score; }
 
-    public long getmDate() { return mDate; }
+    public long getDate() { return mDate; }
 
     public void setDate(final long date) { mDate = date; }
 
@@ -85,7 +85,7 @@ public class Score implements Comparable<Score>, Serializable, Parcelable {
 
         final Score score1 = (Score) o;
 
-        return mDate == score1.getmDate() && mScore == score1.getScore() && mName.equals(score1.getName()) && mWord.equals(score1.getWord());
+        return mDate == score1.getDate() && mScore == score1.getScore() && mName.equals(score1.getName()) && mWord.equals(score1.getWord());
 
     }
 

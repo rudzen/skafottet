@@ -27,6 +27,7 @@ import com.undyingideas.thor.skafottet.support.highscore.local.Score;
 import com.undyingideas.thor.skafottet.views.AutoScaleTextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created on 27-12-2015, 09:59.<br>
@@ -36,12 +37,12 @@ import java.util.ArrayList;
 public class ScoreAdapter extends ArrayAdapter<Score> {
 
     private final Context mContext;
-    private final int layoutResourceId;
-    private final ArrayList<Score> mData;
+    private final int mLayoutResourceId;
+    private List<Score> mData = new ArrayList<>();
 
-    public ScoreAdapter(final Context context, final int layoutResourceId, final ArrayList<Score> data) {
+    public ScoreAdapter(final Context context, final int layoutResourceId, final List<Score> data) {
         super(context, layoutResourceId, data);
-        this.layoutResourceId = layoutResourceId;
+        mLayoutResourceId = layoutResourceId;
         mContext = context;
         mData = data;
     }
@@ -60,7 +61,7 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
         View view = convertView;
         if (view == null) {
             final LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
-            view = inflater.inflate(layoutResourceId, parent, false);
+            view = inflater.inflate(mLayoutResourceId, parent, false);
             ViewHolder.s_Name = (AutoScaleTextView) view.findViewById(R.id.highscore_name);
             ViewHolder.s_Word = (AutoScaleTextView) view.findViewById(R.id.highscore_word);
             ViewHolder.s_Date = (AutoScaleTextView) view.findViewById(R.id.highscore_date);

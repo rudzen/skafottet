@@ -28,6 +28,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class HighscoreManager {
 
@@ -41,7 +42,7 @@ public class HighscoreManager {
 
     private ArrayList<Score> scores;
 
-    private static ScoreComparator mScoreComparator = new ScoreComparator();
+    private final ScoreComparator mScoreComparator = new ScoreComparator();
 
     private final static int MAX = 10;
 
@@ -50,22 +51,17 @@ public class HighscoreManager {
         this.context = context;
     }
 
-    public ArrayList<Score> getScores() {
-        return scores;
+    public List<Score> getScores() {
+        return Collections.unmodifiableList(scores);
     }
 
     private void sort() {
-//        HashSet<Score> mmYeah = new HashSet<>();
+        if (scores.isEmpty()) {
+            Log.d(TAG, "Score list is empty.");
+            return;
+        }
         Log.d(TAG, "Before sort : " + scores.toString());
         Collections.sort(scores, mScoreComparator);
-//        mmYeah.addAll(scores);
-//        scores.clear();
-//        int count = 0;
-//
-//        Iterator<Score> iterator = mmYeah.iterator();
-//        while (count++ < MAX && iterator.hasNext()) {
-//            scores.add(iterator.next());
-//        }
         Log.d(TAG, "After sort : " + scores.toString());
     }
 
@@ -107,7 +103,7 @@ public class HighscoreManager {
         try {
             final ObjectInputStream inputStream = new ObjectInputStream(context.openFileInput(HIGHSCORE_FILE));
             scores = (ArrayList<Score>) inputStream.readObject();
-            Collections.sort(scores);
+            sort();
             loaded = true;
         } catch (final FileNotFoundException e) {
             Log.e(TAG, "[Load] FNF Error: " + e.getMessage());
@@ -125,7 +121,7 @@ public class HighscoreManager {
                 Log.e(TAG, "[Load] IO Error: " + e.getMessage());
             }
             if (!loaded) {
-                /* generate an empty highscore list to avoid crashes */
+                /* generate a new (empty) highscore list */
                 for (int i = 0; i < 10; i++) {
                     GameUtility.getHighscoreManager().addScore("skafottet", "rudz", 100 + i);
                 }
@@ -136,13 +132,12 @@ public class HighscoreManager {
 
     public void saveHighScore() {
         try {
-
             outputStream = new ObjectOutputStream(context.openFileOutput(HIGHSCORE_FILE, Context.MODE_PRIVATE));
             outputStream.writeObject(scores);
         } catch (final FileNotFoundException e) {
-            Log.e("HighScore", "[Update] FNF Error: " + e.getMessage() + ", the program will try and make a new file");
+            Log.e(TAG, "[Update] FNF Error: " + e.getMessage() + ", the program will try and make a new file");
         } catch (final IOException e) {
-            Log.e("HighScore", "[Update] IO Error: " + e.getMessage());
+            Log.e(TAG, "[Update] IO Error: " + e.getMessage());
         } finally {
             try {
                 if (outputStream != null) {
@@ -150,7 +145,7 @@ public class HighscoreManager {
                     outputStream.close();
                 }
             } catch (final IOException e) {
-                Log.e("HighScore", "[Update] Error: " + e.getMessage());
+                Log.e(TAG, "[Update] Error: " + e.getMessage());
             }
         }
     }
@@ -165,8 +160,7 @@ public class HighscoreManager {
             sb.append(scores.get(i).getName());
             sb.append(" [");
             sb.append(scores.get(i).getScore());
-            sb.append(']');
-            sb.append('\n');
+            sb.append("]\n");
         }
         return sb.toString();
     }

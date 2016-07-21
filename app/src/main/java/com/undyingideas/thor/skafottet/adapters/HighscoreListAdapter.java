@@ -37,6 +37,7 @@ import com.undyingideas.thor.skafottet.support.highscore.local.Score;
 import com.undyingideas.thor.skafottet.views.AutoScaleTextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
@@ -44,12 +45,12 @@ public class HighscoreListAdapter extends BaseAdapter implements StickyListHeade
 
     private static final int[] INTS = new int[0];
     private static final Character[] CHARACTERS = new Character[0];
-    private ArrayList<Score> mItems = new ArrayList<>();
+    private List<Score> mItems = new ArrayList<>();
     private int[] mSectionIndices;
     private Character[] mSectionLetters;
     private final LayoutInflater mInflater;
 
-    public HighscoreListAdapter(final Context mContext, final ArrayList<Score> mItems) {
+    public HighscoreListAdapter(final Context mContext, final List<Score> mItems) {
         mInflater = LayoutInflater.from(mContext);
         this.mItems.addAll(mItems);
         mSectionIndices = getSectionIndices();
