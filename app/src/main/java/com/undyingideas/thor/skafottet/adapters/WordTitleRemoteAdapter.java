@@ -35,16 +35,16 @@ import java.util.ArrayList;
  */
 public class WordTitleRemoteAdapter extends ArrayAdapter<String> {
 
-    private final Context context;
-    private final int layoutResourceId;
-    private final ArrayList<String> data;
+    private final Context mContext;
+    private final int mLayoutResourceId;
+    private final ArrayList<String> mData;
     private final static String DESC = "FireBase liste";
 
     public WordTitleRemoteAdapter(final Context context, final int layoutResourceId, final ArrayList<String> data) {
         super(context, layoutResourceId, data);
-        this.layoutResourceId = layoutResourceId;
-        this.context = context;
-        this.data = data;
+        mLayoutResourceId = layoutResourceId;
+        mContext = context;
+        mData = data;
     }
 
     private static final class ViewHolder {
@@ -57,15 +57,15 @@ public class WordTitleRemoteAdapter extends ArrayAdapter<String> {
     public View getView(final int position, final View convertView, final ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            final LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-            view = inflater.inflate(layoutResourceId, parent, false);
+            final LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+            view = inflater.inflate(mLayoutResourceId, parent, false);
             ViewHolder.s_textViewItemTitle = (TextView) view.findViewById(R.id.word_title_item_title);
             ViewHolder.s_textViewDesc = (TextView) view.findViewById(R.id.word_title_item_desc);
         }
-        ViewHolder.s_textViewItemTitle.setText(data.get(position));
+        ViewHolder.s_textViewItemTitle.setText(mData.get(position));
         ViewHolder.s_textViewDesc.setText(DESC);
-        Log.d(DESC, data.get(position));
-        view.setTag(data.get(position));
+        Log.d(DESC, mData.get(position));
+        view.setTag(mData.get(position));
         return view;
     }
 

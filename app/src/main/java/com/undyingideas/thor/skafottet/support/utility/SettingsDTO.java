@@ -43,7 +43,7 @@ public final class SettingsDTO {
     public int prefsColour_g;
     public int prefsColour_b;
 
-    public int textColour; // determined by the prefsColour.
+    public int textColour;
 
     public void setContrastColor() {
         prefsColour_r = prefsColour >> 16 & 0x000000FF;

@@ -47,6 +47,7 @@ public class StartGameAdapter extends ArrayAdapter<StartGameItem> {
         mData = data;
     }
 
+    @SuppressWarnings("StaticVariableOfConcreteClass")
     private static final class ViewHolder {
         public static AutoScaleTextView s_textViewItem;
         public static AutoScaleTextView s_textViewDesc;

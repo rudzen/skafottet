@@ -219,7 +219,7 @@ public class LobbySelectorFragment extends Fragment {
         }
     }
 
-    private class UpdateList implements Runnable {
+    private static class UpdateList implements Runnable {
         @Override
         public void run() {
 //            if (GameUtility.mpc.name == null) {
@@ -235,6 +235,7 @@ public class LobbySelectorFragment extends Fragment {
         }
     }
 
+    @SuppressWarnings("MethodMayBeStatic")
     private void removeInactive(final String name) {
         final ArrayList<LobbyDTO> dtoList = new ArrayList<>();
 //        dtoList.addAll(GameUtility.mpc.lc.lobbyList.values());

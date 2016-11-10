@@ -29,6 +29,14 @@ class ScoreComparator implements Comparator<Score>, Serializable {
 
         if (sc1 > sc2) return -1;
         if (sc1 < sc2) return 1;
+
+        /* equal score, so sort after date! */
+        final long sc1date = score1.getDate();
+        final long sc2date = score2.getDate();
+
+        if (sc1date > sc2date) return -1;
+        if (sc1date < sc2date) return 1;
+
         return 0;
     }
 }

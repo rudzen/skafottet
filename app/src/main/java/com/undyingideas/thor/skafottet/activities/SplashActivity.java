@@ -169,29 +169,14 @@ public class SplashActivity extends AppCompatActivity {
             // advarsel, dette er en test-zone.. alt hvad der reelt foregår her er udsat for underlige fremgangsmåder!..
 
             setPrefs(new TinyDB(getApplicationContext()));
-
 //            getPrefs().clear();
 
             /* set the highscore manager */
-//            HighscoreManager.deleteHighScore(getApplicationContext());
+            //HighscoreManager.deleteHighScore(getApplicationContext());
             setHighscoreManager(new HighscoreManager(getApplicationContext()));
             getHighscoreManager().loadScoreFile();
 
-            setSettings(new SettingsDTO());
-            getSettings().prefsMusic = getPrefs().getBoolean(Constant.KEY_PREFS_MUSIC, true);
-            getSettings().prefsSfx = getPrefs().getBoolean(Constant.KEY_PREFS_SFX, true);
-            getSettings().prefsBlood = getPrefs().getBoolean(Constant.KEY_PREFS_BLOOD, true);
-            getSettings().prefsHeptic = getPrefs().getBoolean(Constant.KEY_PREFS_HEPTIC, true);
-            getSettings().keepLogin = getPrefs().getBoolean(Constant.KEY_PREFS_KEEP_LOGIN, false);
-            getSettings().prefsColour = getPrefs().getInt(Constant.KEY_PREFS_COLOUR, Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? ContextCompat.getColor(getApplicationContext(), R.color.colorAccent) : getResources().getColor(R.color.colorAccent));
-            getSettings().setContrastColor();
-
-            /* keep the preferences as we don't know if the user actually ran the app for the first time. */
-            getPrefs().putBoolean(Constant.KEY_PREFS_BLOOD, getSettings().prefsBlood);
-            getPrefs().putBoolean(Constant.KEY_PREFS_MUSIC, getSettings().prefsMusic);
-            getPrefs().putBoolean(Constant.KEY_PREFS_SFX, getSettings().prefsSfx);
-            getPrefs().putBoolean(Constant.KEY_PREFS_HEPTIC, getSettings().prefsHeptic);
-            getPrefs().putInt(Constant.KEY_PREFS_COLOUR, getSettings().prefsColour);
+            loadSettings();
 
             /* set the intent for the background music */
             setMusicPLayIntent(new Intent(getApplicationContext(), MusicPlay.class));
@@ -199,11 +184,7 @@ public class SplashActivity extends AppCompatActivity {
             setConnectionStatus(NetworkHelper.getConnectivityStatus(getApplicationContext()));
             setConnectionStatusName(NetworkHelper.getConnectivityStatusStringFromStatus(getConnectionStatus()));
 
-            FontUtils.setDefaultFont(getApplicationContext(), "DEFAULT", Constant.FONT_BOLD);
-            FontUtils.setDefaultFont(getApplicationContext(), "MONOSPACE", Constant.FONT_BOLD);
-            FontUtils.setDefaultFont(getApplicationContext(), "SERIF", Constant.FONT_LIGHT);
-            FontUtils.setDefaultFont(getApplicationContext(), "SANS_SERIF", Constant.FONT_BOLD);
-
+            setFonts();
 
             // only for testing stuff!!!!
 //            Log.d(TAG, "Wordlist deleted : " + ListFetcher.deleteList(getApplicationContext()));
@@ -255,6 +236,32 @@ public class SplashActivity extends AppCompatActivity {
                 message.sendToTarget();
             }
         }
+
+        private void loadSettings() {
+            setSettings(new SettingsDTO());
+            getSettings().prefsMusic = getPrefs().getBoolean(Constant.KEY_PREFS_MUSIC, true);
+            getSettings().prefsSfx = getPrefs().getBoolean(Constant.KEY_PREFS_SFX, true);
+            getSettings().prefsBlood = getPrefs().getBoolean(Constant.KEY_PREFS_BLOOD, true);
+            getSettings().prefsHeptic = getPrefs().getBoolean(Constant.KEY_PREFS_HEPTIC, true);
+            getSettings().keepLogin = getPrefs().getBoolean(Constant.KEY_PREFS_KEEP_LOGIN, false);
+            getSettings().prefsColour = getPrefs().getInt(Constant.KEY_PREFS_COLOUR, Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? ContextCompat.getColor(getApplicationContext(), R.color.colorAccent) : getResources().getColor(R.color.colorAccent));
+            getSettings().setContrastColor();
+
+            /* keep the preferences as we don't know if the user actually ran the app for the first time. */
+            getPrefs().putBoolean(Constant.KEY_PREFS_BLOOD, getSettings().prefsBlood);
+            getPrefs().putBoolean(Constant.KEY_PREFS_MUSIC, getSettings().prefsMusic);
+            getPrefs().putBoolean(Constant.KEY_PREFS_SFX, getSettings().prefsSfx);
+            getPrefs().putBoolean(Constant.KEY_PREFS_HEPTIC, getSettings().prefsHeptic);
+            getPrefs().putInt(Constant.KEY_PREFS_COLOUR, getSettings().prefsColour);
+        }
+
+        private void setFonts() {
+            FontUtils.setDefaultFont(getApplicationContext(), "DEFAULT", Constant.FONT_BOLD);
+            FontUtils.setDefaultFont(getApplicationContext(), "MONOSPACE", Constant.FONT_BOLD);
+            FontUtils.setDefaultFont(getApplicationContext(), "SERIF", Constant.FONT_LIGHT);
+            FontUtils.setDefaultFont(getApplicationContext(), "SANS_SERIF", Constant.FONT_BOLD);
+        }
+
 
         private class StartupAuthResultHandler implements Firebase.AuthResultHandler {
 

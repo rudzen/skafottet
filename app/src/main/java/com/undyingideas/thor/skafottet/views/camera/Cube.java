@@ -15,29 +15,39 @@ public class Cube {
         c = c.mul(1f / cube.length);
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     public Cube(final V3 center, final float width, final float length, final float height) {
-        c = center;
-        cube[0] = c.add(new V3(-height / 2, -width / 2, -length / 2));
-        cube[1] = c.add(new V3(-height / 2, -width / 2, length / 2));
-        cube[2] = c.add(new V3(-height / 2, width / 2, -length / 2));
-        cube[3] = c.add(new V3(-height / 2, width / 2, length / 2));
-        cube[4] = c.add(new V3(height / 2, -width / 2, -length / 2));
-        cube[5] = c.add(new V3(height / 2, -width / 2, length / 2));
-        cube[6] = c.add(new V3(height / 2, width / 2, -length / 2));
-        cube[7] = c.add(new V3(height / 2, width / 2, length / 2));
+        final float widthHalf = width / 2f;
+        final float heightHalf = height / 2f;
+        final float lengthHalf = length / 2f;
+        cube[0] = center.add(new V3(-heightHalf, -widthHalf, -lengthHalf));
+        cube[1] = center.add(new V3(-heightHalf, -widthHalf, lengthHalf));
+        cube[2] = center.add(new V3(-heightHalf, widthHalf, -lengthHalf));
+        cube[3] = center.add(new V3(-heightHalf, widthHalf, lengthHalf));
+        cube[4] = center.add(new V3(heightHalf, -widthHalf, -lengthHalf));
+        cube[5] = center.add(new V3(heightHalf, -widthHalf, lengthHalf));
+        cube[6] = center.add(new V3(heightHalf, widthHalf, -lengthHalf));
+        cube[7] = center.add(new V3(heightHalf, widthHalf, lengthHalf));
+        c.x = center.x;
+        c.y = center.y;
+        c.z = center.z;
     }
 
     void move(final V3 vector) {
         c = c.add(vector);
-        for (int i = 0; i < cube.length; i++)
+        for (int i = 0; i < cube.length; i++) {
             cube[i] = cube[i].add(vector);
+        }
     }
 
     void moveTo(final V3 point) {
         c = point.sub(c);
-        for (int i = 0; i < cube.length; i++)
+        for (int i = 0; i < cube.length; i++) {
             cube[i] = cube[i].add(c);
-        c = point;
+        }
+        c.x = point.x;
+        c.y = point.y;
+        c.z = point.z;
     }
 
     void rotate(final M3 r) {
@@ -82,8 +92,9 @@ public class Cube {
         final Paint p = new Paint();
         p.setColor(Color.BLUE);
         p.setStrokeWidth(20);
-        for (int i = 0; i < v[0].length; i++)
+        for (int i = 0; i < v[0].length; i++) {
             S.drawLine(g, v[0][i], v[1][i], p);
+        }
     }
 
     public void draw(final Camera s, final Canvas c, final Paint paint) {

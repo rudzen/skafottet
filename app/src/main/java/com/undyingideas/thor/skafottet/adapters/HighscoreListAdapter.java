@@ -37,6 +37,7 @@ import com.undyingideas.thor.skafottet.support.highscore.local.Score;
 import com.undyingideas.thor.skafottet.views.AutoScaleTextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
@@ -44,14 +45,14 @@ public class HighscoreListAdapter extends BaseAdapter implements StickyListHeade
 
     private static final int[] INTS = new int[0];
     private static final Character[] CHARACTERS = new Character[0];
-    private ArrayList<Score> mItems;
+    private List<Score> mItems = new ArrayList<>();
     private int[] mSectionIndices;
     private Character[] mSectionLetters;
     private final LayoutInflater mInflater;
 
-    public HighscoreListAdapter(final Context mContext, final ArrayList<Score> mItems) {
+    public HighscoreListAdapter(final Context mContext, final List<Score> mItems) {
         mInflater = LayoutInflater.from(mContext);
-        this.mItems = mItems;
+        this.mItems.addAll(mItems);
         mSectionIndices = getSectionIndices();
         mSectionLetters = getSectionLetters();
     }
@@ -141,8 +142,9 @@ public class HighscoreListAdapter extends BaseAdapter implements StickyListHeade
         }
 
         // set header text as first char in name
-        holder.text.setText(mItems.get(position).getName().subSequence(0, 1));
-
+        if (position <= mItems.size()) {
+            holder.text.setText(mItems.get(position).getName().subSequence(0, 1));
+        }
         return convertView;
     }
 
@@ -164,7 +166,6 @@ public class HighscoreListAdapter extends BaseAdapter implements StickyListHeade
         if (mSectionIndices.length == 0) {
             return 0;
         }
-
         return section >= mSectionIndices.length ? mSectionIndices[mSectionIndices.length - 1] : mSectionIndices[0];
     }
 

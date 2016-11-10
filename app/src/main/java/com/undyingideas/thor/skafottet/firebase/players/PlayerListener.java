@@ -128,8 +128,8 @@ public class PlayerListener {
             Log.d(TAG, "onChildAdded : " + dataSnapshot.toString() + " and " + s);
             if (dataSnapshot.exists() && dataSnapshot.hasChildren()) {
                 for (final PlayerListenerSlave slave : slaves) {
-                    slave.addPlayer(dataSnapshot.getKey(), dataSnapshot.getValue(PlayerDTO.class));
-                    slave.setAborted(false);
+                    PlayerListenerSlave.addPlayer(dataSnapshot.getKey(), dataSnapshot.getValue(PlayerDTO.class));
+                    PlayerListenerSlave.setAborted(false);
                     handler.post(slave);
                 }
             }
@@ -139,9 +139,9 @@ public class PlayerListener {
         public void onChildChanged(final DataSnapshot dataSnapshot, final String s) {
             Log.d(TAG, "onChildChanged : " + dataSnapshot.toString() + " and " + s);
             for (final PlayerListenerSlave slave : slaves) {
-                slave.getPlayerList().remove(dataSnapshot.getKey());
-                slave.getPlayerList().put(dataSnapshot.getKey(), dataSnapshot.getValue(PlayerDTO.class));
-                slave.setAborted(false);
+                PlayerListenerSlave.getPlayerList().remove(dataSnapshot.getKey());
+                PlayerListenerSlave.getPlayerList().put(dataSnapshot.getKey(), dataSnapshot.getValue(PlayerDTO.class));
+                PlayerListenerSlave.setAborted(false);
                 handler.post(slave);
             }
         }
@@ -150,8 +150,8 @@ public class PlayerListener {
         public void onChildRemoved(final DataSnapshot dataSnapshot) {
             Log.d(TAG, "onChildRemoved : " + dataSnapshot.toString());
             for (final PlayerListenerSlave slave : slaves) {
-                slave.getPlayerList().remove(dataSnapshot.getKey());
-                slave.setAborted(false);
+                PlayerListenerSlave.getPlayerList().remove(dataSnapshot.getKey());
+                PlayerListenerSlave.setAborted(false);
                 handler.post(slave);
             }
         }
@@ -165,7 +165,7 @@ public class PlayerListener {
         public void onCancelled(final FirebaseError firebaseError) {
             Log.d(TAG, "onCancelled : " + firebaseError.toString());
             for (final PlayerListenerSlave slave : slaves) {
-                slave.setAborted(true);
+                PlayerListenerSlave.setAborted(true);
                 handler.post(slave);
             }
         }

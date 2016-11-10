@@ -69,7 +69,6 @@ public class GameActivity extends SoundAbstract implements
     protected Firebase.AuthStateListener authStateListener;
     protected Firebase firebase;
 
-
     private static final String TAG = "GameActivity";
     /* to handle backpressed when in the menu fragment */
     private static final int BACK_PRESSED_DELAY = 2000;
@@ -212,7 +211,7 @@ public class GameActivity extends SoundAbstract implements
 
     @SuppressWarnings({"OverlyComplexMethod", "OverlyLongMethod"})
     @Override
-    public final void flipFragment(@NonNull final int gameMode) {
+    public final void flipFragment(final int gameMode) {
         mCurrentMode = gameMode;
 //        if (gameMode == Constant.MODE_BACK_PRESSED) {
 //            onBackPressed();
@@ -301,7 +300,7 @@ public class GameActivity extends SoundAbstract implements
 
 
     @Override
-    public void onConnectionFailed(final ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull final ConnectionResult connectionResult) {
         WindowLayout.showSnack("Forbindelse til google fejlede.", findViewById(R.id.fragment_content), true);
     }
 }

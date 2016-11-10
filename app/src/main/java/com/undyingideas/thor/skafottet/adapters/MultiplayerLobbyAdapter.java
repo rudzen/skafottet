@@ -76,7 +76,7 @@ public class MultiplayerLobbyAdapter extends ArrayAdapter<LobbyDTO> {
         StringBuilder sb = new StringBuilder(100);
 
         for (final LobbyPlayerStatus lobbyPlayerStatus : dto.getPlayerList().values()) {
-            if (!lobbyPlayerStatus.getName().equals(mActivePlayer))
+            if (!lobbyPlayerStatus.getName().equals(mActivePlayer.getName()))
                 sb.append(lobbyPlayerStatus.getName()).append(" , ");
         }
         if (sb.length() > 3) {

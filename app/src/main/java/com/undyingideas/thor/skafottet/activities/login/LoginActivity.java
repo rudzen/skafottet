@@ -89,12 +89,16 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
     // TODO : Create change password button to the left of LogIn button.
 
     private static final String LOG_TAG = LoginActivity.class.getSimpleName();
+
     /* A dialog that is presented until the Firebase authentication finished. */
 //    private ProgressDialog mAuthProgressDialog;
+
     /* References to the Firebase */
 //    private Firebase mFirebaseRef;
+
     /* Listener for Firebase session changes */
     private Firebase.AuthStateListener mAuthStateListener;
+
     private AutoCompleteTextView mEditTextEmailInput;
     private EditText mEditTextPasswordInput;
 
@@ -389,6 +393,18 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
         mEditTextEmailInput.setAdapter(adapter);
     }
 
+    private static class GoogleSignInClickListener implements View.OnClickListener {
+        private final SignInButton signInButton;
+
+        public GoogleSignInClickListener(final SignInButton signInButton) {this.signInButton = signInButton;}
+
+        @Override
+        public void onClick(final View v) {
+            WindowLayout.showSnack("Ikke tilføjet endnu.", signInButton, true);
+//                onSignInGooglePressed(v);
+        }
+    }
+
 
     /**
      * Handle user authentication that was initiated with mFirebaseRef.authWithPassword
@@ -580,15 +596,7 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
         userAndUidMapping.put('/' + Constant.FIREBASE_LOCATION_UID_MAPPINGS + '/' + authData.getUid(), mEncodedEmail);
 
         /* Update the database; it will fail if a user already exists */
-        GameUtility.getFirebase().updateChildren(userAndUidMapping, new Firebase.CompletionListener() {
-            @Override
-            public void onComplete(final FirebaseError firebaseError, final Firebase firebase) {
-                if (firebaseError != null) {
-                    /* Try just making a uid mapping */
-                    GameUtility.getFirebase().child(Constant.FIREBASE_LOCATION_UID_MAPPINGS).child(authData.getUid()).setValue(mEncodedEmail);
-                }
-            }
-        });
+        GameUtility.getFirebase().updateChildren(userAndUidMapping, new FirebaseUserCompletionListener(authData));
     }
 
     /**
@@ -634,13 +642,7 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
         final SignInButton signInButton = (SignInButton) findViewById(R.id.login_with_google);
         signInButton.setSize(SignInButton.SIZE_WIDE);
         // TODO : Use regular click listener.
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                WindowLayout.showSnack("Ikke tilføjet endnu.", signInButton, true);
-//                onSignInGooglePressed(v);
-            }
-        });
+        signInButton.setOnClickListener(new GoogleSignInClickListener(signInButton));
     }
 
     /**
@@ -758,6 +760,20 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
                 loginWithGoogle(token);
             } else if (mErrorMessage != null) {
                 showErrorToast(mErrorMessage);
+            }
+        }
+    }
+
+    private class FirebaseUserCompletionListener implements Firebase.CompletionListener {
+        private final AuthData authData;
+
+        public FirebaseUserCompletionListener(final AuthData authData) {this.authData = authData;}
+
+        @Override
+        public void onComplete(final FirebaseError firebaseError, final Firebase firebase) {
+            if (firebaseError != null) {
+                /* Try just making a uid mapping */
+                GameUtility.getFirebase().child(Constant.FIREBASE_LOCATION_UID_MAPPINGS).child(authData.getUid()).setValue(mEncodedEmail);
             }
         }
     }

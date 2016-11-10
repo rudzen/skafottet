@@ -63,9 +63,7 @@ public final class WordController implements Serializable, Parcelable {
     }
 
     public ArrayList<String> getLocalWordList(final int index) {
-        final ArrayList<String> returnList = new ArrayList<>();
-        returnList.addAll(localWords.get(index).getWords());
-        return returnList;
+        return new ArrayList<>(localWords.get(index).getWords());
     }
 
     @SuppressWarnings("MethodWithMultipleReturnPoints")
@@ -87,8 +85,7 @@ public final class WordController implements Serializable, Parcelable {
     }
 
     public void addLocalWordList(final String title, final String url, final Set<String> theList) {
-        final ArrayList<String> daList = new ArrayList<>();
-        daList.addAll(theList);
+        final ArrayList<String> daList = new ArrayList<>(theList);
         addLocalWordList(title, url, daList);
     }
 

@@ -103,8 +103,8 @@ public class LobbyListener {
             Log.d(TAG, "onChildAdded : " + dataSnapshot.toString() + " and " + s);
             if (dataSnapshot.exists() && dataSnapshot.hasChildren()) {
                 for (final LobbyListenerSlave slave : slaves) {
-                    slave.addLobby(dataSnapshot.getKey(), dataSnapshot.getValue(LobbyDTO.class));
-                    slave.setAborted(false);
+                    LobbyListenerSlave.addLobby(dataSnapshot.getKey(), dataSnapshot.getValue(LobbyDTO.class));
+                    LobbyListenerSlave.setAborted(false);
                     handler.post(slave);
                 }
             }
@@ -114,9 +114,9 @@ public class LobbyListener {
         public void onChildChanged(final DataSnapshot dataSnapshot, final String s) {
             Log.d(TAG, "onChildChanged : " + dataSnapshot.toString() + " and " + s);
             for (final LobbyListenerSlave slave : slaves) {
-                slave.getLobbyList().remove(dataSnapshot.getKey());
-                slave.getLobbyList().put(dataSnapshot.getKey(), (LobbyDTO) dataSnapshot.getValue());
-                slave.setAborted(false);
+                LobbyListenerSlave.getLobbyList().remove(dataSnapshot.getKey());
+                LobbyListenerSlave.getLobbyList().put(dataSnapshot.getKey(), (LobbyDTO) dataSnapshot.getValue());
+                LobbyListenerSlave.setAborted(false);
                 handler.post(slave);
             }
         }
@@ -125,8 +125,8 @@ public class LobbyListener {
         public void onChildRemoved(final DataSnapshot dataSnapshot) {
             Log.d(TAG, "onChildRemoved : " + dataSnapshot.toString());
             for (final LobbyListenerSlave slave : slaves) {
-                slave.getLobbyList().remove(dataSnapshot.getKey());
-                slave.setAborted(false);
+                LobbyListenerSlave.getLobbyList().remove(dataSnapshot.getKey());
+                LobbyListenerSlave.setAborted(false);
                 handler.post(slave);
             }
         }
@@ -140,7 +140,7 @@ public class LobbyListener {
         public void onCancelled(final FirebaseError firebaseError) {
             Log.d(TAG, "onCancelled : " + firebaseError.toString());
             for (final LobbyListenerSlave slave : slaves) {
-                slave.setAborted(true);
+                LobbyListenerSlave.setAborted(true);
                 handler.post(slave);
             }
         }

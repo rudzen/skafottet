@@ -91,7 +91,7 @@ public class HighscoreFragment extends Fragment implements
         if (context instanceof IFragmentFlipper) {
             mFragmentFlipper = (IFragmentFlipper) context;
         } else {
-            throw new RuntimeException(context.toString() + " must implement IFragmentFlipper.");
+            throw new RuntimeException(context.getPackageName() + " must implement IFragmentFlipper.");
         }
     }
 
@@ -214,14 +214,6 @@ public class HighscoreFragment extends Fragment implements
         return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
-    private boolean updateCurrentList() {
-
-        if (!sLocal) {
-            // TODO : re-read data from dataholder into adapter and reset the listview
-        }
-        return true;
-    }
-
     /* ************************************************************************ */
     /* ************************************************************************ */
     /* ********************** Interface Overrides ***************************** */
@@ -250,20 +242,44 @@ public class HighscoreFragment extends Fragment implements
         header.setAlpha(1);
     }
 
+    @Override
+    public boolean onNavigationItemSelected(final MenuItem item) {
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
     /* ************************************************************************ */
     /* ************************************************************************ */
     /* *********************** Helper Methods ********************************* */
     /* ************************************************************************ */
     /* ************************************************************************ */
 
+    private static boolean updateCurrentList() {
+
+        if (!sLocal) {
+            // TODO : re-read data from dataholder into adapter and reset the listview
+        }
+        return true;
+    }
+
     public void refreshList() {
         // meeh
     }
 
-    @Override
-    public boolean onNavigationItemSelected(final MenuItem item) {
-        mDrawerLayout.closeDrawer(GravityCompat.START);
-        return true;
+    public Handler getmHandler() {
+        return mHandler;
+    }
+
+    public void setmHandler(final Handler mHandler) {
+        this.mHandler = mHandler;
+    }
+
+    public Runnable getmRefreshStopper() {
+        return mRefreshStopper;
+    }
+
+    public void setmRefreshStopper(final Runnable mRefreshStopper) {
+        this.mRefreshStopper = mRefreshStopper;
     }
 
     /* ************************************************************************ */
@@ -287,10 +303,10 @@ public class HighscoreFragment extends Fragment implements
         public void onRefresh() {
             final HighscoreFragment wordListFragment = mWeakReference.get();
             if (wordListFragment != null) {
-                if (!wordListFragment.updateCurrentList()) {
-                    wordListFragment.mHandler.postDelayed(wordListFragment.mRefreshStopper, 500);
+                if (!updateCurrentList()) {
+                    wordListFragment.getmHandler().postDelayed(wordListFragment.getmRefreshStopper(), 500);
                 } else {
-                    wordListFragment.mHandler.post(wordListFragment.mRefreshStopper);
+                    wordListFragment.getmHandler().post(wordListFragment.getmRefreshStopper());
                 }
             }
         }

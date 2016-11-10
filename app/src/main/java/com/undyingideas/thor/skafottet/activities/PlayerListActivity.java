@@ -61,7 +61,6 @@ public class PlayerListActivity extends AppCompatActivity implements PlayerListe
     private RecyclerView mRecyclerView;
 
     private PlayerListener mPlayerListener;
-    private PlayerListenerSlave mPlayerListenerSlave;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -90,7 +89,7 @@ public class PlayerListActivity extends AppCompatActivity implements PlayerListe
         //setupRecyclerView((RecyclerView) mRecyclerView);
 
         mPlayerListener = new PlayerListener();
-        mPlayerListenerSlave = new PlayerListenerSlave(this);
+        final PlayerListenerSlave mPlayerListenerSlave = new PlayerListenerSlave(this);
         mPlayerListener.addSlave(mPlayerListenerSlave);
 
         if (findViewById(R.id.player_detail_container) != null) {

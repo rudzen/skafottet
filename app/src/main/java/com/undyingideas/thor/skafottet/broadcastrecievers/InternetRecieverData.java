@@ -41,10 +41,10 @@ public class InternetRecieverData implements Runnable {
     private final static String TAG = "InternetRecieverData";
 
     /* the internet connection state, this is set through the broadcast reciever itself */
-    private int data; // is -1 if no connection!
+    private int mData; // is -1 if no connection!
 
     /* to let the class add itself back to the InternetReciever stack */
-    private boolean keepInReciever;
+    private boolean mKeepInReciever;
 
     /* simple (and memory efficient) structure to hold the string values of the connection state */
     private static final SparseArray<String> CONNECTION_INFO = new SparseArray<>(7);
@@ -88,7 +88,7 @@ public class InternetRecieverData implements Runnable {
      */
     private InternetRecieverData(final InternetRecieverInterface internetRecieverInterface, final boolean keepInReciever) {
         internetRecieverInterfaceWeakReference = new WeakReference<>(internetRecieverInterface);
-        this.keepInReciever = keepInReciever;
+        mKeepInReciever = keepInReciever;
     }
 
     /**
@@ -100,9 +100,9 @@ public class InternetRecieverData implements Runnable {
         Log.d(TAG, "Observer runnable started.");
         final InternetRecieverInterface internetRecieverInterface = internetRecieverInterfaceWeakReference.get();
         if (internetRecieverInterface != null) {
-            internetRecieverInterface.onInternetStatusChanged(data);
-            if (data > -1) {
-                internetRecieverInterface.onInternetStatusChanged(CONNECTION_INFO.get(data));
+            internetRecieverInterface.onInternetStatusChanged(mData);
+            if (mData > -1) {
+                internetRecieverInterface.onInternetStatusChanged(CONNECTION_INFO.get(mData));
             } else {
                 internetRecieverInterface.onInternetStatusChanged("Ingen");
             }
@@ -114,11 +114,11 @@ public class InternetRecieverData implements Runnable {
      * @param newData The connection state of the system
      */
     public void setData(final int newData) {
-        data = newData;
+        mData = newData;
     }
 
     public int  getData() {
-        return data;
+        return mData;
     }
 
 
@@ -127,10 +127,10 @@ public class InternetRecieverData implements Runnable {
      * @param newValue If true, it will not be removed from the internet reciever.
      */
     public void setKeepInReciever(final boolean newValue) {
-        keepInReciever = newValue;
+        mKeepInReciever = newValue;
     }
 
     public boolean isKeepInReciever() {
-        return keepInReciever;
+        return mKeepInReciever;
     }
 }

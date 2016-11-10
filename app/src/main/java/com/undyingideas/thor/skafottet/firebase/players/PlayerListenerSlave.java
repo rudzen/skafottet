@@ -72,7 +72,7 @@ public class PlayerListenerSlave extends WeakReferenceHolder<PlayerListenerSlave
 
     }
 
-    public HashMap<String, PlayerDTO> getPlayerList() {
+    public static HashMap<String, PlayerDTO> getPlayerList() {
         return playerList;
     }
 
@@ -85,20 +85,20 @@ public class PlayerListenerSlave extends WeakReferenceHolder<PlayerListenerSlave
         return returnList;
     }
 
-    public void addPlayer(final String key, final PlayerDTO playerDTO) {
+    public static void addPlayer(final String key, final PlayerDTO playerDTO) {
         /* to avoid potential reference issues, just duplicate the parsed dto */
         playerList.put(key, new PlayerDTO(playerDTO));
     }
 
-    public PlayerDTO getPlayerDTO(final String key) {
+    public static PlayerDTO getPlayerDTO(final String key) {
         return playerList.get(key);
     }
 
-    public void setAborted(final boolean newValue) {
+    public static void setAborted(final boolean newValue) {
         aborted = newValue;
     }
 
-    public boolean isAborted() {
+    public static boolean isAborted() {
         return aborted;
     }
 

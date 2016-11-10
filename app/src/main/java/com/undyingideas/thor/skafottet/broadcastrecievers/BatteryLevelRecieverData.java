@@ -37,7 +37,7 @@ final class BatteryLevelRecieverData extends WeakReferenceHolder<BatteryLevelRec
     private final static String TAG = "BatteryLevelRecData";
 
     /* the battery information as DTO */
-    private BatteryDTO data;
+    private BatteryDTO mData;
 
     /* to let the class add itself back to the InternetReciever stack */
     private boolean keepInReciever;
@@ -79,7 +79,7 @@ final class BatteryLevelRecieverData extends WeakReferenceHolder<BatteryLevelRec
         Log.d(TAG, "Observer runnable started.");
         final BatteryLevelRecieveDataInterface internetRecieverInterface = mWeakReference.get();
         if (internetRecieverInterface != null) {
-            internetRecieverInterface.onBatteryStatusChanged(data);
+            internetRecieverInterface.onBatteryStatusChanged(mData);
         }
     }
 
@@ -88,11 +88,11 @@ final class BatteryLevelRecieverData extends WeakReferenceHolder<BatteryLevelRec
      * @param newData The connection state of the system
      */
     public void setData(final BatteryDTO newData) {
-        data = newData;
+        mData = newData;
     }
 
     public BatteryDTO getData() {
-        return data;
+        return mData;
     }
 
     /**

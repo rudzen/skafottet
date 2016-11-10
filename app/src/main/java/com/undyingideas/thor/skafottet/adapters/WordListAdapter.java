@@ -35,6 +35,7 @@ import java.util.ArrayList;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
+@SuppressWarnings("ALL")
 public class WordListAdapter extends BaseAdapter implements StickyListHeadersAdapter, SectionIndexer {
 
     private static final int[] INTS = new int[0];
@@ -101,6 +102,7 @@ public class WordListAdapter extends BaseAdapter implements StickyListHeadersAda
         return position;
     }
 
+    @SuppressWarnings("AssignmentToMethodParameter")
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
         final ViewHolder holder;
@@ -119,6 +121,7 @@ public class WordListAdapter extends BaseAdapter implements StickyListHeadersAda
         return convertView;
     }
 
+    @SuppressWarnings("AssignmentToMethodParameter")
     @Override
     public View getHeaderView(final int position, View convertView, final ViewGroup parent) {
         final HeaderViewHolder holder;
@@ -148,6 +151,7 @@ public class WordListAdapter extends BaseAdapter implements StickyListHeadersAda
         return mItems.get(position).subSequence(0, 1).charAt(0);
     }
 
+    @SuppressWarnings("AssignmentToMethodParameter")
     @Override
     public int getPositionForSection(int section) {
         if (mSectionIndices.length == 0) {

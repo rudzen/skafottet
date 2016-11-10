@@ -58,7 +58,9 @@ public abstract class BaseActivity extends AppCompatActivity implements
         AuthDataHolder.AuthListenerData,
         Foreground.Listener
 {
-    protected String mProvider, mEncodedEmail;
+    protected String mProvider;
+    protected String mEncodedEmail;
+
     /* Client used to interact with Google APIs. */
     protected GoogleApiClient mGoogleApiClient;
 

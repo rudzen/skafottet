@@ -44,6 +44,7 @@ import static android.util.TypedValue.applyDimension;
  *
  * @author rudz
  */
+@SuppressWarnings({"HardCodedStringLiteral", "StringConcatenationMissingWhitespace", "HardcodedFileSeparator"})
 public class AboutFragment extends Fragment {
 
     private static final String SEP = System.lineSeparator();
@@ -113,17 +114,16 @@ public class AboutFragment extends Fragment {
                     "- Adaptere (Array, RecycleView, BaseAdapter) inkl. Viewholders." + SEP + SEP + SEP +
 
                     "Følgende software er blevet brugt under udviklingen :" + SEP +
-                    "- Windows 10 Professional" + SEP +
-                    "- Android Studio v1.5.1" + SEP +
+                    "- Windows 10 Professional / Solus 1.2.x" + SEP +
+                    "- Android Studio v1.5.1 -> 2.1.2" + SEP +
                     "- Genymotion v2.6" + SEP +
-                    "- Adobe Photoshop CS5" + SEP +
+                    "- Adobe Photoshop CS5 / Gimp v2.8" + SEP +
                     "- Audacity v2.1.1" + SEP +
                     "- lamedropXPd v3.1" + SEP +
                     "- Kompozer v0.8b3" + SEP + SEP + SEP +
 
                     "Følgende er brugt som kilder :" + SEP +
                     "- Musik af : http://www.purple-planet.com/horror/4583971268" + SEP +
-//                    "- Musik af Kevin Macloud (https://incompetech.com/)." + SEP +
                     "- Diverse lydstumper fra forskellige sider med gratis lydklip." + SEP + SEP + SEP +
 
 
