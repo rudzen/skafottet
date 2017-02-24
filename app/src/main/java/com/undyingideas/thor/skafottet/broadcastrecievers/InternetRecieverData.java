@@ -17,6 +17,7 @@ package com.undyingideas.thor.skafottet.broadcastrecievers;
 
 import android.net.ConnectivityManager;
 import android.os.Build;
+import android.os.Debug;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -97,7 +98,9 @@ public class InternetRecieverData implements Runnable {
      */
     @Override
     public void run() {
-        Log.d(TAG, "Observer runnable started.");
+        if (Debug.isDebuggerConnected()) {
+            Log.d(TAG, "Observer runnable started.");
+        }
         final InternetRecieverInterface internetRecieverInterface = internetRecieverInterfaceWeakReference.get();
         if (internetRecieverInterface != null) {
             internetRecieverInterface.onInternetStatusChanged(mData);

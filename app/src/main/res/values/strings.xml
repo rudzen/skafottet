@@ -67,6 +67,10 @@
     <string name="pref_dream_text_key">pref_dream_text</string>
     <string name="pref_dream_text_default">zzzZZZzzz</string>
 
+    <!-- misc -->
+    <string name="connection_none">Ingen</string>
+
+
 
     <!-- Color Picker -->
     <string name="dialog_color_picker">Farvevælger</string>
@@ -155,6 +159,7 @@
     <string name="log_message_password_changed_successfully">Kodeord ændret fra midligertidigt til </string>
     <string name="log_message_auth_successful">auth successfuld.</string>
     <string name="title_activity_spasser">Sign in</string>
+    <string name="con_none">Ingen</string>
 
 
 </resources>

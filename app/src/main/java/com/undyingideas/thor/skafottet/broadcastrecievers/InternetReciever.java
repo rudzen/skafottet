@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Debug;
 import android.os.Handler;
 import android.util.Log;
 
@@ -41,10 +42,14 @@ public class InternetReciever extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        Log.d(TAG, "Network connectivity change");
+        if (Debug.isDebuggerConnected()) {
+            Log.d(TAG, "Network connectivity change");
+        }
         final ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm == null) {
-            Log.d(TAG, "ConnectivityManager could not be fetched.");
+            if (Debug.isDebuggerConnected()) {
+                Log.d(TAG, "ConnectivityManager could not be fetched.");
+            }
             return;
         }
         final NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -58,9 +63,13 @@ public class InternetReciever extends BroadcastReceiver {
             if (!internetRecieverData.isKeepInReciever()) {
                 if (removeObserver(internetRecieverData)) {
                     updateObserverSize = true;
-                    Log.d(TAG, "Observer removed");
+                    if (Debug.isDebuggerConnected()) {
+                        Log.d(TAG, "Observer removed");
+                    }
                 } else {
-                    Log.d(TAG, "Observer kept");
+                    if (Debug.isDebuggerConnected()) {
+                        Log.d(TAG, "Observer kept");
+                    }
                 }
             }
         }
@@ -75,8 +84,10 @@ public class InternetReciever extends BroadcastReceiver {
             return;
         }
         OBSERVERS.add(newObserver);
-        Log.d(TAG, "Observer added");
-        Log.d(TAG, "Observers current in stack :" + OBSERVERS.size());
+        if (Debug.isDebuggerConnected()) {
+            Log.d(TAG, "Observer added");
+            Log.d(TAG, "Observers current in stack :" + OBSERVERS.size());
+        }
     }
 
     public static boolean removeObserver(final InternetRecieverData observerToRemove) {

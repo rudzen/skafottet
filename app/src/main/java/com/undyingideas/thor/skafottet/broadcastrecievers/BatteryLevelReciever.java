@@ -19,6 +19,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.BatteryManager;
+import android.os.Debug;
 import android.os.Handler;
 import android.util.Log;
 
@@ -40,7 +41,9 @@ public class BatteryLevelReciever extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        Log.d(TAG, "BatteryLevel change");
+        if (Debug.isDebuggerConnected()) {
+            Log.d(TAG, "BatteryLevel change");
+        }
         if (intent.getExtras() != null) {
 
             // notify the observers who cares about the current battery state!
@@ -60,7 +63,7 @@ public class BatteryLevelReciever extends BroadcastReceiver {
                 );
                 mHandler.post(internetRecieverData);
                 if (!internetRecieverData.isKeepInReciever()) {
-                    if (removeObserver(internetRecieverData)) {
+                    if (Debug.isDebuggerConnected() && removeObserver(internetRecieverData)) {
                         Log.d(TAG, "Observer removed");
                     } else {
                         Log.d(TAG, "Observer kept");
@@ -75,8 +78,10 @@ public class BatteryLevelReciever extends BroadcastReceiver {
     public static void addObserver(final BatteryLevelRecieverData newObserver) {
         if (!mObservers.contains(newObserver)) {
             mObservers.add(newObserver);
-            Log.d(TAG, "Observer added");
-            Log.d(TAG, "Observers current in stack :" + mObservers.size());
+            if (Debug.isDebuggerConnected()) {
+                Log.d(TAG, "Observer added");
+                Log.d(TAG, "Observers current in stack :" + mObservers.size());
+            }
         }
     }
 

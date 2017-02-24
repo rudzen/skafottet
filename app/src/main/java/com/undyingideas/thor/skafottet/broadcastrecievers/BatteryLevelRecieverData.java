@@ -15,6 +15,7 @@
 
 package com.undyingideas.thor.skafottet.broadcastrecievers;
 
+import android.os.Debug;
 import android.util.Log;
 
 import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
@@ -76,7 +77,9 @@ final class BatteryLevelRecieverData extends WeakReferenceHolder<BatteryLevelRec
      */
     @Override
     public void run() {
-        Log.d(TAG, "Observer runnable started.");
+        if (Debug.isDebuggerConnected()) {
+            Log.d(TAG, "Observer runnable started.");
+        }
         final BatteryLevelRecieveDataInterface internetRecieverInterface = mWeakReference.get();
         if (internetRecieverInterface != null) {
             internetRecieverInterface.onBatteryStatusChanged(mData);
