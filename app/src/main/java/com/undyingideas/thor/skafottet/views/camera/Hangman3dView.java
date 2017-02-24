@@ -23,7 +23,7 @@ import static android.view.MotionEvent.ACTION_UP;
 @SuppressWarnings("ClassWithTooManyFields")
 public class Hangman3dView extends View {
 
-    private final static String TAG = "hangman3dview";
+    private static final String TAG = "hangman3dview";
 
     private float mPreviousX, mPreviousY;
     private static final float TOUCH_SCALE_FACTOR = 2f / 180;

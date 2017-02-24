@@ -48,15 +48,15 @@ public class PlayerListener {
 
     private final ArrayList<PlayerListenerSlave> slaves = new ArrayList<>();
 
-    private final static String PLAYERS = "users";
+    private static final String PLAYERS = "users";
 
-    private final static String GAME_LIST = "gameList";
-    private final static String SCORE = "score";
-    private final static String EMAIL = "email";
-    private final static String NAME = "name";
-    public final static String HAS_LOGGED_IN_PW = "hasLoggedInWithPassword";
-    public final static String TIMESTAMP_VALUE = "timestamp";
-    public final static String TIMESTAMP_CHILD = TIMESTAMP_VALUE + "Joined";
+    private static final String GAME_LIST = "gameList";
+    private static final String SCORE = "score";
+    private static final String EMAIL = "email";
+    private static final String NAME = "name";
+    public static final String HAS_LOGGED_IN_PW = "hasLoggedInWithPassword";
+    public static final String TIMESTAMP_VALUE = "timestamp";
+    public static final String TIMESTAMP_CHILD = TIMESTAMP_VALUE + "Joined";
 
 
     private final GameListListener gameListListener;

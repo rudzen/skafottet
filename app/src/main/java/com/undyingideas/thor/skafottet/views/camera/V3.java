@@ -3,7 +3,7 @@ package com.undyingideas.thor.skafottet.views.camera;
 public class V3 {
 
     public float x, y, z;
-    public final static V3 i, j, k;
+    public static final V3 i, j, k;
 
     static {
         i = new V3(1, 0, 0);

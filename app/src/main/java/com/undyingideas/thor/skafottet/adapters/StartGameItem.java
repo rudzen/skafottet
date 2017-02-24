@@ -28,11 +28,11 @@ public class StartGameItem {
     public final int mItemId;
     public final CharSequence mItemName;
     public final CharSequence mDescription;
-    public @DrawableRes
-    final int mResourceIcon;
+    @DrawableRes
+    public final int mResourceIcon;
 
     // constructor
-    public StartGameItem(final int itemId, final CharSequence itemName, final CharSequence description, final @DrawableRes int resourceIcon) {
+    public StartGameItem(final int itemId, final CharSequence itemName, final CharSequence description, @DrawableRes final int resourceIcon) {
         mItemId = itemId;
         mItemName = itemName;
         mDescription = description;

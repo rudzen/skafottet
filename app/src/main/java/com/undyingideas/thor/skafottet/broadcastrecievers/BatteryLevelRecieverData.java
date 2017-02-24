@@ -35,7 +35,7 @@ final class BatteryLevelRecieverData extends WeakReferenceHolder<BatteryLevelRec
 //    private final WeakReference<BatteryLevelRecieveDataInterface> batteryLevelRecieveDataInterfaceWeakReference;
 
     /* the TAG so we know who we are */
-    private final static String TAG = "BatteryLevelRecData";
+    private static final String TAG = "BatteryLevelRecData";
 
     /* the battery information as DTO */
     private BatteryDTO mData;

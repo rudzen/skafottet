@@ -39,7 +39,7 @@ public class InternetRecieverData implements Runnable {
     private final WeakReference<InternetRecieverInterface> internetRecieverInterfaceWeakReference;
 
     /* the TAG so we know who we are */
-    private final static String TAG = "InternetRecieverData";
+    private static final String TAG = "InternetRecieverData";
 
     /* the internet connection state, this is set through the broadcast reciever itself */
     private int mData; // is -1 if no connection!

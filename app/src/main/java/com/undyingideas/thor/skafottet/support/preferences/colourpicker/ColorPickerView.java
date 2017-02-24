@@ -44,15 +44,15 @@ import java.util.Objects;
  */
 public class ColorPickerView extends View {
 
-    private final static int PANEL_SAT_VAL = 0;
-    private final static int PANEL_HUE = 1;
-    private final static int PANEL_ALPHA = 2;
+    private static final int PANEL_SAT_VAL = 0;
+    private static final int PANEL_HUE = 1;
+    private static final int PANEL_ALPHA = 2;
 
     /**
      * The width in pixels of the border
      * surrounding all color panels.
      */
-    private final static float BORDER_WIDTH_PX = 1;
+    private static final float BORDER_WIDTH_PX = 1;
 
     /**
      * The width in dp of the hue panel.

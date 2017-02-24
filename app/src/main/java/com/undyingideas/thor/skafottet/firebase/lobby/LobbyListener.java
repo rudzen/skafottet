@@ -47,10 +47,10 @@ public class LobbyListener {
 
     private final ArrayList<LobbyListenerSlave> slaves = new ArrayList<>();
 
-    private final static String LOBBY = "Lobby";
-    private final static String GAME_LIST = "gameList";
-    private final static String SCORE = "score";
-    private final static String EMAIL = "email";
+    private static final String LOBBY = "Lobby";
+    private static final String GAME_LIST = "gameList";
+    private static final String SCORE = "score";
+    private static final String EMAIL = "email";
 
     private final GameListListener gameListListener;
     private final NameGetter nameGetter;

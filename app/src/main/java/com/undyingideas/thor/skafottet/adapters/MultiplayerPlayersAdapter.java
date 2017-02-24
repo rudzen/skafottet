@@ -40,7 +40,7 @@ public class MultiplayerPlayersAdapter extends ArrayAdapter<PlayerDTO> {
     private final Context mContext;
     private final int mLayoutResourceId;
     private final ArrayList<PlayerDTO> mData;
-    private static final ViewHolder mViewHolder = new ViewHolder();
+    private final ViewHolder mViewHolder = new ViewHolder();
 
     public MultiplayerPlayersAdapter(final Context mContext, final int mLayoutResourceId, final ArrayList<PlayerDTO> data) {
         super(mContext, mLayoutResourceId, data);

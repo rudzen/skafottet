@@ -38,7 +38,7 @@ public class WordTitleRemoteAdapter extends ArrayAdapter<String> {
     private final Context mContext;
     private final int mLayoutResourceId;
     private final ArrayList<String> mData;
-    private final static String DESC = "FireBase liste";
+    private static final String DESC = "FireBase liste";
 
     public WordTitleRemoteAdapter(final Context context, final int layoutResourceId, final ArrayList<String> data) {
         super(context, layoutResourceId, data);

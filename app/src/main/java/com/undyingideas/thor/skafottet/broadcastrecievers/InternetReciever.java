@@ -38,7 +38,7 @@ public class InternetReciever extends BroadcastReceiver {
     private final Handler mHandler = new Handler();
     private static final ArrayList<InternetRecieverData> OBSERVERS = new ArrayList<>();
 
-    private final static String TAG = "InternetReciever";
+    private static final String TAG = "InternetReciever";
 
     @Override
     public void onReceive(final Context context, final Intent intent) {

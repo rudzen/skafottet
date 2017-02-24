@@ -44,7 +44,7 @@ public class HighscoreManager {
 
     private final ScoreComparator mScoreComparator = new ScoreComparator();
 
-    private final static int MAX = 10;
+    private static final int MAX = 10;
 
     public HighscoreManager(final Context context) {
         scores = new ArrayList<>();

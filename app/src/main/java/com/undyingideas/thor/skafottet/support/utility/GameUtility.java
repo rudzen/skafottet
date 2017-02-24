@@ -64,8 +64,8 @@ public final class GameUtility {
     public static final int SFX_LOST = 5;
     public static final int SFX_CHALLENGE = 6;
 
-    public static @DrawableRes
-    final int[] imageRefs = new int[8];
+    @DrawableRes
+    public static final int[] imageRefs = new int[8];
 
     private static Intent musicPLayIntent = new Intent();
 

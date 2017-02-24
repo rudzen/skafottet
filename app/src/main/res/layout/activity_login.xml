@@ -115,7 +115,7 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/login_with_password"
         style="@style/menu_button_style"
         android:layout_width="match_parent"
@@ -127,7 +127,7 @@
             android:id="@+id/login_with_password_text"
             style="@style/menu_button_style_text"
             android:text="@string/button_signin_with_password"/>
-    </LinearLayout>
+    </RelativeLayout>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/login_with_google"

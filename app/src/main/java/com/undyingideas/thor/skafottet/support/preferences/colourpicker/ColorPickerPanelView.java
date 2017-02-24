@@ -35,7 +35,7 @@ public class ColorPickerPanelView extends View {
      * The width in pixels of the border
      * surrounding the color panel.
      */
-    private final static float BORDER_WIDTH_PX = 1;
+    private static final float BORDER_WIDTH_PX = 1;
 
     private float mDensity = 1f;
 

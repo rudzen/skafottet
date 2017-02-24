@@ -12,10 +12,10 @@ public class M3 {
     private final float h;
     private final float i;
 
-    public final static M3 inverse;
-    public final static M3 sX;
-    public final static M3 sY;
-    public final static M3 sZ;
+    public static final M3 inverse;
+    public static final M3 sX;
+    public static final M3 sY;
+    public static final M3 sZ;
 
     static {
         inverse = new M3(1, 0, 0,

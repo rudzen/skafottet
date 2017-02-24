@@ -230,7 +230,7 @@ public class EndOfGameFragment extends Fragment {
     @SuppressWarnings({"OverlyComplexMethod", "OverlyLongMethod"})
     private class CalculateResults implements Runnable {
 
-        private final static String WORD_WAS = "Ordet var : ";
+        private static final String WORD_WAS = "Ordet var : ";
 
         @Override
         public void run() {
@@ -333,7 +333,7 @@ public class EndOfGameFragment extends Fragment {
 
     private static class ResultCalcHandler extends Handler {
 
-        final private WeakReference<EndOfGameFragment> endOfGameFragmentWeakReference;
+        private final WeakReference<EndOfGameFragment> endOfGameFragmentWeakReference;
 
         public ResultCalcHandler(final EndOfGameFragment endOfGameFragment) {
             endOfGameFragmentWeakReference = new WeakReference<>(endOfGameFragment);

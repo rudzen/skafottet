@@ -44,7 +44,7 @@ public class MultiplayerLobbyAdapter extends ArrayAdapter<LobbyDTO> {
     private final Context mContext;
     private final int mLayoutResourceId;
     private final ArrayList<LobbyDTO> mData;
-    private static final ViewHolder mViewHolder = new ViewHolder();
+    private final ViewHolder mViewHolder = new ViewHolder();
     private final PlayerDTO mActivePlayer;
 
     public MultiplayerLobbyAdapter(final PlayerDTO player, final Context mContext, final int mLayoutResourceId, final ArrayList<LobbyDTO> mData) {

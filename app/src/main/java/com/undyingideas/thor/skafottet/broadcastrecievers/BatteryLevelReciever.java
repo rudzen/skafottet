@@ -37,7 +37,7 @@ public class BatteryLevelReciever extends BroadcastReceiver {
     private final Handler mHandler = new Handler();
     private static final ArrayList<BatteryLevelRecieverData> mObservers = new ArrayList<>();
 
-    private final static String TAG = "BatteryLevelReciever";
+    private static final String TAG = "BatteryLevelReciever";
 
     @Override
     public void onReceive(final Context context, final Intent intent) {

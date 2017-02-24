@@ -37,12 +37,11 @@ import com.undyingideas.thor.skafottet.support.utility.WindowLayout;
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
 public abstract class SoundAbstract extends BaseActivity implements SoundPool.OnLoadCompleteListener {
 
-    private final static String TAG = "SoundAbstract";
+    private static final String TAG = "SoundAbstract";
 
     /* sound stuff */
     @RawRes
-    final
-    private int[] mSoundRaw = {
+    private final int[] mSoundRaw = {
             R.raw.guess_wrong,
             R.raw.guess_right,
             R.raw.intro,
@@ -54,7 +53,7 @@ public abstract class SoundAbstract extends BaseActivity implements SoundPool.On
     private SoundPool mSoundPool;
     private float mVolume;
 
-    private final static int SOUND_COUNT = 6;
+    private static final int SOUND_COUNT = 6;
     private final SoundItem[] mSoundItems = new SoundItem[SOUND_COUNT];
 
     SoundThread mSoundThread;

@@ -30,7 +30,7 @@ import java.io.IOException;
 
 public class MusicPlay extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, Foreground.Listener {
 
-    private final static String TAG = "MusicPlayService";
+    private static final String TAG = "MusicPlayService";
 
     public static final String ACTION_PLAY = "SKAFOTMUSIK";
     public static final String ACTION_STOP = "STOPSKAFOTT";

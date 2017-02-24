@@ -29,12 +29,12 @@ public final class StringHelper {
     private static final ArrayList<Character> invalidChars = new ArrayList<>();
 
     /* Settings for regEx matching of incomming words */
-    private final static String regLowerCase = "[a-zæøå]";
-    private final static String regJavaScript = "<script[^>]*>([\\s\\S]*?)</script>";
+    private static final String regLowerCase = "[a-zæøå]";
+    private static final String regJavaScript = "<script[^>]*>([\\s\\S]*?)</script>";
 
-    public final static Pattern patGuess = Pattern.compile(regLowerCase);
+    public static final Pattern patGuess = Pattern.compile(regLowerCase);
     //Pattern.compile(regLowerCase + "|[A-ZÆØÅ]{" + Integer.toString(WORD_LENGTH) + ",}");
-    public final static Pattern patHTML = Pattern.compile("(?i)<[^>]*>");
+    public static final Pattern patHTML = Pattern.compile("(?i)<[^>]*>");
     public static final String VALID_URL = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
     public static Pattern patJS = Pattern.compile(regJavaScript);
 
