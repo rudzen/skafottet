@@ -1,5 +1,12 @@
 (+ = new, - = removed, * = change, ! = fix, / = subitem)
 
+v2017.2.0 - 24-02-2017, rudz
+----------------------------
+[Generic]
+* Updated many variable style convention
+* Updated support library versions used
+! One static leak
+
 v2016.0.3 - 17-07-2016, rudz
 ----------------------------
 [Generic]
