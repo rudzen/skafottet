@@ -15,7 +15,6 @@
 
 package com.undyingideas.thor.skafottet.activities.login;
 
-import android.annotation.TargetApi;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -39,7 +38,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -137,15 +135,12 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
         /**
          * Call signInPassword() when user taps "Done" keyboard action
          */
-        mEditTextPasswordInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(final TextView textView, final int actionId, final KeyEvent keyEvent) {
+        mEditTextPasswordInput.setOnEditorActionListener((textView, actionId, keyEvent) -> {
 
-                if (actionId == EditorInfo.IME_ACTION_DONE || keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                    signInPassword();
-                }
-                return true;
+            if (actionId == EditorInfo.IME_ACTION_DONE || keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                signInPassword();
             }
+            return true;
         });
 
         /* if the user has chosen to keep their login/password, restore here and proceed with login */
@@ -166,24 +161,21 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
          * This is the authentication listener that maintains the current user session
          * and signs in automatically on application launch
          */
-        mAuthStateListener = new Firebase.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(final AuthData authData) {
-                if (WindowLayout.getMd().isShowing()) {
-                    WindowLayout.getMd().dismiss();
-                }
+        mAuthStateListener = authData -> {
+            if (WindowLayout.getMd().isShowing()) {
+                WindowLayout.getMd().dismiss();
+            }
 
-                /**
-                 * If there is a valid session to be restored, start MainActivity.
-                 * No need to pass data via SharedPreferences because app
-                 * already holds userName/provider data from the latest session
-                 */
-                if (authData != null && GameUtility.isLoggedIn()) {
-                    final Intent intent = new Intent(LoginActivity.this, GameActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
-                }
+            /**
+             * If there is a valid session to be restored, start MainActivity.
+             * No need to pass data via SharedPreferences because app
+             * already holds userName/provider data from the latest session
+             */
+            if (authData != null && GameUtility.isLoggedIn()) {
+                final Intent intent = new Intent(this, GameActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
             }
         };
         /* Add auth listener to Firebase ref */
@@ -302,13 +294,7 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
             Snackbar.make(mButtons[0], R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(final View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
+                    .setAction(android.R.string.ok, v -> requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS));
         } else {
             requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
         }

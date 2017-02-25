@@ -52,7 +52,6 @@ class Camera {
 
     }
 
-
     private V2 project(final V3 p) {
         final V3 EP = p.sub(cameraCenter);
 
