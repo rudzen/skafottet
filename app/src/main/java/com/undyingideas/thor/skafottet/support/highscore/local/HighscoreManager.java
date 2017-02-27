@@ -36,8 +36,6 @@ public class HighscoreManager {
 
     private static final String HIGHSCORE_FILE = "scores.dat";
 
-    private final Context context;
-
     private ObjectOutputStream outputStream;
 
     private ArrayList<Score> scores;
@@ -46,9 +44,9 @@ public class HighscoreManager {
 
     private static final int MAX = 10;
 
-    public HighscoreManager(final Context context) {
+    public HighscoreManager() {
         scores = new ArrayList<>();
-        this.context = context;
+        //this.context = context;
     }
 
     public List<Score> getScores() {
@@ -98,7 +96,7 @@ public class HighscoreManager {
         return addScore(word, player.getName(), player.getScore());
     }
 
-    public void loadScoreFile() {
+    public void loadScoreFile(final Context context) {
         boolean loaded = false;
         try {
             final ObjectInputStream inputStream = new ObjectInputStream(context.openFileInput(HIGHSCORE_FILE));
@@ -125,12 +123,12 @@ public class HighscoreManager {
                 for (int i = 0; i < 10; i++) {
                     GameUtility.getHighscoreManager().addScore("skafottet", "rudz", 100 + i);
                 }
-                GameUtility.getHighscoreManager().saveHighScore();
+                GameUtility.getHighscoreManager().saveHighScore(context);
             }
         }
     }
 
-    public void saveHighScore() {
+    public void saveHighScore(final Context context) {
         try {
             outputStream = new ObjectOutputStream(context.openFileOutput(HIGHSCORE_FILE, Context.MODE_PRIVATE));
             outputStream.writeObject(scores);

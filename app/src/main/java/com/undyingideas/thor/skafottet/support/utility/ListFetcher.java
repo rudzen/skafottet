@@ -17,6 +17,7 @@ package com.undyingideas.thor.skafottet.support.utility;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.undyingideas.thor.skafottet.support.abstractions.WeakReferenceHolder;
@@ -44,7 +45,7 @@ public final class ListFetcher {
 
     private static final String sFilename = "words.dat";
 
-    private static Handler sListHandler = new Handler();
+    private static Handler sListHandler = new Handler(Looper.getMainLooper());
     private static Runnable listSaver;
 
     private static byte[] compressWordList(final WordController wordController) {

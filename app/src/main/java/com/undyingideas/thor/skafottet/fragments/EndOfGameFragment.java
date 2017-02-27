@@ -447,7 +447,7 @@ public class EndOfGameFragment extends Fragment {
                     if (GameUtility.getHighscoreManager().checkScore(endOfGameFragment.mEndGame.getPlayers()[0].getScore()) > -1) {
                         final int highscorePosition = GameUtility.getHighscoreManager().addScore(endOfGameFragment.mEndGame.getLogic().getTheWord(), endOfGameFragment.mEndGame.getPlayers()[0]);
                         Log.d("Highscore", "Tilføjet til position # : " + highscorePosition);
-                        GameUtility.getHighscoreManager().saveHighScore();
+                        GameUtility.getHighscoreManager().saveHighScore(endOfGameFragment.getContext());
                         endOfGameFragment.mTextViewLower.setText(endOfGameFragment.mTextViewLower.getText().toString() + "\nDu har indtaget position nummer " + Integer.toString(highscorePosition + 1));
                     } else {
                         Log.d("Highscore", "Spiller " + endOfGameFragment.mEndGame.getPlayers()[0].getName() + " sux.");

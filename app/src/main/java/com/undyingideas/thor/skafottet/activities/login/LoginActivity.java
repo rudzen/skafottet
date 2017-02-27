@@ -38,6 +38,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -135,13 +136,7 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
         /**
          * Call signInPassword() when user taps "Done" keyboard action
          */
-        mEditTextPasswordInput.setOnEditorActionListener((textView, actionId, keyEvent) -> {
-
-            if (actionId == EditorInfo.IME_ACTION_DONE || keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                signInPassword();
-            }
-            return true;
-        });
+        mEditTextPasswordInput.setOnEditorActionListener(new PasswordEditActionListener());
 
         /* if the user has chosen to keep their login/password, restore here and proceed with login */
         if (GameUtility.getSettings().keepLogin && !GameUtility.isLoggedIn()) {
@@ -161,21 +156,24 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
          * This is the authentication listener that maintains the current user session
          * and signs in automatically on application launch
          */
-        mAuthStateListener = authData -> {
-            if (WindowLayout.getMd().isShowing()) {
-                WindowLayout.getMd().dismiss();
-            }
+        mAuthStateListener = new Firebase.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(final AuthData authData) {
+                if (WindowLayout.getMd().isShowing()) {
+                    WindowLayout.getMd().dismiss();
+                }
 
-            /**
-             * If there is a valid session to be restored, start MainActivity.
-             * No need to pass data via SharedPreferences because app
-             * already holds userName/provider data from the latest session
-             */
-            if (authData != null && GameUtility.isLoggedIn()) {
-                final Intent intent = new Intent(this, GameActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
+                /**
+                 * If there is a valid session to be restored, start MainActivity.
+                 * No need to pass data via SharedPreferences because app
+                 * already holds userName/provider data from the latest session
+                 */
+                if (authData != null && GameUtility.isLoggedIn()) {
+                    final Intent intent = new Intent(LoginActivity.this, GameActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    LoginActivity.this.startActivity(intent);
+                    LoginActivity.this.finish();
+                }
             }
         };
         /* Add auth listener to Firebase ref */
@@ -294,7 +292,10 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
             Snackbar.make(mButtons[0], R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, v -> requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS));
+                    .setAction(android.R.string.ok, new View.OnClickListener() {
+                        @Override
+                        public void onClick(final View v) {LoginActivity.this.requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);}
+                    });
         } else {
             requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
         }
@@ -761,6 +762,17 @@ public class LoginActivity extends BaseActivity  implements LoaderManager.Loader
                 /* Try just making a uid mapping */
                 GameUtility.getFirebase().child(Constant.FIREBASE_LOCATION_UID_MAPPINGS).child(authData.getUid()).setValue(mEncodedEmail);
             }
+        }
+    }
+
+    private class PasswordEditActionListener implements TextView.OnEditorActionListener {
+        @Override
+        public boolean onEditorAction(final TextView textView, final int actionId, final KeyEvent keyEvent) {
+
+            if (actionId == EditorInfo.IME_ACTION_DONE || keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                LoginActivity.this.signInPassword();
+            }
+            return true;
         }
     }
 }

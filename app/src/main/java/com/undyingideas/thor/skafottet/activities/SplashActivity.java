@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -109,14 +110,13 @@ public class SplashActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_splash);
 
-        mLoadHandler = new LoadHandler(this);
-        mLoadHandler.post(new LoadConfig());
+        mLoadHandler = new LoadHandler(this, Looper.getMainLooper());
+        new Thread(new LoadConfig()).start();
 
         mLogo = (RelativeLayout) findViewById(R.id.splash_center_circle);
         mLogo.startAnimation(AnimationUtils.loadAnimation(this, R.anim.step_number_fader));
         mTitleLeft = (TextView) findViewById(R.id.splash_text_left);
         mTitleRight = (TextView) findViewById(R.id.splash_text_right);
-
 
         if (savedInstanceState == null) {
             flyIn();
@@ -173,8 +173,8 @@ public class SplashActivity extends AppCompatActivity {
 
             /* set the highscore manager */
             //HighscoreManager.deleteHighScore(getApplicationContext());
-            setHighscoreManager(new HighscoreManager(getApplicationContext()));
-            getHighscoreManager().loadScoreFile();
+            setHighscoreManager(new HighscoreManager());
+            getHighscoreManager().loadScoreFile(getApplicationContext());
 
             loadSettings();
 
@@ -188,7 +188,7 @@ public class SplashActivity extends AppCompatActivity {
 
             // only for testing stuff!!!!
 //            Log.d(TAG, "Wordlist deleted : " + ListFetcher.deleteList(getApplicationContext()));
-            ListFetcher.setListHandler(new Handler());
+            ListFetcher.setListHandler(new Handler(Looper.getMainLooper()));
             ListFetcher.setListSaver(new ListFetcher.ListSaver(getApplicationContext()));
 
             /* begin loading wordlist
@@ -325,7 +325,8 @@ public class SplashActivity extends AppCompatActivity {
 
         private final WeakReference<SplashActivity> splashActivityWeakReference;
 
-        public LoadHandler(final SplashActivity splashActivity) {
+        public LoadHandler(final SplashActivity splashActivity, final Looper looper) {
+            super(looper);
             splashActivityWeakReference = new WeakReference<>(splashActivity);
         }
 

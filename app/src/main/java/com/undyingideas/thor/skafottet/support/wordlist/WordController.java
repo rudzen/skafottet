@@ -90,7 +90,7 @@ public final class WordController implements Serializable, Parcelable {
     }
 
     public void addLocalWordList(final String title, final String url) {
-        addLocalWordList(title, url, new ArrayList<>());
+        addLocalWordList(title, url, new ArrayList<String>());
     }
 
     // hacked together...
